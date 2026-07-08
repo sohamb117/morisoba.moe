@@ -83,19 +83,6 @@ button{cursor:none;}
   animation:grain 1.2s steps(4) infinite;}
 @keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-30px,12px)}40%{transform:translate(18px,-24px)}60%{transform:translate(-12px,30px)}80%{transform:translate(24px,6px)}100%{transform:translate(0,0)}}
 
-/* ---------- tickers ---------- */
-.ticker{position:fixed;left:0;right:0;z-index:9985;overflow:hidden;
-  border-top:1px solid var(--edge-hi);border-bottom:1px solid var(--edge-hi);
-  background:var(--void);font-family:var(--sans);font-size:10px;line-height:22px;
-  height:24px;user-select:none;letter-spacing:1.5px;}
-#ticker-top{top:0;}
-#ticker-bottom{bottom:0;}
-.ticker .tk{display:flex;width:max-content;}
-.ticker .tk span{white-space:pre;letter-spacing:4px;}
-#ticker-top .tk{animation:tick 100s linear infinite;}
-#ticker-bottom .tk{animation:tick 140s linear infinite reverse;}
-@keyframes tick{to{transform:translateX(-50%);}}
-
 /* ---------- loader ---------- */
 #loader{position:fixed;inset:0;z-index:10000;background:var(--void);
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
@@ -195,13 +182,11 @@ button{cursor:none;}
   background:radial-gradient(ellipse at 50% 40%, transparent 55%, rgba(0,0,0,.42) 100%);
 }
 .panel.mat-frame{
-  background:transparent;
+  background:var(--void);
   border-color:var(--edge-mid);
-  box-shadow:0 0 0 3px transparent,0 0 0 4px var(--edge-lo),6px 8px 0 rgba(0,0,0,.55);
+  box-shadow:0 0 0 3px var(--void),0 0 0 4px var(--edge-lo),6px 8px 0 rgba(0,0,0,.55);
 }
 .panel.mat-frame .titlebar{border-bottom-color:var(--edge-mid);}
-.panel.mat-frame .titlebar .tl,
-.panel.mat-frame .pbtn{background:transparent;}
 
 /* screen phosphor tints — allowed color inside .mat-crt bodies only */
 .panel.mat-crt.scr-green .pbody{color:var(--scr-green);}
@@ -215,8 +200,8 @@ button{cursor:none;}
 .panel.mat-paper:hover .titlebar,
 .panel.mat-metal:hover .titlebar,
 .panel.mat-worn:hover  .titlebar,
-.panel.mat-crt:hover   .titlebar{background:var(--ink);color:var(--void);}
-.panel.mat-frame:hover .titlebar{background:var(--edge-mid);color:var(--ink);}
+.panel.mat-crt:hover   .titlebar,
+.panel.mat-frame:hover .titlebar{background:var(--ink);color:var(--void);}
 
 /* ---------- industrial accessories (LEDs, asset tags, placards, silhouettes) ---------- */
 .led-strip{display:inline-flex;gap:3px;padding:0 6px 0 4px;flex:none;align-items:center;}
@@ -253,6 +238,37 @@ button{cursor:none;}
   background-image:repeating-linear-gradient(45deg,
     transparent 0 6px, rgba(200,169,81,.20) 6px 12px);
   border:1px solid rgba(200,169,81,.5);}
+
+#pole-r{position:absolute;top:-32px;bottom:0;right:0;width:78px;opacity:.13;
+  transform:scaleX(-1);}
+#pole-r svg{width:100%;height:100%;}
+#fence-tr{position:absolute;top:0;right:0;width:340px;height:380px;opacity:.09;
+  transform:rotate(-3deg);transform-origin:top right;overflow:hidden;color:var(--ink);}
+#fence-tr svg{width:100%;height:100%;}
+
+/* image-in-panel support: aged photograph slotted into machine */
+.panel.mat-portrait{background:#050506;}
+.panel.mat-portrait .pbody{padding:3px;position:relative;overflow:hidden;}
+.panel.mat-portrait .pbody img{
+  display:block;width:100%;height:auto;
+  filter:grayscale(1) contrast(1.08) brightness(.78);
+  image-rendering:auto;}
+.panel.mat-portrait .pbody::before{
+  content:"";position:absolute;inset:3px;pointer-events:none;z-index:2;
+  background:repeating-linear-gradient(0deg, rgba(255,255,255,.04) 0 1px, transparent 1px 3px);}
+.panel.mat-portrait .pbody::after{
+  content:"";position:absolute;inset:3px;pointer-events:none;z-index:2;
+  background:radial-gradient(ellipse at 50% 45%, transparent 55%, rgba(0,0,0,.5) 100%);}
+.panel.mat-portrait .caption{position:absolute;left:6px;bottom:5px;z-index:3;
+  font-family:var(--sans);font-size:7.5px;letter-spacing:1.4px;color:var(--dust);
+  text-transform:uppercase;opacity:.7;}
+.panel.mat-portrait .asset-tag{color:var(--dust);}
+
+/* GPU-accel hints for continuously-transformed layers */
+#wires,#traces,#big-rings svg,#scanlines,#grain{will-change:transform;}
+.panel{will-change:transform,opacity;
+  transition:opacity .35s cubic-bezier(.22,.61,.36,1),
+             transform .35s cubic-bezier(.22,.61,.36,1);}
 
 /* sticky note micro-styles */
 .panel.note .asset-tag{display:none;}
@@ -291,6 +307,13 @@ button{cursor:none;}
 .work .wt i{font-style:normal;font-size:9px;letter-spacing:2px;opacity:.6;}
 .work .wd{font-size:10px;opacity:.75;margin-top:1px;}
 .work:hover{background:var(--void);color:var(--ink);}
+#p-works .pbody{max-height:172px;overflow-y:auto;overflow-x:hidden;
+  scrollbar-width:thin;scrollbar-color:var(--steel) transparent;
+  scroll-behavior:smooth;padding-right:10px;}
+#p-works .pbody::-webkit-scrollbar{width:5px;height:5px;}
+#p-works .pbody::-webkit-scrollbar-track{background:transparent;}
+#p-works .pbody::-webkit-scrollbar-thumb{background:var(--steel);}
+#p-works .pbody::-webkit-scrollbar-thumb:hover{background:var(--dust);}
 #p-contact .mail{display:block;text-align:center;text-decoration:none;
   border:var(--line);padding:10px 8px;margin-top:10px;font-size:11px;letter-spacing:2px;}
 #p-contact .mail:hover{background:var(--ink);color:var(--void);}
@@ -402,12 +425,6 @@ button{cursor:none;}
 #loadbar i{background:var(--scr-blue);
   filter:drop-shadow(0 0 3px rgba(74,124,153,.55));}
 
-#curcoord{position:fixed;z-index:9999;pointer-events:none;
-  font-family:var(--sans);font-size:8px;letter-spacing:1.4px;
-  color:var(--dust);opacity:.72;white-space:nowrap;
-  padding:2px 4px;background:rgba(3,3,3,.35);}
-@media (hover:none){#curcoord{display:none;}}
-
 #hint{font-family:var(--sans);color:var(--dust);}
 #hint::before{content:"";display:inline-block;width:5px;height:5px;
   background:var(--sig-green);margin-right:6px;vertical-align:middle;
@@ -417,10 +434,15 @@ button{cursor:none;}
 @media (max-width:720px){
   body{overflow:auto;overflow-x:hidden;cursor:auto;}
   #stage{position:static;padding:36px 22px 90px;}
-  #wires,#traces{display:none;}
+  #wires,#traces,#accessories,#decor{display:none;}
   .panel{position:relative !important;left:auto !important;top:auto !important;
     width:100% !important;margin:0 0 14px;transform:none !important;}
   #hint{display:none;}
+  /* strip art / terminal / decorative panels; keep info only */
+  #p-seraph,#p-litany,#p-console,#p-candle,#p-oracle,#p-relic,
+  #p-apple,#p-wave,#p-hex,#p-crux,#p-sigil,#p-note{display:none !important;}
+  /* let the works list stretch to fit all entries */
+  #p-works .pbody{max-height:none;overflow:visible;}
 }
 </style>
 </head>
@@ -436,7 +458,6 @@ SOHAM NAVI ✠ rev.2.6
 </div>
 
 <div id="cursor"></div>
-<div id="curcoord"></div>
 <svg id="traces" xmlns="http://www.w3.org/2000/svg"></svg>
 <div id="decor"></div>
 <div id="accessories">
@@ -514,6 +535,56 @@ SOHAM NAVI ✠ rev.2.6
         <rect x="87" y="108" width="3" height="3"/>
         <rect x="82" y="178" width="3" height="3"/>
       </g>
+    </svg>
+  </div>
+  <div id="pole-r">
+    <svg viewBox="0 0 80 900" preserveAspectRatio="xMidYMax slice">
+      <g class="mast" stroke="#e8e8e8" stroke-width="1" fill="none">
+        <line x1="40" y1="0" x2="40" y2="900"/>
+      </g>
+      <g class="arm-upper" stroke="#e8e8e8" stroke-width="1" fill="none">
+        <line x1="6" y1="220" x2="74" y2="220"/>
+        <line x1="6" y1="220" x2="6" y2="236"/>
+        <line x1="74" y1="220" x2="74" y2="236"/>
+        <line x1="26" y1="216" x2="26" y2="225"/>
+        <line x1="54" y1="216" x2="54" y2="225"/>
+      </g>
+      <g class="arm-lower" stroke="#e8e8e8" stroke-width="1" fill="none">
+        <line x1="14" y1="336" x2="66" y2="336"/>
+        <line x1="14" y1="336" x2="14" y2="348"/>
+        <line x1="66" y1="336" x2="66" y2="348"/>
+        <line x1="30" y1="334" x2="30" y2="342"/>
+        <line x1="50" y1="334" x2="50" y2="342"/>
+      </g>
+      <g class="drop-wires" stroke="#e8e8e8" stroke-width="1" fill="none">
+        <path d="M6 238 Q -34 292 -68 340" opacity=".65"/>
+        <path d="M74 238 Q 118 282 152 320" opacity=".65"/>
+        <path d="M26 227 Q 64 264 128 290" opacity=".5"/>
+        <path d="M54 227 Q 100 254 142 300" opacity=".5"/>
+        <path d="M14 348 Q -22 396 -55 480" opacity=".55"/>
+        <path d="M66 348 Q 110 400 148 490" opacity=".55"/>
+      </g>
+      <g class="insulators" fill="#e8e8e8" stroke="none">
+        <circle cx="6"  cy="238" r="1.6"/>
+        <circle cx="74" cy="238" r="1.6"/>
+        <circle cx="26" cy="227" r="1.4"/>
+        <circle cx="54" cy="227" r="1.4"/>
+        <circle cx="14" cy="348" r="1.6"/>
+        <circle cx="66" cy="348" r="1.6"/>
+      </g>
+      <g class="base" stroke="#e8e8e8" stroke-width="1" fill="none">
+        <line x1="28" y1="890" x2="52" y2="890"/>
+      </g>
+    </svg>
+  </div>
+  <div id="fence-tr">
+    <svg viewBox="0 0 340 380" preserveAspectRatio="none">
+      <defs>
+        <pattern id="chainlink-p" width="14" height="14" patternUnits="userSpaceOnUse">
+          <path d="M0 0 L14 14 M0 14 L14 0" stroke="currentColor" stroke-width="0.55" fill="none"/>
+        </pattern>
+      </defs>
+      <rect width="340" height="380" fill="url(#chainlink-p)"/>
     </svg>
   </div>
   <div class="placard" style="left:1.4%;top:44%;transform:rotate(-4deg)">CAUTION<br>PROTOCOL·7</div>
@@ -594,9 +665,6 @@ SOHAM NAVI ✠ rev.2.6
   <circle class="hub" cx="300" cy="300" r="2" fill="#e8e8e8" stroke="none"/>
 </svg>
 </div>
-
-<div class="ticker" id="ticker-top"><div class="tk"><span></span><span></span></div></div>
-<div class="ticker" id="ticker-bottom"><div class="tk"><span></span><span></span></div></div>
 
 <pre id="cf1" style="display:none">
     )
@@ -825,6 +893,14 @@ check gnd
 loop 0x2c
     —M</pre></div>
   </section>
+
+  <section class="panel" id="p-vessel" data-w="182" style="--tilt:rotate(.4deg)">
+    <div class="titlebar"><span class="tl">l:15 vessel</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
+    <div class="pbody">
+      <img src="refs/artworks-000230771167-tzjcdx-t500x500.jpg" alt="vessel">
+      <span class="caption">subject.0117</span>
+    </div>
+  </section>
 </div>
 
 <div id="dock"></div>
@@ -859,7 +935,8 @@ var LAYOUT = [
   ["p-hex",     .935, .055],
   ["p-crux",     .245, .660],
   ["p-sigil",    .375, .845],
-  ["p-note",     .430, .028]
+  ["p-note",     .430, .028],
+  ["p-vessel",   .680, .300]
 ];
 var WIRES = [
   ["p-name","right","p-works","left"],
@@ -891,13 +968,26 @@ var WIRES = [
   ["p-about","right","p-hex","bottom"],
   ["p-litany","right","p-wave","bottom"],
   ["p-sigil","top","p-contact","bottom"],
-  ["p-sigil","right","p-wave","left"]
+  ["p-sigil","right","p-wave","left"],
+  ["p-vessel","left","p-seraph","bottom"],
+  ["p-vessel","top","p-hex","left"],
+  ["p-vessel","right","p-relic","left"],
+  ["p-vessel","bottom","p-oracle","top"],
+  ["p-vessel","bottom","p-console","top"],
+  ["p-note","right","p-seraph","left"],
+  ["p-note","bottom","p-works","top"],
+  ["p-apple","bottom","p-oracle","right"],
+  ["p-hex","top","p-vessel","right"],
+  ["p-sigil","left","p-crux","right"]
 ];
 /* cables running down to the floor */
 var FLOOR=[
   ["p-litany",.3],["p-litany",.7],["p-contact",.5],["p-wave",.4],
   ["p-console",.6],["p-crux",.5],["p-works",.15],["p-oracle",.7],
-  ["p-about",.4],["p-relic",.5]
+  ["p-about",.4],["p-relic",.5],
+  ["p-vessel",.3],["p-vessel",.7],
+  ["p-note",.5],["p-hex",.5],["p-seraph",.3],["p-seraph",.7],
+  ["p-apple",.5],["p-name",.7],["p-sigil",.5],["p-works",.6]
 ];
 /* cable drops from the top edge onto panels */
 var DROPS = [
@@ -910,7 +1000,12 @@ var DROPS = [
   [.80,"p-console"],[.87,"p-console"],
   [.10,"p-about"],[.18,"p-about"],
   [.50,"p-contact"],
-  [.53,"p-apple"],[.68,"p-wave"],[.925,"p-hex"],[.97,"p-hex"],[.24,"p-crux"]
+  [.53,"p-apple"],[.68,"p-wave"],[.925,"p-hex"],[.97,"p-hex"],[.24,"p-crux"],
+  [.63,"p-vessel"],[.70,"p-vessel"],[.76,"p-vessel"],
+  [.44,"p-note"],[.39,"p-note"],
+  [.33,"p-works"],[.40,"p-apple"],
+  [.16,"p-candle"],[.27,"p-crux"],
+  [.58,"p-oracle"],[.82,"p-console"],[.92,"p-hex"]
 ];
 
 /* material class per panel — chrome stays mono, only .mat-crt bodies get phosphor */
@@ -930,7 +1025,8 @@ var MAT = {
   "p-hex":     "mat-crt scr-blue",
   "p-sigil":   "mat-worn",
   "p-crux":    "mat-frame",
-  "p-note":    "mat-paper note"
+  "p-note":    "mat-paper note",
+  "p-vessel":  "mat-portrait"
 };
 
 var panels = {};
@@ -1057,7 +1153,7 @@ function drawWires(){
     if(!visible(ea)||!visible(eb)) return;
     var a=pt(ea,wr[1]), b=pt(eb,wr[3]);
     var dist=Math.sqrt((b[0]-a[0])*(b[0]-a[0])+(b[1]-a[1])*(b[1]-a[1]));
-    var strands=3+Math.floor(rnd(i+50)*3);
+    var strands=4+Math.floor(rnd(i+50)*5);
     var tone=pickTone(i+55);
     for(var k=0;k<strands;k++){
       var off=(k-(strands-1)/2)*3;
@@ -1112,7 +1208,7 @@ function drawWires(){
     var el=panels[id];
     if(!visible(el)) return;
     var x=el.offsetLeft,y=el.offsetTop,w=el.offsetWidth,h=el.offsetHeight;
-    for(var j=0;j<3;j++){
+    for(var j=0;j<5;j++){
       var sx=x+w*(0.12+0.72*rnd(k*9+j));
       var sy=y+h;
       var len=26+80*rnd(k*5+j+40);
@@ -1244,12 +1340,8 @@ function spawnDecor(){
   decor.innerHTML=out;
 }
 
-/* ================= tickers ================= */
+/* ================= litany duplicator ================= */
 (function(){
-  var top="  0x7F3A  KNX-04:LOOP  22:14:07  RETRY  0x00FF  ▓▒░  0x2C:BUS  RE-INDEX  DELAY:180ms  ▚  MRSB.0117  PING  ↔  0x00A1  SIG:LOW  ○  0x4B2E  HEAP  0.42MiB  ░  IRQ:07  MASK  0x1F  ▓▒░  UART:B  9600  8N1  ▚▞  0x2AF0  MEM:OK  ↑  0x00FE  †  DEV.MOUNT  /anima  ▒  PROT:07  LOADED  ▓  0x1F3C  IRQ.MASK  ░  CHK:0xEA2C  OK  ▒  ";
-  var bot="  ░▒▓  A/D  2026.07.08  22:14:07  UP  17:42:03  KRNL:v2.6  ▚  UPTIME  ✞  0x0FF3  CHK.OK  ▓  MAC:AA:BB:CC:DD:EE  ▒  RX:1.8k  TX:0.4k  ░  PROT:07  LINK.ACTIVE  ▓▒░  BEACON  ↓  MRSB-14.OMEGA  ↔  RE-SYNC  0x7F3A  ▚▞▚▞  IN-BAND  OK  ░  0x00FF  ★  RSSI:-72dBm  ▓  BUS:0x2C  IDLE  ▒  ";
-  document.querySelectorAll("#ticker-top .tk span").forEach(function(sp){sp.textContent=top.repeat(3);});
-  document.querySelectorAll("#ticker-bottom .tk span").forEach(function(sp){sp.textContent=bot.repeat(3);});
   var lt=document.getElementById("litany-track");
   lt.innerHTML+=lt.innerHTML;
 })();
@@ -1301,24 +1393,26 @@ document.querySelectorAll(".pbtn").forEach(function(btn){
   });
 });
 
-/* ================= cursor + coord readout + traces parallax ================= */
+/* ================= cursor + traces parallax (rAF + lerp) ================= */
 var cur=document.getElementById("cursor");
-var coord=document.getElementById("curcoord");
 if(cur&&!isMobile){
-  var lastMove=0, tracesEl=document.getElementById("traces");
+  var tracesEl=document.getElementById("traces");
+  var pxT={x:0,y:0}, pxC={x:0,y:0}, pxRunning=false;
+  function pxFrame(){
+    pxC.x += (pxT.x - pxC.x) * 0.10;
+    pxC.y += (pxT.y - pxC.y) * 0.10;
+    if(tracesEl) tracesEl.style.transform="translate3d("+pxC.x.toFixed(2)+"px,"+pxC.y.toFixed(2)+"px,0)";
+    if(Math.abs(pxT.x-pxC.x)>0.05||Math.abs(pxT.y-pxC.y)>0.05){
+      requestAnimationFrame(pxFrame);
+    } else {
+      pxRunning=false;
+    }
+  }
   window.addEventListener("pointermove",function(e){
     cur.style.left=e.clientX+"px";cur.style.top=e.clientY+"px";
-    if(coord){
-      coord.style.left=(e.clientX+14)+"px";
-      coord.style.top=(e.clientY+8)+"px";
-      coord.textContent=("0000"+e.clientX).slice(-4)+","+("0000"+e.clientY).slice(-4);
-    }
-    var now=performance.now();
-    if(tracesEl&&now-lastMove>32){
-      lastMove=now;
-      var dx=(e.clientX/W()-0.5)*6, dy=(e.clientY/H()-0.5)*4;
-      tracesEl.style.transform="translate("+dx.toFixed(2)+"px,"+dy.toFixed(2)+"px)";
-    }
+    pxT.x=(e.clientX/W()-0.5)*7;
+    pxT.y=(e.clientY/H()-0.5)*5;
+    if(!pxRunning){pxRunning=true;requestAnimationFrame(pxFrame);}
   });
   document.addEventListener("pointerover",function(e){
     if(e.target.closest("a,button,.titlebar"))cur.classList.add("hot");
@@ -1326,11 +1420,12 @@ if(cur&&!isMobile){
   });
 }
 
-/* ================= ascii eye: breathe / grow / split / stitch ===== */
+/* ================= ascii eye: open -> stare -> close -> melt -> reform ===== */
 var eyeEl=document.getElementById("seraph");
 var COLS=39, ROWS=19, ECX=19, ECY=9;
-var TEAR="%/\\Xx*▓¤";
+var EYE_A=11.5;
 var CORR="▓▒░█@#%*+:☩✠†?";
+var DRIP=";.:|";
 
 function lidChar(dxn,upper){
   var ad=Math.abs(dxn);
@@ -1339,19 +1434,16 @@ function lidChar(dxn,upper){
   return dxn<0?"\\":"/";
 }
 
-function renderEye(open,scale,gap,stitch){
-  var r,c;
-  var grid=[];
+function eyeGrid(open){
+  var grid=[], r, c;
   for(r=0;r<ROWS;r++){
     var row=[];
     for(c=0;c<COLS;c++) row.push(" ");
     grid.push(row);
   }
-  var a=Math.min(11.5*scale,18);
-  var b=6.0*scale*Math.max(open,0.05);
+  var a=EYE_A;
+  var b=6.0*Math.max(open,0.05);
   var rI=Math.min(b*0.95,a*0.42);
-
-  /* interior: sclera + iris + pupil */
   for(r=0;r<ROWS;r++){
     for(c=0;c<COLS;c++){
       var ex=(c-ECX)/a, ey=(r-ECY)/b;
@@ -1364,7 +1456,6 @@ function renderEye(open,scale,gap,stitch){
       }
     }
   }
-  /* lids */
   for(c=0;c<COLS;c++){
     var dxn=(c-ECX)/a;
     if(Math.abs(dxn)<=1){
@@ -1374,91 +1465,94 @@ function renderEye(open,scale,gap,stitch){
       if(rl>=0&&rl<ROWS) grid[rl][c]=lidChar(dxn,false);
     }
   }
-  /* canthi */
   var lc=Math.round(ECX-a), rc=Math.round(ECX+a);
   if(lc>=0) grid[ECY][lc]="<";
   if(rc<COLS) grid[ECY][rc]=">";
-  /* lashes when wide open */
-  if(open>0.85&&gap===0){
+  if(open>0.82){
     [-0.72,-0.38,0,0.38,0.72].forEach(function(fx){
-      c=Math.round(ECX+fx*a);
-      var lid=b*Math.sqrt(Math.max(0,1-fx*fx));
-      r=Math.round(ECY-lid)-1;
-      if(r>=0&&c>=0&&c<COLS&&grid[r][c]===" ")
-        grid[r][c]=fx<0?"\\":(fx>0?"/":"|");
+      var cc=Math.round(ECX+fx*a);
+      var lid=6.0*open*Math.sqrt(Math.max(0,1-fx*fx));
+      var rr=Math.round(ECY-lid)-1;
+      if(rr>=0&&cc>=0&&cc<COLS&&grid[rr][cc]===" ")
+        grid[rr][cc]=fx<0?"\\":(fx>0?"/":"|");
     });
   }
+  return grid;
+}
 
-  /* split: shear halves apart, jagged seam */
-  var lines=[];
-  var g=Math.round(gap);
-  for(r=0;r<ROWS;r++){
-    var line=grid[r].join("");
-    if(g>0){
-      if(r<ECY){
-        line=line.slice(g)+Array(g+1).join(" ");
-      }else if(r>ECY){
-        line=Array(g+1).join(" ")+line.slice(0,COLS-g);
-      }else{
-        var ch=line.split("");
-        for(c=0;c<COLS;c++){
-          if(Math.abs(c-ECX)<=a){
-            if(stitch){
-              ch[c]="-+X-"[c%4];
-            }else{
-              ch[c]=TEAR[Math.floor(Math.random()*TEAR.length)];
-            }
-          }
-        }
-        line=ch.join("");
+function addMeltDrips(grid,meltAmt){
+  var maxLen=ROWS-1-ECY;
+  var a=EYE_A;
+  for(var c=0;c<COLS;c++){
+    var dxn=(c-ECX)/a;
+    if(Math.abs(dxn)<=1){
+      var speed=0.55+((c*137+51)%100)/220;
+      var wobble=0.04*Math.sin(c*0.6);
+      var eff=Math.max(0,Math.min(1,meltAmt*speed+wobble));
+      var len=Math.round(maxLen*eff);
+      if(len<=0) continue;
+      for(var d=1;d<=len;d++){
+        var r=ECY+d;
+        if(r>=ROWS) break;
+        var ch;
+        if(d===len&&len>=3) ch="O";
+        else if(d===1) ch="|";
+        else if(d>=len-1) ch=".";
+        else ch=DRIP[(c+d)%DRIP.length];
+        if(grid[r][c]===" "||grid[r][c]==="·") grid[r][c]=ch;
       }
     }
-    lines.push(line);
   }
-  /* stitch marks pierce rows above and below the seam */
-  if(stitch&&g>0){
-    [ECY-1,ECY+1].forEach(function(rr){
-      if(rr<0||rr>=ROWS)return;
-      var ch=lines[rr].split("");
-      for(c=0;c<COLS;c+=3){
-        if(Math.abs(c-ECX)<=a) ch[c]="|";
-      }
-      lines[rr]=ch.join("");
-    });
-  }
-  var out=lines.join("\n").split("");
-  /* light corruption shimmer */
+  return grid;
+}
+
+function corruptText(txt){
+  var out=txt.split("");
   var n=1+Math.floor(Math.random()*2);
   for(var i=0;i<n;i++){
     var p=Math.floor(Math.random()*out.length);
-    if(out[p]!==" "&&out[p]!=="\n")
+    if(out[p]!==" "&&out[p]!=="\n"&&out[p]!=="O")
       out[p]=CORR[Math.floor(Math.random()*CORR.length)];
   }
   return out.join("");
 }
 
-/* phase machine: breathe -> grow -> split -> stitch -> repeat */
-var ephase="breathe", ept=0;
+var EYE_PHASES=["opening","staring","closing","melting","holding","reforming"];
+var EYE_FRAMES={opening:16, staring:24, closing:9, melting:34, holding:10, reforming:28};
+var eyePhaseIdx=0, eyeT=0;
 setInterval(function(){
-  ept++;
-  var open=1, scale=1, gap=0, stitch=false;
-  if(ephase==="breathe"){
-    open=0.10+0.90*(0.5-0.5*Math.cos(ept*0.075));
-    if(ept>168){ephase="grow";ept=0;}
-  }else if(ephase==="grow"){
-    open=1; scale=1+0.55*Math.min(1,ept/36);
-    if(ept>42){ephase="split";ept=0;}
-  }else if(ephase==="split"){
-    open=1; scale=1.55; gap=7*Math.min(1,ept/26);
-    if(ept>36){ephase="stitch";ept=0;}
-  }else{
-    var k=Math.min(1,ept/38);
-    stitch=true; gap=Math.max(0,7*(1-k));
-    scale=1.55-0.55*k; open=1-0.55*k;
-    if(ept>48){ephase="breathe";ept=0;}
+  eyeT++;
+  var phase=EYE_PHASES[eyePhaseIdx];
+  var dur=EYE_FRAMES[phase];
+  if(eyeT>=dur){
+    eyeT=0;
+    eyePhaseIdx=(eyePhaseIdx+1)%EYE_PHASES.length;
+    phase=EYE_PHASES[eyePhaseIdx];
+    dur=EYE_FRAMES[phase];
   }
-  eyeEl.textContent=renderEye(open,scale,gap,stitch);
-},160);
+  var t=eyeT/dur;
+  var open=1, melt=0;
+  if(phase==="opening"){
+    open=1-Math.pow(1-t,3);
+  }else if(phase==="staring"){
+    open=1;
+  }else if(phase==="closing"){
+    open=1-t*t;
+  }else if(phase==="melting"){
+    open=0;
+    melt=t*t*(3-2*t);
+  }else if(phase==="holding"){
+    open=0;
+    melt=1;
+  }else{
+    open=0;
+    melt=1-t*t*(3-2*t);
+  }
+  var grid=eyeGrid(open);
+  if(melt>0) grid=addMeltDrips(grid,melt);
+  var text=grid.map(function(row){return row.join("");}).join("\n");
+  eyeEl.textContent=corruptText(text);
+},100);
 
 /* ================= candle animation ================= */
 var cframes=[
@@ -1489,19 +1583,25 @@ setInterval(function(){
   },460+ix*130);
 });
 
-/* ================= psyche waveform ================= */
+/* ================= psyche waveform (60fps rAF) ================= */
 var waveline=document.getElementById("waveline");
-var wt=0;
-setInterval(function(){
-  wt+=0.32;
-  var pts="";
-  for(var x=0;x<=220;x+=2){
-    var y=32+9*Math.sin(x*0.09+wt)+4*Math.sin(x*0.23-wt*1.7);
-    if(Math.random()<0.012) y+=(Math.random()-.5)*26;
-    pts+=x+","+y.toFixed(1)+" ";
+(function(){
+  var wt=0, lastT=performance.now();
+  function frame(now){
+    var dt=Math.min((now-lastT)/1000,0.05);
+    lastT=now;
+    wt+=dt*2.9;
+    var pts="";
+    for(var x=0;x<=220;x+=2){
+      var y=32+9*Math.sin(x*0.09+wt)+4*Math.sin(x*0.23-wt*1.7);
+      if(Math.random()<0.0022) y+=(Math.random()-.5)*24;
+      pts+=x+","+y.toFixed(1)+" ";
+    }
+    waveline.setAttribute("points",pts);
+    requestAnimationFrame(frame);
   }
-  waveline.setAttribute("points",pts);
-},110);
+  requestAnimationFrame(frame);
+})();
 
 /* ================= hex telemetry ================= */
 (function(){
@@ -1535,7 +1635,7 @@ function typeLog(i){
   var d=document.createElement("div");
   d.textContent=LOG[i];
   logEl.appendChild(d);
-  setTimeout(function(){typeLog(i+1);},200+Math.random()*350);
+  setTimeout(function(){typeLog(i+1);},100+Math.random()*180);
 }
 var clock=document.getElementById("clock");
 setInterval(function(){
@@ -1610,26 +1710,26 @@ var hexTimer=setInterval(function(){
     hexEl.innerHTML=BOOT.slice(Math.max(0,bootI-2),bootI+1).join("<br>");
     bootI++;
   }
-},240);
+},120);
 var bar=document.querySelector("#loadbar i");
 var pct=document.getElementById("loadpct");
 var p=0;
 var loadTimer=setInterval(function(){
-  p+=2+Math.random()*7;
+  p+=4+Math.random()*10;
   if(p>=100){p=100;clearInterval(loadTimer);clearInterval(hexTimer);finishLoad();}
   bar.style.width=p+"%";
   pct.textContent=("00"+Math.floor(p)).slice(-3)+"%";
-},110);
+},60);
 function finishLoad(){
   hexEl.innerHTML="close the world, open the next.";
   setTimeout(function(){
     document.getElementById("loader").classList.add("done");
-    var order=["p-name","p-seraph","p-candle","p-works","p-about","p-oracle","p-relic","p-contact","p-console","p-litany","p-apple","p-wave","p-hex","p-crux","p-sigil"];
+    var order=Object.keys(panels);
     order.forEach(function(id,i){
-      setTimeout(function(){panels[id].classList.add("booted");drawWires();},90*i);
+      setTimeout(function(){panels[id].classList.add("booted");drawWires();},40*i);
     });
-    setTimeout(function(){drawWires();typeLog(0);},90*order.length+200);
-  },900);
+    setTimeout(function(){drawWires();typeLog(0);},40*order.length+180);
+  },420);
 }
 
 window.addEventListener("resize",function(){drawTraces();drawWires();});
