@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <title>✠ ATLAS ✠ · morisoba</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="/shared/chrome.css">
+  <link rel="stylesheet" href="../shared/chrome.css">
   <style>
     /* Panel scrollbar matching index.html */
     .scrollable-body {
@@ -178,7 +178,7 @@ ATLAS ✠ rev.β
     <div id="loadpct">···</div>
   </div>
   <div id="cursor"></div>
-  <a id="home-button" href="/">◄ ✠ HOME</a>
+  <a id="home-button" href="../">◄ ✠ HOME</a>
   <svg id="traces" xmlns="http://www.w3.org/2000/svg"></svg>
   <div id="decor"></div>
   <div id="accessories">
@@ -274,7 +274,7 @@ ATLAS ✠ rev.β
     <section class="panel" id="p-about-atlas" data-w="220" style="--tilt:rotate(0.5deg)">
       <div class="titlebar"><span class="tl">layer:β.0 premise</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
       <div class="pbody prose">
-        each dot a moment of ground travelled. return to <a href="/">index</a> when the coordinates blur.
+        each dot a moment of ground travelled. return to <a href="../">index</a> when the coordinates blur.
       </div>
     </section>
 
@@ -316,7 +316,7 @@ ATLAS ✠ rev.β
   <div id="grain"></div>
   <div id="hint">◇ drag panels · scroll to read ◇</div>
 
-  <script src="/shared/chrome.js"></script>
+  <script src="../shared/chrome.js"></script>
   <script>
   (function(){
   "use strict";
@@ -365,7 +365,7 @@ ATLAS ✠ rev.β
 
   async function loadAtlasData(){
     try {
-      var res = await fetch("/data/atlas.json");
+      var res = await fetch("../data/atlas.json");
       if(!res.ok) throw new Error("HTTP " + res.status);
       return await res.json();
     } catch(e) {
@@ -377,7 +377,7 @@ ATLAS ✠ rev.β
   async function loadWorldMap(){
     const g = document.getElementById("world-map");
     try {
-      const text = await fetch("/shared/world.svg").then(r => r.text());
+      const text = await fetch("../shared/world.svg").then(r => r.text());
       const doc = new DOMParser().parseFromString(text, "image/svg+xml");
       const root = doc.documentElement;
       Array.from(root.children).forEach(child => {

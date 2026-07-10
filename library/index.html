@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <title>✠ CODEX ✠ · morisoba</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="/shared/chrome.css">
+  <link rel="stylesheet" href="../shared/chrome.css">
   <style>
     /* Panel scrollbar matching index.html */
     .scrollable-body {
@@ -267,7 +267,7 @@ CODEX ✠ rev.α
     <div id="loadpct">···</div>
   </div>
   <div id="cursor"></div>
-  <a id="home-button" href="/">◄ ✠ HOME</a>
+  <a id="home-button" href="../">◄ ✠ HOME</a>
   <svg id="traces" xmlns="http://www.w3.org/2000/svg"></svg>
   <div id="decor"></div>
   <div id="accessories">
@@ -361,7 +361,7 @@ CODEX ✠ rev.α
       <section class="panel" id="p-about-library" data-w="220" >
       <div class="titlebar"><span class="tl">layer:α.0 premise</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
       <div class="pbody prose">
-        the codex holds every book read, every film seen, every series remembered. weight, dust, marginalia. return to <a href="/">index</a> when done.
+        the codex holds every book read, every film seen, every series remembered. weight, dust, marginalia. return to <a href="../">index</a> when done.
       </div>
     </section>
       <section class="panel" id="p-stats" data-w="200" >
@@ -401,7 +401,7 @@ CODEX ✠ rev.α
   <div id="grain"></div>
   <div id="hint">◇ drag panels · scroll to read ◇</div>
 
-  <script src="/shared/chrome.js"></script>
+  <script src="../shared/chrome.js"></script>
   <script>
   (function(){
   "use strict";
@@ -490,7 +490,7 @@ CODEX ✠ rev.α
   async function loadLibraryData(){
 
     try {
-      var res = await fetch("/data/library.json");
+      var res = await fetch("../data/library.json");
       if(!res.ok) throw new Error("HTTP " + res.status);
       return await res.json();
     } catch(e) {

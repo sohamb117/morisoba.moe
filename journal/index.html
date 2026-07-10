@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <title>✠ SCRIPTURE ✠ · morisoba</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="/shared/chrome.css">
+  <link rel="stylesheet" href="../shared/chrome.css">
   <style>
     /* Panel scrollbar matching */
     .scrollable-body {
@@ -358,7 +358,7 @@ SCRIPTURE ✠ rev.γ
     <div id="loadpct">···</div>
   </div>
   <div id="cursor"></div>
-  <a id="home-button" href="/">◄ ✠ HOME</a>
+  <a id="home-button" href="../">◄ ✠ HOME</a>
   <svg id="traces" xmlns="http://www.w3.org/2000/svg"></svg>
   <div id="decor"></div>
   <div id="accessories">
@@ -452,7 +452,7 @@ SCRIPTURE ✠ rev.γ
       <section class="panel" id="p-about-journal" data-w="220" >
       <div class="titlebar"><span class="tl">layer:γ.0 premise</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
       <div class="pbody prose">
-        logs, letters, arguments with the machine. return to <a href="/">index</a> when the transmission ends.
+        logs, letters, arguments with the machine. return to <a href="../">index</a> when the transmission ends.
       </div>
     </section>
       <section class="panel" id="p-stats" data-w="200" >
@@ -486,7 +486,7 @@ SCRIPTURE ✠ rev.γ
   <div id="grain"></div>
   <div id="hint">◇ drag panels · scroll to read ◇</div>
 
-  <script src="/shared/chrome.js"></script>
+  <script src="../shared/chrome.js"></script>
   <script>
   (function(){
   "use strict";
@@ -596,7 +596,7 @@ SCRIPTURE ✠ rev.γ
   async function loadManifest(){
 
     try {
-      var res = await fetch("/journal/entries/manifest.json");
+      var res = await fetch("entries/manifest.json");
       if(!res.ok) throw new Error("HTTP " + res.status);
       var data = await res.json();
       __manifest = (data.entries || [])
@@ -615,7 +615,7 @@ SCRIPTURE ✠ rev.γ
     }
     if(__entryCache[slug]) return __entryCache[slug];
     try {
-      var res = await fetch("/journal/entries/" + encodeURIComponent(slug) + ".md");
+      var res = await fetch("entries/" + encodeURIComponent(slug) + ".md");
       if(!res.ok) return null;
       var text = await res.text();
       var parsed = parseFrontmatter(text);
