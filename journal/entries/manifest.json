@@ -1,0 +1,10 @@
+{
+  "entries": [
+    { "slug": "2026-07-22-fragmentation", "date": "2026-07-22", "title": "fragmentation", "tags": ["systems", "misc"], "draft": false },
+    { "slug": "2026-07-15-still-alive", "date": "2026-07-15", "title": "still alive", "tags": ["meta", "work"], "draft": true },
+    { "slug": "2026-07-08-first-signal", "date": "2026-07-08", "title": "first signal", "tags": ["meta"], "draft": false },
+    { "slug": "2026-07-01-void-hours", "date": "2026-07-01", "title": "void hours", "tags": ["meta", "notes"], "draft": false },
+    { "slug": "2026-06-28-tomorrow", "date": "2026-06-28", "title": "tomorrow's protocol", "tags": ["work", "systems"], "draft": false },
+    { "slug": "2026-06-15-quiet-signals", "date": "2026-06-15", "title": "quiet signals", "tags": ["network", "misc"], "draft": false }
+  ]
+}

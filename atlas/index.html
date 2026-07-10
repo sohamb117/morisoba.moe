@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>✠ ATLAS ✠ · morisoba</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/shared/chrome.css">
+  <style>
+    /* Panel scrollbar matching index.html */
+    .scrollable-body {
+      max-height: 250px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: thin;
+      scrollbar-color: var(--steel) transparent;
+      scroll-behavior: smooth;
+      padding-right: 10px;
+    }
+    .scrollable-body::-webkit-scrollbar { width: 5px; height: 5px; }
+    .scrollable-body::-webkit-scrollbar-track { background: transparent; }
+    .scrollable-body::-webkit-scrollbar-thumb { background: var(--steel); }
+    .scrollable-body::-webkit-scrollbar-thumb:hover { background: var(--dust); }
+
+    /* Map styling */
+    #p-map .pbody {
+      padding: 0;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: var(--void-2);
+    }
+    #world {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* List styling */
+    .row {
+      padding: 6px 8px;
+      margin-bottom: 4px;
+      border-bottom: 1px solid var(--graphite);
+      cursor: pointer;
+      transition: background 0.1s, color 0.1s;
+    }
+    .row:hover, .row.selected {
+      background: var(--ink);
+      color: var(--void);
+      border-color: var(--ink);
+    }
+    .row .name {
+      font-weight: bold;
+      font-size: 13px;
+      margin-bottom: 2px;
+    }
+    .row .meta {
+      font-size: 10px;
+      opacity: 0.8;
+      font-style: italic;
+    }
+    .empty {
+      font-style: italic;
+      color: var(--steel);
+      text-align: center;
+      padding: 20px 0;
+      font-size: 11px;
+    }
+
+    /* Detail View */
+    #p-detail .pbody {
+      min-height: 180px;
+    }
+    .d-name {
+      font-size: 16px;
+      font-weight: bold;
+      text-transform: lowercase;
+      margin-bottom: 4px;
+      color: var(--scr-green);
+    }
+    .d-country {
+      font-style: italic;
+      font-size: 12px;
+      margin-bottom: 8px;
+      color: var(--dust);
+    }
+    .d-coords {
+      font-family: var(--mono);
+      font-size: 12px;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+      color: var(--ink-dim);
+    }
+    .d-visits {
+      font-size: 10px;
+      opacity: 0.7;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .d-notes {
+      font-size: 12px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+    .d-notes p {
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+    .d-notes a {
+      color: var(--scr-blue);
+    }
+
+    /* Stats & Info */
+    .stat {
+      font-size: 11px;
+      font-family: var(--mono);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      display: flex;
+      justify-content: space-between;
+    }
+    .prose {
+      font-size: 11px;
+      line-height: 1.4;
+      font-style: italic;
+      color: var(--dust);
+    }
+    .prose a {
+      color: var(--ink);
+      text-decoration: underline;
+    }
+    .prose a:hover {
+      background: var(--ink);
+      color: var(--void);
+      text-decoration: none;
+    }
+
+    /* Home button — top-left corner chrome affordance */
+    #home-button {
+      position: fixed;
+      top: 14px;
+      left: 14px;
+      z-index: 8000;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      color: var(--ink);
+      text-decoration: none;
+      padding: 5px 10px;
+      background: rgba(3, 3, 3, 0.7);
+      border: 1px solid var(--edge-lo);
+      transition: color 120ms, background 120ms, border-color 120ms;
+      text-transform: uppercase;
+    }
+    #home-button:hover {
+      color: var(--void);
+      background: var(--ink);
+      border-color: var(--ink);
+    }
+    @media (max-width: 720px) {
+      #home-button {
+        top: 8px;
+        left: 8px;
+        font-size: 9px;
+        padding: 4px 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="loader" aria-hidden="true">
+    <pre>
+ATLAS ✠ rev.β
+────────────</pre>
+    <div id="hexdump"></div>
+    <div id="loadbar"><i></i></div>
+    <div id="loadpct">···</div>
+  </div>
+  <div id="cursor"></div>
+  <a id="home-button" href="/">◄ ✠ HOME</a>
+  <svg id="traces" xmlns="http://www.w3.org/2000/svg"></svg>
+  <div id="decor"></div>
+  <div id="accessories">
+    <svg id="pole-l" viewBox="0 0 20 1000" preserveAspectRatio="none"><path d="M10,0 L10,1000" stroke="var(--graphite)" stroke-width="1"/><circle cx="10" cy="150" r="3" fill="var(--void)" stroke="var(--dust)"/><circle cx="10" cy="450" r="3" fill="var(--void)" stroke="var(--dust)"/></svg>
+    <svg id="rack-br" viewBox="0 0 100 200"><path d="M0,190 L90,190 L90,0" fill="none" stroke="var(--graphite)" stroke-width="1"/></svg>
+  </div>
+  <div id="big-rings">
+<svg viewBox="0 0 600 600" fill="none" stroke="#e8e8e8" stroke-width="1">
+  <g class="rings">
+    <circle cx="300" cy="300" r="290"/>
+    <circle cx="300" cy="300" r="230" stroke-dasharray="3 8"/>
+    <circle cx="300" cy="300" r="170"/>
+    <circle cx="300" cy="300" r="110" stroke-dasharray="1 4"/>
+    <circle cx="300" cy="300" r="50"/>
+  </g>
+  <g class="crosshair">
+    <line x1="300" y1="10" x2="300" y2="590"/>
+    <line x1="10" y1="300" x2="590" y2="300"/>
+    <line x1="95" y1="95" x2="505" y2="505" opacity=".35"/>
+    <line x1="505" y1="95" x2="95" y2="505" opacity=".35"/>
+  </g>
+  <g class="ticks">
+    <line x1="300" y1="10"  x2="300" y2="24"/>
+    <line x1="300" y1="576" x2="300" y2="590"/>
+    <line x1="10"  y1="300" x2="24"  y2="300"/>
+    <line x1="576" y1="300" x2="590" y2="300"/>
+    <line x1="484" y1="46"  x2="479" y2="55"/>
+    <line x1="554" y1="116" x2="545" y2="121"/>
+    <line x1="554" y1="484" x2="545" y2="479"/>
+    <line x1="484" y1="554" x2="479" y2="545"/>
+    <line x1="116" y1="554" x2="121" y2="545"/>
+    <line x1="46"  y1="484" x2="55"  y2="479"/>
+    <line x1="46"  y1="116" x2="55"  y2="121"/>
+    <line x1="116" y1="46"  x2="121" y2="55"/>
+  </g>
+  <g class="nodes" fill="#e8e8e8" stroke="none">
+    <rect x="376" y="376" width="4" height="4"/>
+    <rect x="220" y="376" width="4" height="4"/>
+    <rect x="220" y="220" width="4" height="4"/>
+    <rect x="376" y="220" width="4" height="4"/>
+    <rect x="468" y="298" width="3" height="3"/>
+    <rect x="445" y="383" width="3" height="3"/>
+    <rect x="383" y="445" width="3" height="3"/>
+    <rect x="298" y="468" width="3" height="3"/>
+    <rect x="213" y="445" width="3" height="3"/>
+    <rect x="151" y="383" width="3" height="3"/>
+    <rect x="128" y="298" width="3" height="3"/>
+    <rect x="151" y="213" width="3" height="3"/>
+    <rect x="213" y="151" width="3" height="3"/>
+    <rect x="298" y="128" width="3" height="3"/>
+    <rect x="383" y="151" width="3" height="3"/>
+    <rect x="445" y="213" width="3" height="3"/>
+    <rect x="497" y="413" width="4" height="4"/>
+    <rect x="99"  y="413" width="4" height="4"/>
+    <rect x="99"  y="183" width="4" height="4"/>
+    <rect x="497" y="183" width="4" height="4"/>
+    <rect x="298" y="68"  width="4" height="4"/>
+    <rect x="298" y="528" width="4" height="4"/>
+  </g>
+  <g class="labels" font-family="Courier New, monospace" font-size="9" fill="#e8e8e8" stroke="none">
+    <text x="386" y="373">0x2A4F</text>
+    <text x="454" y="380">0x81B3</text>
+    <text x="221" y="146">0xCF01</text>
+    <text x="308" y="466">0x004A</text>
+    <text x="454" y="210">0xEA2C</text>
+    <text x="86"  y="292">0x77F0</text>
+  </g>
+  <g class="topology" opacity=".45">
+    <line x1="378" y1="378" x2="222" y2="378"/>
+    <line x1="378" y1="378" x2="447" y2="385"/>
+    <line x1="222" y1="222" x2="128" y2="298"/>
+    <line x1="298" y1="128" x2="378" y2="222"/>
+    <line x1="468" y1="298" x2="497" y2="413"/>
+    <line x1="497" y1="183" x2="445" y2="213"/>
+  </g>
+  <line class="sweep" x1="300" y1="300" x2="300" y2="10" stroke-width="1" opacity=".8">
+    <animateTransform attributeName="transform" type="rotate" from="0 300 300" to="360 300 300" dur="22s" repeatCount="indefinite"/>
+  </line>
+  <circle class="hub" cx="300" cy="300" r="2" fill="#e8e8e8" stroke="none"/>
+</svg>
+</div>
+  
+  <div id="stage">
+    
+    <section class="panel" id="p-name" data-w="180">
+      <div class="titlebar"><span class="tl">layer:β identity</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
+      <div class="pbody">
+        <div style="font-weight:bold; font-size:14px; letter-spacing:2px">ATLAS</div>
+        <div style="font-size:10px; margin-top:5px; color:var(--steel);">GEODETIC.SYNC.OK</div>
+      </div>
+    </section>
+
+    <section class="panel" id="p-about-atlas" data-w="220" style="--tilt:rotate(0.5deg)">
+      <div class="titlebar"><span class="tl">layer:β.0 premise</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
+      <div class="pbody prose">
+        each dot a moment of ground travelled. return to <a href="/">index</a> when the coordinates blur.
+      </div>
+    </section>
+
+    <section class="panel" id="p-stats" data-w="200" style="--tilt:rotate(-0.5deg)">
+      <div class="titlebar"><span class="tl">layer:β.s metrics</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
+      <div class="pbody">
+        <!-- stats rendered via JS -->
+      </div>
+    </section>
+
+    <section class="panel" id="p-waypoints" data-w="240" style="--tilt:rotate(-0.2deg)">
+      <div class="titlebar"><span class="tl">layer:β.1 waypoints</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
+      <div class="pbody scrollable-body"></div>
+    </section>
+
+    <section class="panel" id="p-map" data-w="700" style="--tilt:rotate(0.1deg)">
+      <div class="titlebar"><span class="tl">layer:β.2 projection</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
+      <div class="pbody">
+        <svg id="world" viewBox="0 0 720 360" preserveAspectRatio="xMidYMid meet" style="width:100%; height:auto; display:block;">
+          <g id="world-map"></g>
+          <g id="graticule"></g>
+          <g id="markers"></g>
+        </svg>
+      </div>
+    </section>
+
+    <section class="panel" id="p-detail" data-w="340" style="--tilt:rotate(0.2deg)">
+      <div class="titlebar"><span class="tl">layer:β.x telemetry</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
+      <div class="pbody scrollable-body">
+        <div class="empty">[ select a waypoint ]</div>
+      </div>
+    </section>
+
+  </div>
+  <svg id="wires"></svg>
+  <div id="dock"></div>
+  <div id="pdpt">PRESENT DAY · PRESENT TIME</div>
+  <div id="scanlines"></div>
+  <div id="grain"></div>
+  <div id="hint">◇ drag panels · scroll to read ◇</div>
+
+  <script src="/shared/chrome.js"></script>
+  <script>
+  (function(){
+  "use strict";
+
+  var LAYOUT = [
+    ["p-name",         .045, .050],
+    ["p-map",          .180, .120],
+    ["p-waypoints",    .045, .350],
+    ["p-detail",       .705, .500],
+    ["p-stats",        .705, .720],
+    ["p-about-atlas",  .045, .800]
+  ];
+
+  var MAT = {
+    "p-name":        "mat-paper",
+    "p-map":         "mat-crt scr-blue",
+    "p-waypoints":   "mat-metal",
+    "p-detail":      "mat-crt scr-green",
+    "p-stats":       "mat-worn",
+    "p-about-atlas": "mat-paper"
+  };
+
+  var WIRES = [
+    ["p-name", "bottom", "p-waypoints", "top"],
+    ["p-waypoints", "bottom", "p-about-atlas", "top"],
+    ["p-name", "right", "p-map", "left"],
+    ["p-map", "right", "p-detail", "left"],
+    ["p-detail", "bottom", "p-stats", "top"]
+  ];
+
+  var FLOOR = [
+    ["p-about-atlas", .5], ["p-stats", .5], ["p-map", .5]
+  ];
+
+  var DROPS = [
+    [.05, "p-name"], [.20, "p-map"], [.50, "p-map"], [.80, "p-detail"]
+  ];
+
+  var BOOT = [
+    "atlas online",
+    "loading vectors...",
+    "geodetic sync ok",
+    "rendering graticules...",
+    "OK."
+  ];
+
+  async function loadAtlasData(){
+    try {
+      var res = await fetch("/data/atlas.json");
+      if(!res.ok) throw new Error("HTTP " + res.status);
+      return await res.json();
+    } catch(e) {
+      console.warn("atlas.json load failed:", e);
+      return { places: [] };
+    }
+  }
+
+  async function loadWorldMap(){
+    const g = document.getElementById("world-map");
+    try {
+      const text = await fetch("/shared/world.svg").then(r => r.text());
+      const doc = new DOMParser().parseFromString(text, "image/svg+xml");
+      const root = doc.documentElement;
+      Array.from(root.children).forEach(child => {
+        if(child.tagName === "path" || child.tagName === "g") {
+          g.appendChild(child.cloneNode(true));
+        }
+      });
+      const sx = 720 / 494.7;
+      const sy = 360 / 265.7;
+      g.setAttribute("transform", `scale(${sx} ${sy})`);
+      g.querySelectorAll("path").forEach(p => {
+        p.setAttribute("fill", "var(--charcoal)");
+        p.setAttribute("stroke", "var(--dust)");
+        p.setAttribute("stroke-width", "0.5");
+        p.removeAttribute("style");
+      });
+    } catch(e) {
+      console.warn("world map load failed:", e);
+      g.innerHTML = "<text x=360 y=180 fill='var(--dust)' text-anchor='middle' font-family='var(--mono)' font-size='10'>[ atlas offline ]</text>";
+    }
+  }
+
+  function drawGraticule(){
+    const g = document.getElementById("graticule");
+    for(let lon = -180; lon <= 180; lon += 30){
+      const x = (lon + 180) / 360 * 720;
+      const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      line.setAttribute("x1", x); line.setAttribute("y1", 0);
+      line.setAttribute("x2", x); line.setAttribute("y2", 360);
+      line.setAttribute("stroke", "var(--ink-dim)");
+      line.setAttribute("stroke-width", "0.5");
+      line.setAttribute("stroke-dasharray", "2 4");
+      line.setAttribute("opacity", "0.35");
+      g.appendChild(line);
+      if(lon !== -180 && lon !== 180){
+        const t = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        t.setAttribute("x", x); t.setAttribute("y", 356);
+        t.setAttribute("font-family", "var(--mono)");
+        t.setAttribute("font-size", "6");
+        t.setAttribute("fill", "var(--ink-dim)");
+        t.setAttribute("text-anchor", "middle");
+        t.setAttribute("class", "tick");
+        t.setAttribute("opacity", "0.5");
+        t.textContent = lon === 0 ? "0°" : Math.abs(lon) + (lon > 0 ? "E" : "W");
+        g.appendChild(t);
+      }
+    }
+    for(let lat = -60; lat <= 60; lat += 30){
+      const y = (90 - lat) / 180 * 360;
+      const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      line.setAttribute("x1", 0); line.setAttribute("y1", y);
+      line.setAttribute("x2", 720); line.setAttribute("y2", y);
+      line.setAttribute("stroke", "var(--ink-dim)");
+      line.setAttribute("stroke-width", "0.5");
+      line.setAttribute("stroke-dasharray", "2 4");
+      line.setAttribute("opacity", "0.35");
+      g.appendChild(line);
+      if(lat !== 0){
+        const t = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        t.setAttribute("x", 4); t.setAttribute("y", y - 2);
+        t.setAttribute("font-family", "var(--mono)");
+        t.setAttribute("font-size", "6");
+        t.setAttribute("fill", "var(--ink-dim)");
+        t.setAttribute("class", "tick");
+        t.setAttribute("opacity", "0.5");
+        t.textContent = Math.abs(lat) + (lat > 0 ? "N" : "S");
+        g.appendChild(t);
+      }
+    }
+  }
+
+  function renderMarkers(places){
+    const g = document.getElementById("markers");
+    g.innerHTML = "";
+    places.forEach((place, i) => {
+      if (!place || !Array.isArray(place.coords) || place.coords.length !== 2) return;
+      if (typeof place.coords[0] !== "number" || typeof place.coords[1] !== "number") return;
+      const coords = latLonToXY(place.coords[0], place.coords[1], 720, 360);
+      const x = coords.x;
+      const y = coords.y;
+      const marker = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      marker.setAttribute("class", "marker");
+      marker.setAttribute("data-idx", i);
+      marker.setAttribute("transform", `translate(${x} ${y})`);
+      const r1 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      r1.setAttribute("r", "5"); r1.setAttribute("fill", "none");
+      r1.setAttribute("stroke", "var(--ink-hi)"); r1.setAttribute("stroke-width", "0.7");
+      r1.setAttribute("opacity", "0.4");
+      const r2 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      r2.setAttribute("r", "3"); r2.setAttribute("fill", "none");
+      r2.setAttribute("stroke", "var(--ink-hi)"); r2.setAttribute("stroke-width", "0.7");
+      r2.setAttribute("opacity", "0.7");
+      const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      dot.setAttribute("r", "1.2"); dot.setAttribute("fill", "var(--ink-hi)");
+      marker.appendChild(r1);
+      marker.appendChild(r2);
+      marker.appendChild(dot);
+      const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      label.setAttribute("x", 7); label.setAttribute("y", 2);
+      label.setAttribute("font-family", "var(--mono)");
+      label.setAttribute("font-size", "6");
+      label.setAttribute("fill", "var(--ink)");
+      label.textContent = place.name;
+      marker.appendChild(label);
+      marker.style.cursor = "pointer";
+      g.appendChild(marker);
+      
+      marker.addEventListener("click", () => {
+        var row = document.querySelector("#p-waypoints .row[data-idx='"+i+"']");
+        if(row) row.click();
+      });
+    });
+  }
+
+  function esc(s){
+    return String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  function renderWaypoints(places){
+    var body = document.querySelector("#p-waypoints .pbody");
+    if(!places || places.length === 0){
+      body.innerHTML = '<div class="empty">[ nothing catalogued ]</div>';
+      return;
+    }
+    body.innerHTML = places.map((place, i) => {
+      if (!place || !Array.isArray(place.coords) || place.coords.length !== 2) return "";
+      if (typeof place.coords[0] !== "number" || typeof place.coords[1] !== "number") return "";
+      var latest = (place.visits && place.visits.length) ? place.visits[place.visits.length-1] : "—";
+      return `<div class="row" data-idx="${i}">
+         <div class="name">${esc(place.name)}</div>
+         <div class="meta">${esc(place.country)} · ${esc(latest)}</div>
+       </div>`;
+    }).join("");
+  }
+
+  function renderDetail(place){
+    var body = document.querySelector("#p-detail .pbody");
+    if(!place){
+      body.innerHTML = '<div class="empty">[ select a waypoint ]</div>';
+      return;
+    }
+    
+    var lat = place.coords[0];
+    var lon = place.coords[1];
+    var latStr = Math.abs(lat).toFixed(4) + "°" + (lat >= 0 ? "N" : "S");
+    var lonStr = Math.abs(lon).toFixed(4) + "°" + (lon >= 0 ? "E" : "W");
+    var coordStr = latStr + " · " + lonStr;
+    
+    var visitsStr = "";
+    if (place.visits && place.visits.length > 0) {
+      visitsStr = "visits: " + place.visits.join(", ");
+    }
+    
+    var notesHtml = "";
+    if (typeof markdownToHtml === "function") {
+      notesHtml = markdownToHtml(place.notes || "");
+    } else {
+      notesHtml = esc(place.notes || "").replace(/\\n/g, "<br>");
+    }
+
+    body.innerHTML = `
+      <div class="d-name">${esc(place.name)}</div>
+      <div class="d-country">${esc(place.country)}</div>
+      <div class="d-coords">${coordStr}</div>
+      <div class="d-visits">${esc(visitsStr)}</div>
+      <div class="d-notes">${notesHtml}</div>
+    `;
+  }
+
+  var __data = null;
+  function setupClickHandlers(){
+    document.querySelectorAll("#p-waypoints .row").forEach(row => {
+      row.addEventListener("click", () => {
+        var idx = parseInt(row.dataset.idx, 10);
+        var place = __data.places[idx];
+        if (!place || !Array.isArray(place.coords) || place.coords.length !== 2) return;
+        if (typeof place.coords[0] !== "number" || typeof place.coords[1] !== "number") return;
+        renderDetail(place);
+        document.querySelectorAll("#p-waypoints .row.selected").forEach(r => r.classList.remove("selected"));
+        row.classList.add("selected");
+        
+        // Highlight marker
+        document.querySelectorAll("#markers .marker").forEach(m => {
+          var dot = m.querySelector("circle:last-of-type");
+          var inner = m.querySelector("circle:nth-of-type(2)");
+          if(m.getAttribute("data-idx") == idx) {
+            dot.setAttribute("fill", "var(--ink-hi)");
+            dot.setAttribute("r", "1.7");
+            if(inner) inner.setAttribute("stroke-width", "1.5");
+          } else {
+            dot.setAttribute("fill", "var(--ink-hi)");
+            dot.setAttribute("r", "1.2");
+            if(inner) inner.setAttribute("stroke-width", "0.7");
+          }
+        });
+      });
+    });
+  }
+
+  function renderStats(places){
+    var totalVisits = places.reduce((sum, p) => sum + (p.visits ? p.visits.length : 0), 0);
+    var countries = new Set(places.map(p => p.country));
+    document.querySelector("#p-stats .pbody").innerHTML = `
+      <div class="stat"><span>places</span> <span>${places.length}</span></div>
+      <div class="stat"><span>visits</span> <span>${totalVisits}</span></div>
+      <div class="stat"><span>countries</span> <span>${countries.size}</span></div>
+    `;
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    var panels = applyPanelLayout(LAYOUT, MAT);
+    attachAccessories(document.querySelectorAll(".panel"));
+    spawnDecor();
+    drawTraces();
+    drawWires(LAYOUT, WIRES, FLOOR, DROPS);
+    registerGlitchTargets(["#p-waypoints .row .name", "text.tick"]);
+    startLoader(BOOT, async function(){
+      await loadWorldMap();
+      drawGraticule();
+      __data = await loadAtlasData();
+      renderMarkers(__data.places);
+      renderWaypoints(__data.places);
+      renderStats(__data.places);
+      setupClickHandlers();
+    });
+    initChrome();
+  });
+  })();
+  </script>
+</body>
+</html>

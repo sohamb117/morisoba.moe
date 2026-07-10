@@ -4,272 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>✠ SOHAM ✠</title>
+<link rel="stylesheet" href="/shared/chrome.css">
 <style>
-/* ============================================================
-   ✠ SOHAM — DIVINE MACHINERY v2 ✠
-   black / white / horror vacui / dead wires / ascii seraphim
-   ============================================================ */
-:root{
-  /* MONOCHROME STACK — strict neutral, black-and-white only */
-  --void:       #030303;   /* deepest ground */
-  --void-2:     #08090a;   /* slightly lifted — panel bodies */
-  --charcoal:   #14151a;   /* dark surface fill */
-  --graphite:   #26272b;   /* mid-dark metal */
-  --steel:      #46474b;   /* mid metal, worn */
-  --dust:       #7d7d7f;   /* dim label / secondary ink */
-  --ink-dim:    #b8b8b8;   /* worn text */
-  --ink:        #e8e8e8;   /* primary text (unchanged for compat) */
-  --ink-hi:     #f2f2f2;   /* rare clean highlight */
-
-  /* EDGE ALPHAS — low-contrast separators */
-  --edge-lo:    rgba(232,232,232,0.14);
-  --edge-mid:   rgba(232,232,232,0.28);
-  --edge-hi:    rgba(232,232,232,0.55);
-
-  /* SCREEN PHOSPHORS — allowed color only inside .mat-crt panel bodies */
-  --scr-blue:   #4a7c99;   /* CRT blue-gray */
-  --scr-green:  #6d8f6b;   /* faded phosphor green */
-  --scr-amber:  #a4835a;   /* old terminal amber */
-
-  /* ACCENTS — sparse: LEDs, warnings, packet flow, glitch bursts only */
-  --sig-cyan:    #6fb6c2;
-  --sig-green:   #7fb069;
-  --warn-yellow: #c8a951;
-  --warn-red:    #8a3a3a;   /* deep burgundy, rare */
-
-  /* Typography */
-  --mono: 'Courier New', Courier, monospace;
-  --sans: 'Inter', 'Helvetica Neue', 'Arial', system-ui, sans-serif;
-
-  --line: 1px solid var(--ink);
-}
-*{margin:0;padding:0;box-sizing:border-box;}
-::selection{background:var(--ink);color:var(--void);}
-html,body{height:100%;}
-body{
-  background:var(--void);color:var(--ink);
-  font-family:var(--mono);overflow:hidden;cursor:none;
-}
-a{color:inherit;}
-button{cursor:none;}
-
-/* ---------- cursor ---------- */
-#cursor{position:fixed;top:0;left:0;z-index:9999;pointer-events:none;
-  width:19px;height:19px;margin:-9px 0 0 -9px;mix-blend-mode:difference;}
-#cursor::before,#cursor::after{content:"";position:absolute;background:#fff;}
-#cursor::before{left:9px;top:0;width:1px;height:19px;}
-#cursor::after{top:9px;left:0;height:1px;width:19px;}
-#cursor.hot{transform:rotate(45deg) scale(1.5);}
-@media (hover:none){#cursor{display:none;}body,button{cursor:auto;}}
-
-/* ---------- deep background ---------- */
-#traces{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;}
-#decor{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
-.bg-cross{position:absolute;color:var(--ink);user-select:none;line-height:1;}
-.bg-cross.throb{animation:throb 9s ease-in-out infinite;}
-@keyframes throb{0%,100%{opacity:.05;}50%{opacity:.16;}}
-.fill-tex{position:absolute;font-size:9px;line-height:2.1;letter-spacing:6px;
-  opacity:.08;user-select:none;white-space:pre;}
-#big-rings{position:fixed;inset:0;z-index:0;pointer-events:none;
-  display:flex;align-items:center;justify-content:center;}
-#big-rings svg{width:min(120vh,120vw);opacity:.045;}
-
-/* ---------- overlays ---------- */
-#scanlines{position:fixed;inset:0;z-index:9990;pointer-events:none;
-  background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0 2px,rgba(0,0,0,.07) 3px,rgba(0,0,0,0) 4px);
-  mix-blend-mode:multiply;}
-#grain{position:fixed;inset:-100px;z-index:9991;pointer-events:none;opacity:.06;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
-  animation:grain 1.2s steps(4) infinite;}
-@keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-30px,12px)}40%{transform:translate(18px,-24px)}60%{transform:translate(-12px,30px)}80%{transform:translate(24px,6px)}100%{transform:translate(0,0)}}
-
-/* ---------- loader ---------- */
-#loader{position:fixed;inset:0;z-index:10000;background:var(--void);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
-  transition:opacity .7s,visibility .7s;}
-#loader.done{opacity:0;visibility:hidden;}
-#loader pre{font-size:11px;line-height:1.1;text-align:center;}
-#hexdump{font-size:9px;opacity:.5;height:54px;overflow:hidden;text-align:center;line-height:1.4;}
-#loadpct{font-size:11px;letter-spacing:8px;}
-#loadbar{width:min(380px,70vw);height:8px;border:var(--line);padding:1px;}
-#loadbar i{display:block;height:100%;width:0%;background:var(--ink);}
-
-/* ---------- stage / wires ---------- */
-#stage{position:fixed;inset:0;z-index:1;}
-#wires{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;}
-#wires path{fill:none;stroke:var(--ink);}
-#wires .bus{stroke-width:1;opacity:.85;}
-#wires .bus2{stroke-width:1;opacity:.3;}
-/* tonal cable jackets — monochrome only */
-#wires .t-hi   {stroke:var(--ink);}
-#wires .t-mid  {stroke:var(--ink-dim);}
-#wires .t-lo   {stroke:var(--dust);}
-#wires .t-faint{stroke:var(--steel);}
-#wires .cable  {opacity:.78;}
-#wires .cable2 {opacity:.40;}
-/* accent — packet flow only (screen exception) */
-#wires .flow{stroke:var(--scr-blue);stroke-width:1;stroke-dasharray:2 22;
-  animation:flow 3.2s linear infinite;opacity:.85;
-  filter:drop-shadow(0 0 2px rgba(74,124,153,.6));}
-@keyframes flow{to{stroke-dashoffset:-24;}}
-#wires .port{fill:var(--void);stroke:var(--ink-dim);stroke-width:1;}
-#wires .via{fill:var(--dust);}
-#wires .dead{opacity:.55;stroke:var(--steel);}
-#wires .dead-end{fill:none;stroke:var(--steel);opacity:.65;}
-
-/* ---------- panels ---------- */
-.panel{position:absolute;z-index:10;background:var(--void);border:var(--line);
-  min-width:110px;
-  box-shadow:0 0 0 3px var(--void),0 0 0 4px var(--edge-hi),8px 10px 0 rgba(0,0,0,.9);
-  opacity:0;transform:translateY(12px);transition:opacity .4s,transform .4s;}
-.panel.booted{opacity:1;transform:var(--tilt,none);}
-.panel.dragging{transition:none;}
-.titlebar{display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--edge-hi);
-  padding:4px 6px;font-family:var(--sans);font-size:9px;font-weight:500;
-  letter-spacing:2.4px;text-transform:uppercase;
-  user-select:none;touch-action:none;}
-.titlebar .tl{flex:1;white-space:nowrap;overflow:hidden;background:var(--void);padding:0 4px;}
-.pbtn{font-family:var(--mono);font-size:9px;line-height:1;border:var(--line);
-  background:var(--void);color:var(--ink);width:14px;height:14px;flex:none;
-  display:grid;place-items:center;}
-.pbtn:hover{background:var(--ink);color:var(--void);}
-.pbody{padding:12px;font-size:11px;line-height:1.7;}
-.panel.min .pbody{display:none;}
-.panel.inv{background:var(--ink);color:var(--void);}
-.panel.inv .titlebar{border-color:var(--void);}
-.panel.inv .titlebar .tl{background:var(--ink);}
-.panel.inv .pbtn{border-color:var(--void);background:var(--ink);color:var(--void);}
-.panel.inv .pbtn:hover{background:var(--void);color:var(--ink);}
-.panel:hover .titlebar{background:var(--ink);color:var(--void);}
-.panel:hover .titlebar .tl{background:transparent;}
-.panel.inv:hover .titlebar{background:var(--void);color:var(--ink);}
-
-/* ---------- materials (monochrome tonal surfaces) ---------- */
-.panel.mat-paper{
-  background-color:var(--void-2);
-  background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23p)'/%3E%3C/svg%3E"),
-    repeating-linear-gradient(0deg, transparent 0 21px, rgba(255,255,255,.018) 21px 22px);
-}
-.panel.mat-paper.inv{
-  background-color:#d8d8d8;
-  background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='pi'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .10 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23pi)'/%3E%3C/svg%3E"),
-    repeating-linear-gradient(0deg, transparent 0 21px, rgba(0,0,0,.028) 21px 22px);
-}
-.panel.mat-metal{
-  background-color:var(--charcoal);
-  background-image:
-    repeating-linear-gradient(90deg, transparent 0 3px, rgba(255,255,255,.022) 3px 4px),
-    linear-gradient(180deg, rgba(255,255,255,.035), transparent 40%),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23m)'/%3E%3C/svg%3E");
-}
-.panel.mat-worn{
-  background-color:var(--graphite);
-  background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='w'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.5' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .34 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23w)'/%3E%3C/svg%3E"),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='w2'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23w2)'/%3E%3C/svg%3E");
-}
-.panel.mat-crt{
-  background-color:#050608;
-  background-image:
-    repeating-linear-gradient(0deg, rgba(255,255,255,.022) 0 1px, transparent 1px 3px),
-    radial-gradient(ellipse at center, rgba(255,255,255,.04) 0%, transparent 72%);
-}
-.panel.mat-crt .pbody{position:relative;}
-.panel.mat-crt .pbody::after{
-  content:"";position:absolute;inset:0;pointer-events:none;
-  background:radial-gradient(ellipse at 50% 40%, transparent 55%, rgba(0,0,0,.42) 100%);
-}
-.panel.mat-frame{
-  background:var(--void);
-  border-color:var(--edge-mid);
-  box-shadow:0 0 0 3px var(--void),0 0 0 4px var(--edge-lo),6px 8px 0 rgba(0,0,0,.55);
-}
-.panel.mat-frame .titlebar{border-bottom-color:var(--edge-mid);}
-
-/* screen phosphor tints — allowed color inside .mat-crt bodies only */
-.panel.mat-crt.scr-green .pbody{color:var(--scr-green);}
-.panel.mat-crt.scr-green .pbody svg{stroke:var(--scr-green);}
-.panel.mat-crt.scr-blue  .pbody{color:var(--scr-blue);}
-.panel.mat-crt.scr-blue  .pbody svg{stroke:var(--scr-blue);}
-.panel.mat-crt.scr-amber .pbody{color:var(--scr-amber);}
-.panel.mat-crt.scr-amber .pbody svg{stroke:var(--scr-amber);}
-
-/* keep hover-invert readable across materials */
-.panel.mat-paper:hover .titlebar,
-.panel.mat-metal:hover .titlebar,
-.panel.mat-worn:hover  .titlebar,
-.panel.mat-crt:hover   .titlebar,
-.panel.mat-frame:hover .titlebar{background:var(--ink);color:var(--void);}
-
-/* ---------- industrial accessories (LEDs, asset tags, placards, silhouettes) ---------- */
-.led-strip{display:inline-flex;gap:3px;padding:0 6px 0 4px;flex:none;align-items:center;}
-.led{width:5px;height:5px;flex:none;background:var(--dust);opacity:.55;}
-.led.on  {background:var(--sig-green); opacity:.9; filter:drop-shadow(0 0 1.5px rgba(127,176,105,.7));}
-.led.warn{background:var(--warn-yellow);opacity:.88;filter:drop-shadow(0 0 1.5px rgba(200,169,81,.6));}
-.led.hi  {background:var(--sig-cyan);   opacity:.88;filter:drop-shadow(0 0 1.5px rgba(111,182,194,.6));}
-.led.blink{animation:ledblink 2.6s steps(1) infinite;}
-@keyframes ledblink{0%,55%{opacity:1}56%,100%{opacity:.18}}
-.led.blink.slow{animation-duration:5.2s;}
-.led.blink.fast{animation-duration:1.4s;}
-
-.asset-tag{position:absolute;bottom:3px;right:5px;
-  font-family:var(--sans);font-size:6.5px;letter-spacing:1.1px;
-  color:var(--dust);display:flex;align-items:center;gap:3px;
-  opacity:.6;pointer-events:none;line-height:1;text-transform:uppercase;}
-.asset-tag svg{height:7px;width:auto;display:block;}
-.asset-tag svg rect{fill:var(--dust);}
-.panel.mat-frame .asset-tag{display:none;}
-.panel.mat-crt .asset-tag{display:none;}
-.panel.inv .asset-tag{color:var(--steel);opacity:.7;}
-.panel.inv .asset-tag svg rect{fill:var(--steel);}
-
-#accessories{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
-#pole-l{position:absolute;top:-32px;bottom:0;left:0;width:78px;opacity:.16;}
-#pole-l svg{width:100%;height:100%;}
-#rack-br{position:absolute;bottom:34px;right:6px;width:96px;height:220px;opacity:.14;}
-#rack-br svg{width:100%;height:100%;}
-
-.placard{position:absolute;font-family:var(--sans);font-size:9px;letter-spacing:2.4px;
-  padding:6px 10px;text-transform:uppercase;opacity:.42;line-height:1.25;text-align:center;
-  color:var(--warn-yellow);
-  background-color:#0a0a0a;
-  background-image:repeating-linear-gradient(45deg,
-    transparent 0 6px, rgba(200,169,81,.20) 6px 12px);
-  border:1px solid rgba(200,169,81,.5);}
-
-#pole-r{position:absolute;top:-32px;bottom:0;right:0;width:78px;opacity:.13;
-  transform:scaleX(-1);}
-#pole-r svg{width:100%;height:100%;}
-#fence-tr{position:absolute;top:0;right:0;width:340px;height:380px;opacity:.09;
-  transform:rotate(-3deg);transform-origin:top right;overflow:hidden;color:var(--ink);}
-#fence-tr svg{width:100%;height:100%;}
-
-/* image-in-panel support: aged photograph slotted into machine */
-.panel.mat-portrait{background:#050506;}
-.panel.mat-portrait .pbody{padding:3px;position:relative;overflow:hidden;}
-.panel.mat-portrait .pbody img{
-  display:block;width:100%;height:auto;
-  filter:grayscale(1) contrast(1.08) brightness(.78);
-  image-rendering:auto;}
-.panel.mat-portrait .pbody::before{
-  content:"";position:absolute;inset:3px;pointer-events:none;z-index:2;
-  background:repeating-linear-gradient(0deg, rgba(255,255,255,.04) 0 1px, transparent 1px 3px);}
-.panel.mat-portrait .pbody::after{
-  content:"";position:absolute;inset:3px;pointer-events:none;z-index:2;
-  background:radial-gradient(ellipse at 50% 45%, transparent 55%, rgba(0,0,0,.5) 100%);}
-.panel.mat-portrait .caption{position:absolute;left:6px;bottom:5px;z-index:3;
-  font-family:var(--sans);font-size:7.5px;letter-spacing:1.4px;color:var(--dust);
-  text-transform:uppercase;opacity:.7;}
-.panel.mat-portrait .asset-tag{color:var(--dust);}
-
-/* GPU-accel hints for continuously-transformed layers */
-#wires,#traces,#big-rings svg,#scanlines,#grain{will-change:transform;}
-.panel{will-change:transform,opacity;
-  transition:opacity .35s cubic-bezier(.22,.61,.36,1),
-             transform .35s cubic-bezier(.22,.61,.36,1);}
-
 /* sticky note micro-styles */
 .panel.note .asset-tag{display:none;}
 #p-note{opacity:.88;}
@@ -295,7 +31,7 @@ button{cursor:none;}
 #seraph{font-size:10px;line-height:1.08;letter-spacing:0;white-space:pre;
   text-align:center;}
 #p-seraph .caption{font-size:9px;letter-spacing:3px;text-align:center;opacity:.6;
-  padding-top:6px;text-transform:uppercase;}
+  padding-top:6px;}
 
 /* about / works / contact */
 #p-about .pbody p+p{margin-top:8px;}
@@ -353,31 +89,8 @@ button{cursor:none;}
 @keyframes heartbeat{0%,100%{transform:scale(1)}8%{transform:scale(1.035)}16%{transform:scale(1)}24%{transform:scale(1.02)}32%{transform:scale(1)}}
 .flame{transform-origin:75px 38px;animation:flamewave 2.6s ease-in-out infinite;}
 @keyframes flamewave{0%,100%{transform:skewX(0deg) scaleY(1)}50%{transform:skewX(-2.5deg) scaleY(1.05)}}
-
-/* dock / hint */
-#dock{position:fixed;bottom:32px;left:50%;transform:translateX(-50%);
-  z-index:9000;display:flex;gap:6px;}
-#dock button{font-family:var(--mono);font-size:9px;letter-spacing:2px;
-  text-transform:uppercase;border:var(--line);background:var(--void);
-  color:var(--ink);padding:5px 10px;}
-#dock button:hover{background:var(--ink);color:var(--void);}
-#dock:empty{display:none;}
-#hint{position:fixed;bottom:32px;right:28px;z-index:9000;font-size:9px;
-  letter-spacing:3px;opacity:.45;text-transform:uppercase;pointer-events:none;
-  animation:blink 2s steps(1) infinite;}
-
-/* ghost dialog windows (navi hologram noise) */
-.ghost-win{position:absolute;border:1px solid var(--edge-lo);background:rgba(3,3,3,.55);}
-.ghost-win::before{content:"";display:block;height:13px;border-bottom:1px solid var(--edge-lo);}
-.ghost-win.lit{border-color:var(--edge-mid);}
-.ghost-win.lit::before{border-bottom-color:var(--edge-mid);}
-
-/* source code as texture (layer:00 program) */
-.code-tex{position:absolute;font-size:9px;line-height:1.9;white-space:pre;
-  user-select:none;letter-spacing:1px;}
-
 /* apple / crux ascii */
-#apple,#crux{font-size:10px;line-height:1.15;white-space:pre;text-align:center;}
+#apple,#crux{font-size:10px;line-height:1.15;white-space:pre;text-align:left;}
 .pcaption{font-size:8px;letter-spacing:3px;text-align:center;opacity:.5;padding-top:5px;text-transform:lowercase;}
 
 /* psyche waveform */
@@ -388,69 +101,14 @@ button{cursor:none;}
 #p-hex .pbody{padding:4px 7px;height:224px;overflow:hidden;}
 #hexcol{font-size:8px;line-height:1.55;white-space:pre;opacity:.7;animation:hexscroll 30s linear infinite;}
 @keyframes hexscroll{to{transform:translateY(-50%);}}
-
-/* present day, present time */
-#pdpt{position:fixed;bottom:32px;left:28px;z-index:9000;font-family:var(--sans);
-  font-size:9px;letter-spacing:3px;pointer-events:none;
-  animation:pdpt 8s ease-in-out infinite;text-transform:uppercase;color:var(--ink-dim);}
-@keyframes pdpt{0%,100%{opacity:.12}50%{opacity:.55}}
-
-/* ---------- optical layer: bloom, aberration, packet-burst, drift ---------- */
-.panel.mat-crt .pbody{text-shadow:0 0 2px currentColor;}
 #seraph{text-shadow:1.1px 0 rgba(111,182,194,.35), -1.1px 0 rgba(200,80,80,.30);}
-.glitching{text-shadow:1.5px 0 rgba(111,182,194,.5), -1.5px 0 rgba(200,60,60,.42);}
-
-#scanlines{animation:scan-drift 9s linear infinite;}
-@keyframes scan-drift{from{transform:translateY(0)}to{transform:translateY(3px)}}
-
-.packet-burst{position:fixed;left:0;z-index:9992;pointer-events:none;
-  height:2px;mix-blend-mode:screen;
-  background:linear-gradient(90deg,
-    transparent 0%,
-    rgba(200,60,60,.55) 18%,
-    rgba(90,220,90,.45) 42%,
-    rgba(80,150,220,.55) 68%,
-    transparent 100%);
-  animation:burst 120ms steps(4,end) forwards;}
-@keyframes burst{0%{opacity:0;transform:translateX(-4px)}
-                 25%{opacity:.9;transform:translateX(2px)}
-                 60%{opacity:.7;transform:translateX(-1px)}
-                 100%{opacity:0;transform:translateX(3px)}}
-
-/* ---------- chrome: loader recolor + cursor coord readout + hint ---------- */
-#loader pre{color:var(--ink-dim);}
-#hexdump{color:var(--dust);}
-#loadpct{color:var(--ink-dim);}
-#loadbar{border-color:var(--edge-hi);}
-#loadbar i{background:var(--scr-blue);
-  filter:drop-shadow(0 0 3px rgba(74,124,153,.55));}
-
-#hint{font-family:var(--sans);color:var(--dust);}
-#hint::before{content:"";display:inline-block;width:5px;height:5px;
-  background:var(--sig-green);margin-right:6px;vertical-align:middle;
-  filter:drop-shadow(0 0 1.5px rgba(127,176,105,.7));
-  animation:ledblink 2.2s steps(1) infinite;}
-
-@media (max-width:720px){
-  body{overflow:auto;overflow-x:hidden;cursor:auto;}
-  #stage{position:static;padding:36px 22px 90px;}
-  #wires,#traces,#accessories,#decor{display:none;}
-  .panel{position:relative !important;left:auto !important;top:auto !important;
-    width:100% !important;margin:0 0 14px;transform:none !important;}
-  #hint{display:none;}
-  /* strip art / terminal / decorative panels; keep info only */
-  #p-seraph,#p-litany,#p-console,#p-candle,#p-oracle,#p-relic,
-  #p-apple,#p-wave,#p-hex,#p-crux,#p-sigil,#p-note{display:none !important;}
-  /* let the works list stretch to fit all entries */
-  #p-works .pbody{max-height:none;overflow:visible;}
-}
 </style>
 </head>
 <body>
 
 <div id="loader" aria-hidden="true">
 <pre>
-SOHAM NAVI ✠ rev.2.6
+✧ COPLAND OS ✧ rev.2.6
 ────────────────────</pre>
 <div id="hexdump"></div>
 <div id="loadbar"><i></i></div>
@@ -707,44 +365,46 @@ SOHAM NAVI ✠ rev.2.6
   </section>
 
   <section class="panel" id="p-seraph" data-w="290" style="--tilt:rotate(.3deg)">
-    <div class="titlebar"><span class="tl">layer:01 oculus</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
+    <div class="titlebar"><span class="tl">oculus</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
     <div class="pbody">
       <pre id="seraph"></pre>
-      <div class="caption">▓▒░ it watches ░▒▓</div>
+      <div class="caption">▓▒░ aka. morisoba ░▒▓</div>
     </div>
   </section>
 
   <section class="panel" id="p-about" data-w="290" style="--tilt:rotate(.35deg)">
-    <div class="titlebar"><span class="tl">layer:02 about</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
+    <div class="titlebar"><span class="tl">layer:01 about</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
     <div class="pbody">
-      <p>i am soham. i build things — software, systems, small machines of thought.</p>
-      <p>this terminal is a reliquary for the work. everything can be dragged, profaned, restored.</p>
+      <p>i'm soham. i'm currently studying cs + econ at new york university.</p>
+      <p>i specialize in critical, high-scale data engineering and applied ai. i'm currently working on ai security at microsoft.</p>
+      <p>this site contains everything i've publicly worked on. check it out!<a href="/library/"></a><a href="/atlas/"></a><a href="/journal/"></a></p>
     </div>
   </section>
 
   <section class="panel inv" id="p-works" data-w="330" style="--tilt:rotate(-.3deg)">
-    <div class="titlebar"><span class="tl">layer:03 opera</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
+    <div class="titlebar"><span class="tl">layer:02 work</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
     <div class="pbody">
-      <a class="work" href="#"><span class="wt"><b>OPUS I</b><i>2026</i></span><span class="wd">a project awaiting its true name. replace me.</span></a>
-      <a class="work" href="#"><span class="wt"><b>OPUS II</b><i>2025</i></span><span class="wd">second vessel — tools, code, or craft. replace me.</span></a>
-      <a class="work" href="#"><span class="wt"><b>OPUS III</b><i>2025</i></span><span class="wd">third vessel — experiments, ephemera. replace me.</span></a>
-      <a class="work" href="#"><span class="wt"><b>APOCRYPHA</b><i>∞</i></span><span class="wd">unfinished. unnumbered. unrepentant.</span></a>
+      <a class="work" href="#"><span class="wt"><b>ironmill</b><i>∞</i></span><span class="wd">worked with ironmill to develop a patented system for selecting optimal zk proofs.</span></a>
+      <a class="work" href="#"><span class="wt"><b>doppio labs</b><i>∞</i></span><span class="wd">raised from lvlup ventures at an 8-figure valuation to build people search tools. shut down.</span></a>
+      <a class="work" href="#"><span class="wt"><b>arenabench</b><i>2026</i></span><span class="wd">simulated competitive environment. cybersecurity benchmark for frontier llm</span></a>
+      <a class="work" href="#"><span class="wt"><b>npx morisoba</b><i>2025</i></span><span class="wd">personal profile, packaged as a rust binary and pushed to npm. also a custom wasm web deployment.</span></a>
+      <a class="work" href="#"><span class="wt"><b>eigenfish</b><i>2025</i></span><span class="wd">eigenfish generator.</span></a>
     </div>
   </section>
 
   <section class="panel" id="p-contact" data-w="270" style="--tilt:rotate(.5deg)">
-    <div class="titlebar"><span class="tl">layer:04 confess</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
+    <div class="titlebar"><span class="tl">layer:03 contact</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
     <div class="pbody">
       <a class="mail" href="mailto:sohamb117@gmail.com">✉ SOHAMB117@GMAIL.COM</a>
-      <div class="prompt">C:\SOHAM&gt; _listening<span class="cursor-blink"></span></div>
+      <div class="prompt">C:\SOHAM&gt; npx morisoba<span class="cursor-blink"></span></div>
     </div>
   </section>
 
   <section class="panel" id="p-litany" data-w="410" style="--tilt:rotate(-.25deg)">
-    <div class="titlebar"><span class="tl">layer:05 litany</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
+    <div class="titlebar"><span class="tl"><href="/npx">layer:05 npx morisoba</href></span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
     <div class="pbody">
       <div class="litany-track" id="litany-track">
-        <span>sync_err loop:0x7f3a ▓ heap.reindex ok ▒ packet.drop 0x00A1 ▓ conn.retry ♱ mem.scrub 0x2c ok ░ dev.mount /anima ok ▓▒░ signal.low ✝ subject:0117 wired ▓ psyche.resonance 2.4hz ▒ prot_07 handshake ok ░ irq.mask 0x1F ▓ pkt.tx 0x4B2E ✞ ttl.expire ░ heartbeat lost ▓▒ resync inbound † chan.recover ▚▞ eof.transmission ░▒▓ </span>
+        <href="/npx"><span>sync_err loop:0x7f3a ▓ > npx morisoba ▒ > npx morisoba ▓ > npx morisoba ░ > npx morisoba ▓▒░ > npx morisoba ▓ > npx morisoba ▒ > npx morisoba ░ > npx morisoba ▓ > npx morisoba ░ > npx morisoba ▓▒ > npx morisoba ▚▞ > npx morisoba ░▒▓ </span></href>
       </div>
     </div>
   </section>
@@ -762,9 +422,10 @@ SOHAM NAVI ✠ rev.2.6
     <div class="pbody"><pre id="candle"></pre></div>
   </section>
 
-  <section class="panel" id="p-oracle" data-w="180" style="--tilt:rotate(.45deg)">
-    <div class="titlebar"><span class="tl">l:08 videt</span><button class="pbtn" data-act="close">✕</button></div>
+  <section class="panel" id="p-oracle" data-w="180" style="--tilt:rotate(.45deg)" style="display: none;">
+    <div class="titlebar"><span class="tl">l:08 links</span><button class="pbtn" data-act="close">✕</button></div>
     <div class="pbody">
+      <!--
       <svg viewBox="60 30 180 140" fill="none" stroke="#e8e8e8" stroke-width="1.4">
         <g class="rays" opacity=".6">
           <line x1="150" y1="34" x2="150" y2="48"/>
@@ -784,11 +445,13 @@ SOHAM NAVI ✠ rev.2.6
         <line x1="96" y1="158" x2="204" y2="158"/>
       </svg>
     </div>
+    -->
   </section>
-
+  
   <section class="panel" id="p-relic" data-w="160" style="--tilt:rotate(-.5deg)">
     <div class="titlebar"><span class="tl">l:09 cor</span><button class="pbtn" data-act="close">✕</button></div>
     <div class="pbody">
+      <!--
       <svg viewBox="10 0 130 160" fill="none" stroke="#e8e8e8" stroke-width="1.4">
         <g class="flame">
           <path d="M75 14 C 68 26, 82 28, 75 40 C 88 32, 84 22, 75 14 Z"/>
@@ -813,32 +476,34 @@ SOHAM NAVI ✠ rev.2.6
           <line x1="75" y1="146" x2="75" y2="158"/>
         </g>
       </svg>
+      -->
     </div>
   </section>
 
   <section class="panel" id="p-apple" data-w="196" style="--tilt:rotate(.4deg)">
-    <div class="titlebar"><span class="tl">l:10 malum</span><button class="pbtn" data-act="close">✕</button></div>
+    <div class="titlebar"><span class="tl">l:10 ringo</span><button class="pbtn" data-act="close">✕</button></div>
     <div class="pbody">
       <pre id="apple">
-            __
-           | )
-           |
-      ###   ###
-    #############
-  #############
-  #############
- ################
- ###################
-  #################
-  #################
-    #############
-      #########</pre>
-      <div class="pcaption">eritis sicut deus</div>
+                __
+              | )
+              |
+          ###   ###
+       ##############
+      #############
+    ##############
+    ################
+    ###################
+    ###################
+      ################
+        #############
+          #########
+    </pre>
+      <div class="pcaption">i'm a huge lain fan</div>
     </div>
   </section>
 
   <section class="panel" id="p-wave" data-w="240" style="--tilt:rotate(-.35deg)">
-    <div class="titlebar"><span class="tl">layer:11 psyche</span><button class="pbtn" data-act="close">✕</button></div>
+    <div class="titlebar"><span class="tl">layer:11 status</span><button class="pbtn" data-act="close">✕</button></div>
     <div class="pbody">
       <svg id="wavesvg" viewBox="0 0 220 64" fill="none" stroke="#e8e8e8">
         <g opacity=".18" stroke-width="1">
@@ -851,51 +516,63 @@ SOHAM NAVI ✠ rev.2.6
         </g>
         <polyline id="waveline" stroke-width="1" points="0,32 220,32"/>
       </svg>
-      <div class="pcaption">psyche resonance · 2.4hz</div>
+      <div class="pcaption">this just looks cool · 2.4hz</div>
     </div>
   </section>
 
   <section class="panel" id="p-hex" data-w="86" style="--tilt:rotate(.5deg)">
-    <div class="titlebar"><span class="tl">l:12</span><button class="pbtn" data-act="close">✕</button></div>
+    <div class="titlebar"><span class="tl">rnd</span><button class="pbtn" data-act="close">✕</button></div>
     <div class="pbody"><pre id="hexcol"></pre></div>
   </section>
 
   <section class="panel" id="p-sigil" data-w="160" style="--tilt:rotate(.3deg)">
     <div class="titlebar"><span class="tl">l:14</span><button class="pbtn" data-act="close">✕</button></div>
+    
     <div class="pbody">
+      <!--
       <pre style="font-size:13px;line-height:1;text-align:center;letter-spacing:0">█║▌║█║║▌█║▌║║█▌║█</pre>
       <div class="pcaption">no.000117 · wired</div>
+      -->
     </div>
+    
   </section>
 
-  <section class="panel" id="p-crux" data-w="130" style="--tilt:rotate(-.45deg)">
-    <div class="titlebar"><span class="tl">l:13 crux</span><button class="pbtn" data-act="close">✕</button></div>
+  <section class="panel" id="p-crux" data-w="260" style="--tilt:rotate(-.45deg)">
+    <div class="titlebar"><span class="tl">l:13 EVA</span><button class="pbtn" data-act="close">✕</button></div>
     <div class="pbody">
       <pre id="crux">
-      _
-     | |
-  ___| |___
- |___   ___|
-     | |
-     | |
-     | |
-     | |
-   __| |__
-  |_______|</pre>
+   ,--------------v--------------,
+    \             |             /
+   _.-;==;-._     |     _.-;==;/._
+ <`  (    )  `>   |   <`  (    )  `>
+   `^-*v=*-^`     |     `^-*=v*-^`
+   _.-;=\;-._     |     _.-;/=;-._
+ <`  (    )  `>   |   <`  (    )  `>
+   `^-*==*\^`     |     `^r*==*-^`
+   _.-;==;-\_     |     _/-;==;-._
+ <`  (    )  `>   |   <`  (    )  `>
+   `^-*==*-^`\    |    /`^-*==*-^`
+              \   |   / _.-;==;-._
+               \  |  /<`  (    )  `>
+                \ | /   `^-*==*-^`
+                 \|/
+                  `</pre>
     </div>
   </section>
 
-  <section class="panel" id="p-note" data-w="126" style="--tilt:rotate(-4.2deg)">
-    <div class="titlebar"><span class="tl">note.txt</span><button class="pbtn" data-act="close">✕</button></div>
-    <div class="pbody"><pre id="notetxt">chan 07
-dead again
-check gnd
-loop 0x2c
-    —M</pre></div>
+  <section class="panel" id="p-note" data-w="160" style="--tilt:rotate(-4.2deg)">
+    <div class="titlebar"><span class="tl">vitals.txt</span><button class="pbtn" data-act="close">✕</button></div>
+    <div class="pbody"><pre id="notetxt">
+- intp
+- 21 yrs
+- bay//nyc
+- indian
+- arista edu 400
+</pre></div>
   </section>
 
   <section class="panel" id="p-vessel" data-w="182" style="--tilt:rotate(.4deg)">
-    <div class="titlebar"><span class="tl">l:15 vessel</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
+    <div class="titlebar"><span class="tl">lain.png</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
     <div class="pbody">
       <img src="refs/artworks-000230771167-tzjcdx-t500x500.jpg" alt="vessel">
       <span class="caption">subject.0117</span>
@@ -910,13 +587,10 @@ loop 0x2c
 <div id="scanlines"></div>
 <div id="grain"></div>
 
+<script src="/shared/chrome.js"></script>
 <script>
 (function(){
 "use strict";
-
-var W = function(){return window.innerWidth;};
-var H = function(){return window.innerHeight;};
-var isMobile = window.matchMedia("(max-width:720px)").matches;
 
 /* ================= layout ================= */
 var LAYOUT = [
@@ -1029,396 +703,21 @@ var MAT = {
   "p-vessel":  "mat-portrait"
 };
 
-var panels = {};
-LAYOUT.forEach(function(row){
-  var el = document.getElementById(row[0]);
-  panels[row[0]] = el;
-  var w = parseInt(el.getAttribute("data-w"),10)||280;
-  if(!isMobile){
-    el.style.width = w+"px";
-    el.style.left = Math.round(row[1]*W())+"px";
-    el.style.top  = Math.round(row[2]*H())+"px";
-  }
-  var mat = MAT[row[0]];
-  if(mat) mat.split(" ").forEach(function(c){el.classList.add(c);});
-});
+var BOOT=[
+  "tachibana bios v2.6 ........ ok",
+  "memory check 65536k ........ ok",
+  "mounting /dev/anima ........ ok",
+  "psyche driver 2.4hz ........ ok",
+  "protocol_7 ................. loaded",
+  "connecting to the wired ...."
+];
 
-/* ================= industrial accessories: LEDs + asset tags per panel ================= */
-function panelHash(id){
-  var h=0; for(var i=0;i<id.length;i++) h=(h*31+id.charCodeAt(i))&0xFFFF;
-  return h;
-}
-function ledStripHTML(id){
-  var seed=panelHash(id);
-  var n=3+(seed%3);
-  var blink=seed%n;
-  var out="";
-  for(var k=0;k<n;k++){
-    var v=(seed+k*13)%12;
-    var cls="led";
-    if(v<2) cls+=" warn";
-    else if(v<4) cls+=" hi";
-    else if(v<9) cls+=" on";
-    if(k===blink){
-      cls+=" blink";
-      if((seed>>3)%2) cls+=" slow";
-    }
-    out+='<i class="'+cls+'"></i>';
-  }
-  return '<span class="led-strip">'+out+'</span>';
-}
-function serialHex(id){
-  return ("0000"+panelHash(id).toString(16).toUpperCase()).slice(-4);
-}
-function barcodeSVG(seed){
-  var s=seed, bars="", x=0;
-  for(var i=0;i<11;i++){
-    s=(s*1103515245+12345)&0x7FFFFFFF;
-    var bw=1+(s%3), gap=1+((s>>4)%2);
-    bars+='<rect x="'+x+'" y="0" width="'+bw+'" height="8"/>';
-    x+=bw+gap;
-  }
-  return '<svg viewBox="0 0 '+x+' 8" preserveAspectRatio="xMidYMid meet">'+bars+'</svg>';
-}
-Object.keys(panels).forEach(function(id){
-  var el=panels[id];
-  var tb=el.querySelector(".titlebar");
-  if(tb){
-    var firstBtn=tb.querySelector(".pbtn");
-    var wrap=document.createElement("span");
-    wrap.innerHTML=ledStripHTML(id);
-    var strip=wrap.firstChild;
-    if(firstBtn) tb.insertBefore(strip,firstBtn); else tb.appendChild(strip);
-  }
-  var body=el.querySelector(".pbody");
-  if(body){
-    var s=serialHex(id);
-    var bc=barcodeSVG(panelHash(id)*7+91);
-    body.insertAdjacentHTML("beforeend",
-      '<span class="asset-tag">'+bc+'<span>MRSB·A'+s+'</span></span>');
-  }
-});
-
-/* ================= wires ================= */
-var svg = document.getElementById("wires");
-function pt(el, side){
-  var x=el.offsetLeft,y=el.offsetTop,w=el.offsetWidth,h=el.offsetHeight;
-  switch(side){
-    case "left":return [x,y+h/2,-1,0];
-    case "right":return [x+w,y+h/2,1,0];
-    case "top":return [x+w/2,y,0,-1];
-    case "bottom":return [x+w/2,y+h,0,1];
-  }
-}
-/* deterministic pseudo-random so cables keep their shape while dragging */
-function rnd(i){var x=Math.sin(i*127.1+13.7)*43758.5453;return x-Math.floor(x);}
-/* slack catenary-ish cable between two points */
-function sagCtl(ax,ay,bx,by,sag,seed){
-  var w1=(rnd(seed)-.5)*44, w2=(rnd(seed+1)-.5)*44;
-  var s1=sag*(0.8+0.5*rnd(seed+2)), s2=sag*(0.8+0.5*rnd(seed+3));
-  return [ax+(bx-ax)/3+w1, ay+(by-ay)/3+s1,
-          ax+2*(bx-ax)/3+w2, ay+2*(by-ay)/3+s2];
-}
-function sagPath(ax,ay,bx,by,sag,seed){
-  var c=sagCtl(ax,ay,bx,by,sag,seed);
-  return "M"+Math.round(ax)+" "+Math.round(ay)+
-    " C "+Math.round(c[0])+" "+Math.round(c[1])+
-    ", "+Math.round(c[2])+" "+Math.round(c[3])+
-    ", "+Math.round(bx)+" "+Math.round(by);
-}
-/* point along the same cable, for bindings/clips */
-function sagPt(ax,ay,bx,by,sag,seed,t){
-  var c=sagCtl(ax,ay,bx,by,sag,seed);
-  var u=1-t;
-  var x=u*u*u*ax+3*u*u*t*c[0]+3*u*t*t*c[2]+t*t*t*bx;
-  var y=u*u*u*ay+3*u*u*t*c[1]+3*u*t*t*c[3]+t*t*t*by;
-  return [Math.round(x),Math.round(y)];
-}
-function visible(el){return el.style.display!=="none";}
-/* pick a monochrome tone deterministically; bias toward mid/lo to feel worn */
-function pickTone(seed){
-  var r=rnd(seed);
-  if(r<0.15) return "t-hi";
-  if(r<0.50) return "t-mid";
-  if(r<0.80) return "t-lo";
-  return "t-faint";
-}
-function drawWires(){
-  if(isMobile) return;
-  svg.setAttribute("viewBox","0 0 "+W()+" "+H());
-  var out="";
-  /* slack cable bundles between panels */
-  WIRES.forEach(function(wr,i){
-    var ea=panels[wr[0]], eb=panels[wr[2]];
-    if(!visible(ea)||!visible(eb)) return;
-    var a=pt(ea,wr[1]), b=pt(eb,wr[3]);
-    var dist=Math.sqrt((b[0]-a[0])*(b[0]-a[0])+(b[1]-a[1])*(b[1]-a[1]));
-    var strands=4+Math.floor(rnd(i+50)*5);
-    var tone=pickTone(i+55);
-    for(var k=0;k<strands;k++){
-      var off=(k-(strands-1)/2)*3;
-      var sag=16+dist*0.15*(1+rnd(i*7+k)*0.9);
-      var d=sagPath(a[0]+off,a[1],b[0]+off,b[1],sag,i*31+k*7);
-      out+='<path class="'+(k===0?'cable':'cable2')+' '+tone+'" d="'+d+'"/>';
-      if(k===0&&i%3===0) out+='<path class="flow" d="'+d+'"/>';
-      /* bindings taping the bundle together */
-      if(k===0){
-        [0.32,0.62].forEach(function(t,bi2){
-          if(rnd(i*5+bi2)<.6){
-            var bp=sagPt(a[0]+off,a[1],b[0]+off,b[1],sag,i*31+k*7,t);
-            out+='<rect class="port" x="'+(bp[0]-2)+'" y="'+(bp[1]-4)+'" width="5" height="9"/>';
-          }
-        });
-      }
-    }
-    out+='<rect class="port" x="'+(a[0]-3)+'" y="'+(a[1]-3)+'" width="6" height="6"/>';
-    out+='<rect class="port" x="'+(b[0]-3)+'" y="'+(b[1]-3)+'" width="6" height="6"/>';
-  });
-  /* cables dropping from the top of the screen */
-  DROPS.forEach(function(dp,i){
-    var el=panels[dp[1]];
-    if(!visible(el)) return;
-    var tx=dp[0]*W(), ty=25;
-    var px=el.offsetLeft+el.offsetWidth*(0.15+0.7*rnd(i+200));
-    var py=el.offsetTop;
-    var d=sagPath(tx,ty,px,py,24+56*rnd(i+300),i*13+500);
-    var tone=pickTone(i+250);
-    out+='<path class="cable '+tone+'" style="opacity:.55" d="'+d+'"/>';
-    if(i%2===1){
-      var d2=sagPath(tx+4,ty,px+4,py,30+56*rnd(i+310),i*17+900);
-      out+='<path class="cable2 '+tone+'" d="'+d2+'"/>';
-    }
-    out+='<circle class="via" cx="'+Math.round(tx)+'" cy="'+ty+'" r="2"/>';
-    out+='<rect class="port" x="'+(px-3)+'" y="'+(py-3)+'" width="6" height="6"/>';
-  });
-  /* cables running down to the floor */
-  FLOOR.forEach(function(fl,i){
-    var el=panels[fl[0]];
-    if(!visible(el)) return;
-    var px=el.offsetLeft+el.offsetWidth*fl[1];
-    var py=el.offsetTop+el.offsetHeight;
-    var bx=px+(rnd(i+700)-.5)*260;
-    var d=sagPath(px,py,bx,H()-26,10+34*rnd(i+710),i*19+720);
-    var tone=pickTone(i+750);
-    out+='<path class="cable '+tone+'" style="opacity:.45" d="'+d+'"/>';
-    out+='<circle class="via" cx="'+Math.round(bx)+'" cy="'+(H()-26)+'" r="2"/>';
-  });
-  /* limp dead cables hanging off every panel */
-  Object.keys(panels).forEach(function(id,k){
-    var el=panels[id];
-    if(!visible(el)) return;
-    var x=el.offsetLeft,y=el.offsetTop,w=el.offsetWidth,h=el.offsetHeight;
-    for(var j=0;j<5;j++){
-      var sx=x+w*(0.12+0.72*rnd(k*9+j));
-      var sy=y+h;
-      var len=26+80*rnd(k*5+j+40);
-      var ex=sx+(rnd(k*3+j+80)-.5)*110;
-      var ey=sy+len;
-      var d="M"+Math.round(sx)+" "+Math.round(sy)+
-        " C "+Math.round(sx+(rnd(k+j+7)-.5)*20)+" "+Math.round(sy+len*.65)+
-        ", "+Math.round(ex)+" "+Math.round(ey-len*.35)+
-        ", "+Math.round(ex)+" "+Math.round(ey);
-      out+='<path class="dead" d="'+d+'"/>';
-      if(j===1){
-        /* electrode pad on this loose end */
-        out+='<circle class="dead-end" cx="'+Math.round(ex)+'" cy="'+Math.round(ey)+'" r="4.5"/>';
-        out+='<circle class="via" cx="'+Math.round(ex)+'" cy="'+Math.round(ey)+'" r="1.5"/>';
-      }else{
-        out+='<circle class="dead-end" cx="'+Math.round(ex)+'" cy="'+Math.round(ey)+'" r="2.5"/>';
-      }
-    }
-  });
-  svg.innerHTML=out;
-}
-
-/* ================= background traces (static) ================= */
-var traces=document.getElementById("traces");
-function drawTraces(){
-  if(isMobile) return;
-  traces.setAttribute("viewBox","0 0 "+W()+" "+H());
-  var g=32, out="";
-  var TR="#8a8a8c"; /* in-wall trace tone — steel/dust */
-  function snap(v){return Math.round(v/g)*g;}
-  /* long slack wire spans crossing the whole screen */
-  for(var sp=0;sp<16;sp++){
-    var y1=H()*(0.06+0.88*Math.random());
-    var y2=y1+(Math.random()-.5)*H()*0.35;
-    var sag=30+Math.random()*140;
-    var c1y=y1+(y2-y1)/3+sag, c2y=y1+2*(y2-y1)/3+sag;
-    var dd="M0 "+Math.round(y1)+" C "+Math.round(W()/3)+" "+Math.round(c1y)+
-      ", "+Math.round(2*W()/3)+" "+Math.round(c2y)+", "+W()+" "+Math.round(y2);
-    var oo=(.06+Math.random()*.10).toFixed(2);
-    out+='<path d="'+dd+'" fill="none" stroke="'+TR+'" stroke-width="1" opacity="'+oo+'"/>';
-    if(sp%3===0){
-      var dd2="M0 "+Math.round(y1+5)+" C "+Math.round(W()/3)+" "+Math.round(c1y+14)+
-        ", "+Math.round(2*W()/3)+" "+Math.round(c2y+9)+", "+W()+" "+Math.round(y2+4);
-      out+='<path d="'+dd2+'" fill="none" stroke="'+TR+'" stroke-width="1" opacity="'+oo+'"/>';
-    }
-  }
-  for(var i=0;i<30;i++){
-    var x=snap(Math.random()*W()), y=snap(Math.random()*H());
-    var d="M"+x+" "+y, horiz=Math.random()<.5;
-    var segs=2+Math.floor(Math.random()*4);
-    for(var s=0;s<segs;s++){
-      var len=g*(1+Math.floor(Math.random()*5));
-      if(Math.random()<.5) len=-len;
-      if(horiz){x=Math.max(0,Math.min(W(),x+len));}
-      else{y=Math.max(0,Math.min(H(),y+len));}
-      d+=" L"+x+" "+y; horiz=!horiz;
-    }
-    var op=(.06+Math.random()*.11).toFixed(2);
-    out+='<path d="'+d+'" fill="none" stroke="'+TR+'" stroke-width="1" opacity="'+op+'"/>';
-    out+='<rect x="'+(x-2)+'" y="'+(y-2)+'" width="4" height="4" fill="'+TR+'" opacity="'+op+'"/>';
-  }
-  for(var v=0;v<90;v++){
-    out+='<circle cx="'+snap(Math.random()*W())+'" cy="'+snap(Math.random()*H())+
-      '" r="1.4" fill="'+TR+'" opacity="'+(.04+Math.random()*.09).toFixed(2)+'"/>';
-  }
-  traces.innerHTML=out;
-}
-
-/* ================= scattered texture: tech glyphs, sparse crosses ================= */
-function spawnDecor(){
-  if(isMobile) return;
-  var decor=document.getElementById("decor");
-  var crosses=["✠","†","☩","♰","✝","☨","✞","♱"];
-  var techGlyphs=["▓","▒","░","▚","▞","▓▒░","░▒▓","[XX]","<NUL>","0x1F","0x2A","0x77","0xEA","0x00","0xFF","::","▓▒","▚▞","·─·","0xCF01","0x2A4F","IRQ:07","MASK","EOF","ACK","NAK","RETRY","CHK","0x00A1"];
-  var out="";
-  for(var i=0;i<6;i++){
-    var gl=crosses[Math.floor(Math.random()*crosses.length)];
-    var fs=(10+Math.random()*22).toFixed(0);
-    var op=(.04+Math.random()*.06).toFixed(2);
-    out+='<span class="bg-cross" style="left:'+(Math.random()*94).toFixed(1)+
-      '%;top:'+(Math.random()*92).toFixed(1)+'%;font-size:'+fs+'px;opacity:'+op+'">'+gl+'</span>';
-  }
-  for(var g=0;g<32;g++){
-    var tg=techGlyphs[Math.floor(Math.random()*techGlyphs.length)];
-    var fs2=(7+Math.random()*4).toFixed(0);
-    var op2=(.06+Math.random()*.10).toFixed(2);
-    out+='<span class="bg-cross" style="left:'+(Math.random()*94).toFixed(1)+
-      '%;top:'+(Math.random()*92).toFixed(1)+'%;font-size:'+fs2+'px;opacity:'+op2+
-      ';letter-spacing:2px">'+tg+'</span>';
-  }
-  var texRow="▓▒░ ▚▞ ░▒▓ ▞▚ ";
-  for(var t=0;t<3;t++){
-    var block="";
-    for(var r=0;r<6;r++){block+=texRow.repeat(4)+"\n";}
-    out+='<div class="fill-tex" style="left:'+(Math.random()*70).toFixed(0)+
-      '%;top:'+(Math.random()*80).toFixed(0)+'%">'+block+'</div>';
-  }
-  for(var gw=0;gw<16;gw++){
-    var wgt=(90+Math.random()*280).toFixed(0);
-    var hgt=(50+Math.random()*190).toFixed(0);
-    out+='<div class="ghost-win'+(Math.random()<.3?' lit':'')+
-      '" style="left:'+(Math.random()*85).toFixed(1)+'%;top:'+(Math.random()*80).toFixed(1)+
-      '%;width:'+wgt+'px;height:'+hgt+'px"></div>';
-  }
-  var CODE=[
-    "void reset_panel(u_int level);",
-    "if(level < MAX_LAYER){",
-    "coord_init(&object[PANEL]);",
-    "load_model(&s_long_&kids_tmd);",
-    "imprint the memory into the consciousness.",
-    "rewrite the record.",
-    "the thing you don't remember\nis the thing that didn't happen.",
-    "protocol_7 :: init_g_pass()",
-    "object[LAYER]->world.coord[2] = 0;",
-    "DrawSync(0);  // 被験者の意識",
-    "new_panel_set(i, 0, 4);",
-    "soham will guide you.",
-    "close the world, open the next.",
-    "BGdly = BG_LINE_Y + move_cyc;"
-  ];
-  for(var cf=0;cf<24;cf++){
-    var frag=CODE[cf%CODE.length];
-    var rot=Math.random()<.22?"transform:rotate(90deg);":"";
-    var fs3=(8+Math.random()*3).toFixed(0);
-    var op3=(.08+Math.random()*.11).toFixed(2);
-    out+='<div class="code-tex" style="left:'+(Math.random()*82).toFixed(1)+
-      '%;top:'+(Math.random()*88).toFixed(1)+'%;font-size:'+fs3+'px;opacity:'+op3+';'+rot+'">'+frag+'</div>';
-  }
-  decor.innerHTML=out;
-}
-
+function startMainAnimations(){
 /* ================= litany duplicator ================= */
 (function(){
   var lt=document.getElementById("litany-track");
   lt.innerHTML+=lt.innerHTML;
 })();
-
-/* ================= drag ================= */
-var zTop=100;
-function bringTop(el){zTop++;el.style.zIndex=zTop;}
-Object.keys(panels).forEach(function(id){
-  var el=panels[id];
-  var bar=el.querySelector(".titlebar");
-  el.addEventListener("pointerdown",function(){bringTop(el);});
-  bar.addEventListener("pointerdown",function(e){
-    if(e.target.classList.contains("pbtn")||isMobile)return;
-    e.preventDefault();bringTop(el);el.classList.add("dragging");
-    var sx=e.clientX-el.offsetLeft, sy=e.clientY-el.offsetTop;
-    function mv(ev){
-      el.style.left=Math.max(-el.offsetWidth+50,Math.min(ev.clientX-sx,W()-50))+"px";
-      el.style.top=Math.max(24,Math.min(ev.clientY-sy,H()-40))+"px";
-      drawWires();
-    }
-    function up(){
-      el.classList.remove("dragging");
-      window.removeEventListener("pointermove",mv);
-      window.removeEventListener("pointerup",up);
-      drawWires();
-    }
-    window.addEventListener("pointermove",mv);
-    window.addEventListener("pointerup",up);
-  });
-});
-
-/* ================= min / close / dock ================= */
-var dock=document.getElementById("dock");
-document.querySelectorAll(".pbtn").forEach(function(btn){
-  btn.addEventListener("click",function(e){
-    e.stopPropagation();
-    var el=btn.closest(".panel");
-    if(btn.getAttribute("data-act")==="min"){
-      el.classList.toggle("min");drawWires();
-    }else{
-      el.style.display="none";
-      var b=document.createElement("button");
-      b.textContent=el.querySelector(".tl").textContent;
-      b.addEventListener("click",function(){
-        el.style.display="";dock.removeChild(b);bringTop(el);drawWires();
-      });
-      dock.appendChild(b);drawWires();
-    }
-  });
-});
-
-/* ================= cursor + traces parallax (rAF + lerp) ================= */
-var cur=document.getElementById("cursor");
-if(cur&&!isMobile){
-  var tracesEl=document.getElementById("traces");
-  var pxT={x:0,y:0}, pxC={x:0,y:0}, pxRunning=false;
-  function pxFrame(){
-    pxC.x += (pxT.x - pxC.x) * 0.10;
-    pxC.y += (pxT.y - pxC.y) * 0.10;
-    if(tracesEl) tracesEl.style.transform="translate3d("+pxC.x.toFixed(2)+"px,"+pxC.y.toFixed(2)+"px,0)";
-    if(Math.abs(pxT.x-pxC.x)>0.05||Math.abs(pxT.y-pxC.y)>0.05){
-      requestAnimationFrame(pxFrame);
-    } else {
-      pxRunning=false;
-    }
-  }
-  window.addEventListener("pointermove",function(e){
-    cur.style.left=e.clientX+"px";cur.style.top=e.clientY+"px";
-    pxT.x=(e.clientX/W()-0.5)*7;
-    pxT.y=(e.clientY/H()-0.5)*5;
-    if(!pxRunning){pxRunning=true;requestAnimationFrame(pxFrame);}
-  });
-  document.addEventListener("pointerover",function(e){
-    if(e.target.closest("a,button,.titlebar"))cur.classList.add("hot");
-    else cur.classList.remove("hot");
-  });
-}
 
 /* ================= ascii eye: open -> stare -> close -> melt -> reform ===== */
 var eyeEl=document.getElementById("seraph");
@@ -1621,13 +920,13 @@ var waveline=document.getElementById("waveline");
 
 /* ================= console ================= */
 var LOG=[
-  "0x0000 mount /dev/anima .... OK",
-  "0x001F seraph.exe .......... OK",
-  "0x0033 halo driver v6.66 ... OK",
-  "0x004C rosary daemon ....... OK",
-  "0x005A confessional:31337 .. OPEN",
-  "0x0071 litany broadcast .... LIVE",
-  "0x00FF ✠ laudetur ✠ ........ ∞"
+  "0x0000 load photos ........ OK",
+  "0x001F populate content ... OK",
+  "0x0033 package npx ........ OK",
+  "0x004C create wasm bin .... OK",
+  "0x005A start webserver .. OPEN",
+  "0x0071 site status ...... LIVE",
+  "0x00FF ✠~ morisoba.moe 2026 ~✠"
 ];
 var logEl=document.getElementById("console-log");
 function typeLog(i){
@@ -1646,96 +945,20 @@ setInterval(function(){
 document.getElementById("visits").textContent=
   String(100000+Math.floor(Math.random()*899999)).slice(0,6);
 
-/* ================= glitch corruption: religious residue as data drift ================= */
-(function(){
-  var CROSS=["✠","†","☩","♰","✝","☨","✞","♱"];
-  function tick(){
-    var targets=document.querySelectorAll(".tl, #console-log div, #hexcol, #p-hex .pcaption, .work .wt b");
-    if(targets.length){
-      var el=targets[Math.floor(Math.random()*targets.length)];
-      var txt=el.textContent;
-      if(txt&&txt.length>=3){
-        var pos=-1, tries=0;
-        while(tries++<20){
-          var p=Math.floor(Math.random()*txt.length);
-          var ch=txt[p];
-          if(ch!==" "&&ch!=="\n"&&ch!=="\t"&&ch!=="✠"&&ch!=="†"){pos=p;break;}
-        }
-        if(pos>=0){
-          var g=CROSS[Math.floor(Math.random()*CROSS.length)];
-          el.textContent=txt.slice(0,pos)+g+txt.slice(pos+1);
-          el.classList.add("glitching");
-          setTimeout(function(){
-            if(el.textContent.length===txt.length) el.textContent=txt;
-            el.classList.remove("glitching");
-          },90+Math.random()*90);
-        }
-      }
-    }
-    setTimeout(tick,3000+Math.random()*5000);
-  }
-  setTimeout(tick,6000);
-})();
 
-/* ================= packet-loss RGB tear (rare) ================= */
-(function(){
-  if(isMobile) return;
-  function burst(){
-    var b=document.createElement("div");
-    b.className="packet-burst";
-    var wRatio=0.30+Math.random()*0.40;
-    b.style.width=(W()*wRatio).toFixed(0)+"px";
-    b.style.left=(Math.random()*(W()-W()*wRatio)).toFixed(0)+"px";
-    b.style.top=(24+Math.random()*(H()-72)).toFixed(0)+"px";
-    document.body.appendChild(b);
-    setTimeout(function(){if(b.parentNode) b.parentNode.removeChild(b);},260);
-    setTimeout(burst,15000+Math.random()*22000);
-  }
-  setTimeout(burst,12000+Math.random()*8000);
-})();
-
-/* ================= loader ================= */
-var BOOT=[
-  "tachibana bios v2.6 ........ ok",
-  "memory check 65536k ........ ok",
-  "mounting /dev/anima ........ ok",
-  "psyche driver 2.4hz ........ ok",
-  "protocol_7 ................. loaded",
-  "connecting to the wired ...."
-];
-var hexEl=document.getElementById("hexdump");
-var bootI=0;
-var hexTimer=setInterval(function(){
-  if(bootI<BOOT.length){
-    hexEl.innerHTML=BOOT.slice(Math.max(0,bootI-2),bootI+1).join("<br>");
-    bootI++;
-  }
-},120);
-var bar=document.querySelector("#loadbar i");
-var pct=document.getElementById("loadpct");
-var p=0;
-var loadTimer=setInterval(function(){
-  p+=4+Math.random()*10;
-  if(p>=100){p=100;clearInterval(loadTimer);clearInterval(hexTimer);finishLoad();}
-  bar.style.width=p+"%";
-  pct.textContent=("00"+Math.floor(p)).slice(-3)+"%";
-},60);
-function finishLoad(){
-  hexEl.innerHTML="close the world, open the next.";
-  setTimeout(function(){
-    document.getElementById("loader").classList.add("done");
-    var order=Object.keys(panels);
-    order.forEach(function(id,i){
-      setTimeout(function(){panels[id].classList.add("booted");drawWires();},40*i);
-    });
-    setTimeout(function(){drawWires();typeLog(0);},40*order.length+180);
-  },420);
+  typeLog(0);
 }
 
-window.addEventListener("resize",function(){drawTraces();drawWires();});
-drawTraces();
-spawnDecor();
-drawWires();
+document.addEventListener("DOMContentLoaded", function(){
+  var panels = applyPanelLayout(LAYOUT, MAT);
+  attachAccessories(document.querySelectorAll(".panel"));
+  spawnDecor();
+  drawTraces();
+  drawWires(LAYOUT, WIRES, FLOOR, DROPS);
+  registerGlitchTargets(["#console-log div", "#hexcol", "#p-hex .pcaption", ".work .wt b"]);
+  startLoader(BOOT, startMainAnimations);
+  initChrome();
+});
 })();
 </script>
 </body>

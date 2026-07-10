@@ -1,0 +1,64 @@
+{
+  "books": [
+    {
+      "title": "opus bibliotheca i",
+      "author": "replace me",
+      "started": "2026-01-01",
+      "finished": "2026-03-14",
+      "rating": 4,
+      "notes": "replace me. notes support **bold**, *italic*, `code`, [links](https://example.com), and multiple paragraphs."
+    },
+    {
+      "title": "opus bibliotheca ii — in progress",
+      "author": "replace me",
+      "started": "2026-06-01",
+      "finished": null,
+      "rating": null,
+      "notes": "currently reading. finished:null hides the finish date and marks as unfinished."
+    },
+    {
+      "title": "apocrypha",
+      "author": "unknown",
+      "started": null,
+      "finished": null,
+      "rating": null,
+      "notes": "abandoned, or forgotten, or never quite begun."
+    }
+  ],
+  "films": [
+    {
+      "title": "opus cinema i",
+      "director": "replace me",
+      "watched": "2026-02-14",
+      "rating": 5,
+      "notes": "replace me."
+    },
+    {
+      "title": "opus cinema ii",
+      "director": "replace me",
+      "watched": "2026-04-22",
+      "rating": 3,
+      "notes": "replace me."
+    }
+  ],
+  "shows": [
+    {
+      "title": "serial experiments opus",
+      "creator": "replace me",
+      "started": "2026-01-15",
+      "finished": "2026-02-20",
+      "seasons": 1,
+      "rating": 5,
+      "notes": "replace me."
+    },
+    {
+      "title": "opus series ii — ongoing",
+      "creator": "replace me",
+      "started": "2026-06-01",
+      "finished": null,
+      "seasons": 2,
+      "rating": null,
+      "notes": "in progress. finished:null indicates currently watching."
+    }
+  ]
+}

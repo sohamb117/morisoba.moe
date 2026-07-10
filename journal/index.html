@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>✠ SCRIPTURE ✠ · morisoba</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/shared/chrome.css">
+  <style>
+    /* Panel scrollbar matching */
+    .scrollable-body {
+      max-height: 250px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: thin;
+      scrollbar-color: var(--steel) transparent;
+      scroll-behavior: smooth;
+      padding-right: 10px;
+    }
+    .scrollable-body::-webkit-scrollbar { width: 5px; height: 5px; }
+    .scrollable-body::-webkit-scrollbar-track { background: transparent; }
+    .scrollable-body::-webkit-scrollbar-thumb { background: var(--steel); }
+    .scrollable-body::-webkit-scrollbar-thumb:hover { background: var(--dust); }
+
+
+    /* p-scripture specifically needs more height */
+    #p-scripture .scrollable-body {
+      max-height: 480px;
+    }
+
+    /* GRID LAYOUT */
+    #stage.grid {
+      display: grid;
+      grid-template-columns: 260px 1fr 440px;
+      gap: 16px;
+      padding: 80px 40px;
+      height: 100vh;
+      box-sizing: border-box;
+      align-items: stretch;
+    }
+    .grid-col {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      min-width: 0; /* overflow trap */
+      height: calc(100vh - 160px);
+      padding: 12px;
+      position: relative;
+      box-sizing: border-box;
+    }
+    .grid-col-sidebar {
+      overflow-y: auto;
+      scrollbar-width: none;
+    }
+    .grid-col-list .panel, .grid-col-reader .panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+    .grid-col-list .panel .pbody, .grid-col-reader .panel .pbody {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      max-height: none !important;
+    }
+    #stage.grid .panel {
+      position: relative !important;
+      left: auto !important;
+      top: auto !important;
+      width: auto !important;
+      margin: 0 !important;
+      will-change: transform;
+    }
+    #stage.grid .panel .titlebar { cursor: grab; }
+    #stage.grid .panel.dragging { z-index: 1000 !important; }
+    #stage.grid .panel.dragging .titlebar { cursor: grabbing; }
+    /* Give panels horizontal breathing room within their column so they can drag L/R */
+    .grid-col > .panel {
+      max-width: calc(100% - 28px);
+      align-self: center;
+    }
+    #wires { display: none !important; }
+
+    /* Tag Filter */
+    #p-taxonomy .tag-pill {
+      cursor: pointer;
+      border: 1px solid var(--edge-mid);
+      padding: 2px 6px;
+      margin: 1px;
+      display: inline-block;
+      font-size: 10px;
+      transition: background 120ms, color 120ms;
+    }
+    #p-taxonomy .tag-pill:hover {
+      background: var(--charcoal);
+    }
+    #p-taxonomy .tag-pill.active {
+      background: var(--ink-hi);
+      color: var(--void);
+      border-color: var(--ink-hi);
+    }
+
+    /* Mobile Modal */
+    @media (max-width: 720px) {
+      #stage.grid {
+        display: flex;
+        flex-direction: column;
+        height: auto;
+        padding: 40px 20px 80px;
+      }
+      .grid-col {
+        height: auto;
+        overflow: visible;
+      }
+      .grid-col-list .panel, .grid-col-reader .panel {
+        display: block;
+      }
+      .grid-col-list .panel .pbody {
+        max-height: 480px !important;
+      }
+      #p-scripture {
+        display: none; /* hidden by default on mobile */
+      }
+      body.modal-open #stage.grid #p-scripture {
+        display: flex !important;
+        position: fixed !important;
+        inset: 0 !important;
+        z-index: 9500 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        max-height: 100vh !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: var(--void);
+        flex-direction: column;
+      }
+      body.modal-open {
+        overflow: hidden !important;
+      }
+      body.modal-open #p-scripture .pbody {
+        flex: 1;
+        overflow-y: auto;
+        padding: 20px;
+      }
+    }
+
+
+    /* Index list */
+    .row {
+      padding: 6px 8px;
+      margin-bottom: 4px;
+      border-bottom: 1px solid var(--graphite);
+      cursor: pointer;
+      transition: background 0.1s, color 0.1s;
+    }
+    .row:hover, .row.selected {
+      background: var(--ink);
+      color: var(--void);
+      border-color: var(--ink);
+    }
+    .row-date {
+      font-family: var(--mono);
+      font-size: 10px;
+      opacity: 0.8;
+      display: inline-block;
+      margin-right: 6px;
+    }
+    .row-title {
+      font-weight: bold;
+      font-size: 13px;
+    }
+    .row-tag {
+      font-family: var(--mono);
+      font-size: 9px;
+      opacity: 0.7;
+      border: 1px solid currentColor;
+      padding: 1px 4px;
+      border-radius: 2px;
+      margin-left: 6px;
+      text-transform: uppercase;
+      vertical-align: middle;
+    }
+    .empty {
+      font-style: italic;
+      color: var(--steel);
+      text-align: center;
+      padding: 20px 0;
+      font-size: 11px;
+    }
+    .loading {
+      color: var(--steel);
+      text-align: center;
+      padding: 20px 0;
+      font-size: 11px;
+      animation: blink 1s infinite steps(1);
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* Scripture Panel Typography */
+    .entry-head {
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px dashed var(--graphite);
+    }
+    .entry-title {
+      font-family: var(--mono);
+      font-size: 16px;
+      font-weight: bold;
+      text-transform: lowercase;
+      color: var(--ink-hi);
+      margin-bottom: 4px;
+    }
+    .entry-meta {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--ink-dim);
+      opacity: 0.8;
+      letter-spacing: 0.5px;
+    }
+    .entry-body {
+      font-family: var(--sans);
+    }
+    .entry-body h1, .entry-body h2, .entry-body h3 {
+      font-family: var(--mono);
+      font-size: 14px;
+      margin: 18px 0 10px;
+      color: var(--ink);
+    }
+    .entry-body h2 { font-size: 12px; }
+    .entry-body p {
+      font-size: 12px;
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+    .entry-body code {
+      font-family: var(--mono);
+      background: var(--charcoal);
+      padding: 2px 4px;
+      font-size: 10.5px;
+      border-radius: 2px;
+    }
+    .entry-body pre {
+      font-family: var(--mono);
+      background: var(--void-2);
+      padding: 10px;
+      overflow-x: auto;
+      margin-bottom: 12px;
+      font-size: 10.5px;
+      border-left: 2px solid var(--steel);
+    }
+    .entry-body pre code {
+      background: transparent;
+      padding: 0;
+    }
+    .entry-body blockquote {
+      border-left: 2px solid var(--steel);
+      margin: 0 0 12px 0;
+      padding-left: 10px;
+      color: var(--ink-dim);
+      font-style: italic;
+    }
+    .entry-body a {
+      color: inherit;
+      text-decoration: none;
+      border-bottom: 1px solid var(--steel);
+    }
+    .entry-body a:hover {
+      background: var(--ink);
+      color: var(--void);
+      border-color: transparent;
+    }
+    .entry-body ul, .entry-body ol {
+      margin: 0 0 12px 0;
+      padding-left: 20px;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .entry-body hr {
+      border: 0;
+      border-top: 1px dashed var(--graphite);
+      margin: 16px 0;
+    }
+
+    /* Taxonomy & Stats */
+    .tag-pill {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--void);
+      background: var(--ink-dim);
+      padding: 2px 6px;
+      margin: 2px;
+      text-transform: uppercase;
+    }
+    .stat {
+      font-size: 11px;
+      font-family: var(--mono);
+      margin-bottom: 4px;
+      text-transform: lowercase;
+      display: flex;
+      justify-content: space-between;
+    }
+    .prose {
+      font-size: 11px;
+      line-height: 1.4;
+      font-style: italic;
+      color: var(--dust);
+    }
+    .prose a {
+      color: var(--ink);
+      text-decoration: underline;
+    }
+    .prose a:hover {
+      background: var(--ink);
+      color: var(--void);
+      text-decoration: none;
+    }
+
+    /* Home button — top-left corner chrome affordance */
+    #home-button {
+      position: fixed;
+      top: 14px;
+      left: 14px;
+      z-index: 8000;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      color: var(--ink);
+      text-decoration: none;
+      padding: 5px 10px;
+      background: rgba(3, 3, 3, 0.7);
+      border: 1px solid var(--edge-lo);
+      transition: color 120ms, background 120ms, border-color 120ms;
+      text-transform: uppercase;
+    }
+    #home-button:hover {
+      color: var(--void);
+      background: var(--ink);
+      border-color: var(--ink);
+    }
+    @media (max-width: 720px) {
+      #home-button {
+        top: 8px;
+        left: 8px;
+        font-size: 9px;
+        padding: 4px 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="loader" aria-hidden="true">
+    <pre>
+SCRIPTURE ✠ rev.γ
+────────────</pre>
+    <div id="hexdump"></div>
+    <div id="loadbar"><i></i></div>
+    <div id="loadpct">···</div>
+  </div>
+  <div id="cursor"></div>
+  <a id="home-button" href="/">◄ ✠ HOME</a>
+  <svg id="traces" xmlns="http://www.w3.org/2000/svg"></svg>
+  <div id="decor"></div>
+  <div id="accessories">
+    <svg id="pole-l" viewBox="0 0 20 1000" preserveAspectRatio="none"><path d="M10,0 L10,1000" stroke="var(--graphite)" stroke-width="1"/><circle cx="10" cy="150" r="3" fill="var(--void)" stroke="var(--dust)"/><circle cx="10" cy="450" r="3" fill="var(--void)" stroke="var(--dust)"/></svg>
+    <svg id="rack-br" viewBox="0 0 100 200"><path d="M0,190 L90,190 L90,0" fill="none" stroke="var(--graphite)" stroke-width="1"/></svg>
+  </div>
+  <div id="big-rings">
+<svg viewBox="0 0 600 600" fill="none" stroke="#e8e8e8" stroke-width="1">
+  <g class="rings">
+    <circle cx="300" cy="300" r="290"/>
+    <circle cx="300" cy="300" r="230" stroke-dasharray="3 8"/>
+    <circle cx="300" cy="300" r="170"/>
+    <circle cx="300" cy="300" r="110" stroke-dasharray="1 4"/>
+    <circle cx="300" cy="300" r="50"/>
+  </g>
+  <g class="crosshair">
+    <line x1="300" y1="10" x2="300" y2="590"/>
+    <line x1="10" y1="300" x2="590" y2="300"/>
+    <line x1="95" y1="95" x2="505" y2="505" opacity=".35"/>
+    <line x1="505" y1="95" x2="95" y2="505" opacity=".35"/>
+  </g>
+  <g class="ticks">
+    <line x1="300" y1="10"  x2="300" y2="24"/>
+    <line x1="300" y1="576" x2="300" y2="590"/>
+    <line x1="10"  y1="300" x2="24"  y2="300"/>
+    <line x1="576" y1="300" x2="590" y2="300"/>
+    <line x1="484" y1="46"  x2="479" y2="55"/>
+    <line x1="554" y1="116" x2="545" y2="121"/>
+    <line x1="554" y1="484" x2="545" y2="479"/>
+    <line x1="484" y1="554" x2="479" y2="545"/>
+    <line x1="116" y1="554" x2="121" y2="545"/>
+    <line x1="46"  y1="484" x2="55"  y2="479"/>
+    <line x1="46"  y1="116" x2="55"  y2="121"/>
+    <line x1="116" y1="46"  x2="121" y2="55"/>
+  </g>
+  <g class="nodes" fill="#e8e8e8" stroke="none">
+    <rect x="376" y="376" width="4" height="4"/>
+    <rect x="220" y="376" width="4" height="4"/>
+    <rect x="220" y="220" width="4" height="4"/>
+    <rect x="376" y="220" width="4" height="4"/>
+    <rect x="468" y="298" width="3" height="3"/>
+    <rect x="445" y="383" width="3" height="3"/>
+    <rect x="383" y="445" width="3" height="3"/>
+    <rect x="298" y="468" width="3" height="3"/>
+    <rect x="213" y="445" width="3" height="3"/>
+    <rect x="151" y="383" width="3" height="3"/>
+    <rect x="128" y="298" width="3" height="3"/>
+    <rect x="151" y="213" width="3" height="3"/>
+    <rect x="213" y="151" width="3" height="3"/>
+    <rect x="298" y="128" width="3" height="3"/>
+    <rect x="383" y="151" width="3" height="3"/>
+    <rect x="445" y="213" width="3" height="3"/>
+    <rect x="497" y="413" width="4" height="4"/>
+    <rect x="99"  y="413" width="4" height="4"/>
+    <rect x="99"  y="183" width="4" height="4"/>
+    <rect x="497" y="183" width="4" height="4"/>
+    <rect x="298" y="68"  width="4" height="4"/>
+    <rect x="298" y="528" width="4" height="4"/>
+  </g>
+  <g class="labels" font-family="Courier New, monospace" font-size="9" fill="#e8e8e8" stroke="none">
+    <text x="386" y="373">0x2A4F</text>
+    <text x="454" y="380">0x81B3</text>
+    <text x="221" y="146">0xCF01</text>
+    <text x="308" y="466">0x004A</text>
+    <text x="454" y="210">0xEA2C</text>
+    <text x="86"  y="292">0x77F0</text>
+  </g>
+  <g class="topology" opacity=".45">
+    <line x1="378" y1="378" x2="222" y2="378"/>
+    <line x1="378" y1="378" x2="447" y2="385"/>
+    <line x1="222" y1="222" x2="128" y2="298"/>
+    <line x1="298" y1="128" x2="378" y2="222"/>
+    <line x1="468" y1="298" x2="497" y2="413"/>
+    <line x1="497" y1="183" x2="445" y2="213"/>
+  </g>
+  <line class="sweep" x1="300" y1="300" x2="300" y2="10" stroke-width="1" opacity=".8">
+    <animateTransform attributeName="transform" type="rotate" from="0 300 300" to="360 300 300" dur="22s" repeatCount="indefinite"/>
+  </line>
+  <circle class="hub" cx="300" cy="300" r="2" fill="#e8e8e8" stroke="none"/>
+</svg>
+</div>
+  <div id="stage" class="grid">
+    <div class="grid-col grid-col-sidebar">
+      <section class="panel" id="p-name" data-w="180">
+      <div class="titlebar"><span class="tl">layer:γ identity</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
+      <div class="pbody">
+        <div style="font-weight:bold; font-size:14px; font-family:var(--mono);">SCRIPTURE</div>
+        <div style="font-size:10px; margin-top:5px; color:var(--steel);">JOURNAL.RECORDS</div>
+      </div>
+    </section>
+      <section class="panel" id="p-about-journal" data-w="220" >
+      <div class="titlebar"><span class="tl">layer:γ.0 premise</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
+      <div class="pbody prose">
+        logs, letters, arguments with the machine. return to <a href="/">index</a> when the transmission ends.
+      </div>
+    </section>
+      <section class="panel" id="p-stats" data-w="200" >
+      <div class="titlebar"><span class="tl">layer:γ.s metrics</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
+      <div class="pbody"></div>
+    </section>
+      <section class="panel" id="p-taxonomy" data-w="200" >
+      <div class="titlebar"><span class="tl">layer:γ.t taxonomy</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
+      <div class="pbody scrollable-body" style="max-height:120px;"></div>
+    </section>
+    </div>
+    <div class="grid-col grid-col-list">
+      <section class="panel" id="p-index" data-w="280" >
+      <div class="titlebar"><span class="tl">layer:γ.1 index</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
+      <div class="pbody scrollable-body" style="max-height:480px;"></div>
+    </section>
+    </div>
+    <div class="grid-col grid-col-reader">
+      <section class="panel" id="p-scripture" data-w="420" >
+      <div class="titlebar"><span class="tl">layer:γ.x entry</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
+      <div class="pbody scrollable-body">
+        <div class="empty">[ select an entry ]</div>
+      </div>
+    </section>
+    </div>
+  </div>
+  <svg id="wires"></svg>
+  <div id="dock"></div>
+  <div id="pdpt">PRESENT DAY · PRESENT TIME</div>
+  <div id="scanlines"></div>
+  <div id="grain"></div>
+  <div id="hint">◇ drag panels · scroll to read ◇</div>
+
+  <script src="/shared/chrome.js"></script>
+  <script>
+  (function(){
+  "use strict";
+
+  var LAYOUT = [
+    ["p-name",          .045, .065],
+    ["p-about-journal", .050, .180],
+    ["p-stats",         .040, .360],
+    ["p-taxonomy",      .045, .540],
+    ["p-index",         .280, .080],
+    ["p-scripture",     .540, .120]
+  ];
+
+  var MAT = {
+    "p-name":          "mat-paper",
+    "p-about-journal": "mat-paper",
+    "p-stats":         "mat-worn",
+    "p-taxonomy":      "mat-worn",
+    "p-index":         "mat-metal",
+    "p-scripture":     "mat-paper"
+  };
+
+  var WIRES = [
+    ["p-name", "bottom", "p-about-journal", "top"],
+    ["p-about-journal", "bottom", "p-stats", "top"],
+    ["p-stats", "bottom", "p-taxonomy", "top"],
+    ["p-name", "right", "p-index", "left"],
+    ["p-index", "right", "p-scripture", "left"],
+    ["p-taxonomy", "right", "p-index", "bottom"]
+  ];
+
+  var FLOOR = [
+    ["p-taxonomy", .5], ["p-scripture", .3], ["p-scripture", .7], ["p-index", .5]
+  ];
+
+  var DROPS = [
+    [.05, "p-name"], [.10, "p-name"],
+    [.35, "p-index"], [.45, "p-index"],
+    [.65, "p-scripture"], [.75, "p-scripture"]
+  ];
+
+  var BOOT = [
+    "scripture online", 
+    "loading transmissions…", 
+    "verifying signatures...", 
+    "OK."
+  ];
+
+  var __manifest = null;
+  var __entryCache = {};
+
+
+  var __activeFilter = null;
+
+  function setFilter(tag) {
+    __activeFilter = (tag === __activeFilter) ? null : tag;
+    document.querySelectorAll('#p-taxonomy .tag-pill').forEach(el => {
+      el.classList.toggle('active', el.dataset.tag === __activeFilter);
+    });
+    renderIndex();
+    setupClickHandlers();
+  }
+
+  function filteredEntries() {
+    var valid = __manifest.filter(e => e.draft !== true);
+    if (!__activeFilter) return valid;
+    return valid.filter(e => Array.isArray(e.tags) && e.tags.includes(__activeFilter));
+  }
+
+  function wireTagFilter() {
+    document.querySelectorAll('#p-taxonomy .tag-pill').forEach(el => {
+      el.addEventListener('click', () => setFilter(el.dataset.tag));
+    });
+  }
+
+  function overrideReaderClose(readerId) {
+    var reader = document.getElementById(readerId);
+    if (!reader) return;
+    var closeBtn = reader.querySelector('.pbtn[data-act="close"]');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        hideReader(readerId);
+      }, true);
+    }
+    var minBtn = reader.querySelector('.pbtn[data-act="min"]');
+    if (minBtn) minBtn.remove();
+  }
+
+  function hideReader(readerId) {
+    var reader = document.getElementById(readerId);
+    if (!reader) return;
+    reader.style.display = 'none';
+    document.body.classList.remove('modal-open');
+  }
+
+  function showReader(readerId) {
+    var reader = document.getElementById(readerId);
+    if (!reader) return;
+    reader.style.display = '';
+    if (window.matchMedia('(max-width: 720px)').matches) {
+      document.body.classList.add('modal-open');
+    }
+  }
+
+  async function loadManifest(){
+
+    try {
+      var res = await fetch("/journal/entries/manifest.json");
+      if(!res.ok) throw new Error("HTTP " + res.status);
+      var data = await res.json();
+      __manifest = (data.entries || [])
+        .filter(e => e.draft !== true)
+        .sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+    } catch(e) {
+      console.warn("manifest load failed:", e);
+      __manifest = [];
+    }
+  }
+
+  async function loadEntry(slug){
+    if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
+      console.warn("invalid slug shape:", slug);
+      return null;
+    }
+    if(__entryCache[slug]) return __entryCache[slug];
+    try {
+      var res = await fetch("/journal/entries/" + encodeURIComponent(slug) + ".md");
+      if(!res.ok) return null;
+      var text = await res.text();
+      var parsed = parseFrontmatter(text);
+      __entryCache[slug] = parsed;
+      return parsed;
+    } catch(e) {
+      console.warn("entry load failed:", slug, e);
+      return null;
+    }
+  }
+
+  function esc(s){
+    return String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  function renderIndex(){
+    var body = document.querySelector("#p-index .pbody");
+    if(!__manifest || __manifest.length === 0){
+      body.innerHTML = '<div class="empty">[ no transmissions ]</div>';
+      return;
+    }
+    var entries = filteredEntries();
+    if (entries.length === 0) {
+      body.innerHTML = '<div class="empty">[ no entries match filter ]</div>';
+      return;
+    }
+    body.innerHTML = entries.map((e, i) =>
+      '<div class="row" data-slug="' + esc(e.slug) + '" data-idx="' + i + '">' +
+         '<span class="row-date">[' + esc(e.date) + ']</span>' +
+         '<span class="row-title">' + esc(e.title) + '</span>' +
+         (e.tags || []).map(t => '<span class="row-tag">' + esc(t) + '</span>').join(" ") +
+       '</div>'
+    ).join("");
+  }
+
+  async function renderEntry(slug){
+    var body = document.querySelector("#p-scripture .pbody");
+    body.innerHTML = '<div class="loading">…</div>';
+    var entry = await loadEntry(slug);
+    if(!entry){
+      body.innerHTML = '<div class="empty">[ entry unavailable ]</div>';
+      return;
+    }
+    var fm = entry.frontmatter || {};
+    var tags = Array.isArray(fm.tags) ? fm.tags.join(" · ") : "";
+    var renderedBody = markdownToHtml(entry.content || "");
+    body.innerHTML = 
+      '<div class="entry-head">' +
+        '<div class="entry-title">' + esc(fm.title || "untitled") + '</div>' +
+        '<div class="entry-meta">' + esc(fm.date || "") + (tags ? " · " + esc(tags) : "") + '</div>' +
+      '</div>' +
+      '<div class="entry-body">' + renderedBody + '</div>';
+  }
+
+  function setupClickHandlers(){
+    document.querySelectorAll("#p-index .row").forEach(row => {
+      row.addEventListener("click", () => {
+        var slug = row.dataset.slug;
+        document.querySelectorAll(".row.selected").forEach(r => r.classList.remove("selected"));
+        row.classList.add("selected");
+        showReader("p-scripture");
+        renderEntry(slug);
+      });
+    });
+  }
+
+  function renderTaxonomy(){
+    var counts = {};
+    __manifest.forEach(e => (e.tags || []).forEach(t => counts[t] = (counts[t] || 0) + 1));
+    var body = document.querySelector("#p-taxonomy .pbody");
+    var tags = Object.entries(counts).sort((a,b) => b[1] - a[1]);
+    if(tags.length === 0){
+      body.innerHTML = '<div class="empty">[ untagged ]</div>';
+      return;
+    }
+    body.innerHTML = tags.map(([t, n]) => '<span class="tag-pill" data-tag="' + esc(t) + '">' + esc(t) + ' · ' + n + '</span>').join(" ");
+  }
+
+  function renderStats(){
+    var body = document.querySelector("#p-stats .pbody");
+    if(__manifest.length === 0){
+      body.innerHTML = '<div class="empty">[ silent ]</div>';
+      return;
+    }
+    var dates = __manifest.map(e => e.date).sort();
+    var counts = {};
+    __manifest.forEach(e => (e.tags || []).forEach(t => counts[t] = (counts[t] || 0) + 1));
+    var topTag = Object.entries(counts).sort((a,b) => b[1] - a[1])[0];
+    body.innerHTML = 
+      '<div class="stat"><span>entries</span> <span>' + __manifest.length + '</span></div>' +
+      '<div class="stat"><span>first</span> <span>' + esc(dates[0]) + '</span></div>' +
+      '<div class="stat"><span>recent</span> <span>' + esc(dates[dates.length - 1]) + '</span></div>' +
+      '<div class="stat"><span>top tag</span> <span>' + (topTag ? esc(topTag[0]) + " ("+topTag[1]+")" : "—") + '</span></div>';
+  }
+
+  /* Column-clamped drag: panels draggable within their .grid-col bounds only.
+     Uses transform-based translation so grid/flex flow is preserved. Preempts
+     shared chrome's left/top drag via capture-phase pointerdown + stopImmediatePropagation. */
+  function attachClampedDrag() {
+    var isDragging = false, dragPanel = null, dragCol = null;
+    var startX = 0, startY = 0, startTx = 0, startTy = 0;
+
+    function getTransform(el) {
+      var t = el.style.transform || "";
+      var m = t.match(/translate3d\(([-\d.]+)px,\s*([-\d.]+)px/);
+      return m ? { x: parseFloat(m[1]), y: parseFloat(m[2]) } : { x: 0, y: 0 };
+    }
+    function setTransform(el, x, y) {
+      el.style.transform = "translate3d(" + x + "px, " + y + "px, 0)";
+    }
+
+    document.addEventListener("pointerdown", function(e) {
+      if (document.body.classList.contains("modal-open")) return;
+      var tb = e.target.closest(".titlebar");
+      if (!tb) return;
+      if (e.target.closest(".pbtn")) return;
+      var panel = tb.closest(".panel");
+      if (!panel) return;
+      var col = panel.closest(".grid-col");
+      if (!col) return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      isDragging = true;
+      dragPanel = panel;
+      dragCol = col;
+      startX = e.clientX;
+      startY = e.clientY;
+      var tr = getTransform(panel);
+      startTx = tr.x;
+      startTy = tr.y;
+      panel.classList.add("dragging");
+      try { tb.setPointerCapture(e.pointerId); } catch(err) {}
+    }, true);
+
+    document.addEventListener("pointermove", function(e) {
+      if (!isDragging || !dragPanel || !dragCol) return;
+      var dx = e.clientX - startX;
+      var dy = e.clientY - startY;
+      var proposedTx = startTx + dx;
+      var proposedTy = startTy + dy;
+      var colRect = dragCol.getBoundingClientRect();
+      var cs = getComputedStyle(dragCol);
+      var padTop = parseFloat(cs.paddingTop) || 0;
+      var padLeft = parseFloat(cs.paddingLeft) || 0;
+      var padRight = parseFloat(cs.paddingRight) || 0;
+      var padBottom = parseFloat(cs.paddingBottom) || 0;
+      /* Temporarily strip transform to measure natural (flow) position */
+      var currentTransform = dragPanel.style.transform;
+      dragPanel.style.transform = "";
+      var naturalRect = dragPanel.getBoundingClientRect();
+      dragPanel.style.transform = currentTransform;
+      var natLeft = naturalRect.left - colRect.left;
+      var natTop = naturalRect.top - colRect.top;
+      var w = naturalRect.width;
+      var h = naturalRect.height;
+      var minTx = padLeft - natLeft;
+      var maxTx = colRect.width - padRight - w - natLeft;
+      var minTy = padTop - natTop;
+      var maxTy = colRect.height - padBottom - h - natTop;
+      /* If panel is bigger than column interior, clamp to min (don't allow drag beyond) */
+      if (maxTx < minTx) maxTx = minTx;
+      if (maxTy < minTy) maxTy = minTy;
+      var tx = Math.max(minTx, Math.min(maxTx, proposedTx));
+      var ty = Math.max(minTy, Math.min(maxTy, proposedTy));
+      setTransform(dragPanel, tx, ty);
+    }, true);
+
+    function endDrag() {
+      if (!isDragging) return;
+      isDragging = false;
+      if (dragPanel) dragPanel.classList.remove("dragging");
+      dragPanel = null;
+      dragCol = null;
+    }
+    document.addEventListener("pointerup", endDrag, true);
+    document.addEventListener("pointercancel", endDrag, true);
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    Object.keys(MAT).forEach(id => {
+      var el = document.getElementById(id);
+      if(el) el.className += ' ' + MAT[id];
+    });
+    /* Manually stagger .booted class since applyPanelLayout is bypassed on subpages.
+       Chrome.css sets panels to opacity:0 until .booted, so without this they stay invisible. */
+    document.querySelectorAll("#stage .panel").forEach((el, i) => {
+      setTimeout(() => el.classList.add("booted"), 40 * i + 200);
+    });
+    attachAccessories(document.querySelectorAll(".panel"));
+    spawnDecor();
+    drawTraces();
+    registerGlitchTargets(["#p-index .row-title", ".tag-pill", ".stat"]);
+    
+    startLoader(BOOT);
+    initChrome();
+    attachClampedDrag();
+
+    loadManifest().then(() => {
+      renderIndex();
+      renderTaxonomy();
+      wireTagFilter();
+      renderStats();
+      setupClickHandlers();
+      overrideReaderClose("p-scripture");
+      var valid = __manifest.filter(e => e.draft !== true);
+      if(valid.length > 0){
+        var isMobile = window.matchMedia('(max-width: 720px)').matches;
+        var firstRow = document.querySelector("#p-index .row");
+        if(firstRow && !isMobile) firstRow.click();
+      } else {
+        document.querySelector("#p-scripture .pbody").innerHTML = '<div class="empty">[ no transmissions ]</div>';
+      }
+    });
+  });
+  })();
+  </script>
+</body>
+</html>

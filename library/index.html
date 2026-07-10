@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>✠ CODEX ✠ · morisoba</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/shared/chrome.css">
+  <style>
+    /* Panel scrollbar matching index.html */
+    .scrollable-body {
+      max-height: 250px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: thin;
+      scrollbar-color: var(--steel) transparent;
+      scroll-behavior: smooth;
+      padding-right: 10px;
+    }
+    .scrollable-body::-webkit-scrollbar { width: 5px; height: 5px; }
+    .scrollable-body::-webkit-scrollbar-track { background: transparent; }
+    .scrollable-body::-webkit-scrollbar-thumb { background: var(--steel); }
+    .scrollable-body::-webkit-scrollbar-thumb:hover { background: var(--dust); }
+
+    /* Lists */
+    .row {
+      padding: 6px 8px;
+      margin-bottom: 4px;
+      border-bottom: 1px solid var(--graphite);
+      cursor: pointer;
+      transition: background 0.1s, color 0.1s;
+    }
+    .row:hover, .row.selected {
+      background: var(--ink);
+      color: var(--void);
+      border-color: var(--ink);
+    }
+    .row .title {
+      font-weight: bold;
+      font-size: 13px;
+      margin-bottom: 2px;
+    }
+    .row .meta {
+      font-size: 10px;
+      opacity: 0.8;
+      font-style: italic;
+    }
+
+    /* p-detail specifically needs more height */
+    #p-detail .scrollable-body {
+      max-height: 480px;
+    }
+
+    /* GRID LAYOUT */
+    #stage.grid {
+      display: grid;
+      grid-template-columns: 260px 1fr 440px;
+      gap: 16px;
+      padding: 80px 40px;
+      height: 100vh;
+      box-sizing: border-box;
+      align-items: stretch;
+    }
+    .grid-col {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      min-width: 0; /* overflow trap */
+      height: calc(100vh - 160px);
+      padding: 12px;
+      position: relative;
+      box-sizing: border-box;
+    }
+    .grid-col-sidebar {
+      overflow-y: auto;
+      scrollbar-width: none;
+    }
+    .grid-col-stack .panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+    .grid-col-reader .panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+    .grid-col-stack .panel .pbody, .grid-col-reader .panel .pbody {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      max-height: none !important;
+    }
+    #stage.grid .panel {
+      position: relative !important;
+      left: auto !important;
+      top: auto !important;
+      width: auto !important;
+      margin: 0 !important;
+      will-change: transform;
+    }
+    #stage.grid .panel .titlebar { cursor: grab; }
+    #stage.grid .panel.dragging { z-index: 1000 !important; }
+    #stage.grid .panel.dragging .titlebar { cursor: grabbing; }
+    /* Give panels horizontal breathing room within their column so they can drag L/R */
+    .grid-col > .panel {
+      max-width: calc(100% - 28px);
+      align-self: center;
+    }
+    #wires { display: none !important; }
+
+    /* Mobile Modal */
+    @media (max-width: 720px) {
+      #stage.grid {
+        display: flex;
+        flex-direction: column;
+        height: auto;
+        padding: 40px 20px 80px;
+      }
+      .grid-col {
+        height: auto;
+        overflow: visible;
+      }
+      .grid-col-stack .panel, .grid-col-reader .panel {
+        display: block;
+        margin-bottom: 16px !important;
+      }
+      .grid-col-stack .panel .pbody {
+        max-height: 250px !important;
+      }
+      #p-detail {
+        display: none; /* hidden by default on mobile */
+      }
+      body.modal-open #stage.grid #p-detail {
+        display: flex !important;
+        position: fixed !important;
+        inset: 0 !important;
+        z-index: 9500 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        max-height: 100vh !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: var(--void);
+        flex-direction: column;
+      }
+      body.modal-open {
+        overflow: hidden !important;
+      }
+      body.modal-open #p-detail .pbody {
+        flex: 1;
+        overflow-y: auto;
+        padding: 20px;
+      }
+    }
+
+    .empty {
+      font-style: italic;
+      color: var(--steel);
+      text-align: center;
+      padding: 20px 0;
+      font-size: 11px;
+    }
+
+    /* Detail View */
+    #p-detail .pbody {
+      min-height: 180px;
+    }
+    .d-title {
+      font-size: 16px;
+      font-weight: bold;
+      text-transform: lowercase;
+      margin-bottom: 4px;
+      color: var(--scr-green);
+    }
+    .d-byline {
+      font-style: italic;
+      font-size: 12px;
+      margin-bottom: 8px;
+      color: var(--dust);
+    }
+    .d-meta {
+      font-size: 10px;
+      opacity: 0.7;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .d-rating {
+      font-family: var(--mono);
+      font-size: 14px;
+      margin-bottom: 16px;
+      letter-spacing: 2px;
+      color: var(--charcoal);
+    }
+    .d-notes {
+      font-size: 12px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+
+    /* Stats & Info */
+    .stat {
+      font-size: 11px;
+      font-family: var(--mono);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      display: flex;
+      justify-content: space-between;
+    }
+    .prose {
+      font-size: 11px;
+      line-height: 1.4;
+      font-style: italic;
+      color: var(--dust);
+    }
+    .prose a {
+      color: var(--ink);
+      text-decoration: underline;
+    }
+    .prose a:hover {
+      background: var(--ink);
+      color: var(--void);
+      text-decoration: none;
+    }
+
+    /* Home button — top-left corner chrome affordance */
+    #home-button {
+      position: fixed;
+      top: 14px;
+      left: 14px;
+      z-index: 8000;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      color: var(--ink);
+      text-decoration: none;
+      padding: 5px 10px;
+      background: rgba(3, 3, 3, 0.7);
+      border: 1px solid var(--edge-lo);
+      transition: color 120ms, background 120ms, border-color 120ms;
+      text-transform: uppercase;
+    }
+    #home-button:hover {
+      color: var(--void);
+      background: var(--ink);
+      border-color: var(--ink);
+    }
+    @media (max-width: 720px) {
+      #home-button {
+        top: 8px;
+        left: 8px;
+        font-size: 9px;
+        padding: 4px 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="loader" aria-hidden="true">
+    <pre>
+CODEX ✠ rev.α
+────────────</pre>
+    <div id="hexdump"></div>
+    <div id="loadbar"><i></i></div>
+    <div id="loadpct">···</div>
+  </div>
+  <div id="cursor"></div>
+  <a id="home-button" href="/">◄ ✠ HOME</a>
+  <svg id="traces" xmlns="http://www.w3.org/2000/svg"></svg>
+  <div id="decor"></div>
+  <div id="accessories">
+    <svg id="pole-l" viewBox="0 0 20 1000" preserveAspectRatio="none"><path d="M10,0 L10,1000" stroke="var(--graphite)" stroke-width="1"/><circle cx="10" cy="150" r="3" fill="var(--void)" stroke="var(--dust)"/><circle cx="10" cy="450" r="3" fill="var(--void)" stroke="var(--dust)"/></svg>
+    <svg id="rack-br" viewBox="0 0 100 200"><path d="M0,190 L90,190 L90,0" fill="none" stroke="var(--graphite)" stroke-width="1"/></svg>
+  </div>
+  <div id="big-rings">
+<svg viewBox="0 0 600 600" fill="none" stroke="#e8e8e8" stroke-width="1">
+  <g class="rings">
+    <circle cx="300" cy="300" r="290"/>
+    <circle cx="300" cy="300" r="230" stroke-dasharray="3 8"/>
+    <circle cx="300" cy="300" r="170"/>
+    <circle cx="300" cy="300" r="110" stroke-dasharray="1 4"/>
+    <circle cx="300" cy="300" r="50"/>
+  </g>
+  <g class="crosshair">
+    <line x1="300" y1="10" x2="300" y2="590"/>
+    <line x1="10" y1="300" x2="590" y2="300"/>
+    <line x1="95" y1="95" x2="505" y2="505" opacity=".35"/>
+    <line x1="505" y1="95" x2="95" y2="505" opacity=".35"/>
+  </g>
+  <g class="ticks">
+    <line x1="300" y1="10"  x2="300" y2="24"/>
+    <line x1="300" y1="576" x2="300" y2="590"/>
+    <line x1="10"  y1="300" x2="24"  y2="300"/>
+    <line x1="576" y1="300" x2="590" y2="300"/>
+    <line x1="484" y1="46"  x2="479" y2="55"/>
+    <line x1="554" y1="116" x2="545" y2="121"/>
+    <line x1="554" y1="484" x2="545" y2="479"/>
+    <line x1="484" y1="554" x2="479" y2="545"/>
+    <line x1="116" y1="554" x2="121" y2="545"/>
+    <line x1="46"  y1="484" x2="55"  y2="479"/>
+    <line x1="46"  y1="116" x2="55"  y2="121"/>
+    <line x1="116" y1="46"  x2="121" y2="55"/>
+  </g>
+  <g class="nodes" fill="#e8e8e8" stroke="none">
+    <rect x="376" y="376" width="4" height="4"/>
+    <rect x="220" y="376" width="4" height="4"/>
+    <rect x="220" y="220" width="4" height="4"/>
+    <rect x="376" y="220" width="4" height="4"/>
+    <rect x="468" y="298" width="3" height="3"/>
+    <rect x="445" y="383" width="3" height="3"/>
+    <rect x="383" y="445" width="3" height="3"/>
+    <rect x="298" y="468" width="3" height="3"/>
+    <rect x="213" y="445" width="3" height="3"/>
+    <rect x="151" y="383" width="3" height="3"/>
+    <rect x="128" y="298" width="3" height="3"/>
+    <rect x="151" y="213" width="3" height="3"/>
+    <rect x="213" y="151" width="3" height="3"/>
+    <rect x="298" y="128" width="3" height="3"/>
+    <rect x="383" y="151" width="3" height="3"/>
+    <rect x="445" y="213" width="3" height="3"/>
+    <rect x="497" y="413" width="4" height="4"/>
+    <rect x="99"  y="413" width="4" height="4"/>
+    <rect x="99"  y="183" width="4" height="4"/>
+    <rect x="497" y="183" width="4" height="4"/>
+    <rect x="298" y="68"  width="4" height="4"/>
+    <rect x="298" y="528" width="4" height="4"/>
+  </g>
+  <g class="labels" font-family="Courier New, monospace" font-size="9" fill="#e8e8e8" stroke="none">
+    <text x="386" y="373">0x2A4F</text>
+    <text x="454" y="380">0x81B3</text>
+    <text x="221" y="146">0xCF01</text>
+    <text x="308" y="466">0x004A</text>
+    <text x="454" y="210">0xEA2C</text>
+    <text x="86"  y="292">0x77F0</text>
+  </g>
+  <g class="topology" opacity=".45">
+    <line x1="378" y1="378" x2="222" y2="378"/>
+    <line x1="378" y1="378" x2="447" y2="385"/>
+    <line x1="222" y1="222" x2="128" y2="298"/>
+    <line x1="298" y1="128" x2="378" y2="222"/>
+    <line x1="468" y1="298" x2="497" y2="413"/>
+    <line x1="497" y1="183" x2="445" y2="213"/>
+  </g>
+  <line class="sweep" x1="300" y1="300" x2="300" y2="10" stroke-width="1" opacity=".8">
+    <animateTransform attributeName="transform" type="rotate" from="0 300 300" to="360 300 300" dur="22s" repeatCount="indefinite"/>
+  </line>
+  <circle class="hub" cx="300" cy="300" r="2" fill="#e8e8e8" stroke="none"/>
+</svg>
+</div>
+  <div id="stage" class="grid">
+    <div class="grid-col grid-col-sidebar">
+      <section class="panel" id="p-name" data-w="180">
+      <div class="titlebar"><span class="tl">layer:α identity</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
+      <div class="pbody">
+        <div style="font-weight:bold; font-size:14px;">LIBRARY / CODEX</div>
+        <div style="font-size:10px; margin-top:5px; color:var(--steel);">SYSTEM.INDEX.OK</div>
+      </div>
+    </section>
+      <section class="panel" id="p-about-library" data-w="220" >
+      <div class="titlebar"><span class="tl">layer:α.0 premise</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
+      <div class="pbody prose">
+        the codex holds every book read, every film seen, every series remembered. weight, dust, marginalia. return to <a href="/">index</a> when done.
+      </div>
+    </section>
+      <section class="panel" id="p-stats" data-w="200" >
+      <div class="titlebar"><span class="tl">layer:α.s metrics</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
+      <div class="pbody">
+        <!-- stats rendered via JS -->
+      </div>
+    </section>
+    </div>
+    <div class="grid-col grid-col-stack">
+      <section class="panel" id="p-books" data-w="300" >
+      <div class="titlebar"><span class="tl">layer:α.1 books</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
+      <div class="pbody scrollable-body"></div>
+    </section>
+      <section class="panel" id="p-films" data-w="300" >
+      <div class="titlebar"><span class="tl">layer:α.2 films</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
+      <div class="pbody scrollable-body"></div>
+    </section>
+      <section class="panel" id="p-shows" data-w="300" >
+      <div class="titlebar"><span class="tl">layer:α.3 series</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
+      <div class="pbody scrollable-body"></div>
+    </section>
+    </div>
+    <div class="grid-col grid-col-reader">
+      <section class="panel" id="p-detail" data-w="340" >
+      <div class="titlebar"><span class="tl">layer:α.x details</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
+      <div class="pbody scrollable-body">
+        <div class="empty">[ select an entry ]</div>
+      </div>
+    </section>
+    </div>
+  </div>
+  <svg id="wires"></svg>
+  <div id="dock"></div>
+  <div id="pdpt">PRESENT DAY · PRESENT TIME</div>
+  <div id="scanlines"></div>
+  <div id="grain"></div>
+  <div id="hint">◇ drag panels · scroll to read ◇</div>
+
+  <script src="/shared/chrome.js"></script>
+  <script>
+  (function(){
+  "use strict";
+
+  var LAYOUT = [
+    ["p-name",          .045, .065],
+    ["p-about-library", .050, .200],
+    ["p-stats",         .040, .420],
+    ["p-books",         .280, .120],
+    ["p-films",         .580, .080],
+    ["p-shows",         .250, .580],
+    ["p-detail",        .620, .520]
+  ];
+
+  var MAT = {
+    "p-name":          "mat-paper",
+    "p-about-library": "mat-paper",
+    "p-stats":         "mat-worn",
+    "p-books":         "mat-metal",
+    "p-films":         "mat-metal",
+    "p-shows":         "mat-metal",
+    "p-detail":        "mat-crt scr-green"
+  };
+
+  var WIRES = [
+    ["p-name", "bottom", "p-about-library", "top"],
+    ["p-about-library", "bottom", "p-stats", "top"],
+    ["p-name", "right", "p-books", "left"],
+    ["p-books", "right", "p-films", "left"],
+    ["p-books", "bottom", "p-shows", "top"],
+    ["p-films", "bottom", "p-detail", "top"],
+    ["p-shows", "right", "p-detail", "left"],
+    ["p-stats", "right", "p-shows", "left"]
+  ];
+
+  var FLOOR = [
+    ["p-stats", .5], ["p-shows", .3], ["p-shows", .7], ["p-detail", .5]
+  ];
+
+  var DROPS = [
+    [.05, "p-name"], [.10, "p-name"],
+    [.35, "p-books"], [.45, "p-books"],
+    [.65, "p-films"], [.75, "p-films"]
+  ];
+
+  var BOOT = [
+    "codex online", 
+    "connecting to library schema...", 
+    "indexing shelves...", 
+    "verifying chronologies...", 
+    "OK."
+  ];
+
+
+  function overrideReaderClose(readerId) {
+    var reader = document.getElementById(readerId);
+    if (!reader) return;
+    var closeBtn = reader.querySelector('.pbtn[data-act="close"]');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        hideReader(readerId);
+      }, true);
+    }
+    var minBtn = reader.querySelector('.pbtn[data-act="min"]');
+    if (minBtn) minBtn.remove();
+  }
+
+  function hideReader(readerId) {
+    var reader = document.getElementById(readerId);
+    if (!reader) return;
+    reader.style.display = 'none';
+    document.body.classList.remove('modal-open');
+  }
+
+  function showReader(readerId) {
+    var reader = document.getElementById(readerId);
+    if (!reader) return;
+    reader.style.display = '';
+    if (window.matchMedia('(max-width: 720px)').matches) {
+      document.body.classList.add('modal-open');
+    }
+  }
+
+  async function loadLibraryData(){
+
+    try {
+      var res = await fetch("/data/library.json");
+      if(!res.ok) throw new Error("HTTP " + res.status);
+      return await res.json();
+    } catch(e) {
+      console.warn("library.json load failed:", e);
+      return { books: [], films: [], shows: [] };
+    }
+  }
+
+  function statusLabel(item){
+    if(item.finished) return item.finished.slice(0,4);
+    if(item.started && !item.finished) return "in progress";
+    if(!item.started && !item.finished) return "—";
+    return "";
+  }
+
+  function ratingGlyph(rating){
+    if(rating == null) return "";
+    var filled = "●".repeat(rating);
+    var empty = "○".repeat(5 - rating);
+    return filled + empty;
+  }
+
+  function esc(s){
+    return String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  function renderList(panelId, items, kind){
+    var body = document.querySelector("#" + panelId + " .pbody");
+    if(!body) return;
+    if(!items || items.length === 0){
+      body.innerHTML = '<div class="empty">[ nothing catalogued ]</div>';
+      return;
+    }
+    body.innerHTML = items.map((item, i) =>
+      `<div class="row" data-kind="${kind}" data-idx="${i}">
+         <div class="title">${esc(item.title)}</div>
+         <div class="meta">${esc(item.author || item.director || item.creator || "")} · ${esc(statusLabel(item))}</div>
+       </div>`
+    ).join("");
+  }
+
+  function renderDetail(item, kind){
+    var body = document.querySelector("#p-detail .pbody");
+    if(!item){
+      body.innerHTML = '<div class="empty">[ select an entry ]</div>';
+      return;
+    }
+    var role = kind === "film" ? "director" : kind === "show" ? "creator" : "author";
+    var byline = item[role] ? esc(item[role]) : "";
+    var dateInfo = "";
+    if(kind === "film" && item.watched) dateInfo = "watched " + item.watched;
+    else {
+      if(item.started) dateInfo += "started " + item.started;
+      if(item.finished) dateInfo += (dateInfo?" · ":"") + "finished " + item.finished;
+      if(kind === "show" && item.seasons) dateInfo += (dateInfo?" · ":"") + item.seasons + " seasons";
+    }
+    var notesHtml = (typeof markdownToHtml === "function")
+      ? markdownToHtml(item.notes || "")
+      : esc(item.notes || "").replace(/\n/g, "<br>");
+    body.innerHTML = `
+      <div class="d-title">${esc(item.title)}</div>
+      <div class="d-byline">${byline}</div>
+      <div class="d-meta">${esc(dateInfo)}</div>
+      <div class="d-rating">${ratingGlyph(item.rating)}</div>
+      <div class="d-notes">${notesHtml}</div>
+    `;
+  }
+
+  var __data = null;
+  function setupClickHandlers(){
+    document.querySelectorAll(".row").forEach(row => {
+      row.addEventListener("click", () => {
+        var kind = row.dataset.kind;
+        var idx = parseInt(row.dataset.idx, 10);
+        var collection = kind === "book" ? __data.books : kind === "film" ? __data.films : __data.shows;
+        document.querySelectorAll(".row.selected").forEach(r => r.classList.remove("selected"));
+        row.classList.add("selected");
+        showReader("p-detail");
+        renderDetail(collection[idx], kind);
+      });
+    });
+  }
+
+  function renderStats(data){
+    var inProgress = data.books.filter(b => b.started && !b.finished).length
+      + data.shows.filter(s => s.started && !s.finished).length;
+    var unrated = data.books.filter(b => b.rating == null).length
+      + data.films.filter(f => f.rating == null).length
+      + data.shows.filter(s => s.rating == null).length;
+    document.querySelector("#p-stats .pbody").innerHTML = `
+      <div class="stat"><span>books</span> <span>${data.books.length}</span></div>
+      <div class="stat"><span>films</span> <span>${data.films.length}</span></div>
+      <div class="stat"><span>shows</span> <span>${data.shows.length}</span></div>
+      <div class="stat" style="margin-top:8px;"><span>in progress</span> <span>${inProgress}</span></div>
+      <div class="stat"><span>unrated</span> <span>${unrated}</span></div>
+    `;
+  }
+
+  /* Column-clamped drag: panels draggable within their .grid-col bounds only.
+     Uses transform-based translation so grid/flex flow is preserved. Preempts
+     shared chrome's left/top drag via capture-phase pointerdown + stopImmediatePropagation. */
+  function attachClampedDrag() {
+    var isDragging = false, dragPanel = null, dragCol = null;
+    var startX = 0, startY = 0, startTx = 0, startTy = 0;
+
+    function getTransform(el) {
+      var t = el.style.transform || "";
+      var m = t.match(/translate3d\(([-\d.]+)px,\s*([-\d.]+)px/);
+      return m ? { x: parseFloat(m[1]), y: parseFloat(m[2]) } : { x: 0, y: 0 };
+    }
+    function setTransform(el, x, y) {
+      el.style.transform = "translate3d(" + x + "px, " + y + "px, 0)";
+    }
+
+    document.addEventListener("pointerdown", function(e) {
+      if (document.body.classList.contains("modal-open")) return;
+      var tb = e.target.closest(".titlebar");
+      if (!tb) return;
+      if (e.target.closest(".pbtn")) return;
+      var panel = tb.closest(".panel");
+      if (!panel) return;
+      var col = panel.closest(".grid-col");
+      if (!col) return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      isDragging = true;
+      dragPanel = panel;
+      dragCol = col;
+      startX = e.clientX;
+      startY = e.clientY;
+      var tr = getTransform(panel);
+      startTx = tr.x;
+      startTy = tr.y;
+      panel.classList.add("dragging");
+      try { tb.setPointerCapture(e.pointerId); } catch(err) {}
+    }, true);
+
+    document.addEventListener("pointermove", function(e) {
+      if (!isDragging || !dragPanel || !dragCol) return;
+      var dx = e.clientX - startX;
+      var dy = e.clientY - startY;
+      var proposedTx = startTx + dx;
+      var proposedTy = startTy + dy;
+      var colRect = dragCol.getBoundingClientRect();
+      var cs = getComputedStyle(dragCol);
+      var padTop = parseFloat(cs.paddingTop) || 0;
+      var padLeft = parseFloat(cs.paddingLeft) || 0;
+      var padRight = parseFloat(cs.paddingRight) || 0;
+      var padBottom = parseFloat(cs.paddingBottom) || 0;
+      /* Temporarily strip transform to measure natural (flow) position */
+      var currentTransform = dragPanel.style.transform;
+      dragPanel.style.transform = "";
+      var naturalRect = dragPanel.getBoundingClientRect();
+      dragPanel.style.transform = currentTransform;
+      var natLeft = naturalRect.left - colRect.left;
+      var natTop = naturalRect.top - colRect.top;
+      var w = naturalRect.width;
+      var h = naturalRect.height;
+      var minTx = padLeft - natLeft;
+      var maxTx = colRect.width - padRight - w - natLeft;
+      var minTy = padTop - natTop;
+      var maxTy = colRect.height - padBottom - h - natTop;
+      if (maxTx < minTx) maxTx = minTx;
+      if (maxTy < minTy) maxTy = minTy;
+      var tx = Math.max(minTx, Math.min(maxTx, proposedTx));
+      var ty = Math.max(minTy, Math.min(maxTy, proposedTy));
+      setTransform(dragPanel, tx, ty);
+    }, true);
+
+    function endDrag() {
+      if (!isDragging) return;
+      isDragging = false;
+      if (dragPanel) dragPanel.classList.remove("dragging");
+      dragPanel = null;
+      dragCol = null;
+    }
+    document.addEventListener("pointerup", endDrag, true);
+    document.addEventListener("pointercancel", endDrag, true);
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    Object.keys(MAT).forEach(id => {
+      var el = document.getElementById(id);
+      if(el) el.className += ' ' + MAT[id];
+    });
+    /* Manually stagger .booted class since applyPanelLayout is bypassed on subpages.
+       Chrome.css sets panels to opacity:0 until .booted, so without this they stay invisible. */
+    document.querySelectorAll("#stage .panel").forEach((el, i) => {
+      setTimeout(() => el.classList.add("booted"), 40 * i + 200);
+    });
+    attachAccessories(document.querySelectorAll(".panel"));
+    spawnDecor();
+    drawTraces();
+    registerGlitchTargets(["#p-books .row .title", "#p-films .row .title", "#p-shows .row .title"]);
+    startLoader(BOOT, async function(){
+      __data = await loadLibraryData();
+      renderList("p-books", __data.books, "book");
+      renderList("p-films", __data.films, "film");
+      renderList("p-shows", __data.shows, "show");
+      renderStats(__data);
+      setupClickHandlers();
+      overrideReaderClose("p-detail");
+    });
+    initChrome();
+    attachClampedDrag();
+  });
+  })();
+  </script>
+</body>
+</html>
