@@ -318,16 +318,16 @@ function spawnDecor(config){
     "if(level < MAX_LAYER){",
     "coord_init(&object[PANEL]);",
     "load_model(&s_long_&kids_tmd);",
-    "imprint the memory into the consciousness.",
-    "rewrite the record.",
-    "the thing you don't remember\nis the thing that didn't happen.",
+    "sputnik <---> sweetheart.",
+    "one four three.",
+    "isn't it good...\nnorwegian wood.",
     "protocol_7 :: init_g_pass()",
     "object[LAYER]->world.coord[2] = 0;",
-    "DrawSync(0);  // 被験者の意識",
+    "DrawSync(0); 岩倉玲音//レイン",
     "new_panel_set(i, 0, 4);",
-    "soham will guide you.",
-    "close the world, open the next.",
-    "BGdly = BG_LINE_Y + move_cyc;"
+    "musée des beaux-arts.",
+    "it's ur (eg0 b4by)",
+    "世紀エヴァンゲリオン"
   ];
   for(var cf=0;cf<24;cf++){
     var frag=CODE[cf%CODE.length];
@@ -498,7 +498,7 @@ var loadTimer=setInterval(function(){
   pct.textContent=("00"+Math.floor(p)).slice(-3)+"%";
 },60);
 function finishLoad(){
-  hexEl.innerHTML="close the world, open the next.";
+  hexEl.innerHTML="product by sybil research";
   setTimeout(function(){
     document.getElementById("loader").classList.add("done");
     var panels=chromePanels;
