@@ -365,7 +365,7 @@
   </section>
 
   <section class="panel" id="p-seraph" data-w="290" style="--tilt:rotate(.3deg)">
-    <div class="titlebar"><span class="tl">oculus</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
+    <div class="titlebar"><span class="tl">LAYER:12 oculus</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
     <div class="pbody">
       <pre id="seraph"></pre>
       <div class="caption">▓▒░ aka. morisoba ░▒▓</div>
@@ -400,11 +400,11 @@
     </div>
   </section>
 
-  <section class="panel" id="p-litany" data-w="410" style="--tilt:rotate(-.25deg)">
-    <div class="titlebar"><span class="tl"><href="/npx">layer:05 npx morisoba</href></span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
+  <section class="panel" id="p-litany" data-w="410" style="--tilt:rotate(-.25deg);cursor:pointer;" onclick="window.open('/npx','_blank','noopener')">
+    <div class="titlebar"><span class="tl">layer:05 npx morisoba</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
     <div class="pbody">
       <div class="litany-track" id="litany-track">
-        <href="/npx"><span>sync_err loop:0x7f3a ▓ > npx morisoba ▒ > npx morisoba ▓ > npx morisoba ░ > npx morisoba ▓▒░ > npx morisoba ▓ > npx morisoba ▒ > npx morisoba ░ > npx morisoba ▓ > npx morisoba ░ > npx morisoba ▓▒ > npx morisoba ▚▞ > npx morisoba ░▒▓ </span></href>
+        <span>sync_err loop:0x7f3a ▓ &gt; npx morisoba ▒ &gt; npx morisoba ▓ &gt; npx morisoba ░ &gt; npx morisoba ▓▒░ &gt; npx morisoba ▓ &gt; npx morisoba ▒ &gt; npx morisoba ░ &gt; npx morisoba ▓ &gt; npx morisoba ░ &gt; npx morisoba ▓▒ &gt; npx morisoba ▚▞ &gt; npx morisoba ░▒▓ </span>
       </div>
     </div>
   </section>
@@ -418,7 +418,7 @@
   </section>
 
   <section class="panel" id="p-candle" data-w="120" style="--tilt:rotate(-.6deg)">
-    <div class="titlebar"><span class="tl">l:07</span><button class="pbtn" data-act="close">✕</button></div>
+    <div class="titlebar"><span class="tl">l:07</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
     <div class="pbody"><pre id="candle"></pre></div>
   </section>
 
@@ -449,7 +449,7 @@
   </section>
   
   <section class="panel" id="p-relic" data-w="160" style="--tilt:rotate(-.5deg)">
-    <div class="titlebar"><span class="tl">l:09 cor</span><button class="pbtn" data-act="close">✕</button></div>
+    <div class="titlebar"><span class="tl">l:09 cor</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
     <div class="pbody">
       <!--
       <svg viewBox="10 0 130 160" fill="none" stroke="#e8e8e8" stroke-width="1.4">
@@ -481,7 +481,7 @@
   </section>
 
   <section class="panel" id="p-apple" data-w="196" style="--tilt:rotate(.4deg)">
-    <div class="titlebar"><span class="tl">l:10 ringo</span><button class="pbtn" data-act="close">✕</button></div>
+    <div class="titlebar"><span class="tl">l:10 ringo</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
     <div class="pbody">
       <pre id="apple">
                 __
@@ -503,7 +503,7 @@
   </section>
 
   <section class="panel" id="p-wave" data-w="240" style="--tilt:rotate(-.35deg)">
-    <div class="titlebar"><span class="tl">layer:11 status</span><button class="pbtn" data-act="close">✕</button></div>
+    <div class="titlebar"><span class="tl">layer:11 status</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
     <div class="pbody">
       <svg id="wavesvg" viewBox="0 0 220 64" fill="none" stroke="#e8e8e8">
         <g opacity=".18" stroke-width="1">
@@ -521,24 +521,19 @@
   </section>
 
   <section class="panel" id="p-hex" data-w="86" style="--tilt:rotate(.5deg)">
-    <div class="titlebar"><span class="tl">rnd</span><button class="pbtn" data-act="close">✕</button></div>
+    <div class="titlebar"><span class="tl">rnd</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
     <div class="pbody"><pre id="hexcol"></pre></div>
   </section>
 
   <section class="panel" id="p-sigil" data-w="160" style="--tilt:rotate(.3deg)">
     <div class="titlebar"><span class="tl">l:14</span><button class="pbtn" data-act="close">✕</button></div>
-    
-    <div class="pbody">
-      <!--
-      <pre style="font-size:13px;line-height:1;text-align:center;letter-spacing:0">█║▌║█║║▌█║▌║║█▌║█</pre>
-      <div class="pcaption">no.000117 · wired</div>
-      -->
+    <div class="pbody" style="text-align:center;padding:10px 8px;">
+      <a href="/resume.pdf" target="_blank" rel="noopener" class="mail" style="display:block;text-decoration:none;padding:8px 10px;border:1px solid var(--dust);letter-spacing:3px;font-size:11px;">resume</a>
     </div>
-    
   </section>
 
   <section class="panel" id="p-crux" data-w="260" style="--tilt:rotate(-.45deg)">
-    <div class="titlebar"><span class="tl">l:13 EVA</span><button class="pbtn" data-act="close">✕</button></div>
+    <div class="titlebar"><span class="tl">l:13 EVA</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
     <div class="pbody">
       <pre id="crux">
    ,--------------v--------------,
@@ -594,22 +589,22 @@
 
 /* ================= layout ================= */
 var LAYOUT = [
-  ["p-name",    .045, .065],
+  ["p-name",    .035, .055],
   ["p-seraph",  .640, .060],
-  ["p-about",   .055, .430],
-  ["p-works",   .330, .250],
-  ["p-contact", .350, .680],
-  ["p-litany",  .045, .840],
+  ["p-about",   .030, .500],
+  ["p-works",   .260, .400],
+  ["p-contact", .590, .450],
+  ["p-litany",  .295, .800],
   ["p-console", .715, .620],
   ["p-candle",  .285, .060],
-  ["p-oracle",  .545, .560],
+  ["p-oracle",  .500, .055],
   ["p-relic",   .880, .360],
   ["p-apple",   .485, .400],
   ["p-wave",    .585, .800],
   ["p-hex",     .935, .055],
   ["p-crux",     .245, .660],
-  ["p-sigil",    .375, .845],
-  ["p-note",     .430, .028],
+  ["p-sigil",    .820, .055],
+  ["p-note",     .300, .055],
   ["p-vessel",   .680, .300]
 ];
 var WIRES = [
@@ -958,6 +953,12 @@ document.addEventListener("DOMContentLoaded", function(){
   registerGlitchTargets(["#console-log div", "#hexcol", "#p-hex .pcaption", ".work .wt b"]);
   startLoader(BOOT, startMainAnimations);
   initChrome();
+  ["p-seraph","p-console","p-candle","p-relic","p-apple","p-wave","p-hex","p-crux","p-vessel"].forEach(function(id){
+    var el=document.getElementById(id);
+    if(!el) return;
+    var btn=el.querySelector('.pbtn[data-act="close"]');
+    if(btn) btn.click();
+  });
 });
 })();
 </script>
