@@ -125,17 +125,19 @@ button{cursor:none;}
 .pbtn{font-family:var(--mono);font-size:9px;line-height:1;border:var(--line);
   background:var(--void);color:var(--ink);width:14px;height:14px;flex:none;
   display:grid;place-items:center;}
-.pbtn:hover{background:var(--ink);color:var(--void);}
+@media (hover:hover){.pbtn:hover{background:var(--ink);color:var(--void);}}
 .pbody{padding:12px;font-size:11px;line-height:1.7;}
 .panel.min .pbody{display:none;}
 .panel.inv{background:var(--ink);color:var(--void);}
 .panel.inv .titlebar{border-color:var(--void);}
 .panel.inv .titlebar .tl{background:var(--ink);}
 .panel.inv .pbtn{border-color:var(--void);background:var(--ink);color:var(--void);}
+@media (hover:hover){
 .panel.inv .pbtn:hover{background:var(--void);color:var(--ink);}
 .panel:hover .titlebar{background:var(--ink);color:var(--void);}
 .panel:hover .titlebar .tl{background:transparent;}
 .panel.inv:hover .titlebar{background:var(--void);color:var(--ink);}
+}
 
 /* ---------- materials (monochrome tonal surfaces) ---------- */
 .panel.mat-paper{
@@ -190,11 +192,13 @@ button{cursor:none;}
 .panel.mat-crt.scr-amber .pbody svg{stroke:var(--scr-amber);}
 
 /* keep hover-invert readable across materials */
+@media (hover:hover){
 .panel.mat-paper:hover .titlebar,
 .panel.mat-metal:hover .titlebar,
 .panel.mat-worn:hover  .titlebar,
 .panel.mat-crt:hover   .titlebar,
 .panel.mat-frame:hover .titlebar{background:var(--ink);color:var(--void);}
+}
 
 /* ---------- industrial accessories (LEDs, asset tags, placards, silhouettes) ---------- */
 .led-strip{display:inline-flex;gap:3px;padding:0 6px 0 4px;flex:none;align-items:center;}
@@ -269,7 +273,7 @@ button{cursor:none;}
 #dock button{font-family:var(--mono);font-size:9px;letter-spacing:2px;
   text-transform:uppercase;border:var(--line);background:var(--void);
   color:var(--ink);padding:5px 10px;}
-#dock button:hover{background:var(--ink);color:var(--void);}
+@media (hover:hover){#dock button:hover{background:var(--ink);color:var(--void);}}
 #dock:empty{display:none;}
 #hint{position:fixed;bottom:32px;right:28px;z-index:9000;font-size:9px;
   letter-spacing:3px;opacity:.45;text-transform:uppercase;pointer-events:none;
@@ -327,7 +331,7 @@ button{cursor:none;}
 
 @media (max-width:720px){
   body{overflow:auto;overflow-x:hidden;cursor:auto;}
-  #stage{position:static;padding:36px 22px 90px;}
+  #stage{position:static;padding:36px 22px 20px;}
   #wires,#traces,#accessories,#decor{display:none;}
   .panel{position:relative !important;left:auto !important;top:auto !important;
     width:100% !important;margin:0 0 14px;transform:none !important;}
@@ -337,4 +341,34 @@ button{cursor:none;}
   #p-apple,#p-wave,#p-hex,#p-crux,#p-sigil,#p-note{display:none !important;}
   /* let the works list stretch to fit all entries */
   #p-works .pbody{max-height:none !important;overflow:visible !important;}
+  /* dock: in-flow grid at page bottom, no floating */
+  #dock{
+    position:static;
+    left:auto;bottom:auto;
+    transform:none;
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:6px;
+    padding:0 22px 14px;
+    width:100%;
+    max-width:100%;
+    box-sizing:border-box;
+  }
+  #dock button{
+    width:100%;
+    min-width:0;
+    padding:8px 6px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  /* pdpt: in-flow at page bottom, no floating */
+  #pdpt{
+    position:static;
+    left:auto;bottom:auto;
+    padding:6px 22px 22px;
+    text-align:center;
+    animation:none;
+    opacity:.45;
+  }
 }

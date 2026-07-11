@@ -42,17 +42,17 @@
 .work .wt b{font-weight:bold;letter-spacing:2px;}
 .work .wt i{font-style:normal;font-size:9px;letter-spacing:2px;opacity:.6;}
 .work .wd{font-size:10px;opacity:.75;margin-top:1px;}
-.work:hover{background:var(--void);color:var(--ink);}
+@media (hover:hover){.work:hover{background:var(--void);color:var(--ink);}}
 #p-works .pbody{max-height:172px;overflow-y:auto;overflow-x:hidden;
   scrollbar-width:thin;scrollbar-color:var(--steel) transparent;
   scroll-behavior:smooth;padding-right:10px;}
 #p-works .pbody::-webkit-scrollbar{width:5px;height:5px;}
 #p-works .pbody::-webkit-scrollbar-track{background:transparent;}
 #p-works .pbody::-webkit-scrollbar-thumb{background:var(--steel);}
-#p-works .pbody::-webkit-scrollbar-thumb:hover{background:var(--dust);}
+@media (hover:hover){#p-works .pbody::-webkit-scrollbar-thumb:hover{background:var(--dust);}}
 #p-contact .mail{display:block;text-align:center;text-decoration:none;
   border:var(--line);padding:10px 8px;margin-top:10px;font-size:11px;letter-spacing:2px;}
-#p-contact .mail:hover{background:var(--ink);color:var(--void);}
+@media (hover:hover){#p-contact .mail:hover{background:var(--ink);color:var(--void);}}
 #p-contact .prompt{margin-top:10px;font-size:10px;opacity:.85;}
 .cursor-blink{display:inline-block;width:7px;height:11px;background:currentColor;
   vertical-align:-2px;animation:blink 1s steps(1) infinite;}

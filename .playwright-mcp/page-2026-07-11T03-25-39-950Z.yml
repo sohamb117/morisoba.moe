@@ -1,0 +1,197 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e3]: ✧ COPLAND OS ✧ rev.2.6 ────────────────────
+    - generic [ref=e5]: ···
+  - generic:
+    - generic: ✝
+    - generic: ♱
+    - generic: ✠
+    - generic: ✝
+    - generic: ♱
+    - generic: ♱
+    - generic: "0x77"
+    - generic: "0x2A4F"
+    - generic: ▒
+    - generic: ░▒▓
+    - generic: ACK
+    - generic: NAK
+    - generic: ▓▒░
+    - generic: ·─·
+    - generic: ▒
+    - generic: MASK
+    - generic: "0x00"
+    - generic: ▞
+    - generic: ACK
+    - generic: ▓
+    - generic: ░
+    - generic: "0x00"
+    - generic: ▞
+    - generic: "0x2A"
+    - generic: EOF
+    - generic: ░▒▓
+    - generic: ░▒▓
+    - generic: RETRY
+    - generic: ▚▞
+    - generic: "0xCF01"
+    - generic: MASK
+    - generic: "::"
+    - generic: ·─·
+    - generic: ▚▞
+    - generic: "0xCF01"
+    - generic: ▒
+    - generic: "0xFF"
+    - generic: ▚
+    - generic: ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚
+    - generic: ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚
+    - generic: ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚ ▓▒░ ▚▞ ░▒▓ ▞▚
+    - generic: void reset_panel(u_int level);
+    - generic: "if(level < MAX_LAYER){"
+    - generic: coord_init(&object[PANEL]);
+    - generic: load_model(&s_long_&kids_tmd);
+    - generic: sputnik <---> sweetheart.
+    - generic: one four three.
+    - generic: isn't it good... norwegian wood.
+    - generic: "protocol_7 :: init_g_pass()"
+    - generic: object[LAYER]->world.coord[2] = 0;
+    - generic: DrawSync(0); 岩倉玲音//レイン
+    - generic: new_panel_set(i, 0, 4);
+    - generic: musée des beaux-arts.
+    - generic: it's ur (eg0 b4by)
+    - generic: 世紀エヴァンゲリオン
+    - generic: void reset_panel(u_int level);
+    - generic: "if(level < MAX_LAYER){"
+    - generic: coord_init(&object[PANEL]);
+    - generic: load_model(&s_long_&kids_tmd);
+    - generic: sputnik <---> sweetheart.
+    - generic: one four three.
+    - generic: isn't it good... norwegian wood.
+    - generic: "protocol_7 :: init_g_pass()"
+    - generic: object[LAYER]->world.coord[2] = 0;
+    - generic: DrawSync(0); 岩倉玲音//レイン
+  - generic:
+    - generic: SENSITIVEFOR·YOUR·EYES·ONLY
+    - generic: DO NOTDISCONNECT
+  - generic:
+    - img:
+      - generic:
+        - generic: "0x2A4F"
+        - generic: "0x81B3"
+        - generic: "0xCF01"
+        - generic: "0x004A"
+        - generic: "0xEA2C"
+        - generic: "0x77F0"
+  - generic [ref=e6]:
+    - generic [ref=e7]:
+      - generic [ref=e8]:
+        - generic [ref=e9]: layer:00 identity
+        - button "–" [ref=e14]
+        - button "✕" [ref=e15]
+      - generic [ref=e16]:
+        - generic [ref=e17]: "##### ####### # # # # # # # # # # # # # ## ## # # # # # # # # # # # ##### # # ####### ##### # # # # # # # # # # # # # # # # # # # # # # ##### ####### # # # # # #"
+        - generic [ref=e18]:
+          - generic [ref=e19]: ✠
+          - generic [ref=e20]: ☩
+          - generic [ref=e21]: †
+          - generic [ref=e22]: ♰
+          - generic [ref=e23]: †
+          - generic [ref=e24]: ☩
+          - generic [ref=e25]: ✠
+        - generic: MRSB·A61C8
+    - generic [ref=e26]:
+      - generic [ref=e27]:
+        - generic [ref=e28]: layer:01 about
+        - button "–" [ref=e35]
+        - button "✕" [ref=e36]
+      - generic [ref=e37]:
+        - paragraph [ref=e38]: i'm soham. i'm currently studying cs + econ at new york university.
+        - paragraph [ref=e39]: i specialize in critical, high-scale data engineering and applied ai. i'm currently working on ai security at microsoft.
+        - paragraph [ref=e40]:
+          - text: this site contains everything i've publicly worked on. check it out!
+          - link:
+            - /url: library/
+          - link:
+            - /url: atlas/
+          - link:
+            - /url: journal/
+        - generic: MRSB·A23F0
+    - generic [ref=e41]:
+      - generic [ref=e42]:
+        - generic [ref=e43]: layer:02 work
+        - button "–" [ref=e49]
+        - button "✕" [ref=e50]
+      - generic [ref=e51]:
+        - link "ironmill ∞ worked with ironmill to develop a patented system for selecting optimal zk proofs." [ref=e52] [cursor=pointer]:
+          - /url: "#"
+          - generic [ref=e53]:
+            - generic [ref=e54]: ironmill
+            - generic [ref=e55]: ∞
+          - text: worked with ironmill to develop a patented system for selecting optimal zk proofs.
+        - link "doppio labs ∞ raised from lvlup ventures at an 8-figure valuation to build people search tools. shut down." [ref=e56] [cursor=pointer]:
+          - /url: "#"
+          - generic [ref=e57]:
+            - generic [ref=e58]: doppio labs
+            - generic [ref=e59]: ∞
+          - text: raised from lvlup ventures at an 8-figure valuation to build people search tools. shut down.
+        - link "arenabench 2026 simulated competitive environment. cybersecurity benchmark for frontier llm" [ref=e60] [cursor=pointer]:
+          - /url: "#"
+          - generic [ref=e61]:
+            - generic [ref=e62]: arenabench
+            - generic [ref=e63]: "2026"
+          - text: simulated competitive environment. cybersecurity benchmark for frontier llm
+        - link "npx morisoba 2025 personal profile, packaged as a rust binary and pushed to npm. also a custom wasm web deployment." [ref=e64] [cursor=pointer]:
+          - /url: "#"
+          - generic [ref=e65]:
+            - generic [ref=e66]: npx morisoba
+            - generic [ref=e67]: "2025"
+          - text: personal profile, packaged as a rust binary and pushed to npm. also a custom wasm web deployment.
+        - link "eigenfish 2025 eigenfish generator." [ref=e68] [cursor=pointer]:
+          - /url: "#"
+          - generic [ref=e69]:
+            - generic [ref=e70]: eigenfish
+            - generic [ref=e71]: "2025"
+          - text: eigenfish generator.
+        - generic: MRSB·A1BE5
+    - generic [ref=e72]:
+      - generic [ref=e73]:
+        - generic [ref=e74]: layer:03 contact
+        - button "–" [ref=e80]
+        - button "✕" [ref=e81]
+      - generic [ref=e82]:
+        - link "✉ SOHAMB117@GMAIL.COM" [ref=e83] [cursor=pointer]:
+          - /url: mailto:sohamb117@gmail.com
+        - generic [ref=e84]: C:\SOHAM> npx morisoba
+        - generic: MRSB·A97C3
+    - generic [ref=e86] [cursor=pointer]:
+      - generic [ref=e87]:
+        - generic [ref=e88]: layer:05 npx morisoba
+        - button "–" [ref=e94]
+        - button "✕" [ref=e95]
+      - generic [ref=e96]: sync_err loop:0x7f3a ▓ > npx morisoba ▒ > npx morisoba ▓ > npx morisoba ░ > npx morisoba ▓▒░ > npx morisoba ▓ > npx morisoba ▒ > npx morisoba ░ > npx morisoba ▓ > npx morisoba ░ > npx morisoba ▓▒ > npx morisoba ▚▞ > npx morisoba ░▒▓
+    - generic [ref=e100]:
+      - generic [ref=e101]: l:08 links
+      - button "✕" [ref=e106]
+    - generic [ref=e108]:
+      - generic [ref=e109]:
+        - generic [ref=e110]: l:14
+        - button "✕" [ref=e116]
+      - generic [ref=e117]:
+        - link "resume" [ref=e118] [cursor=pointer]:
+          - /url: resume.pdf
+        - generic: MRSB·ADA17
+    - generic [ref=e119]:
+      - generic [ref=e120]:
+        - generic [ref=e121]: vitals.txt
+        - button "✕" [ref=e126]
+      - generic [ref=e127]: "- intp - 21 yrs - bay//nyc - indian - arista edu 400"
+  - generic [ref=e129]:
+    - button "LAYER:12 oculus" [ref=e130]
+    - button "layer:06 choir" [ref=e131]
+    - button "l:07" [ref=e132]
+    - button "l:09 cor" [ref=e133]
+    - button "l:10 ringo" [ref=e134]
+    - button "layer:11 status" [ref=e135]
+    - button "rnd" [ref=e136]
+    - button "l:13 EVA" [ref=e137]
+    - button "lain.png" [ref=e138]
+  - generic: drag everything
+  - generic: present day · present time
