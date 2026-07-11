@@ -339,6 +339,7 @@ button{cursor:none;}
   /* strip art / terminal / decorative panels; keep info only */
   #p-seraph,#p-litany,#p-console,#p-candle,#p-oracle,#p-relic,
   #p-apple,#p-wave,#p-hex,#p-crux,#p-sigil,#p-note{display:none !important;}
+  #stage .panel.restored{display:block !important;}
   /* let the works list stretch to fit all entries */
   #p-works .pbody{max-height:none !important;overflow:visible !important;}
   /* dock: in-flow grid at page bottom, no floating */

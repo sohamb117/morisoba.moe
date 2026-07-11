@@ -953,7 +953,7 @@ document.addEventListener("DOMContentLoaded", function(){
   registerGlitchTargets(["#console-log div", "#hexcol", "#p-hex .pcaption", ".work .wt b"]);
   startLoader(BOOT, startMainAnimations);
   initChrome();
-  ["p-seraph","p-console","p-candle","p-relic","p-apple","p-wave","p-hex","p-crux","p-vessel"].forEach(function(id){
+  (isMobile() ? ["p-seraph","p-apple","p-crux","p-vessel"] : ["p-seraph","p-console","p-candle","p-relic","p-apple","p-wave","p-hex","p-crux","p-vessel"]).forEach(function(id){
     var el=document.getElementById(id);
     if(!el) return;
     var btn=el.querySelector('.pbtn[data-act="close"]');

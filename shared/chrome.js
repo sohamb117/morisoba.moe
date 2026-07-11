@@ -378,11 +378,13 @@ document.querySelectorAll(".pbtn").forEach(function(btn){
     if(btn.getAttribute("data-act")==="min"){
       el.classList.toggle("min");drawWires();
     }else{
-      el.style.display="none";
+      el.classList.remove("restored");
+      el.style.setProperty("display","none","important");
       var b=document.createElement("button");
       b.textContent=el.querySelector(".tl").textContent;
       b.addEventListener("click",function(){
-        el.style.display="";dock.removeChild(b);bringTop(el);drawWires();
+        if(isMobile()) document.getElementById("stage").appendChild(el);
+        el.style.removeProperty("display");el.classList.add("restored");dock.removeChild(b);bringTop(el);drawWires();
       });
       dock.appendChild(b);drawWires();
     }
