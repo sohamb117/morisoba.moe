@@ -1,64 +1,40 @@
 {
   "books": [
     {
-      "title": "opus bibliotheca i",
-      "author": "replace me",
-      "started": "2026-01-01",
-      "finished": "2026-03-14",
+      "title": "a picture of dorian grey",
+      "author": "oscar wilde",
+      "started": "2026-06",
+      "finished": "2026-06",
       "rating": 4,
-      "notes": "replace me. notes support **bold**, *italic*, `code`, [links](https://example.com), and multiple paragraphs."
+      "notes": "a classic for a reason. oscar wilde's prose feels incredibly comfortable for something written in the Victorian period. rich with reference, very glad I had familiarity with the bible and other canonical works before reading."
     },
     {
-      "title": "opus bibliotheca ii — in progress",
-      "author": "replace me",
-      "started": "2026-06-01",
-      "finished": null,
-      "rating": null,
-      "notes": "currently reading. finished:null hides the finish date and marks as unfinished."
-    },
-    {
-      "title": "apocrypha",
-      "author": "unknown",
-      "started": null,
-      "finished": null,
-      "rating": null,
-      "notes": "abandoned, or forgotten, or never quite begun."
+      "title": "the ring",
+      "author": "koji suzuki",
+      "started": "2026-07",
+      "finished": "2026-07",
+      "rating": 3.5,
+      "notes": "japanese horror is so thrilling. the ring is not gruesome in the slightest, and the horror comes more from atmosphere and tension than anything else. while the mystery itself isn't anything special, ryuji's characterisation is a curveball and something i'm still working through."
     }
   ],
   "films": [
     {
-      "title": "opus cinema i",
-      "director": "replace me",
-      "watched": "2026-02-14",
-      "rating": 5,
-      "notes": "replace me."
-    },
-    {
-      "title": "opus cinema ii",
-      "director": "replace me",
-      "watched": "2026-04-22",
+      "title": "964 pinocchio",
+      "director": "shozin fukui",
+      "finished": "2026-07-04",
       "rating": 3,
-      "notes": "replace me."
+      "notes": "what the fuck did i watch. it's a bizarre work, not one i can explain in any way. feels like a fever dream. slightly disturbing, but the gore is so comical that i can't even take it seriously. not sure what i got out of it, and not sure what i was supposed to get out of"
     }
   ],
   "shows": [
     {
-      "title": "serial experiments opus",
-      "creator": "replace me",
-      "started": "2026-01-15",
-      "finished": "2026-02-20",
+      "title": "serial experiments lain",
+      "creator": "chiaki konaka",
+      "started": "2025",
+      "finished": "2026",
       "seasons": 1,
       "rating": 5,
-      "notes": "replace me."
-    },
-    {
-      "title": "opus series ii — ongoing",
-      "creator": "replace me",
-      "started": "2026-06-01",
-      "finished": null,
-      "seasons": 2,
-      "rating": null,
-      "notes": "in progress. finished:null indicates currently watching."
+      "notes": "let's all love lain <3"
     }
   ]
 }

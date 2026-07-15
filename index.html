@@ -102,9 +102,48 @@
 #hexcol{font-size:8px;line-height:1.55;white-space:pre;opacity:.7;animation:hexscroll 30s linear infinite;}
 @keyframes hexscroll{to{transform:translateY(-50%);}}
 #seraph{text-shadow:1.1px 0 rgba(111,182,194,.35), -1.1px 0 rgba(200,80,80,.30);}
+
+/* entry gate */
+#entry-gate{position:fixed;inset:0;z-index:10001;background:var(--void);display:grid;place-items:center;overflow:hidden;cursor:none;transition:opacity .4s,visibility .4s;}
+#entry-gate::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 43%,rgba(232,232,232,.11),transparent 30%),repeating-linear-gradient(0deg,transparent 0 3px,rgba(232,232,232,.035) 3px 4px);pointer-events:none;}
+#entry-gate.done{opacity:0;visibility:hidden;pointer-events:none;}
+#entry-gate ~ #cursor{z-index:10002;}
+.entry-noise{position:absolute;inset:0;overflow:hidden;pointer-events:none;}.entry-noise::before{content:"";position:absolute;inset:0;background-image:linear-gradient(135deg,transparent 49.8%,rgba(232,232,232,.07) 50%,transparent 50.2%),linear-gradient(45deg,transparent 49.8%,rgba(232,232,232,.045) 50%,transparent 50.2%);background-size:260px 260px;opacity:.3;}.entry-trace{position:absolute;bottom:9vh;left:6vw;font-size:8px;line-height:2;letter-spacing:4px;color:var(--dust);opacity:.24;white-space:pre;animation:entry-drift 18s linear infinite;}
+.entry-shell{position:relative;width:min(680px,calc(100vw - 48px));text-align:center;animation:entry-wake .9s steps(10) both;}
+.entry-titlebar{position:absolute;top:-38px;left:50%;transform:translateX(-50%);font-size:8px;letter-spacing:4px;text-transform:uppercase;color:var(--dust);white-space:nowrap;}.entry-led{display:none;}
+.entry-main{padding:0;}.entry-sigil-wrap{position:relative;width:min(360px,62vw);margin:0 auto 26px;animation:entry-signal 8s ease-in-out infinite;}.entry-sigil-wrap::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(3,3,3,.32) 0 2px,transparent 2px 4px),repeating-linear-gradient(90deg,rgba(232,232,232,.06) 0 1px,transparent 1px 5px);mix-blend-mode:screen;pointer-events:none;}.entry-sigil{width:100%;height:auto;display:block;opacity:.72;filter:grayscale(1) contrast(1.15) url("#entry-crt");}.entry-product{font-family:Georgia,serif;font-style:italic;font-size:42px;letter-spacing:-1.5px;color:var(--ink);text-shadow:2px 1px 0 rgba(232,232,232,.18);}.entry-maker{margin-top:4px;font-family:Georgia,serif;font-style:italic;font-size:18px;letter-spacing:-.5px;color:var(--ink-dim);}.entry-rule{width:min(380px,80vw);height:1px;margin:27px auto 16px;background:linear-gradient(90deg,transparent,var(--edge-hi),transparent);}
+.entry-status{font-size:8px;line-height:1.8;letter-spacing:1.5px;color:var(--ink-dim);text-transform:uppercase;}.entry-status span{color:var(--ink);}.entry-prompt{margin:20px 0 10px;font-family:var(--sans);font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--ink-dim);}
+.entry-actions{display:flex;justify-content:center;gap:22px;}.entry-actions button{font-family:var(--mono);font-size:12px;letter-spacing:3px;text-transform:uppercase;border:1px solid var(--edge-mid);background:rgba(3,3,3,.35);color:var(--ink);padding:13px 20px;cursor:none;transition:color .12s,text-shadow .12s,background .12s;}.entry-actions button::before{content:"[ ";color:var(--ink-dim);}.entry-actions button::after{content:" ]";color:var(--ink-dim);}.entry-actions #btn-load{color:var(--ink-hi);}
+@media (hover:hover){.entry-actions button:hover{color:var(--void);background:var(--ink);text-shadow:none;}}
+.entry-footer{margin-top:26px;font-family:var(--mono);font-size:7px;letter-spacing:1.5px;color:var(--steel);text-transform:uppercase;}.entry-footer::before{content:"NAVI-0117"}.entry-footer::after{content:"";}
+@keyframes entry-wake{0%{opacity:0;transform:translateY(12px)}100%{opacity:1;transform:translateY(0)}}
+@keyframes entry-drift{to{transform:translateX(20vw)}}
+@keyframes entry-signal{0%,100%{opacity:.64;transform:scale(.985)}50%{opacity:.78;transform:scale(1)}}
+@media (max-width:720px){#entry-gate{cursor:auto;}.entry-shell{width:calc(100vw - 32px);}.entry-titlebar{top:-28px;font-size:7px;}.entry-sigil-wrap{width:min(270px,72vw);margin-bottom:20px;}.entry-product{font-size:31px;line-height:1;}.entry-maker{font-size:15px;}.entry-actions{flex-direction:column;gap:8px;}.entry-actions button{min-height:48px;cursor:auto;}.entry-trace{bottom:5vh;left:-30vw;}}
 </style>
 </head>
 <body>
+
+<div id="entry-gate">
+  <div class="entry-noise"></div>
+  <div class="entry-trace">0xCF01  IRQ:07  MASK  ACK  NAK  RETRY  object[LAYER]-&gt;world.coord[2] = 0;  DrawSync(0);  protocol_7 :: init_g_pass()  ▓▒░ ▚▞ ░▒▓</div>
+  <div class="entry-shell">
+    <div class="entry-titlebar"><span>boot menu</span><span class="entry-led"><i></i><i></i><i></i></span></div>
+    <div class="entry-main">
+      <div class="entry-sigil-wrap"><svg class="entry-sigil" viewBox="0 0 360 300" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><filter id="entry-crt"><feTurbulence type="fractalNoise" baseFrequency=".65" numOctaves="2" seed="7" result="noise"/><feDisplacementMap in="SourceGraphic" in2="noise" scale="1.2" xChannelSelector="R" yChannelSelector="G"/></filter><circle cx="180" cy="132" r="105" stroke-width="42" opacity=".35"/><path d="M72 132c46-80 170-80 216 0-46 80-170 80-216 0Z" stroke-width="26"/><circle cx="180" cy="132" r="44" stroke-width="22"/><circle cx="180" cy="132" r="11" fill="currentColor" stroke="none"/><path d="M132 201v53c0 18-14 31-31 31-17 0-31-13-31-31v-20M228 201v53c0 18 14 31 31 31 17 0 31-13 31-31v-20" stroke-width="21" stroke-linecap="round"/><circle cx="180" cy="11" r="9" fill="currentColor" stroke="none"/><circle cx="66" cy="196" r="9" fill="currentColor" stroke="none"/><circle cx="294" cy="196" r="9" fill="currentColor" stroke="none"/></svg></div>
+      <div class="entry-product">Copland OS Enterprise</div>
+      <div class="entry-maker">Product By Sybil Research</div>
+      <div class="entry-rule"></div>
+      <div class="entry-status"><span>[ok]</span> profile service online<br><span>[ok]</span> wired interface ready</div>
+      <div class="entry-prompt">Select user environment</div>
+      <div class="entry-actions">
+        <button id="btn-resume">RESUME.EXE</button>
+        <button id="btn-load">LOAD OS</button>
+      </div>
+    </div>
+    <div class="entry-footer"></div>
+  </div>
+</div>
 
 <div id="loader" aria-hidden="true">
 <pre>
@@ -425,6 +464,7 @@
   <section class="panel" id="p-oracle" data-w="180" style="--tilt:rotate(.45deg)" style="display: none;">
     <div class="titlebar"><span class="tl">l:08 links</span><button class="pbtn" data-act="close">✕</button></div>
     <div class="pbody">
+      <a href="/library/">/library/</a>
       <!--
       <svg viewBox="60 30 180 140" fill="none" stroke="#e8e8e8" stroke-width="1.4">
         <g class="rays" opacity=".6">
@@ -528,7 +568,7 @@
   <section class="panel" id="p-sigil" data-w="160" style="--tilt:rotate(.3deg)">
     <div class="titlebar"><span class="tl">l:14</span><button class="pbtn" data-act="close">✕</button></div>
     <div class="pbody" style="text-align:center;padding:10px 8px;">
-      <a href="resume.pdf" target="_blank" rel="noopener" class="mail" style="display:block;text-decoration:none;padding:8px 10px;border:1px solid var(--dust);letter-spacing:3px;font-size:11px;">resume</a>
+      <a href="resume/" class="mail" style="display:block;text-decoration:none;padding:8px 10px;border:1px solid var(--dust);letter-spacing:3px;font-size:11px;">resume</a>
     </div>
   </section>
 
@@ -561,8 +601,7 @@
 - intp
 - 21 yrs
 - bay//nyc
-- indian
-- arista edu 400
+- indian + singaporean
 </pre></div>
   </section>
 
@@ -951,7 +990,16 @@ document.addEventListener("DOMContentLoaded", function(){
   drawTraces();
   drawWires(LAYOUT, WIRES, FLOOR, DROPS);
   registerGlitchTargets(["#console-log div", "#hexcol", "#p-hex .pcaption", ".work .wt b"]);
-  startLoader(BOOT, startMainAnimations);
+
+  var eg = document.getElementById("entry-gate");
+  document.getElementById("btn-resume").addEventListener("click", function(){
+    window.location.href = "resume/";
+  });
+  document.getElementById("btn-load").addEventListener("click", function(){
+    eg.classList.add("done");
+    startLoader(BOOT, startMainAnimations);
+  });
+
   initChrome();
   (isMobile() ? ["p-seraph","p-apple","p-crux","p-vessel"] : ["p-seraph","p-console","p-candle","p-relic","p-apple","p-wave","p-hex","p-crux","p-vessel"]).forEach(function(id){
     var el=document.getElementById(id);

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Soham | Resume</title>
+<link rel="stylesheet" href="../shared/chrome.css">
+<style>
+  /* Base Reset & Aesthetics */
+  #resume-container {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 60px 20px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--steel) transparent;
+    background:linear-gradient(90deg,rgba(3,3,3,.16),rgba(3,3,3,.28));
+  }
+  #resume-container::-webkit-scrollbar { width: 5px; height: 5px; }
+  #resume-container::-webkit-scrollbar-track { background: transparent; }
+  #resume-container::-webkit-scrollbar-thumb { background: var(--steel); }
+  @media (hover: hover) {
+    #resume-container::-webkit-scrollbar-thumb:hover { background: var(--dust); }
+  }
+
+  .content {
+    max-width: 680px;
+    margin: 0 auto;
+    font-size: 11px;
+    line-height: 1.6;
+    letter-spacing: 0.3px;
+    text-shadow:0 1px 2px rgba(3,3,3,.95);
+  }
+  #traces { opacity:.38; }
+  #decor { opacity:.28; }
+  #scanlines { opacity:.42; }
+  #grain { opacity:.045; }
+  
+  header {
+    margin-bottom: 40px;
+    border-bottom: 1px dashed var(--edge-hi);
+    padding-bottom: 20px;
+  }
+  h1 {
+    font-size: 18px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .sub {
+    color: var(--dust);
+    font-family: var(--sans);
+    letter-spacing: 1px;
+    font-size: 9px;
+    text-transform: uppercase;
+  }
+  .home-link {
+    display: inline-block;
+    margin-bottom: 20px;
+    text-decoration: none;
+    border: var(--line);
+    padding: 6px 12px;
+    font-family: var(--sans);
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: background 0.2s, color 0.2s;
+  }
+  @media (hover:hover) { .home-link:hover {
+    background: var(--ink);
+    color: var(--void);
+  } }
+
+  section {
+    margin-bottom: 40px;
+  }
+  h2 {
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    margin-bottom: 16px;
+    border-left: 2px solid var(--ink);
+    padding-left: 8px;
+  }
+
+  .item {
+    margin-bottom: 24px;
+  }
+  .item-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 4px;
+    border-bottom: 1px dashed var(--edge-lo);
+    padding-bottom: 4px;
+  }
+  .item-head strong {
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+  .item-head span {
+    font-family: var(--sans);
+    font-size: 9px;
+    color: var(--dust);
+    letter-spacing: 1px;
+  }
+  .item-sub {
+    font-style: italic;
+    color: var(--ink-dim);
+    margin-bottom: 8px;
+  }
+  .item ul {
+    list-style: none;
+    padding-left: 14px;
+  }
+  .item ul li {
+    position: relative;
+    margin-bottom: 8px;
+    color: var(--ink);
+  }
+  .item ul li::before {
+    content: "›";
+    position: absolute;
+    left: -14px;
+    color: var(--dust);
+  }
+
+  .skills-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .skill-tag {
+    border: 1px solid var(--edge-mid);
+    padding: 4px 8px;
+    font-size: 10px;
+    color: var(--ink-dim);
+  }
+
+  .contact-links a {
+    display: inline-block;
+    margin-right: 16px;
+    text-decoration: none;
+    border-bottom: 1px solid var(--edge-mid);
+    padding-bottom: 2px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  @media (hover:hover) { .contact-links a:hover {
+    color: var(--ink-hi);
+    border-color: var(--ink-hi);
+  } }
+
+  /* Responsive fixes */
+  @media (max-width: 600px) {
+    .item-head {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .item-head span {
+      margin-top: 4px;
+    }
+    #resume-container {
+      padding: 30px 15px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<svg id="traces" xmlns="http://www.w3.org/2000/svg"></svg>
+<div id="decor"></div>
+<div id="scanlines"></div>
+<div id="grain"></div>
+
+<div id="resume-container">
+  <div class="content">
+    <a href="../" class="home-link">← Return to Root</a>
+    
+    <header>
+      <h1>Soham</h1>
+      <div class="sub">CS + ECON @ NYU · AI SECURITY @ MICROSOFT</div>
+    </header>
+
+    <section>
+      <h2>Profile</h2>
+      <p>Currently studying computer science and economics at New York University. I specialize in critical, high-scale data engineering and applied AI, and currently work on AI security at Microsoft.</p>
+    </section>
+
+    <section>
+      <h2>Experience</h2>
+      
+      <div class="item">
+        <div class="item-head">
+          <strong>Microsoft</strong>
+          <span>AI Security</span>
+        </div>
+        <div class="item-sub">AI Security</div>
+        <ul>
+          <li>Current work in AI security.</li>
+        </ul>
+      </div>
+
+      <div class="item">
+        <div class="item-head">
+          <strong>Ironmill</strong>
+          <span></span>
+        </div>
+        <div class="item-sub">Zero-Knowledge Proof Systems</div>
+        <ul>
+          <li>Worked with Ironmill to develop a patented system for selecting optimal zero-knowledge proofs.</li>
+        </ul>
+      </div>
+
+      <div class="item">
+        <div class="item-head">
+          <strong>Doppio Labs</strong>
+          <span></span>
+        </div>
+        <div class="item-sub">People Search Tools</div>
+        <ul>
+          <li>Company backed by LvlUp Ventures at an eight-figure valuation to build people-search tools.</li>
+          <li>The company shut down.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>Selected Work</h2>
+      
+      <div class="item">
+        <div class="item-head">
+          <strong>ArenaBench</strong>
+          <span></span>
+        </div>
+        <ul>
+          <li>Simulated competitive environment: a cybersecurity benchmark for frontier LLMs.</li>
+        </ul>
+      </div>
+
+      <div class="item">
+        <div class="item-head">
+          <strong>npx morisoba</strong>
+          <span></span>
+        </div>
+        <ul>
+          <li>Personal profile packaged as a Rust binary, published to npm, with a custom WASM web deployment.</li>
+        </ul>
+      </div>
+
+      <div class="item">
+        <div class="item-head">
+          <strong>eigenfish</strong>
+          <span></span>
+        </div>
+        <ul>
+          <li>Eigenfish generator.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>Education</h2>
+      <div class="item">
+        <div class="item-head">
+          <strong>New York University (NYU)</strong>
+          <span></span>
+        </div>
+        <div class="item-sub">Computer Science + Economics · currently studying</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Skills</h2>
+      <div class="skills-list">
+        <span class="skill-tag">Security Engineering</span>
+        <span class="skill-tag">AI Security</span>
+        <span class="skill-tag">Applied AI</span>
+        <span class="skill-tag">Data Engineering</span>
+        <span class="skill-tag">Rust</span>
+        <span class="skill-tag">WASM</span>
+      </div>
+    </section>
+
+    <section>
+      <h2>Contact</h2>
+      <div class="contact-links">
+        <a href="mailto:sohamb117@gmail.com">sohamb117@gmail.com</a>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script src="../shared/chrome.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    if (typeof spawnDecor === 'function') spawnDecor();
+    if (typeof drawTraces === 'function') drawTraces();
+    if (typeof initChrome === 'function') initChrome();
+  });
+</script>
+</body>
+</html>
