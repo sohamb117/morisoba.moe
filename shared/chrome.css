@@ -41,19 +41,13 @@
 html,body{height:100%;}
 body{
   background:var(--void);color:var(--ink);
-  font-family:var(--mono);overflow:hidden;cursor:none;
+  font-family:var(--mono);overflow:hidden;cursor:auto;
 }
 a{color:inherit;}
-button{cursor:none;}
+button{cursor:pointer;}
 
 /* ---------- cursor ---------- */
-#cursor{position:fixed;top:0;left:0;z-index:9999;pointer-events:none;
-  width:19px;height:19px;margin:-9px 0 0 -9px;mix-blend-mode:difference;}
-#cursor::before,#cursor::after{content:"";position:absolute;background:#fff;}
-#cursor::before{left:9px;top:0;width:1px;height:19px;}
-#cursor::after{top:9px;left:0;height:1px;width:19px;}
-#cursor.hot{transform:rotate(45deg) scale(1.5);}
-@media (hover:none){#cursor{display:none;}body,button{cursor:auto;}}
+#cursor{display:none;}
 
 /* ---------- deep background ---------- */
 #traces{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;}
