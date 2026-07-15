@@ -112,8 +112,8 @@
 .entry-titlebar{position:absolute;top:-38px;left:50%;transform:translateX(-50%);font-size:8px;letter-spacing:4px;text-transform:uppercase;color:var(--dust);white-space:nowrap;}.entry-led{display:none;}
 .entry-main{padding:0;}.entry-sigil-wrap{position:relative;width:min(360px,62vw);margin:0 auto 26px;animation:entry-signal 8s ease-in-out infinite;}.entry-sigil-wrap::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(3,3,3,.32) 0 2px,transparent 2px 4px),repeating-linear-gradient(90deg,rgba(232,232,232,.06) 0 1px,transparent 1px 5px);mix-blend-mode:screen;pointer-events:none;}.entry-sigil{width:100%;height:auto;display:block;opacity:.72;filter:grayscale(1) contrast(1.15) url("#entry-crt");}.entry-product{font-family:Georgia,serif;font-style:italic;font-size:42px;letter-spacing:-1.5px;color:var(--ink);text-shadow:2px 1px 0 rgba(232,232,232,.18);}.entry-maker{margin-top:4px;font-family:Georgia,serif;font-style:italic;font-size:18px;letter-spacing:-.5px;color:var(--ink-dim);}.entry-rule{width:min(380px,80vw);height:1px;margin:27px auto 16px;background:linear-gradient(90deg,transparent,var(--edge-hi),transparent);}
 .entry-status{font-size:8px;line-height:1.8;letter-spacing:1.5px;color:var(--ink-dim);text-transform:uppercase;}.entry-status span{color:var(--ink);}.entry-prompt{margin:20px 0 10px;font-family:var(--sans);font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--ink-dim);}
-.entry-actions{display:flex;justify-content:center;gap:22px;}.entry-actions button{font-family:var(--mono);font-size:12px;letter-spacing:3px;text-transform:uppercase;border:1px solid var(--edge-mid);background:rgba(3,3,3,.35);color:var(--ink);padding:13px 20px;cursor:pointer;transition:none;}.entry-actions button::before{content:"[ ";color:var(--ink-dim);}.entry-actions button::after{content:" ]";color:var(--ink-dim);}.entry-actions button.selected,.entry-actions button:focus-visible{color:var(--void);background:var(--ink);outline:none;}.entry-actions button.selected::before,.entry-actions button.selected::after,.entry-actions button:focus-visible::before,.entry-actions button:focus-visible::after{color:var(--void);}
-@media (hover:hover){.entry-actions button:hover{border-color:var(--ink);}}
+.entry-actions{display:flex;justify-content:center;gap:22px;}.entry-actions button{font-family:var(--mono);font-size:12px;letter-spacing:3px;text-transform:uppercase;border:1px solid var(--edge-mid);background:rgba(3,3,3,.35);color:var(--ink);padding:13px 20px;cursor:pointer;transition:none;}.entry-actions button::before{content:"[ ";color:var(--ink-dim);}.entry-actions button::after{content:" ]";color:var(--ink-dim);}
+@media (hover:hover){.entry-actions button:hover{color:var(--void);background:var(--ink);border-color:var(--ink);}.entry-actions button:hover::before,.entry-actions button:hover::after{color:var(--void);}}
 .entry-footer{margin-top:26px;font-family:var(--mono);font-size:7px;letter-spacing:1.5px;color:var(--steel);text-transform:uppercase;}.entry-footer::before{content:"NAVI-0117"}.entry-footer::after{content:"";}
 @keyframes entry-wake{0%{opacity:0;transform:translateY(12px)}100%{opacity:1;transform:translateY(0)}}
 @keyframes entry-drift{to{transform:translateX(20vw)}}
@@ -991,28 +991,12 @@ document.addEventListener("DOMContentLoaded", function(){
   registerGlitchTargets(["#console-log div", "#hexcol", "#p-hex .pcaption", ".work .wt b"]);
 
   var eg = document.getElementById("entry-gate");
-  var entryButtons = Array.prototype.slice.call(eg.querySelectorAll("button"));
-  var entryIndex = -1;
-  function selectEntry(index){
-    entryIndex = (index + entryButtons.length) % entryButtons.length;
-    entryButtons.forEach(function(button,i){button.classList.toggle("selected",i===entryIndex);});
-    entryButtons[entryIndex].focus();
-  }
-  entryButtons.forEach(function(button,index){
-    button.addEventListener("pointerenter",function(){selectEntry(index);});
-    button.addEventListener("focus",function(){selectEntry(index);});
-  });
   document.getElementById("btn-resume").addEventListener("click", function(){
     window.location.href = "resume/";
   });
   document.getElementById("btn-load").addEventListener("click", function(){
     eg.classList.add("done");
     startLoader(BOOT, startMainAnimations);
-  });
-  eg.addEventListener("keydown",function(e){
-    if(e.key==="ArrowLeft"||e.key==="ArrowUp"){e.preventDefault();selectEntry(entryIndex<0?entryButtons.length-1:entryIndex-1);}
-    if(e.key==="ArrowRight"||e.key==="ArrowDown"){e.preventDefault();selectEntry(entryIndex<0?0:entryIndex+1);}
-    if(e.key==="Enter"&&entryIndex>=0){e.preventDefault();entryButtons[entryIndex].click();}
   });
 
   initChrome();
