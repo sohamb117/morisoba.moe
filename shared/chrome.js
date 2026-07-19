@@ -314,19 +314,19 @@ function spawnDecor(config){
       '%;width:'+wgt+'px;height:'+hgt+'px"></div>';
   }
   var CODE=config.CODE || [
-    "void reset_panel(u_int level);",
-    "if(level < MAX_LAYER){",
-    "coord_init(&object[PANEL]);",
-    "load_model(&s_long_&kids_tmd);",
+    "torch.nn.MultiheadAttention()",
+    "DROP TABLE Students;--,",
+    "attention is all you need!",
+    "super.__init__()",
     "sputnik <---> sweetheart.",
     "one four three.",
     "isn't it good...\nnorwegian wood.",
-    "protocol_7 :: init_g_pass()",
-    "object[LAYER]->world.coord[2] = 0;",
-    "DrawSync(0); 岩倉玲音//レイン",
-    "new_panel_set(i, 0, 4);",
+    "",
+    "from torch.nn import LeakyReLU",
+    "curl -sSf https://sh.rustup.rs | sh",
+    "go play baroque (2007)",
     "musée des beaux-arts.",
-    "it's ur (eg0 b4by)",
+    "it's ur ego baby",
     "世紀エヴァンゲリオン"
   ];
   for(var cf=0;cf<24;cf++){
