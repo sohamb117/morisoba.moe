@@ -92,14 +92,14 @@
 /* console */
 #p-console .pbody{padding:8px 10px;font-size:10px;line-height:1.65;}
 #project-list{max-height:clamp(100px,calc(38vh - 150px),240px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--steel) transparent;}
-.project{padding:5px 0;border-bottom:1px dashed var(--edge-mid);overflow-wrap:anywhere;}
+.project{padding:5px 8px;border-bottom:1px dashed var(--edge-mid);overflow-wrap:anywhere;}
 .project:last-child{border-bottom:0;}
 .project{transition:background-color .15s,color .15s,box-shadow .15s;}
 @media(hover:hover){
-  .project:hover{background:rgba(232,232,232,.08);box-shadow:inset 2px 0 var(--ink);}
-  .project:hover > a{color:var(--ink);text-decoration:underline;}
+  .project:hover{background:rgba(232,232,232,.035);box-shadow:inset 1px 0 var(--edge-mid);}
+  .project:hover > a{color:var(--ink);}
 }
-.project:focus-within{background:rgba(232,232,232,.08);box-shadow:inset 2px 0 var(--ink);}
+.project:focus-within{background:rgba(232,232,232,.035);box-shadow:inset 1px 0 var(--edge-mid);}
 @media(prefers-reduced-motion:reduce){.project{transition:none;}}
 .project a{text-underline-offset:2px;}
 .project > a{font-size:11px;}
