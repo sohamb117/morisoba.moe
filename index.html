@@ -1199,8 +1199,15 @@ document.addEventListener("DOMContentLoaded", function(){
   popup.setAttribute("aria-label","Expanded panel");
   document.body.appendChild(popup);
   var expanded=null,placeholder=null,previousFocus=null,previousOverflow="",wasMin=false;
-  function restorePanel(){
-    if(!expanded) return;
+  var popupClosing=false;
+  function restorePanel(immediate){
+    if(!expanded || popupClosing) return;
+    if(!immediate && !window.matchMedia("(prefers-reduced-motion: reduce)").matches){
+      popupClosing=true;
+      var exit=popup.animate([{transform:"scale(1)",opacity:1},{transform:"scale(.86)",opacity:0}],{duration:180,easing:"ease-in"});
+      exit.finished.catch(function(){}).then(function(){popupClosing=false;restorePanel(true);});
+      return;
+    }
     var panel=expanded;
     popup.close();
     placeholder.replaceWith(panel);
@@ -1212,6 +1219,7 @@ document.addEventListener("DOMContentLoaded", function(){
     panel.querySelector('[data-act="maximize"]').setAttribute("aria-expanded","false");
     panel.querySelector('[data-act="maximize"]').textContent="□";
     expanded=null;
+    window.chromeCableModal=false;
     document.body.style.overflow=previousOverflow;
     if(previousFocus && previousFocus.isConnected) previousFocus.focus({preventScroll:true});
     drawWires();
@@ -1219,7 +1227,10 @@ document.addEventListener("DOMContentLoaded", function(){
   function maximizePanel(panel){
     if(isMobile()) return;
     if(expanded===panel){restorePanel();return;}
-    if(expanded) restorePanel();
+    if(popupClosing) return;
+    if(expanded) restorePanel(true);
+    drawWires();
+    window.chromeCableModal=true;
     previousFocus=document.activeElement;
     previousOverflow=document.body.style.overflow;
     wasMin=panel.classList.contains("min");
@@ -1236,6 +1247,9 @@ document.addEventListener("DOMContentLoaded", function(){
     button.setAttribute("aria-expanded","true");
     document.body.style.overflow="hidden";
     popup.showModal();
+    if(!window.matchMedia("(prefers-reduced-motion: reduce)").matches){
+      popup.animate([{transform:"scale(.86)",opacity:0},{transform:"scale(1)",opacity:1}],{duration:240,easing:"cubic-bezier(.2,.8,.2,1)"});
+    }
     button.focus({preventScroll:true});
     drawWires();
   }
@@ -1266,7 +1280,7 @@ document.addEventListener("DOMContentLoaded", function(){
   });
 
   window.matchMedia("(max-width:720px)").addEventListener("change",function(event){
-    if(event.matches) restorePanel();
+    if(event.matches) restorePanel(true);
   });
   }
   (isMobile() ? ["p-hex","p-vessel","p-wave","p-ascii"] : ["p-candle","p-vessel"]).forEach(function(id){
