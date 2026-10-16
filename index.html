@@ -1128,7 +1128,7 @@ setInterval(function(){
       if(copy) group.setAttribute("aria-hidden","true");
       items.forEach(function(item){
         var a=document.createElement("a");
-        a.href=item.html_url;a.textContent=item.sha.slice(0,8);
+        a.href=item.html_url;a.textContent=item.sha.slice(0,4).toUpperCase()+" "+item.sha.slice(4,8).toUpperCase();
         a.target="_blank";a.rel="noopener noreferrer";
         a.title=item.repository.full_name+" · "+item.commit.message.split("\n")[0];
         if(copy) a.tabIndex=-1;
