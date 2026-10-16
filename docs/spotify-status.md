@@ -20,3 +20,27 @@ If Spotify authorization expires or is revoked, repeat authorization and replace
 `node --test tests/spotify-status.test.mjs`
 
 Live Spotify and Cloudflare verification requires the owner connection above.
+
+## Beat-grid visualizer and cache setup
+
+The frontend requests analysis only for the current song while the page and status panel are visible. No scheduled jobs run. The browser retains up to 20 song analyses in memory. The middleware validates that the requested song is the current playing track; arbitrary song IDs cannot consume the Brizm allowance.
+
+Analysis priority:
+
+1. Shared Cloudflare KV cache (`SPOTIFY_ANALYSIS` binding).
+2. Brizm `GET /v1/beatgrid/{spotify_id}` using server-side `BRIZM_API_KEY`. Actual beat/downbeat timestamps drive a synthesized waveform; this is not a sampled amplitude waveform.
+3. ReccoBeats track lookup and audio features (no key): actual tempo, energy, acousticness and danceability select a rhythmic, acoustic, intense or soft simulation. These are visual styles, not asserted musical genres.
+4. A labeled ambient fallback when no data is available. Its default pulse is not claimed to be measured song BPM.
+
+In Cloudflare:
+
+- Storage & Databases → KV → Create namespace → name `morisoba-spotify-analysis`.
+- Workers & Pages → morisoba → Bindings → Add → KV namespace → variable name `SPOTIFY_ANALYSIS` → select that namespace.
+- Settings → Variables and Secrets → Add Secret `BRIZM_API_KEY` with the **live** key supplied by Brizm. A test key returns mock data and must not be used for the public visualizer.
+- Deploy/apply the updated bindings and secrets. If Git deploys are managed with Wrangler, add the actual namespace ID to `kv_namespaces` in wrangler.jsonc after creating it; never use a placeholder ID. The binding is deliberately optional so an unconfigured namespace does not break existing deployment.
+
+Request Brizm API access via https://developers.brizm.dev/docs/quickstart/. Their documented schema has beat timestamps, but live responses and catalog coverage remain unverified until a key is configured.
+
+Brizm is called only when its key **and a readable durable cache** are configured. Grids are stored for 180 days, tempo fallback for 24 hours, total provider failures for an hour. Changing from fallback-only to configured Brizm changes the cache key immediately. An in-memory cache and same-isolate promise sharing reduce duplicate requests; KV is eventually consistent, so concurrent first requests in different isolates/regions can still duplicate a call. This is not an exact global quota limiter.
+
+`node --test tests/spotify-status.test.mjs tests/spotify-analysis.test.mjs`
