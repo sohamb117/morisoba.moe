@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const vm = require('node:vm');
 const source = fs.readFileSync(require('node:path').join(__dirname, '../shared/panel-effects.js'), 'utf8');
-function setup({ reduced = false, failAnimation = false } = {}) {
+function setup({ reduced = false, failAnimation = false, popup = false, booting = false } = {}) {
   let handler, closes = 0, stops = 0;
   const classes = new Set(), animations = [], nodes = [];
   const motion = { matches: reduced, addEventListener() {}, removeEventListener() {} };
@@ -19,7 +19,7 @@ function setup({ reduced = false, failAnimation = false } = {}) {
     }
   };
   const button = {
-    isConnected: true, closest: () => panel,
+    isConnected: true, closest: selector => selector === ".panel-popup" ? (popup ? {} : null) : panel,
     click() {
       let blocked = false;
       handler({ target: { closest: () => button }, preventDefault() {}, stopImmediatePropagation() { blocked = true; stops++; } });
@@ -27,6 +27,7 @@ function setup({ reduced = false, failAnimation = false } = {}) {
     }
   };
   const document = {
+    getElementById: id => booting && id === "loader" ? { classList: { contains: () => false } } : null,
     querySelectorAll: () => [], addEventListener: (_, fn) => { handler = fn; },
     body: { appendChild: n => nodes.push(n) },
     createElement: () => ({ style: {}, setAttribute() {}, animate: panel.animate, remove() { nodes.splice(nodes.indexOf(this), 1); } })
@@ -50,4 +51,15 @@ test('repeated close clicks replay once and clean up before restore', async () =
 test('animation failure still closes and releases temporary DOM', async () => {
   const s = setup({ failAnimation: true }); s.button.click(); await new Promise(setImmediate);
   assert.equal(s.closes(), 1); assert.equal(s.nodes.length, 0); assert.equal(s.panel.inert, false);
+});
+
+test('popup copies bypass the global disconnect animation', () => {
+  const s = setup({ popup: true }); s.button.click();
+  assert.equal(s.closes(), 1); assert.equal(s.animations.length, 0);
+  assert.equal(s.stops(), 0); assert.equal(s.nodes.length, 0);
+});
+test('boot setup closes panels without detached connector effects', () => {
+  const s = setup({ booting: true }); s.button.click();
+  assert.equal(s.closes(), 1); assert.equal(s.animations.length, 0);
+  assert.equal(s.stops(), 0); assert.equal(s.nodes.length, 0);
 });
