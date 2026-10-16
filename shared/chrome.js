@@ -206,7 +206,7 @@ function drawWires(LAYOUT, WIRES, FLOOR, DROPS){
   DROPS.forEach(function(dp,i){
     var el=panels[dp[1]];
     if(!visible(el)) return;
-    var tx=dp[0]*W(), ty=25;
+    var tx=dp[0]*W(), ty=-10;
     var px=el.offsetLeft+el.offsetWidth*(0.15+0.7*rnd(i+200));
     var py=el.offsetTop;
     var d=sagPath(tx,ty,px,py,40+140*rnd(i+300),i*13+500);
@@ -387,7 +387,7 @@ Object.keys(panels).forEach(function(id){
     var sx=e.clientX-el.offsetLeft, sy=e.clientY-el.offsetTop;
     function mv(ev){
       el.style.left=Math.max(-el.offsetWidth+50,Math.min(ev.clientX-sx,W()-50))+"px";
-      el.style.top=Math.max(24,Math.min(ev.clientY-sy,H()-40))+"px";
+      el.style.top=Math.max(0,Math.min(ev.clientY-sy,H()-40))+"px";
       drawWires();
     }
     function up(){
