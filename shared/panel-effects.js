@@ -15,7 +15,7 @@
 
   document.addEventListener('click', function (event) {
     const button = event.target.closest('.pbtn[data-act="close"], #closeDossier, #closeGuide');
-    if (!button) return;
+    if (!button || button.closest(".panel-popup")) return;
     if (replay.has(button)) { replay.delete(button); return; }
     const panel = button.closest('.panel, dialog');
     if (!panel || motion.matches || typeof panel.animate !== 'function') return;
