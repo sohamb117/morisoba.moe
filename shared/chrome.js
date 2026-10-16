@@ -105,8 +105,9 @@ function pt(el, side){
 function rnd(i){var x=Math.sin(i*127.1+13.7)*43758.5453;return x-Math.floor(x);}
 /* slack catenary-ish cable between two points */
 function sagCtl(ax,ay,bx,by,sag,seed){
-  var w1=(rnd(seed)-.5)*44, w2=(rnd(seed+1)-.5)*44;
-  var s1=sag*(0.8+0.5*rnd(seed+2)), s2=sag*(0.8+0.5*rnd(seed+3));
+  var reach=Math.min(150,Math.hypot(bx-ax,by-ay)*.24);
+  var w1=(rnd(seed)-.5)*reach, w2=(rnd(seed+1)-.5)*reach;
+  var s1=sag*(0.55+1.05*rnd(seed+2)), s2=sag*(0.7+1.1*rnd(seed+3));
   return [ax+(bx-ax)/3+w1, ay+(by-ay)/3+s1,
           ax+2*(bx-ax)/3+w2, ay+2*(by-ay)/3+s2];
 }
@@ -134,6 +135,12 @@ function pickTone(seed){
   if(r<0.80) return "t-lo";
   return "t-faint";
 }
+/* Stable sizes and slack: redrawing during drag never reshuffles the loom. */
+function cableMarkup(d,tone,seed,secondary){
+  var width=(secondary?1.7:2.8)+rnd(seed)*2.2;
+  return '<path class="cable-jacket" stroke-width="'+(width+1.8).toFixed(2)+'" d="'+d+'"/>'+
+    '<path class="'+(secondary?'cable2':'cable')+' '+tone+'" stroke-width="'+width.toFixed(2)+'" d="'+d+'"/>';
+}
 function drawWires(LAYOUT, WIRES, FLOOR, DROPS){
   if(isMobile()) return;
   if(WIRES) chromeWires=WIRES;
@@ -151,13 +158,14 @@ function drawWires(LAYOUT, WIRES, FLOOR, DROPS){
     if(!visible(ea)||!visible(eb)) return;
     var a=pt(ea,wr[1]), b=pt(eb,wr[3]);
     var dist=Math.sqrt((b[0]-a[0])*(b[0]-a[0])+(b[1]-a[1])*(b[1]-a[1]));
-    var strands=4+Math.floor(rnd(i+50)*5);
+    var strands=2+Math.floor(rnd(i+50)*3);
     var tone=pickTone(i+55);
     for(var k=0;k<strands;k++){
-      var off=(k-(strands-1)/2)*3;
-      var sag=16+dist*0.15*(1+rnd(i*7+k)*0.9);
+      var off=(k-(strands-1)/2)*(5+3*rnd(i*19+k));
+      var extraSlack=rnd(i+411)>.55?1.75:1;
+      var sag=(24+dist*.20*(1+rnd(i*7+k)*.9))*extraSlack;
       var d=sagPath(a[0]+off,a[1],b[0]+off,b[1],sag,i*31+k*7);
-      out+='<path class="'+(k===0?'cable':'cable2')+' '+tone+'" d="'+d+'"/>';
+      out+=cableMarkup(d,tone,i*31+k+90,k!==0);
       if(k===0&&i%3===0) out+='<path class="flow" d="'+d+'"/>';
       /* bindings taping the bundle together */
       if(k===0){
@@ -179,12 +187,12 @@ function drawWires(LAYOUT, WIRES, FLOOR, DROPS){
     var tx=dp[0]*W(), ty=25;
     var px=el.offsetLeft+el.offsetWidth*(0.15+0.7*rnd(i+200));
     var py=el.offsetTop;
-    var d=sagPath(tx,ty,px,py,24+56*rnd(i+300),i*13+500);
+    var d=sagPath(tx,ty,px,py,40+140*rnd(i+300),i*13+500);
     var tone=pickTone(i+250);
-    out+='<path class="cable '+tone+'" style="opacity:.55" d="'+d+'"/>';
+    out+=cableMarkup(d,tone,i+300,false);
     if(i%2===1){
-      var d2=sagPath(tx+4,ty,px+4,py,30+56*rnd(i+310),i*17+900);
-      out+='<path class="cable2 '+tone+'" d="'+d2+'"/>';
+      var d2=sagPath(tx+4,ty,px+4,py,55+120*rnd(i+310),i*17+900);
+      out+=cableMarkup(d2,tone,i+310,true);
     }
     out+='<circle class="via" cx="'+Math.round(tx)+'" cy="'+ty+'" r="2"/>';
     out+='<rect class="port" x="'+(px-3)+'" y="'+(py-3)+'" width="6" height="6"/>';
@@ -196,9 +204,9 @@ function drawWires(LAYOUT, WIRES, FLOOR, DROPS){
     var px=el.offsetLeft+el.offsetWidth*fl[1];
     var py=el.offsetTop+el.offsetHeight;
     var bx=px+(rnd(i+700)-.5)*260;
-    var d=sagPath(px,py,bx,H()-26,10+34*rnd(i+710),i*19+720);
+    var d=sagPath(px,py,bx,H()-26,30+95*rnd(i+710),i*19+720);
     var tone=pickTone(i+750);
-    out+='<path class="cable '+tone+'" style="opacity:.45" d="'+d+'"/>';
+    out+=cableMarkup(d,tone,i+710,false);
     out+='<circle class="via" cx="'+Math.round(bx)+'" cy="'+(H()-26)+'" r="2"/>';
   });
   /* limp dead cables hanging off every panel */
@@ -209,14 +217,14 @@ function drawWires(LAYOUT, WIRES, FLOOR, DROPS){
     for(var j=0;j<5;j++){
       var sx=x+w*(0.12+0.72*rnd(k*9+j));
       var sy=y+h;
-      var len=26+80*rnd(k*5+j+40);
-      var ex=sx+(rnd(k*3+j+80)-.5)*110;
+      var len=40+110*rnd(k*5+j+40)+(j===1?90:0);
+      var ex=sx+(rnd(k*3+j+80)-.5)*180;
       var ey=sy+len;
       var d="M"+Math.round(sx)+" "+Math.round(sy)+
         " C "+Math.round(sx+(rnd(k+j+7)-.5)*20)+" "+Math.round(sy+len*.65)+
         ", "+Math.round(ex)+" "+Math.round(ey-len*.35)+
         ", "+Math.round(ex)+" "+Math.round(ey);
-      out+='<path class="dead" d="'+d+'"/>';
+      out+='<path class="dead" style="stroke-width:'+(1.5+2*rnd(k*11+j)).toFixed(2)+'" d="'+d+'"/>';
       if(j===1){
         /* electrode pad on this loose end */
         out+='<circle class="dead-end" cx="'+Math.round(ex)+'" cy="'+Math.round(ey)+'" r="4.5"/>';
@@ -247,11 +255,11 @@ function drawTraces(){
     var dd="M0 "+Math.round(y1)+" C "+Math.round(W()/3)+" "+Math.round(c1y)+
       ", "+Math.round(2*W()/3)+" "+Math.round(c2y)+", "+W()+" "+Math.round(y2);
     var oo=(.06+Math.random()*.10).toFixed(2);
-    out+='<path d="'+dd+'" fill="none" stroke="'+TR+'" stroke-width="1" opacity="'+oo+'"/>';
+    out+='<path d="'+dd+'" fill="none" stroke="'+TR+'" stroke-width="'+(1.4+rnd(sp+940)*1.6).toFixed(2)+'" opacity="'+oo+'"/>';
     if(sp%3===0){
       var dd2="M0 "+Math.round(y1+5)+" C "+Math.round(W()/3)+" "+Math.round(c1y+14)+
         ", "+Math.round(2*W()/3)+" "+Math.round(c2y+9)+", "+W()+" "+Math.round(y2+4);
-      out+='<path d="'+dd2+'" fill="none" stroke="'+TR+'" stroke-width="1" opacity="'+oo+'"/>';
+      out+='<path d="'+dd2+'" fill="none" stroke="'+TR+'" stroke-width="'+(1.4+rnd(sp+940)*1.6).toFixed(2)+'" opacity="'+oo+'"/>';
     }
   }
   for(var i=0;i<30;i++){

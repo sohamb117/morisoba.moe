@@ -44,17 +44,51 @@
   pointer-events: none;
 }
 
-:is(.pbtn, #dock button, #home-button, .home-link, .skill-tag,
-    .entry-actions button, #p-taxonomy .tag-pill,
-    .jp-hud button:not(.record):not(.maplibregl-popup-close-button),
-    .jp-hud .detail-actions a, .jp-hud .download-source,
-    .jp-hud .location-card) {
+/* Small controls stay square; only close buttons use the Layer 01 frame. */
+:is(.pbtn[data-act="close"], #closeDossier, #closeGuide) {
   --hud-cut: 3px;
-  clip-path: polygon(var(--hud-cut) 0, 100% 0,
-    100% calc(100% - var(--hud-cut)), calc(100% - var(--hud-cut)) 100%,
-    0 100%, 0 var(--hud-cut));
-  border-radius: 0;
+  clip-path: polygon(3px 0, 100% 0, 100% calc(100% - 3px),
+    calc(100% - 3px) 100%, 0 100%, 0 3px);
+  outline: 2px solid currentColor;
+  outline-offset: -3px;
 }
+:is(.pbtn[data-act="close"], #closeDossier, #closeGuide):focus-visible {
+  box-shadow: inset 0 0 0 3px currentColor;
+}
+
+/* One continuous dock, with square segments and only two outer corner cuts. */
+#dock {
+  display: flex;
+  gap: 0;
+  width: max-content;
+  max-width: calc(100% - 44px);
+  border: 1px solid var(--ink);
+  background: var(--void);
+  clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px),
+    calc(100% - 6px) 100%, 0 100%, 0 6px);
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+#dock button {
+  flex: 0 0 auto;
+  width: auto;
+  border: 0;
+  border-right: 1px solid var(--edge-mid);
+  white-space: nowrap;
+}
+#dock button:last-child { border-right: 0; }
+@media (max-width: 720px) {
+  #dock { margin: 0 22px 14px; padding: 0; }
+  #dock button { padding: 10px 12px; }
+}
+
+/* Rounded, varied cable jackets give the wiring weight without new animation. */
+#wires { z-index: 0; }
+#wires path { stroke-linecap: round; stroke-linejoin: round; }
+#wires .cable-jacket { stroke: #020203; opacity: .8; }
+#wires .dead { stroke-width: 1.8; }
+#traces path { stroke-linecap: round; stroke-linejoin: round; }
+
 /* Preserve native input/select rendering and their external focus outlines. */
 .library-controls input, .library-controls select, .jp-hud .searchbox {
   box-shadow: inset 2px 0 var(--hud-faint);
@@ -101,7 +135,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 @media (prefers-contrast: more), (forced-colors: active) {
   #scanlines, #grain, .jp-hud::after { display: none; }
   .panel:not(.world), .jp-hud > header, .jp-hud dialog,
-  button, .home-link, #home-button, .skill-tag, .tag-pill,
+  button, #dock, :is(.pbtn[data-act="close"], #closeDossier, #closeGuide), .home-link, #home-button, .skill-tag, .tag-pill,
   .jp-hud .detail-actions a, .jp-hud .download-source, .jp-hud .location-card {
     clip-path: none;
   }
