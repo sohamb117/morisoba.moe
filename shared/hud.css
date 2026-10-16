@@ -1,0 +1,183 @@
+/* Subtle hardware framing. Loaded last on every page, including jp_subcult.
+   Static textures only; content, geometry and interaction remain page-owned. */
+:root {
+  --hud-cut: 6px;
+  --hud-edge: rgba(210, 210, 216, .48);
+  --hud-faint: rgba(210, 210, 216, .16);
+
+}
+
+/* Opposite corner cuts keep the reference's machinery feel at a small scale.
+   The map canvas itself is deliberately excluded from window framing. */
+.panel:not(.world), .jp-hud > header, .jp-hud dialog {
+  clip-path: polygon(var(--hud-cut) 0, 100% 0,
+    100% calc(100% - var(--hud-cut)), calc(100% - var(--hud-cut)) 100%,
+    0 100%, 0 var(--hud-cut));
+  border-radius: 0;
+}
+.panel:not(.world)::before, .panel:not(.world)::after {
+  content: "";
+  position: absolute;
+  width: var(--hud-cut);
+  height: var(--hud-cut);
+  pointer-events: none;
+  z-index: 3;
+  background: linear-gradient(135deg, transparent 42%, var(--hud-edge) 44% 56%, transparent 58%);
+}
+.panel:not(.world)::before { top: 0; left: 0; }
+.panel:not(.world)::after { right: 0; bottom: 0; }
+.titlebar {
+  position: relative;
+  box-shadow: inset 0 1px var(--hud-faint);
+  background-image: linear-gradient(90deg, rgba(220,220,230,.035), transparent 65%);
+}
+/* Small registration marks are attached to existing title bars, never text. */
+.titlebar::after {
+  content: "";
+  width: 12px;
+  height: 2px;
+  position: absolute;
+  top: 0;
+  left: 35%;
+  opacity: .35;
+  background: repeating-linear-gradient(90deg, currentColor 0 1px, transparent 1px 4px);
+  pointer-events: none;
+}
+
+/* Small controls stay square; only close buttons use the Layer 01 frame. */
+:is(.pbtn[data-act="close"], #closeDossier, #closeGuide) {
+  --hud-cut: 3px;
+  clip-path: polygon(3px 0, 100% 0, 100% calc(100% - 3px),
+    calc(100% - 3px) 100%, 0 100%, 0 3px);
+  outline: none;
+  border-width: .5px;
+}
+:is(.pbtn[data-act="close"], #closeDossier, #closeGuide):focus-visible {
+  box-shadow: inset 0 0 0 3px currentColor;
+}
+
+/* One continuous dock, with square segments and only two outer corner cuts. */
+#dock {
+  display: flex;
+  gap: 0;
+  width: max-content;
+  max-width: calc(100% - 44px);
+  border: 1px solid var(--ink);
+  background: var(--void);
+  clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px),
+    calc(100% - 6px) 100%, 0 100%, 0 6px);
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+#dock button {
+  flex: 0 0 auto;
+  width: auto;
+  border: 0;
+  border-right: 1px solid var(--edge-mid);
+  white-space: nowrap;
+}
+#dock button:last-child { border-right: 0; }
+@media (max-width: 720px) {
+  #dock {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+    width: calc(100% - 44px);
+    margin: 0 22px 14px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    clip-path: none;
+    overflow: visible;
+  }
+  #dock button, #dock button:last-child {
+    width: 100%;
+    padding: 10px 6px;
+    border: 1px solid var(--ink);
+  }
+}
+
+/* Rounded, varied cable jackets give the wiring weight without new animation. */
+#wires { z-index: 0; }
+#wires path { stroke-linecap: round; stroke-linejoin: round; }
+#wires .cable-jacket { stroke: #020203; opacity: .8; }
+#wires .dead { stroke-width: 1.8; }
+#traces path { stroke-linecap: round; stroke-linejoin: round; }
+
+/* Preserve native input/select rendering and their external focus outlines. */
+.library-controls input, .library-controls select, .jp-hud .searchbox {
+  box-shadow: inset 2px 0 var(--hud-faint);
+}
+.entry-actions button { box-shadow: inset 0 1px var(--hud-faint); }
+.entry-rule { box-shadow: 0 0 5px rgba(220,220,230,.12); }
+#resume-container h2 {
+  border-bottom: 1px solid var(--hud-faint);
+  padding-bottom: 6px;
+}
+
+/* Replace moving full-screen noise with a quieter stationary texture. */
+#scanlines {
+  animation: none;
+  will-change: auto;
+  background: repeating-linear-gradient(0deg, transparent 0 3px, rgba(0,0,0,.045) 3px 4px);
+}
+#grain { animation: none; transform: none; inset: 0; opacity: .025; will-change: auto; }
+.panel.mat-crt .pbody { text-shadow: 0 0 3px rgba(210,220,230,.16); }
+.jp-hud::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+  background: repeating-linear-gradient(0deg, transparent 0 3px, rgba(0,0,0,.035) 3px 4px);
+}
+/* Inset rings stay visible inside clipped controls and windows. */
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible,
+[tabindex]:focus-visible, summary:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -3px;
+}
+
+@media (max-width: 720px) { :root { --hud-cut: 5px; } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+  #scanlines, #grain, .packet-burst, .jp-hud::after { display: none; }
+}
+@media (prefers-contrast: more), (forced-colors: active) {
+  #scanlines, #grain, .jp-hud::after { display: none; }
+  .panel:not(.world), .jp-hud > header, .jp-hud dialog,
+  button, #dock, :is(.pbtn[data-act="close"], #closeDossier, #closeGuide), .home-link, #home-button, .skill-tag, .tag-pill,
+  .jp-hud .detail-actions a, .jp-hud .download-source, .jp-hud .location-card {
+    clip-path: none;
+  }
+  .panel.mat-crt .pbody { text-shadow: none; }
+}
+@media print {
+  #scanlines, #grain, .jp-hud::after { display: none; }
+  .panel, .skill-tag, .home-link { clip-path: none !important; }
+  #resume-container h2 { border-bottom: 0; padding-bottom: 0; }
+}
+
+/* Hardware is a silhouette with collars/fins, not another UI rectangle. */
+#wires .hardware-shell { fill: #17181a; stroke: #929397; stroke-width: .8; }
+#wires .hardware-collar { fill: #515258; stroke: #151517; stroke-width: .7; }
+#wires .hardware-detail { fill: none; stroke: #74757a; stroke-width: .7; }
+.panel-terminals { position: absolute; inset: 0; pointer-events: none; z-index: 4; }
+.panel-terminal { position: absolute; top: 48%; width: 5px; height: 17px;
+  background: repeating-linear-gradient(0deg,#777 0 1px,#171719 1px 4px);
+  border: .5px solid #777; border-radius: 2px; }
+.panel-terminal:first-child { left: 0; }
+.panel-terminal:last-child { right: 0; }
+#resume-container header { position: relative; }
+.disconnecting { pointer-events: none; }
+.disconnecting .panel-terminals { visibility: hidden; }
+.detached-terminal { position: fixed; pointer-events: none; z-index: 10001;
+  width: 7px; height: 19px; border: .5px solid #999; border-radius: 3px;
+  background: repeating-linear-gradient(0deg,#777 0 1px,#171719 1px 4px); }
+.detached-terminal::after { content: ""; position: absolute; top: 17px;
+  left: 2px; width: 2px; height: 26px; background: #666; border-radius: 50%; }
+@media print { .panel-terminals, .detached-terminal { display: none; } }

@@ -1,10 +1,10 @@
 name: Library checks
 on:
   pull_request:
-    paths: ['library/**', 'data/**', 'scripts/**', 'tests/**', '.github/workflows/library-checks.yml']
+    paths: ['library/**', 'shared/**', '**/index.html', 'index.html', 'data/**', 'scripts/**', 'tests/**', '.github/workflows/library-checks.yml']
   push:
     branches: [main]
-    paths: ['library/**', 'data/**', 'scripts/**', 'tests/**']
+    paths: ['library/**', 'shared/**', '**/index.html', 'index.html', 'data/**', 'scripts/**', 'tests/**']
 permissions:
   contents: read
 jobs:
@@ -20,5 +20,6 @@ jobs:
           node-version: '22'
       - run: pip install -r scripts/requirements.txt
       - run: python -m unittest discover -s tests -v
-      - run: node --test tests/library-data.test.cjs
+      - run: node --test tests/*.test.cjs
       - run: node --check library/library.js
+      - run: node --check shared/chrome.js && node --check shared/panel-effects.js
