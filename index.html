@@ -174,6 +174,16 @@
 @keyframes entry-drift{to{transform:translateX(20vw)}}
 @keyframes entry-signal{0%,100%{opacity:.64;transform:scale(.985)}50%{opacity:.78;transform:scale(1)}}
 @media (max-width:720px){.entry-shell{width:calc(100vw - 32px);}.entry-titlebar{top:-28px;font-size:7px;}.entry-sigil-wrap{width:min(270px,72vw);margin-bottom:20px;}.entry-product{font-size:31px;line-height:1;}.entry-maker{font-size:15px;}.entry-actions{flex-direction:column;gap:8px;}.entry-actions button{min-height:48px;}.entry-trace{bottom:5vh;left:-30vw;}}
+
+/* Mobile home: information first; optional panels stay in the dock. */
+@media(max-width:720px){
+  #stage #p-name,#stage #p-about,#stage #p-note,#stage #p-works,
+  #stage #p-console,#stage #p-oracle,#stage #p-contact,#stage #p-relic{display:block !important;}
+  #stage #p-hex:not(.restored),#stage #p-vessel:not(.restored),
+  #stage #p-wave:not(.restored),#stage #p-ascii:not(.restored){display:none !important;}
+  #stage #p-litany,#stage #p-candle,
+  #stage #p-litany.restored,#stage #p-candle.restored{display:none !important;}
+}
 </style>
 <link rel="stylesheet" href="shared/hud.css?v=3">
 <script defer src="shared/panel-effects.js?v=1"></script>
@@ -1127,6 +1137,12 @@ setInterval(function(){
 }
 
 document.addEventListener("DOMContentLoaded", function(){
+  if(isMobile()){
+    var mobileOrder=["p-name","p-about","p-note","p-works","p-console","p-oracle","p-contact","p-relic"];
+    mobileOrder.forEach(function(id){
+      document.getElementById("stage").appendChild(document.getElementById(id));
+    });
+  }
   var panels = applyPanelLayout(LAYOUT, MAT);
   attachAccessories(document.querySelectorAll(".panel"));
   spawnDecor();
@@ -1153,7 +1169,7 @@ document.addEventListener("DOMContentLoaded", function(){
   if(location.hash === "#p-console") enterPersonal();
 
   initChrome();
-  (isMobile() ? ["p-vessel"] : ["p-candle","p-vessel"]).forEach(function(id){
+  (isMobile() ? ["p-hex","p-vessel","p-wave","p-ascii"] : ["p-candle","p-vessel"]).forEach(function(id){
     var el=document.getElementById(id);
     if(!el) return;
     var btn=el.querySelector('.pbtn[data-act="close"]');
