@@ -227,11 +227,11 @@ function drawWires(LAYOUT, WIRES, FLOOR, DROPS){
     var px=el.offsetLeft+el.offsetWidth*fl[1];
     var py=el.offsetTop+el.offsetHeight;
     var bx=px+(rnd(i+700)-.5)*260;
-    var d=sagPath(px,py,bx,H()-26,30+95*rnd(i+710),i*19+720);
+    var d=sagPath(px,py,bx,H()+30,30+95*rnd(i+710),i*19+720);
     var tone=pickTone(i+750);
     out+=cableMarkup(d,tone,i+710,false);
-    if(i%3===0) out+=cableHardware(px,py,bx,H()-26,30+95*rnd(i+710),i*19+720,.54,'transformer');
-    out+='<circle class="via" cx="'+Math.round(bx)+'" cy="'+(H()-26)+'" r="2"/>';
+    if(i%3===0) out+=cableHardware(px,py,bx,H()+30,30+95*rnd(i+710),i*19+720,.54,'transformer');
+    out+='<circle class="via" cx="'+Math.round(bx)+'" cy="'+(H()+30)+'" r="2"/>';
   });
   /* limp dead cables hanging off every panel */
   Object.keys(panels).forEach(function(id,k){
