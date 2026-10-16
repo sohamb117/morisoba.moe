@@ -193,13 +193,16 @@
   #stage #p-litany.restored,#stage #p-candle.restored{display:none !important;}
 }
 
+#wires{visibility:hidden;opacity:0;transition:opacity .25s ease;}
+body.desktop-ready #wires{visibility:visible;opacity:1;}
+
 /* Focused Work / Projects view: 390 × 844 phone proportions, 50% wider. */
 .panel-popup{position:fixed;inset:0;margin:auto;
   width:min(585px,calc(100vw - 64px),calc((100dvh - 64px) * 585 / 844));
   height:min(844px,calc(100dvh - 64px),calc((100vw - 64px) * 844 / 585));
   max-width:none;max-height:none;padding:0;border:0;transform-origin:center;
   background:transparent;color:var(--ink);overflow:visible;}
-.panel-popup::backdrop{background:rgba(0,0,0,.94);}
+.panel-popup::backdrop{background:rgba(0,0,0,.80);}
 .panel-popup .panel.is-maximized{position:relative !important;inset:auto !important;
   width:100% !important;height:100% !important;margin:0 !important;
   transform:none !important;opacity:1;display:flex !important;flex-direction:column;}
@@ -213,7 +216,7 @@
 @media(max-width:720px){.pbtn[data-act="maximize"]{display:none;}}
 </style>
 <link rel="stylesheet" href="shared/hud.css?v=3">
-<script defer src="shared/panel-effects.js?v=popup-isolated-2"></script>
+<script defer src="shared/panel-effects.js?v=boot-isolated-3"></script>
 </head>
 <body>
 
@@ -1184,6 +1187,7 @@ document.addEventListener("DOMContentLoaded", function(){
   function enterPersonal(){
     eg.classList.add("done");
     startLoader(BOOT, function(){
+      document.body.classList.add("desktop-ready");
       startMainAnimations();
       if(location.hash === "#p-console"){
         var projects=document.getElementById("p-console");
