@@ -2,13 +2,12 @@
 
 `data/library.json` remains the handwritten source, unchanged by the importer.
 `data/imports/letterboxd.json` and `myanimelist.json` contain committed public
-snapshots. The static `/library/` page combines them locally; visitors do not
+snapshots, including a `reviews` array keyed by stable source entry IDs. The static `/library/` page combines them locally; visitors do not
 need credentials, cross-origin fetches, or either service to be available.
 
 Scope: Letterboxd `morisoba` watched films and watchlist, and MyAnimeList
-`ch0p1n117` anime and manga lists across all statuses. Custom Letterboxd lists,
-diary history and review text are not imported. Reviews remain accessible via
-profile links. No watched dates are inferred from release years. MAL scores stay
+`ch0p1n117` anime and manga lists across all statuses. Public Letterboxd and MAL reviews are also imported, with source permalinks.
+Custom Letterboxd lists and full diary history are not imported. No watched dates are inferred from release years. MAL scores stay
 out of 10, Letterboxd scores out of 5, and zero MAL scores mean unrated.
 
 ## Refresh
@@ -103,3 +102,38 @@ but its custom-domain routing/deployment is external to this repository's Pages
 settings. Verify that domain after merge; do not assume a successful Pages build
 proves the custom domain updated. This implementation PR does not merge or deploy
 itself.
+
+## Reviews
+
+A small **reviewed** flag appears when an entry has handwritten notes or an
+imported review with nonempty text; a rating alone does not qualify. Full review
+text appears inside the existing source details. Handwritten notes are preserved
+separately. Multiple review IDs for a film (including rewatches) remain separate,
+with their original links. Spoiler-marked reviews are collapsed until opened.
+HTML is converted to plain text with paragraph breaks and escaped when rendered.
+
+Normal syncs include reviews. To refresh reviews without re-fetching the lists:
+
+```sh
+.venv/bin/python scripts/sync_library.py --reviews-only
+```
+
+Both providers' public review pages are paginated and checked against their
+advertised totals. Letterboxd long/collapsed excerpts are expanded through the
+full review permalink and checked against the author and film. MAL's hidden
+continuation is included; an empty profile is accepted only with both a zero
+count and the explicit no-reviews message. Unrecognized markup, incomplete pages,
+wrong authors, and failed full-text fetches fail the source sync and preserve its
+previous lists and reviews. Reviews absent from the current lists are retained in
+the source snapshot for a later matching list entry; no title guessing is used.
+`reviewEvidence` records the review fetches independently of list evidence.
+
+Verified on 2026-10-16: 16 Letterboxd reviews across 14 films; MAL explicitly has
+zero public reviews. Review page 2 required the public browser fallback. Its
+captured DOM is retained in `docs/evidence/letterboxd-review-page-2026-10-16.json`.
+The fallback accepts `{url, retrievedAt, html}` objects as well as film-grid row
+extracts. For a blocked reviews page, capture the visible review container,
+heading and next-page link from the normal public page, preserving their HTML.
+Supply the fresh JSON array using `--browser-pages /path/to/pages.json` (an alias
+for `--letterboxd-browser-pages`). The same count, identity, and freshness checks
+still apply. Never turn a blocked request into an empty review list.

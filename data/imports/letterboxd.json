@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "source": "letterboxd",
   "username": "morisoba",
-  "syncedAt": "2026-10-16T05:32:19.588084+00:00",
+  "syncedAt": "2026-10-16T05:51:50.237174+00:00",
   "counts": {
     "watchlist": 141,
     "films": 185
@@ -4268,6 +4268,149 @@
       "ratingMax": 5,
       "url": "https://letterboxd.com/film/zodiac/",
       "userUrl": "https://letterboxd.com/morisoba/film/zodiac/"
+    }
+  ],
+  "reviews": [
+    {
+      "id": "letterboxd:viewing:1049975344",
+      "entryId": "letterboxd:neon-genesis-evangelion-the-end-of-evangelion",
+      "url": "https://letterboxd.com/morisoba/film/neon-genesis-evangelion-the-end-of-evangelion/",
+      "text": "yo wtf",
+      "spoiler": false,
+      "watchedOn": "2025-10-22"
+    },
+    {
+      "id": "letterboxd:viewing:1072374182",
+      "entryId": "letterboxd:neon-genesis-evangelion",
+      "url": "https://letterboxd.com/morisoba/film/neon-genesis-evangelion/",
+      "text": "Freudian.",
+      "spoiler": false,
+      "watchedOn": "2025-11-14T00:08:27.672Z"
+    },
+    {
+      "id": "letterboxd:viewing:1072374412",
+      "entryId": "letterboxd:neon-genesis-evangelion",
+      "url": "https://letterboxd.com/morisoba/film/neon-genesis-evangelion/1/",
+      "text": "Freudian.",
+      "spoiler": false,
+      "watchedOn": "2025-11-14T00:08:43.854Z"
+    },
+    {
+      "id": "letterboxd:viewing:1411697139",
+      "entryId": "letterboxd:neon-genesis-evangelion-death-and-rebirth",
+      "url": "https://letterboxd.com/morisoba/film/neon-genesis-evangelion-death-and-rebirth/",
+      "text": "it adds nothing but it somehow still adds something. it reveals a lot about each character, which sets up perfectly for the highly character-driven sequel.",
+      "spoiler": false,
+      "watchedOn": "2026-07-21"
+    },
+    {
+      "id": "letterboxd:viewing:1411697516",
+      "entryId": "letterboxd:neon-genesis-evangelion-the-end-of-evangelion",
+      "url": "https://letterboxd.com/morisoba/film/neon-genesis-evangelion-the-end-of-evangelion/1/",
+      "text": "it’s better every time",
+      "spoiler": false,
+      "watchedOn": "2026-07-23"
+    },
+    {
+      "id": "letterboxd:viewing:1411701107",
+      "entryId": "letterboxd:964-pinocchio",
+      "url": "https://letterboxd.com/morisoba/film/964-pinocchio/",
+      "text": "what the fuck lol.",
+      "spoiler": false,
+      "watchedOn": "2026-07-06"
+    },
+    {
+      "id": "letterboxd:viewing:1419144996",
+      "entryId": "letterboxd:the-odyssey-2026",
+      "url": "https://letterboxd.com/morisoba/film/the-odyssey-2026/",
+      "text": "like peak movie. dialogue was like 99% there, casting was a bit celebrity heavy but wtv, genuinely idk what else I would have changed. just damn good.",
+      "spoiler": false,
+      "watchedOn": "2026-07-27"
+    },
+    {
+      "id": "letterboxd:viewing:1503088554",
+      "entryId": "letterboxd:angels-egg",
+      "url": "https://letterboxd.com/morisoba/film/angels-egg/",
+      "text": "I don’t know if there is another film this visually beautiful.",
+      "spoiler": false,
+      "watchedOn": "2026-09-20"
+    },
+    {
+      "id": "letterboxd:viewing:613318199",
+      "entryId": "letterboxd:requiem-for-a-dream",
+      "url": "https://letterboxd.com/morisoba/film/requiem-for-a-dream/",
+      "text": "Wtf\nBeautiful cinematography and sound tho\nBut wtf",
+      "spoiler": false,
+      "watchedOn": "2024-06-16"
+    },
+    {
+      "id": "letterboxd:viewing:700410845",
+      "entryId": "letterboxd:beau-travail",
+      "url": "https://letterboxd.com/morisoba/film/beau-travail/",
+      "text": "Damn he can dance",
+      "spoiler": false,
+      "watchedOn": "2024-10-25"
+    },
+    {
+      "id": "letterboxd:viewing:711241294",
+      "entryId": "letterboxd:the-bad-sleep-well",
+      "url": "https://letterboxd.com/morisoba/film/the-bad-sleep-well/",
+      "text": "Really good sometimes you just need to avenge your fathers death",
+      "spoiler": false,
+      "watchedOn": "2024-11-08"
+    },
+    {
+      "id": "letterboxd:viewing:721561268",
+      "entryId": "letterboxd:pather-panchali",
+      "url": "https://letterboxd.com/morisoba/film/pather-panchali/",
+      "text": "Beautifully shot, well written, and culturally significant, especially for me.",
+      "spoiler": false,
+      "watchedOn": "2024-11-22"
+    },
+    {
+      "id": "letterboxd:viewing:768258346",
+      "entryId": "letterboxd:project-x-2012",
+      "url": "https://letterboxd.com/morisoba/film/project-x-2012/",
+      "text": "shits crazy",
+      "spoiler": false,
+      "watchedOn": "2025-01-08"
+    },
+    {
+      "id": "letterboxd:viewing:776960998",
+      "entryId": "letterboxd:nosferatu-2024",
+      "url": "https://letterboxd.com/morisoba/film/nosferatu-2024/",
+      "text": "best comedy this year",
+      "spoiler": false,
+      "watchedOn": "2025-01-14"
+    },
+    {
+      "id": "letterboxd:viewing:923613615",
+      "entryId": "letterboxd:kpop-demon-hunters",
+      "url": "https://letterboxd.com/morisoba/film/kpop-demon-hunters/",
+      "text": "animation crazy why are they all aura farming",
+      "spoiler": false,
+      "watchedOn": "2025-06-21"
+    },
+    {
+      "id": "letterboxd:viewing:954656869",
+      "entryId": "letterboxd:superman-2025",
+      "url": "https://letterboxd.com/morisoba/film/superman-2025/",
+      "text": "a bit preachy and thematically blatant, but. it makes sense given how low media literacy seems to be these days\n\noverall very good film. mediocre music, great sound design. cinematography is excellent for what it is. writing and story direction was good, some characters fell flat and humour was just not funny at a lot of points",
+      "spoiler": false,
+      "watchedOn": "2025-07-21"
+    }
+  ],
+  "reviewEvidence": [
+    {
+      "url": "https://letterboxd.com/morisoba/reviews/",
+      "sha256": "0a59ebab6c1f4a5fe50f48cbf7ba6102dd8bc938e8b0d7a4b6b9e885d1d35b28",
+      "retrievedAt": "2026-10-16T05:51:50.197283+00:00"
+    },
+    {
+      "url": "https://letterboxd.com/morisoba/reviews/films/page/2/",
+      "method": "browser-dom",
+      "sha256": "8d9ee620f47e03f734145a73f4cf8edc42ffd93492e2de71e6eaa0facec9a098",
+      "retrievedAt": "2026-10-16T05:49:37.742Z"
     }
   ]
 }

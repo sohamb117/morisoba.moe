@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "source": "myanimelist",
   "username": "ch0p1n117",
-  "syncedAt": "2026-10-16T05:29:56.716025+00:00",
+  "syncedAt": "2026-10-16T05:52:40.519702+00:00",
   "counts": {
     "anime": 71,
     "manga": 33
@@ -1905,6 +1905,14 @@
         "total": 500,
         "unit": "chapters"
       }
+    }
+  ],
+  "reviews": [],
+  "reviewEvidence": [
+    {
+      "url": "https://myanimelist.net/profile/ch0p1n117/reviews",
+      "sha256": "b44900608ea704b3df9f65dbabaf932d4520b923059d615bc21dbc7de76cb1b7",
+      "retrievedAt": "2026-10-16T05:52:40.500092+00:00"
     }
   ]
 }

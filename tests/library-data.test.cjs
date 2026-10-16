@@ -67,3 +67,24 @@ test('malformed snapshots are rejected before rendering', () => {
   for (const value of [null, {}, {schemaVersion:1, entries:[]}]) assert.ok(!M.validSnapshot(value));
   assert.ok(!M.validSnapshot({...snapshots[0],entries:[{...snapshots[0].entries[0],rating:20}]}));
 });
+
+test('reviewed flag requires written text, including handwritten notes', () => {
+  assert.equal(M.reviewed({rating:5,imports:[]}),false);
+  assert.equal(M.reviewed({notes:'  ',imports:[]}),false);
+  assert.equal(M.reviewed({notes:'My review.',imports:[]}),true);
+  assert.equal(M.reviewed({imports:[{reviews:[{text:'Source review.'}]}]}),true);
+});
+test('reviews attach by source identity and survive explicit entry links', () => {
+  const entry = snapshots[0].entries.find(e=>e.id==='letterboxd:964-pinocchio');
+  const sample = {...snapshots[0], entries:[entry], reviews:[{id:'review:1',entryId:entry.id,text:'First review',url:entry.userUrl,spoiler:false},{id:'review:2',entryId:entry.id,text:'Rewatch review',url:entry.userUrl+'1/',spoiler:false}]};
+  const merged = M.merge(local,[sample],links);
+  const film = merged.find(i=>i.title==='964 pinocchio');
+  assert.equal(film.imports[0].reviews.length,2);
+  assert.equal(film.notes,local.films[0].notes);
+  assert.equal(M.reviewed(film),true);
+});
+test('malformed review text and unsafe source URLs invalidate snapshots', () => {
+  const base = {id:'r',entryId:'letterboxd:angels-egg',text:'Review',url:'https://letterboxd.com/morisoba/film/angels-egg/',spoiler:false};
+  assert.equal(M.validSnapshot({...snapshots[0],reviews:[base]}),true);
+  for(const change of [{text:12},{text:' '},{spoiler:'false'},{url:'javascript:alert(1)'}]) assert.equal(Boolean(M.validSnapshot({...snapshots[0],reviews:[{...base,...change}]})),false);
+});

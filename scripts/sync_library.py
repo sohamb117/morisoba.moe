@@ -14,6 +14,7 @@ from urllib.parse import urljoin, urlparse
 from urllib.request import Request, urlopen
 
 from bs4 import BeautifulSoup
+from library_reviews import fetch_letterboxd_reviews, fetch_mal_reviews
 
 ROOT = Path(__file__).resolve().parents[1]
 PROFILES = {'letterboxd': 'morisoba', 'myanimelist': 'ch0p1n117'}
@@ -39,7 +40,7 @@ class Client:
             self.evidence.append({'url': url, 'method': 'browser-dom',
                                   'sha256': hashlib.sha256(raw).hexdigest(),
                                   'retrievedAt': page['retrievedAt']})
-            return browser_page_html(page)
+            return page['html'] if 'html' in page else browser_page_html(page)
         for attempt in range(3):
             time.sleep(max(0, 1.0 - (time.monotonic() - self.last_request)))
             self.last_request = time.monotonic()
@@ -200,7 +201,7 @@ def fetch_mal(client):
     return result, counts
 
 
-def write_snapshot(path, source, entries, counts, evidence, allow_shrink=False):
+def write_snapshot(path, source, entries, counts, evidence, allow_shrink=False, reviews=None, review_evidence=None):
     old = json.loads(path.read_text()) if path.exists() else None
     # Unexpected drops commonly indicate upstream blocking or partial responses.
     if old and not allow_shrink:
@@ -208,11 +209,16 @@ def write_snapshot(path, source, entries, counts, evidence, allow_shrink=False):
             if counts.get(key, 0) < previous * 0.9:
                 raise ImportFailure(f'{key} shrank by more than 10%; inspect and use --allow-shrink if intentional')
     entries.sort(key=lambda e: e['id'])
-    if old and old['entries'] == entries and old['counts'] == counts:
+    if reviews is None:
+        reviews = old.get('reviews', []) if old else []
+        review_evidence = old.get('reviewEvidence', []) if old else []
+    reviews.sort(key=lambda r: r['id'])
+    if old and 'reviews' in old and old.get('reviews', []) == reviews and old['entries'] == entries and old['counts'] == counts:
         return False  # Idempotent; timestamp describes the last changed snapshot.
     payload = {'schemaVersion': 1, 'source': source, 'username': PROFILES[source],
                'syncedAt': datetime.now(timezone.utc).isoformat(), 'counts': counts,
-               'evidence': evidence, 'entries': entries}
+               'evidence': evidence, 'entries': entries, 'reviews': reviews,
+               'reviewEvidence': review_evidence or []}
     path.parent.mkdir(parents=True, exist_ok=True)
     temp = path.with_suffix('.json.tmp')
     temp.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + '\n')
@@ -224,7 +230,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--source', choices=['all', *PROFILES], default='all')
     parser.add_argument('--output-dir', type=Path, default=ROOT / 'data/imports')
-    parser.add_argument('--letterboxd-browser-pages', type=Path, help='JSON array of public DOM page extractions; see docs/library-imports.md')
+    parser.add_argument('--letterboxd-browser-pages', '--browser-pages', type=Path, help='JSON array of fresh public DOM extracts (film rows or html); see docs/library-imports.md')
+    parser.add_argument('--reviews-only', action='store_true', help='Refresh reviews using the existing list snapshots')
     parser.add_argument('--allow-shrink', action='store_true', help='Accept a verified drop greater than 10%%')
     args = parser.parse_args()
     browser_pages = {}
@@ -240,9 +247,19 @@ def main():
             continue
         client = Client(browser_pages)
         try:
-            entries, counts = fetcher(client)
-            changed = write_snapshot(args.output_dir / f'{source}.json', source, entries, counts, client.evidence, args.allow_shrink)
-            print(f'{source}: {counts}; {"updated" if changed else "unchanged"}')
+            path = args.output_dir / f'{source}.json'
+            if args.reviews_only:
+                previous = json.loads(path.read_text())
+                entries, counts, evidence = previous['entries'], previous['counts'], previous['evidence']
+            else:
+                entries, counts = fetcher(client)
+                evidence = list(client.evidence)
+            client.evidence = []
+            review_fetcher = fetch_letterboxd_reviews if source == 'letterboxd' else fetch_mal_reviews
+            reviews = review_fetcher(client, PROFILES[source])
+            changed = write_snapshot(path, source, entries, counts, evidence, args.allow_shrink,
+                                     reviews=reviews, review_evidence=client.evidence)
+            print(f'{source}: {counts}; {len(reviews)} reviews; {"updated" if changed else "unchanged"}')
         except (ImportFailure, ValueError, OSError) as exc:
             failed = True
             print(f'{source}: FAILED; existing snapshot retained: {exc}', file=sys.stderr)

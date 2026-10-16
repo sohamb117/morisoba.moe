@@ -7,6 +7,7 @@
   const kinds = ['books', 'films', 'shows', 'manga'];
   const status = item => item.status || (item.finished ? 'completed' : item.started ? 'in progress' : 'unrecorded');
   const rating = item => Number.isFinite(item.rating) ? `${item.rating}/${item.ratingMax || 5}` : 'unrated';
+  const reviewed = item => Boolean(item.notes?.trim() || item.imports?.some(entry => entry.reviews?.some(review => review.text.trim())));
   function merge(local, snapshots, links) {
     const items = kinds.flatMap(kind => (local[kind] || []).map((item, i) => ({
       ...item, id: `local:${kind}:${i}`, kind, source: 'local', imports: [], ratingMax: 5
@@ -24,15 +25,16 @@
     for (const snapshot of snapshots) for (const entry of snapshot.entries) {
       if (seen.has(entry.id) || !kinds.includes(entry.kind)) continue;
       seen.add(entry.id);
+      const imported = {...entry, reviews: (snapshot.reviews || []).filter(review => review.entryId === entry.id)};
       const groupId = groups.get(entry.id) || entry.id;
       let item = byId.get(entry.id) || byId.get(groupId);
       if (!item) {
-        item = {...entry, id: groupId, imports: []};
+        item = {...imported, id: groupId, imports: []};
         items.push(item);
       }
       byId.set(groupId, item);
       byId.set(entry.id, item);
-      item.imports.push(entry);
+      item.imports.push(imported);
       if (item.source !== 'local' && entry.status === 'completed') item.status = 'completed';
     }
     return items;
@@ -57,6 +59,9 @@
     return value?.schemaVersion === 1 && ['letterboxd', 'myanimelist'].includes(value.source) &&
       typeof value.username === 'string' && typeof value.syncedAt === 'string' && !Number.isNaN(Date.parse(value.syncedAt)) &&
       value.counts && typeof value.counts === 'object' && Array.isArray(value.entries) &&
+      (value.reviews === undefined || (Array.isArray(value.reviews) && value.reviews.every(r =>
+        r && typeof r.id === 'string' && typeof r.entryId === 'string' && typeof r.text === 'string' && r.text.trim() &&
+        typeof r.spoiler === 'boolean' && safeUrl(r.url)))) &&
       value.entries.every(e => e && typeof e.id === 'string' && typeof e.title === 'string' &&
         e.source === value.source && kinds.includes(e.kind) && ['completed','in progress','planned','on hold','dropped'].includes(e.status) &&
         [5,10].includes(e.ratingMax) && (e.rating === null || (Number.isFinite(e.rating) && e.rating > 0 && e.rating <= e.ratingMax)) &&
@@ -69,5 +74,5 @@
       return url.protocol === 'https:' && ['letterboxd.com', 'myanimelist.net'].includes(url.hostname) && !url.username && !url.password ? url.href : null;
     } catch (_) { return null; }
   }
-  return {kinds, status, rating, merge, filter, safeUrl, validSnapshot};
+  return {kinds, status, rating, reviewed, merge, filter, safeUrl, validSnapshot};
 });

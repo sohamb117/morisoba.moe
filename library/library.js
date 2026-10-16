@@ -50,6 +50,10 @@
         ${entry.sourceStarted ? `<div>started ${esc(entry.sourceStarted)} (MAL date)</div>` : ''}
         ${entry.sourceFinished ? `<div>finished ${esc(entry.sourceFinished)} (MAL date)</div>` : ''}
         <div>${sourceLink(entry.userUrl, entry.source === 'letterboxd' ? 'view on profile' : 'view list')}</div>
+        ${(entry.reviews || []).map(review => `<div class="imported-review">
+          <div class="review-caption">${sourceLink(review.url, 'review')}${review.watchedOn ? ` · watched ${esc(review.watchedOn)}` : ''}</div>
+          ${review.spoiler ? `<details><summary>show review · spoilers</summary><div class="d-notes">${esc(review.text)}</div></details>` : `<div class="d-notes">${esc(review.text)}</div>`}
+        </div>`).join('')}
       </div>`).join('')}
       ${!item.notes && !item.imports.length ? '<div class="empty">[ no notes yet ]</div>' : ''}`;
     if (matchMedia('(max-width: 720px)').matches) {
@@ -74,7 +78,7 @@
       body.innerHTML = rows.length ? rows.map(item => `<button type="button" class="row${selected === item.id ? ' selected' : ''}" data-id="${esc(item.id)}">
         <span class="title">${esc(item.title)}</span>
         <span class="meta">${esc([item.author || item.director || item.creator, item.year, M.status(item), M.rating(item)].filter(Boolean).join(' · '))}</span>
-        <span class="source-tags">${esc([...new Set([item.source, ...item.imports.map(e => e.source)])].map(s => names[s]).join(' / '))}</span>
+        <span class="source-tags">${esc([...new Set([item.source, ...item.imports.map(e => e.source)])].map(s => names[s]).join(' / '))}${M.reviewed(item) ? ' <span class="reviewed-flag">reviewed</span>' : ''}</span>
       </button>`).join('') : '<div class="empty">[ no matching entries ]</div>';
     }
     document.getElementById('library-results').textContent = `${filtered.length} / ${items.length} entries`;
@@ -108,7 +112,7 @@
     document.addEventListener('keydown', event => {
       if (event.key === 'Escape' && selected) closeReader();
       if (event.key === 'Tab' && document.body.classList.contains('modal-open')) {
-        const focusable = [...panel.querySelectorAll('button, a[href]')];
+        const focusable = [...panel.querySelectorAll('button, a[href], summary')];
         const first = focusable[0], last = focusable[focusable.length - 1];
         if (event.shiftKey && document.activeElement === first) {event.preventDefault(); last.focus();}
         else if (!event.shiftKey && document.activeElement === last) {event.preventDefault(); first.focus();}
