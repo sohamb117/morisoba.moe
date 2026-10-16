@@ -813,7 +813,7 @@ function asciiTitle(){
     ? "Layer 10: Ascii" : "layer 10: ascii // "+asciiLayers[asciiIndex].dataset.name;
 }
 new MutationObserver(asciiTitle).observe(asciiPanel,{attributes:true,attributeFilter:["class"]});
-var asciiDurations={EVA:7000,RINGO:9000,OCULUS:12000};
+var asciiDurations={EVA:12000,RINGO:9000,OCULUS:12000};
 function scheduleAsciiSwitch(){
   setTimeout(switchAsciiLayer,asciiDurations[asciiLayers[asciiIndex].dataset.name]);
 }
@@ -999,7 +999,7 @@ setInterval(function(){
 },300);
 
 /* ================= apple + crux shimmer ================= */
-["apple","crux"].forEach(function(id,ix){
+["apple"].forEach(function(id,ix){
   var el2=document.getElementById(id);
   var base=el2.textContent;
   setInterval(function(){
@@ -1012,6 +1012,55 @@ setInterval(function(){
     el2.textContent=ch.join("");
   },460+ix*130);
 });
+
+/* ================= EVA: random staggered eye blinks ================= */
+(function(){
+  var el=document.getElementById("crux");
+  var base=el.textContent.split("\n");
+  var eyes=[];
+  base.forEach(function(line,row){
+    var re=/<\x60[^>]+>/g,match;
+    while((match=re.exec(line))) eyes.push({row:row,start:match.index,width:match[0].length});
+  });
+  var blinks=[];
+  var nextBlink=0;
+  var reduced=window.matchMedia("(prefers-reduced-motion: reduce)");
+  setInterval(function(){
+    if(document.hidden || asciiPanel.classList.contains("min") || asciiPanel.style.display==="none" ||
+       asciiLayers[asciiIndex].dataset.name!=="EVA" || reduced.matches){
+      blinks=[];nextBlink=0;el.textContent=base.join("\n");return;
+    }
+    var now=performance.now();
+    if(now>=nextBlink){
+      // Fisher-Yates: pick a fresh subset of 2–4 eyes without duplicates.
+      var choices=eyes.slice();
+      for(var i=choices.length-1;i>0;i--){
+        var j=Math.floor(Math.random()*(i+1)),tmp=choices[i];choices[i]=choices[j];choices[j]=tmp;
+      }
+      blinks=choices.slice(0,2+Math.floor(Math.random()*3)).map(function(eye,index){
+        return {eye:eye,time:now+index*(110+Math.random()*130)};
+      });
+      nextBlink=now+2200+Math.random()*1600;
+    }
+    var lines=base.slice();
+    blinks.forEach(function(blink){
+      var elapsed=now-blink.time;
+      if(elapsed<0 || elapsed>320) return;
+      var eye=blink.eye;
+      function patch(row,text){
+        lines[row]=lines[row].slice(0,eye.start)+text+lines[row].slice(eye.start+eye.width);
+      }
+      if(elapsed>=80 && elapsed<240){
+        patch(eye.row-1," ".repeat(eye.width));
+        patch(eye.row,"  "+"-".repeat(eye.width-4)+"  ");
+        patch(eye.row+1," ".repeat(eye.width));
+      }else{
+        patch(eye.row,base[eye.row].slice(eye.start,eye.start+eye.width).replace(/[()]/g,"-"));
+      }
+    });
+    el.textContent=lines.join("\n");
+  },40);
+})();
 
 /* ================= hex telemetry ================= */
 (function(){
