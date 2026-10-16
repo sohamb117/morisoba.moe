@@ -197,14 +197,14 @@
   width:min(585px,calc(100vw - 64px),calc((100dvh - 64px) * 585 / 844));
   aspect-ratio:585 / 844;max-width:none;max-height:none;padding:0;border:0;
   background:transparent;color:var(--ink);overflow:visible;}
-.panel-popup::backdrop{background:rgba(0,0,0,.78);}
+.panel-popup::backdrop{background:rgba(0,0,0,.94);}
 .panel-popup .panel.is-maximized{position:relative !important;inset:auto !important;
   width:100% !important;height:100% !important;margin:0 !important;
   transform:none !important;opacity:1;display:flex !important;flex-direction:column;}
 .panel-popup .titlebar{flex:none;cursor:default;}
-.panel-popup #p-works .pbody,.panel-popup #p-console .pbody{
+.panel-popup .popup-work .pbody,.panel-popup .popup-projects .pbody{
   flex:1;min-height:0;max-height:none !important;overflow-y:auto !important;}
-.panel-popup #project-list{max-height:none;overflow:visible;}
+.panel-popup .popup-project-list{max-height:none;overflow:visible;}
 @media(max-width:720px){.pbtn[data-act="maximize"]{display:none;}}
 </style>
 <link rel="stylesheet" href="shared/hud.css?v=3">
@@ -1198,7 +1198,7 @@ document.addEventListener("DOMContentLoaded", function(){
   popup.className="panel-popup";
   popup.setAttribute("aria-label","Expanded panel");
   document.body.appendChild(popup);
-  var expanded=null,placeholder=null,previousFocus=null,previousOverflow="",wasMin=false;
+  var expanded=null,previousFocus=null,previousOverflow="";
   var popupClosing=false;
   function restorePanel(immediate){
     if(!expanded || popupClosing) return;
@@ -1210,14 +1210,7 @@ document.addEventListener("DOMContentLoaded", function(){
     }
     var panel=expanded;
     popup.close();
-    placeholder.replaceWith(panel);
-    panel.classList.remove("is-maximized");
-    if(wasMin) panel.classList.add("min");
-    panel.removeAttribute("role");
-    panel.removeAttribute("aria-modal");
-    panel.querySelector('[data-act="maximize"]').setAttribute("aria-label","Maximize");
-    panel.querySelector('[data-act="maximize"]').setAttribute("aria-expanded","false");
-    panel.querySelector('[data-act="maximize"]').textContent="□";
+    panel.remove();
     expanded=null;
     window.chromeCableModal=false;
     document.body.style.overflow=previousOverflow;
@@ -1226,25 +1219,35 @@ document.addEventListener("DOMContentLoaded", function(){
   }
   function maximizePanel(panel){
     if(isMobile()) return;
-    if(expanded===panel){restorePanel();return;}
     if(popupClosing) return;
     if(expanded) restorePanel(true);
     drawWires();
     window.chromeCableModal=true;
     previousFocus=document.activeElement;
     previousOverflow=document.body.style.overflow;
-    wasMin=panel.classList.contains("min");
-    placeholder=document.createComment("panel home");
-    panel.before(placeholder);
-    expanded=panel;
-    panel.classList.remove("min");
-    panel.classList.add("is-maximized");
-    popup.setAttribute("aria-label",panel.id==="p-console"?"Projects":"Work");
-    popup.appendChild(panel);
-    var button=panel.querySelector('[data-act="maximize"]');
+    var copy=panel.cloneNode(true);
+    var projects=panel.id==="p-console";
+    var list=copy.querySelector("#project-list");
+    if(list) list.classList.add("popup-project-list");
+    // Independent presentation copy: preserve original panel and avoid duplicate IDs.
+    [copy].concat(Array.from(copy.querySelectorAll("[id]"))).forEach(function(el){el.removeAttribute("id");});
+    copy.classList.remove("min","dragging");
+    copy.classList.add("is-maximized",projects?"popup-projects":"popup-work");
+    expanded=copy;
+    popup.setAttribute("aria-label",projects?"Projects":"Work");
+    popup.appendChild(copy);
+    var button=copy.querySelector('[data-act="maximize"]');
     button.textContent="❐";
     button.setAttribute("aria-label","Restore");
     button.setAttribute("aria-expanded","true");
+    copy.addEventListener("click",function(event){
+      if(event.target.closest(".pbtn")){
+        event.preventDefault();event.stopPropagation();restorePanel();
+      }
+    });
+    copy.querySelector(".titlebar").addEventListener("dblclick",function(event){
+      if(!event.target.closest("a,button")) restorePanel();
+    });
     document.body.style.overflow="hidden";
     popup.showModal();
     if(!window.matchMedia("(prefers-reduced-motion: reduce)").matches){
