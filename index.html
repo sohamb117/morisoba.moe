@@ -184,6 +184,19 @@
   #stage #p-litany,#stage #p-candle,
   #stage #p-litany.restored,#stage #p-candle.restored{display:none !important;}
 }
+
+/* Focused Work / Projects view. */
+.panel-popup{position:fixed;inset:0;margin:auto;width:min(900px,calc(100vw - 32px));
+  max-width:none;max-height:calc(100dvh - 32px);padding:5px;border:0;
+  background:transparent;color:var(--ink);overflow:visible;}
+.panel-popup::backdrop{background:rgba(0,0,0,.78);}
+.panel-popup .panel.is-maximized{position:relative !important;inset:auto !important;
+  width:100% !important;margin:0 !important;transform:none !important;opacity:1;
+  display:block !important;max-height:calc(100dvh - 42px);}
+.panel-popup #p-works .pbody,.panel-popup #p-console .pbody{
+  max-height:calc(100dvh - 100px) !important;overflow-y:auto !important;}
+.panel-popup #project-list{max-height:none;overflow:visible;}
+.panel-popup .titlebar{cursor:default;}
 </style>
 <link rel="stylesheet" href="shared/hud.css?v=3">
 <script defer src="shared/panel-effects.js?v=1"></script>
@@ -1169,6 +1182,74 @@ document.addEventListener("DOMContentLoaded", function(){
   if(location.hash === "#p-console") enterPersonal();
 
   initChrome();
+
+  /* Native modal keeps keyboard focus inside and dims the whole desktop. */
+  var popup=document.createElement("dialog");
+  popup.className="panel-popup";
+  popup.setAttribute("aria-label","Expanded panel");
+  document.body.appendChild(popup);
+  var expanded=null,placeholder=null,previousFocus=null,previousOverflow="",wasMin=false;
+  function restorePanel(){
+    if(!expanded) return;
+    var panel=expanded;
+    popup.close();
+    placeholder.replaceWith(panel);
+    panel.classList.remove("is-maximized");
+    if(wasMin) panel.classList.add("min");
+    panel.removeAttribute("role");
+    panel.removeAttribute("aria-modal");
+    panel.querySelector('[data-act="maximize"]').setAttribute("aria-label","Maximize");
+    panel.querySelector('[data-act="maximize"]').setAttribute("aria-expanded","false");
+    panel.querySelector('[data-act="maximize"]').textContent="□";
+    expanded=null;
+    document.body.style.overflow=previousOverflow;
+    if(previousFocus && previousFocus.isConnected) previousFocus.focus({preventScroll:true});
+    drawWires();
+  }
+  function maximizePanel(panel){
+    if(expanded===panel){restorePanel();return;}
+    if(expanded) restorePanel();
+    previousFocus=document.activeElement;
+    previousOverflow=document.body.style.overflow;
+    wasMin=panel.classList.contains("min");
+    placeholder=document.createComment("panel home");
+    panel.before(placeholder);
+    expanded=panel;
+    panel.classList.remove("min");
+    panel.classList.add("is-maximized");
+    popup.setAttribute("aria-label",panel.id==="p-console"?"Projects":"Work");
+    popup.appendChild(panel);
+    var button=panel.querySelector('[data-act="maximize"]');
+    button.textContent="❐";
+    button.setAttribute("aria-label","Restore");
+    button.setAttribute("aria-expanded","true");
+    document.body.style.overflow="hidden";
+    popup.showModal();
+    button.focus({preventScroll:true});
+    drawWires();
+  }
+  popup.addEventListener("cancel",function(event){event.preventDefault();restorePanel();});
+  popup.addEventListener("click",function(event){if(event.target===popup) restorePanel();});
+  ["p-console","p-works"].forEach(function(id){
+    var panel=document.getElementById(id),bar=panel.querySelector(".titlebar");
+    var button=document.createElement("button");
+    button.className="pbtn";button.dataset.act="maximize";
+    button.textContent="□";button.title="Maximize / restore";
+    button.setAttribute("aria-label","Maximize");button.setAttribute("aria-expanded","false");
+    bar.insertBefore(button,bar.querySelector('[data-act="close"]'));
+    button.addEventListener("click",function(event){event.stopPropagation();maximizePanel(panel);});
+    bar.addEventListener("dblclick",function(event){
+      if(event.target.closest("button,a")) return;
+      event.preventDefault();maximizePanel(panel);
+    });
+    bar.addEventListener("pointerdown",function(event){
+      if(expanded===panel) event.stopImmediatePropagation();
+    },true);
+    panel.addEventListener("click",function(event){
+      if(expanded===panel && event.target.closest('[data-act="min"],[data-act="close"]')) restorePanel();
+    },true);
+  });
+
   (isMobile() ? ["p-hex","p-vessel","p-wave","p-ascii"] : ["p-candle","p-vessel"]).forEach(function(id){
     var el=document.getElementById(id);
     if(!el) return;
