@@ -146,7 +146,13 @@
 
 /* hex telemetry strip */
 #p-hex .pbody{padding:4px 7px;height:224px;overflow:hidden;}
-#hexcol{font-size:8px;line-height:1.55;white-space:pre;opacity:.7;animation:hexscroll 30s linear infinite;}
+#hexcol{font-size:10px;line-height:1.8;opacity:.7;}
+#hexcol.gitlog-ready{animation:hexscroll 52s linear infinite;}
+#hexcol a{display:block;width:max-content;text-decoration:none;letter-spacing:2px;}
+#hexcol a:hover,#hexcol a:focus-visible{text-decoration:underline;opacity:1;}
+#p-hex .pbody:hover #hexcol,#p-hex:focus-within #hexcol{animation-play-state:paused;}
+.gitlog-status{font-size:9px;letter-spacing:0;}
+@media(prefers-reduced-motion:reduce){#hexcol.gitlog-ready{animation:none;}#p-hex .pbody{overflow-y:auto;}}
 @keyframes hexscroll{to{transform:translateY(-50%);}}
 #seraph{text-shadow:1.1px 0 rgba(111,182,194,.35), -1.1px 0 rgba(200,80,80,.30);}
 
@@ -658,9 +664,9 @@
     </div>
   </section>
 
-  <section class="panel" id="p-hex" data-w="86" style="--tilt:rotate(.5deg)">
-    <div class="titlebar"><span class="tl">rnd</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
-    <div class="pbody"><pre id="hexcol"></pre></div>
+  <section class="panel" id="p-hex" data-w="186" style="--tilt:rotate(.5deg)">
+    <div class="titlebar"><span class="tl">layer:12 gitlog</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
+    <div class="pbody"><div id="hexcol" aria-label="Latest GitHub commits"><span class="gitlog-status">connecting…</span></div></div>
   </section>
 
 
@@ -1064,22 +1070,57 @@ setInterval(function(){
   },40);
 })();
 
-/* ================= hex telemetry ================= */
+/* ================= live GitHub commit stream ================= */
 (function(){
-  var HX="0123456789ABCDEF";
-  var s="";
-  for(var i=0;i<52;i++){
-    var line="";
-    for(var j=0;j<2;j++){
-      var w2="";
-      for(var k3=0;k3<4;k3++)w2+=HX[Math.floor(Math.random()*16)];
-      line+=w2+" ";
-    }
-    s+=line+"\n";
+  var el=document.getElementById("hexcol"),key="morisoba-gitlog-v1";
+  function valid(item){
+    return item && /^[a-f0-9]{40}$/i.test(item.sha) &&
+      /^https:\/\/github\.com\/[^/]+\/[^/]+\/commit\/[a-f0-9]{40}$/i.test(item.html_url);
   }
-  document.getElementById("hexcol").textContent=s+s;
+  function render(items){
+    items=items.filter(valid).slice(0,32);
+    if(!items.length) return false;
+    el.replaceChildren();
+    [false,true].forEach(function(copy){
+      var group=document.createElement("div");
+      if(copy) group.setAttribute("aria-hidden","true");
+      items.forEach(function(item){
+        var a=document.createElement("a");
+        a.href=item.html_url;a.textContent=item.sha.slice(0,8);
+        a.target="_blank";a.rel="noopener noreferrer";
+        a.title=item.repository.full_name+" · "+item.commit.message.split("\n")[0];
+        if(copy) a.tabIndex=-1;
+        group.appendChild(a);
+      });
+      el.appendChild(group);
+    });
+    el.classList.add("gitlog-ready");
+    return true;
+  }
+  var cached=null,shown=false;
+  try{cached=JSON.parse(localStorage.getItem(key));if(cached) shown=render(cached.items);}catch(e){}
+  async function refresh(){
+    if(document.hidden) return;
+    try{
+      var response=await fetch("https://api.github.com/search/commits?q=author%3Asohamb117&sort=committer-date&order=desc&per_page=32",{
+        headers:{Accept:"application/vnd.github+json"}
+      });
+      if(!response.ok) throw new Error("GitHub unavailable");
+      var data=await response.json();
+      if(!Array.isArray(data.items)||!render(data.items)) throw new Error("No commits");
+      shown=true;
+      try{localStorage.setItem(key,JSON.stringify({at:Date.now(),items:data.items}));}catch(e){}
+    }catch(e){
+      if(!shown){
+        el.replaceChildren();
+        var a=document.createElement("a");a.href="https://github.com/sohamb117";
+        a.textContent="view github ↗";el.appendChild(a);
+      }
+    }
+  }
+  if(!cached || !shown || Date.now()-cached.at>300000) refresh();
+  setInterval(refresh,300000);
 })();
-
 
 }
 
@@ -1089,7 +1130,7 @@ document.addEventListener("DOMContentLoaded", function(){
   spawnDecor();
   drawTraces();
   drawWires(LAYOUT, WIRES, FLOOR, DROPS);
-  registerGlitchTargets(["#hexcol", "#p-hex .pcaption", ".work .wt b"]);
+  registerGlitchTargets([ "#p-hex .pcaption", ".work .wt b"]);
 
   var eg = document.getElementById("entry-gate");
   document.getElementById("btn-resume").addEventListener("click", function(){
@@ -1110,7 +1151,7 @@ document.addEventListener("DOMContentLoaded", function(){
   if(location.hash === "#p-console") enterPersonal();
 
   initChrome();
-  (isMobile() ? ["p-vessel"] : ["p-candle","p-hex","p-vessel"]).forEach(function(id){
+  (isMobile() ? ["p-vessel"] : ["p-candle","p-vessel"]).forEach(function(id){
     var el=document.getElementById(id);
     if(!el) return;
     var btn=el.querySelector('.pbtn[data-act="close"]');
