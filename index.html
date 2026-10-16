@@ -1204,17 +1204,20 @@ document.addEventListener("DOMContentLoaded", function(){
   popup.setAttribute("aria-label","Expanded panel");
   document.body.appendChild(popup);
   var expanded=null,previousFocus=null,previousOverflow="";
-  var popupClosing=false;
+  var popupClosing=false,popupAnimation=null;
   function restorePanel(immediate){
     if(!expanded || popupClosing) return;
+    if(popupAnimation){popupAnimation.cancel();popupAnimation=null;}
     if(!immediate && !window.matchMedia("(prefers-reduced-motion: reduce)").matches){
       popupClosing=true;
-      var exit=popup.animate([{transform:"scale(1)",opacity:1},{transform:"scale(.86)",opacity:0}],{duration:180,easing:"ease-in"});
+      var exit=popup.animate([{transform:"scale(1)",opacity:1},{transform:"scale(.86)",opacity:0}],{duration:180,easing:"ease-in",fill:"forwards"});
+      popupAnimation=exit;
       exit.finished.catch(function(){}).then(function(){popupClosing=false;restorePanel(true);});
       return;
     }
     var panel=expanded;
     popup.close();
+    if(popupAnimation){popupAnimation.cancel();popupAnimation=null;}
     panel.remove();
     expanded=null;
     window.chromeCableModal=false;
@@ -1258,7 +1261,7 @@ document.addEventListener("DOMContentLoaded", function(){
     document.body.style.overflow="hidden";
     popup.showModal();
     if(!window.matchMedia("(prefers-reduced-motion: reduce)").matches){
-      popup.animate([{transform:"scale(.86)",opacity:0},{transform:"scale(1)",opacity:1}],{duration:240,easing:"cubic-bezier(.2,.8,.2,1)"});
+      popupAnimation=popup.animate([{transform:"scale(.86)",opacity:0},{transform:"scale(1)",opacity:1}],{duration:240,easing:"cubic-bezier(.2,.8,.2,1)"});
     }
     button.focus({preventScroll:true});
     drawWires();
