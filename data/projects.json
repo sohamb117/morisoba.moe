@@ -1,0 +1,236 @@
+{
+  "verifiedOn": "2026-10-16",
+  "owner": "sohamb117",
+  "projects": [
+    {
+      "repo": "arenabench",
+      "name": "ArenaBench",
+      "category": "AI / security",
+      "description": "An adversarial benchmark where LLM agents compete inside a disposable Linux VM. Traces capture system exploration, privilege escalation, and emergent multi-agent behavior.",
+      "technologies": [
+        "Python",
+        "Linux VMs",
+        "LLM evaluation"
+      ],
+      "links": [
+        {
+          "label": "source",
+          "url": "https://github.com/sohamb117/arenabench"
+        }
+      ]
+    },
+    {
+      "repo": "pokeweb",
+      "name": "Pokeweb",
+      "category": "Games / web",
+      "description": "Pokémon Diamond, Pearl, and Platinum in the browser: recompiled WASM cores in Web Workers, a React interface, local saves, and optional cloud saves.",
+      "technologies": [
+        "C",
+        "WebAssembly",
+        "React",
+        "TypeScript"
+      ],
+      "links": [
+        {
+          "label": "source",
+          "url": "https://github.com/sohamb117/pokeweb"
+        },
+        {
+          "label": "play",
+          "url": "https://pokeweb.morisoba.moe"
+        }
+      ]
+    },
+    {
+      "repo": "gen4recomp",
+      "name": "gen4recomp / nativeplat",
+      "category": "Games / native",
+      "description": "Native Pokémon ports built from decompilations and static recompilation, with a desktop launcher, save tools, display effects, rewind, and multiplayer features. Coverage varies by game.",
+      "technologies": [
+        "C",
+        "C++",
+        "WebAssembly"
+      ],
+      "links": [
+        {
+          "label": "source",
+          "url": "https://github.com/sohamb117/gen4recomp"
+        },
+        {
+          "label": "releases",
+          "url": "https://github.com/sohamb117/gen4recomp/releases"
+        }
+      ]
+    },
+    {
+      "repo": "sokaris",
+      "name": "Sokaris",
+      "category": "Creative tools",
+      "description": "A Julia toolkit for programmatic photo editing: composable image operations, editing macros, and an automatically refreshing image viewer.",
+      "technologies": [
+        "Julia",
+        "Image processing"
+      ],
+      "links": [
+        {
+          "label": "source",
+          "url": "https://github.com/sohamb117/sokaris"
+        },
+        {
+          "label": "browser playground",
+          "url": "https://github.com/sohamb117/sokaris-playground"
+        }
+      ]
+    },
+    {
+      "repo": "fruit-fly-heaven",
+      "name": "Flytrain / Fruit Fly Heaven",
+      "category": "Neuroscience / research",
+      "description": "A browser neuromechanics experiment connecting the BANC fruit fly connectome to FlyBody in MuJoCo. Flytrain coordinates shared parameter search; autonomous behavior remains an open research goal.",
+      "technologies": [
+        "Python",
+        "MuJoCo",
+        "WebGPU",
+        "WebAssembly"
+      ],
+      "links": [
+        {
+          "label": "source",
+          "url": "https://github.com/sohamb117/fruit-fly-heaven"
+        },
+        {
+          "label": "training console",
+          "url": "https://flytrain.morisoba.moe/train.html"
+        },
+        {
+          "label": "benchmark",
+          "url": "https://github.com/sohamb117/fruit-fly-heaven/tree/main/experiments/connectome_body"
+        }
+      ]
+    },
+    {
+      "repo": "npx-morisoba",
+      "name": "npx morisoba",
+      "category": "Developer tools",
+      "description": "A Rust terminal portfolio with ASCII imagery and keyboard navigation, distributed through npm. The same application also runs in the browser through WebAssembly.",
+      "technologies": [
+        "Rust",
+        "Ratatui",
+        "WebAssembly"
+      ],
+      "links": [
+        {
+          "label": "source",
+          "url": "https://github.com/sohamb117/npx-morisoba"
+        },
+        {
+          "label": "npm",
+          "url": "https://www.npmjs.com/package/morisoba"
+        }
+      ]
+    },
+    {
+      "repo": "eigenself",
+      "name": "Eigenfish / eigenself",
+      "category": "Generative art",
+      "description": "Name-seeded eigenvalue projections: an interactive generator that turns a name into a family of mathematical images.",
+      "technologies": [
+        "JavaScript",
+        "HTML",
+        "Linear algebra"
+      ],
+      "links": [
+        {
+          "label": "source",
+          "url": "https://github.com/sohamb117/eigenself"
+        }
+      ]
+    },
+    {
+      "repo": "love-canvas",
+      "name": "love-canvas",
+      "category": "Graphics / web",
+      "description": "An experimental Canvas 2D backend for a subset of LÖVE’s graphics API, with Lua running in WASM. Includes a WebGL-free demo and browser tests.",
+      "technologies": [
+        "JavaScript",
+        "Lua",
+        "Canvas 2D",
+        "WebAssembly"
+      ],
+      "links": [
+        {
+          "label": "source",
+          "url": "https://github.com/sohamb117/love-canvas"
+        }
+      ]
+    },
+    {
+      "repo": "omp-pet",
+      "name": "OMP Pet",
+      "category": "Developer tools",
+      "description": "A native macOS desktop companion for oh-my-pi, built with Rust and AppKit. Session events travel over a private Unix socket to an animated pet and status readout.",
+      "technologies": [
+        "Rust",
+        "AppKit",
+        "TypeScript"
+      ],
+      "links": [
+        {
+          "label": "source",
+          "url": "https://github.com/sohamb117/omp-pet"
+        }
+      ]
+    },
+    {
+      "repo": "dream-state-learning",
+      "name": "Dream-State Learning",
+      "category": "AI / research",
+      "description": "Experiments in continual agent memory: consolidating experience into adapter weights and measuring transfer with controlled environments and baseline comparisons.",
+      "technologies": [
+        "Python",
+        "LLMs",
+        "Continual learning"
+      ],
+      "links": [
+        {
+          "label": "source",
+          "url": "https://github.com/sohamb117/dream-state-learning"
+        }
+      ]
+    },
+    {
+      "repo": "geoshader",
+      "name": "Geoshader",
+      "category": "Economics / research",
+      "description": "A neural event-study pipeline exploring geopolitical shocks and defense-equity returns, with GDELT events, market data, and model interpretation.",
+      "technologies": [
+        "Python",
+        "Financial NLP",
+        "Event studies"
+      ],
+      "links": [
+        {
+          "label": "source",
+          "url": "https://github.com/sohamb117/geoshader"
+        }
+      ]
+    },
+    {
+      "repo": "greenhouse",
+      "name": "Greenhouse",
+      "category": "Developer tools",
+      "description": "A portable macOS development setup with workstation tools, language runtimes, diagnostics, and reusable agent configuration.",
+      "technologies": [
+        "Python",
+        "Shell",
+        "macOS"
+      ],
+      "links": [
+        {
+          "label": "source",
+          "url": "https://github.com/sohamb117/greenhouse"
+        }
+      ]
+    }
+  ]
+}

@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>✠ SOHAM ✠</title>
-<link rel="stylesheet" href="shared/chrome.css?v=cursor-off">
+<link rel="stylesheet" href="shared/chrome.css?v=projects-20261016">
+<link rel="stylesheet" href="shared/portfolio.css">
 <style>
 /* sticky note micro-styles */
 .panel.note .asset-tag{display:none;}
@@ -65,11 +66,7 @@
 
 @keyframes litany{to{transform:translateX(-50%);}}
 
-/* console */
-#p-console .pbody{padding:8px 10px;font-size:9px;line-height:1.65;}
-#console-log div{white-space:nowrap;overflow:hidden;}
-#clockline{margin-top:6px;border-top:1px dashed var(--edge-mid);
-  padding-top:5px;display:flex;justify-content:space-between;gap:8px;font-size:9px;}
+
 
 /* candle */
 #p-candle .pbody{padding:6px 8px;}
@@ -121,7 +118,7 @@
 @media (max-width:720px){.entry-shell{width:calc(100vw - 32px);}.entry-titlebar{top:-28px;font-size:7px;}.entry-sigil-wrap{width:min(270px,72vw);margin-bottom:20px;}.entry-product{font-size:31px;line-height:1;}.entry-maker{font-size:15px;}.entry-actions{flex-direction:column;gap:8px;}.entry-actions button{min-height:48px;}.entry-trace{bottom:5vh;left:-30vw;}}
 </style>
 </head>
-<body>
+<body class="portfolio-home">
 
 <div id="entry-gate">
   <div class="entry-noise"></div>
@@ -414,20 +411,24 @@
   <section class="panel" id="p-about" data-w="290" style="--tilt:rotate(.35deg)">
     <div class="titlebar"><span class="tl">layer:01 about</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
     <div class="pbody">
-      <p>i'm soham. i'm currently studying cs + econ at new york university.</p>
-      <p>i specialize in critical, high-scale data engineering and applied ai. i'm currently working on ai security at microsoft.</p>
-      <p>this site contains everything i've publicly worked on. check it out!<a href="library/"></a><a href="atlas/"></a><a href="journal/"></a></p>
+      <p>i'm soham. cs + econ at new york university, currently on leave.</p>
+      <p>i build systems for applied ai, security, and large-scale data. previously: microsoft security intelligence.</p>
+      <p>explore my projects, research, and experiments. <a href="https://github.com/sohamb117" target="_blank" rel="noopener noreferrer">more on github ↗</a></p>
     </div>
   </section>
 
   <section class="panel inv" id="p-works" data-w="330" style="--tilt:rotate(-.3deg)">
     <div class="titlebar"><span class="tl">layer:02 work</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
     <div class="pbody">
-      <a class="work" href="#"><span class="wt"><b>ironmill</b><i>∞</i></span><span class="wd">worked with ironmill to develop a patented system for selecting optimal zk proofs.</span></a>
-      <a class="work" href="#"><span class="wt"><b>doppio labs</b><i>∞</i></span><span class="wd">raised from lvlup ventures at an 8-figure valuation to build people search tools. shut down.</span></a>
-      <a class="work" href="#"><span class="wt"><b>arenabench</b><i>2026</i></span><span class="wd">simulated competitive environment. cybersecurity benchmark for frontier llm</span></a>
-      <a class="work" href="#"><span class="wt"><b>npx morisoba</b><i>2025</i></span><span class="wd">personal profile, packaged as a rust binary and pushed to npm. also a custom wasm web deployment.</span></a>
-      <a class="work" href="#"><span class="wt"><b>eigenfish</b><i>2025</i></span><span class="wd">eigenfish generator.</span></a>
+      <nav class="work-actions" aria-label="Resume">
+        <a href="resume/">read resume ↗</a>
+        <a href="resume/Soham-Bhattacharya-CV.pdf" download>download CV ↓</a>
+      </nav>
+      <a class="work" href="resume/#microsoft"><span class="wt"><b>microsoft</b><i>2026</i></span><span class="wd">software engineering intern · security intelligence</span></a>
+      <a class="work" href="resume/#omega"><span class="wt"><b>omega venture partners</b><i>2025–26</i></span><span class="wd">technical consultant · ai systems</span></a>
+      <a class="work" href="resume/#doppio"><span class="wt"><b>doppio labs</b><i>2025–26</i></span><span class="wd">co-founder &amp; cto · people search</span></a>
+      <a class="work" href="resume/#cisco"><span class="wt"><b>cisco systems</b><i>2024–25</i></span><span class="wd">technical intern · control center / ios-xr</span></a>
+      <a class="work" href="resume/#ironmill"><span class="wt"><b>ironmill</b><i>2022–23</i></span><span class="wd">associate distributed computing researcher</span></a>
     </div>
   </section>
 
@@ -439,20 +440,98 @@
     </div>
   </section>
 
-  <section class="panel" id="p-litany" data-w="410" style="--tilt:rotate(-.25deg);cursor:pointer;" onclick="window.open('npx/','_blank','noopener')">
+  <section class="panel" id="p-litany" data-w="410" style="--tilt:rotate(-.25deg);cursor:pointer;" >
     <div class="titlebar"><span class="tl">layer:05 npx morisoba</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
     <div class="pbody">
-      <div class="litany-track" id="litany-track">
+      <a class="litany-track" id="litany-track" href="https://github.com/sohamb117/npx-morisoba" target="_blank" rel="noopener noreferrer" aria-label="npx morisoba on GitHub">
         <span>sync_err loop:0x7f3a ▓ &gt; npx morisoba ▒ &gt; npx morisoba ▓ &gt; npx morisoba ░ &gt; npx morisoba ▓▒░ &gt; npx morisoba ▓ &gt; npx morisoba ▒ &gt; npx morisoba ░ &gt; npx morisoba ▓ &gt; npx morisoba ░ &gt; npx morisoba ▓▒ &gt; npx morisoba ▚▞ &gt; npx morisoba ░▒▓ </span>
-      </div>
+      </a>
     </div>
   </section>
 
-  <section class="panel" id="p-console" data-w="300" style="--tilt:rotate(.3deg)">
-    <div class="titlebar"><span class="tl">layer:06 choir</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
+  <section class="panel" id="p-projects" data-w="620" aria-labelledby="projects-title" style="--tilt:rotate(.15deg)">
+    <div class="titlebar"><span class="tl" id="projects-title">layer:06 projects</span><button class="pbtn" data-act="min" aria-label="Minimize projects" aria-expanded="true">–</button><button class="pbtn" data-act="close" aria-label="Close projects">✕</button></div>
     <div class="pbody">
-      <div id="console-log"></div>
-      <div id="clockline"><span id="clock">--:--:--</span><span>№ <span id="visits">000000</span></span></div>
+      <div class="projects-intro"><span>selected builds / ongoing experiments</span><a href="https://github.com/sohamb117?tab=repositories" target="_blank" rel="noopener noreferrer">all repos ↗</a></div>
+      <label class="project-search" for="project-search">find a project<input id="project-search" type="search" placeholder="name, topic, or technology" autocomplete="off"></label>
+      <p id="project-count" role="status" aria-live="polite"></p>
+      <div class="project-list" aria-label="Projects">
+<!-- PROJECTS:START -->
+        <article class="project-card" id="project-arenabench">
+          <div class="project-heading"><h2><a href="https://github.com/sohamb117/arenabench" target="_blank" rel="noopener noreferrer">ArenaBench</a></h2><span class="project-kind">AI / security</span></div>
+          <p>An adversarial benchmark where LLM agents compete inside a disposable Linux VM. Traces capture system exploration, privilege escalation, and emergent multi-agent behavior.</p>
+          <ul class="project-tags" aria-label="Technologies"><li>Python</li><li>Linux VMs</li><li>LLM evaluation</li></ul>
+          <div class="project-links"><a href="https://github.com/sohamb117/arenabench" target="_blank" rel="noopener noreferrer">source ↗</a></div>
+        </article>
+        <article class="project-card" id="project-pokeweb">
+          <div class="project-heading"><h2><a href="https://github.com/sohamb117/pokeweb" target="_blank" rel="noopener noreferrer">Pokeweb</a></h2><span class="project-kind">Games / web</span></div>
+          <p>Pokémon Diamond, Pearl, and Platinum in the browser: recompiled WASM cores in Web Workers, a React interface, local saves, and optional cloud saves.</p>
+          <ul class="project-tags" aria-label="Technologies"><li>C</li><li>WebAssembly</li><li>React</li><li>TypeScript</li></ul>
+          <div class="project-links"><a href="https://github.com/sohamb117/pokeweb" target="_blank" rel="noopener noreferrer">source ↗</a> <a href="https://pokeweb.morisoba.moe" target="_blank" rel="noopener noreferrer">play ↗</a></div>
+        </article>
+        <article class="project-card" id="project-gen4recomp">
+          <div class="project-heading"><h2><a href="https://github.com/sohamb117/gen4recomp" target="_blank" rel="noopener noreferrer">gen4recomp / nativeplat</a></h2><span class="project-kind">Games / native</span></div>
+          <p>Native Pokémon ports built from decompilations and static recompilation, with a desktop launcher, save tools, display effects, rewind, and multiplayer features. Coverage varies by game.</p>
+          <ul class="project-tags" aria-label="Technologies"><li>C</li><li>C++</li><li>WebAssembly</li></ul>
+          <div class="project-links"><a href="https://github.com/sohamb117/gen4recomp" target="_blank" rel="noopener noreferrer">source ↗</a> <a href="https://github.com/sohamb117/gen4recomp/releases" target="_blank" rel="noopener noreferrer">releases ↗</a></div>
+        </article>
+        <article class="project-card" id="project-sokaris">
+          <div class="project-heading"><h2><a href="https://github.com/sohamb117/sokaris" target="_blank" rel="noopener noreferrer">Sokaris</a></h2><span class="project-kind">Creative tools</span></div>
+          <p>A Julia toolkit for programmatic photo editing: composable image operations, editing macros, and an automatically refreshing image viewer.</p>
+          <ul class="project-tags" aria-label="Technologies"><li>Julia</li><li>Image processing</li></ul>
+          <div class="project-links"><a href="https://github.com/sohamb117/sokaris" target="_blank" rel="noopener noreferrer">source ↗</a> <a href="https://github.com/sohamb117/sokaris-playground" target="_blank" rel="noopener noreferrer">browser playground ↗</a></div>
+        </article>
+        <article class="project-card" id="project-fruit-fly-heaven">
+          <div class="project-heading"><h2><a href="https://github.com/sohamb117/fruit-fly-heaven" target="_blank" rel="noopener noreferrer">Flytrain / Fruit Fly Heaven</a></h2><span class="project-kind">Neuroscience / research</span></div>
+          <p>A browser neuromechanics experiment connecting the BANC fruit fly connectome to FlyBody in MuJoCo. Flytrain coordinates shared parameter search; autonomous behavior remains an open research goal.</p>
+          <ul class="project-tags" aria-label="Technologies"><li>Python</li><li>MuJoCo</li><li>WebGPU</li><li>WebAssembly</li></ul>
+          <div class="project-links"><a href="https://github.com/sohamb117/fruit-fly-heaven" target="_blank" rel="noopener noreferrer">source ↗</a> <a href="https://flytrain.morisoba.moe/train.html" target="_blank" rel="noopener noreferrer">training console ↗</a> <a href="https://github.com/sohamb117/fruit-fly-heaven/tree/main/experiments/connectome_body" target="_blank" rel="noopener noreferrer">benchmark ↗</a></div>
+        </article>
+        <article class="project-card" id="project-npx-morisoba">
+          <div class="project-heading"><h2><a href="https://github.com/sohamb117/npx-morisoba" target="_blank" rel="noopener noreferrer">npx morisoba</a></h2><span class="project-kind">Developer tools</span></div>
+          <p>A Rust terminal portfolio with ASCII imagery and keyboard navigation, distributed through npm. The same application also runs in the browser through WebAssembly.</p>
+          <ul class="project-tags" aria-label="Technologies"><li>Rust</li><li>Ratatui</li><li>WebAssembly</li></ul>
+          <div class="project-links"><a href="https://github.com/sohamb117/npx-morisoba" target="_blank" rel="noopener noreferrer">source ↗</a> <a href="https://www.npmjs.com/package/morisoba" target="_blank" rel="noopener noreferrer">npm ↗</a></div>
+        </article>
+        <article class="project-card" id="project-eigenself">
+          <div class="project-heading"><h2><a href="https://github.com/sohamb117/eigenself" target="_blank" rel="noopener noreferrer">Eigenfish / eigenself</a></h2><span class="project-kind">Generative art</span></div>
+          <p>Name-seeded eigenvalue projections: an interactive generator that turns a name into a family of mathematical images.</p>
+          <ul class="project-tags" aria-label="Technologies"><li>JavaScript</li><li>HTML</li><li>Linear algebra</li></ul>
+          <div class="project-links"><a href="https://github.com/sohamb117/eigenself" target="_blank" rel="noopener noreferrer">source ↗</a></div>
+        </article>
+        <article class="project-card" id="project-love-canvas">
+          <div class="project-heading"><h2><a href="https://github.com/sohamb117/love-canvas" target="_blank" rel="noopener noreferrer">love-canvas</a></h2><span class="project-kind">Graphics / web</span></div>
+          <p>An experimental Canvas 2D backend for a subset of LÖVE’s graphics API, with Lua running in WASM. Includes a WebGL-free demo and browser tests.</p>
+          <ul class="project-tags" aria-label="Technologies"><li>JavaScript</li><li>Lua</li><li>Canvas 2D</li><li>WebAssembly</li></ul>
+          <div class="project-links"><a href="https://github.com/sohamb117/love-canvas" target="_blank" rel="noopener noreferrer">source ↗</a></div>
+        </article>
+        <article class="project-card" id="project-omp-pet">
+          <div class="project-heading"><h2><a href="https://github.com/sohamb117/omp-pet" target="_blank" rel="noopener noreferrer">OMP Pet</a></h2><span class="project-kind">Developer tools</span></div>
+          <p>A native macOS desktop companion for oh-my-pi, built with Rust and AppKit. Session events travel over a private Unix socket to an animated pet and status readout.</p>
+          <ul class="project-tags" aria-label="Technologies"><li>Rust</li><li>AppKit</li><li>TypeScript</li></ul>
+          <div class="project-links"><a href="https://github.com/sohamb117/omp-pet" target="_blank" rel="noopener noreferrer">source ↗</a></div>
+        </article>
+        <article class="project-card" id="project-dream-state-learning">
+          <div class="project-heading"><h2><a href="https://github.com/sohamb117/dream-state-learning" target="_blank" rel="noopener noreferrer">Dream-State Learning</a></h2><span class="project-kind">AI / research</span></div>
+          <p>Experiments in continual agent memory: consolidating experience into adapter weights and measuring transfer with controlled environments and baseline comparisons.</p>
+          <ul class="project-tags" aria-label="Technologies"><li>Python</li><li>LLMs</li><li>Continual learning</li></ul>
+          <div class="project-links"><a href="https://github.com/sohamb117/dream-state-learning" target="_blank" rel="noopener noreferrer">source ↗</a></div>
+        </article>
+        <article class="project-card" id="project-geoshader">
+          <div class="project-heading"><h2><a href="https://github.com/sohamb117/geoshader" target="_blank" rel="noopener noreferrer">Geoshader</a></h2><span class="project-kind">Economics / research</span></div>
+          <p>A neural event-study pipeline exploring geopolitical shocks and defense-equity returns, with GDELT events, market data, and model interpretation.</p>
+          <ul class="project-tags" aria-label="Technologies"><li>Python</li><li>Financial NLP</li><li>Event studies</li></ul>
+          <div class="project-links"><a href="https://github.com/sohamb117/geoshader" target="_blank" rel="noopener noreferrer">source ↗</a></div>
+        </article>
+        <article class="project-card" id="project-greenhouse">
+          <div class="project-heading"><h2><a href="https://github.com/sohamb117/greenhouse" target="_blank" rel="noopener noreferrer">Greenhouse</a></h2><span class="project-kind">Developer tools</span></div>
+          <p>A portable macOS development setup with workstation tools, language runtimes, diagnostics, and reusable agent configuration.</p>
+          <ul class="project-tags" aria-label="Technologies"><li>Python</li><li>Shell</li><li>macOS</li></ul>
+          <div class="project-links"><a href="https://github.com/sohamb117/greenhouse" target="_blank" rel="noopener noreferrer">source ↗</a></div>
+        </article>
+<!-- PROJECTS:END -->
+      </div>
+      <p id="project-empty" hidden>No projects match. Try another name or technology.</p>
     </div>
   </section>
 
@@ -620,7 +699,8 @@
 <div id="scanlines"></div>
 <div id="grain"></div>
 
-<script src="shared/chrome.js"></script>
+<script src="shared/chrome.js?v=projects-20261016"></script>
+<script src="shared/projects.js" defer></script>
 <script>
 (function(){
 "use strict";
@@ -629,20 +709,20 @@
 var LAYOUT = [
   ["p-name",    .035, .055],
   ["p-seraph",  .640, .060],
-  ["p-about",   .030, .500],
-  ["p-works",   .260, .400],
-  ["p-contact", .590, .450],
-  ["p-litany",  .295, .800],
-  ["p-console", .715, .620],
+  ["p-about",   .040, .290],
+  ["p-works",   .040, .600],
+  ["p-contact", .745, .055],
+  ["p-litany",  .430, .850],
+  ["p-projects", .430, .230],
   ["p-candle",  .285, .060],
-  ["p-oracle",  .500, .055],
+  ["p-oracle",  .530, .055],
   ["p-relic",   .880, .360],
   ["p-apple",   .485, .400],
   ["p-wave",    .585, .800],
   ["p-hex",     .935, .055],
   ["p-crux",     .245, .660],
-  ["p-sigil",    .820, .055],
-  ["p-note",     .300, .055],
+  ["p-sigil",    .430, .730],
+  ["p-note",     .345, .055],
   ["p-vessel",   .680, .300]
 ];
 var WIRES = [
@@ -655,23 +735,23 @@ var WIRES = [
   ["p-candle","left","p-name","top"],
   ["p-works","right","p-oracle","left"],
   ["p-oracle","top","p-seraph","bottom"],
-  ["p-oracle","right","p-console","left"],
-  ["p-console","top","p-relic","bottom"],
+  ["p-oracle","right","p-projects","left"],
+  ["p-projects","top","p-relic","bottom"],
   ["p-relic","left","p-seraph","right"],
   ["p-seraph","left","p-candle","right"],
-  ["p-console","bottom","p-litany","right"],
+  ["p-projects","bottom","p-litany","right"],
   ["p-contact","bottom","p-litany","top"],
   ["p-name","left","p-litany","left"],
   ["p-apple","top","p-works","bottom"],
   ["p-apple","right","p-oracle","left"],
-  ["p-wave","top","p-console","bottom"],
+  ["p-wave","top","p-projects","bottom"],
   ["p-wave","left","p-contact","right"],
   ["p-hex","bottom","p-relic","top"],
   ["p-hex","left","p-seraph","right"],
   ["p-crux","bottom","p-litany","top"],
   ["p-crux","top","p-about","bottom"],
   ["p-name","right","p-relic","left"],
-  ["p-candle","bottom","p-console","top"],
+  ["p-candle","bottom","p-projects","top"],
   ["p-about","right","p-hex","bottom"],
   ["p-litany","right","p-wave","bottom"],
   ["p-sigil","top","p-contact","bottom"],
@@ -680,7 +760,7 @@ var WIRES = [
   ["p-vessel","top","p-hex","left"],
   ["p-vessel","right","p-relic","left"],
   ["p-vessel","bottom","p-oracle","top"],
-  ["p-vessel","bottom","p-console","top"],
+  ["p-vessel","bottom","p-projects","top"],
   ["p-note","right","p-seraph","left"],
   ["p-note","bottom","p-works","top"],
   ["p-apple","bottom","p-oracle","right"],
@@ -690,7 +770,7 @@ var WIRES = [
 /* cables running down to the floor */
 var FLOOR=[
   ["p-litany",.3],["p-litany",.7],["p-contact",.5],["p-wave",.4],
-  ["p-console",.6],["p-crux",.5],["p-works",.15],["p-oracle",.7],
+  ["p-projects",.6],["p-crux",.5],["p-works",.15],["p-oracle",.7],
   ["p-about",.4],["p-relic",.5],
   ["p-vessel",.3],["p-vessel",.7],
   ["p-note",.5],["p-hex",.5],["p-seraph",.3],["p-seraph",.7],
@@ -704,7 +784,7 @@ var DROPS = [
   [.55,"p-oracle"],
   [.60,"p-seraph"],[.66,"p-seraph"],[.72,"p-seraph"],[.77,"p-seraph"],
   [.84,"p-relic"],[.90,"p-relic"],[.95,"p-relic"],
-  [.80,"p-console"],[.87,"p-console"],
+  [.80,"p-projects"],[.87,"p-projects"],
   [.10,"p-about"],[.18,"p-about"],
   [.50,"p-contact"],
   [.53,"p-apple"],[.68,"p-wave"],[.925,"p-hex"],[.97,"p-hex"],[.24,"p-crux"],
@@ -712,7 +792,7 @@ var DROPS = [
   [.44,"p-note"],[.39,"p-note"],
   [.33,"p-works"],[.40,"p-apple"],
   [.16,"p-candle"],[.27,"p-crux"],
-  [.58,"p-oracle"],[.82,"p-console"],[.92,"p-hex"]
+  [.58,"p-oracle"],[.82,"p-projects"],[.92,"p-hex"]
 ];
 
 /* material class per panel — chrome stays mono, only .mat-crt bodies get phosphor */
@@ -723,7 +803,7 @@ var MAT = {
   "p-works":   "mat-paper",
   "p-contact": "mat-metal",
   "p-litany":  "mat-crt scr-amber",
-  "p-console": "mat-crt scr-green",
+  "p-projects": "mat-crt",
   "p-candle":  "mat-frame",
   "p-oracle":  "mat-frame",
   "p-relic":   "mat-frame",
@@ -951,35 +1031,7 @@ var waveline=document.getElementById("waveline");
   document.getElementById("hexcol").textContent=s+s;
 })();
 
-/* ================= console ================= */
-var LOG=[
-  "0x0000 load photos ........ OK",
-  "0x001F populate content ... OK",
-  "0x0033 package npx ........ OK",
-  "0x004C create wasm bin .... OK",
-  "0x005A start webserver .. OPEN",
-  "0x0071 site status ...... LIVE",
-  "0x00FF ✠~ morisoba.moe 2026 ~✠"
-];
-var logEl=document.getElementById("console-log");
-function typeLog(i){
-  if(i>=LOG.length)return;
-  var d=document.createElement("div");
-  d.textContent=LOG[i];
-  logEl.appendChild(d);
-  setTimeout(function(){typeLog(i+1);},100+Math.random()*180);
-}
-var clock=document.getElementById("clock");
-setInterval(function(){
-  var n=new Date();
-  function p(v){return(v<10?"0":"")+v;}
-  clock.textContent="A.D."+n.getFullYear()+" "+p(n.getHours())+":"+p(n.getMinutes())+":"+p(n.getSeconds());
-},1000);
-document.getElementById("visits").textContent=
-  String(100000+Math.floor(Math.random()*899999)).slice(0,6);
 
-
-  typeLog(0);
 }
 
 document.addEventListener("DOMContentLoaded", function(){
@@ -988,19 +1040,28 @@ document.addEventListener("DOMContentLoaded", function(){
   spawnDecor();
   drawTraces();
   drawWires(LAYOUT, WIRES, FLOOR, DROPS);
-  registerGlitchTargets(["#console-log div", "#hexcol", "#p-hex .pcaption", ".work .wt b"]);
+  registerGlitchTargets(["#hexcol", "#p-hex .pcaption"]);
 
   var eg = document.getElementById("entry-gate");
   document.getElementById("btn-resume").addEventListener("click", function(){
     window.location.href = "resume/";
   });
-  document.getElementById("btn-load").addEventListener("click", function(){
+  function enterPersonal(){
     eg.classList.add("done");
-    startLoader(BOOT, startMainAnimations);
-  });
+    startLoader(BOOT, function(){
+      startMainAnimations();
+      if(location.hash === "#p-projects"){
+        var projects = document.getElementById("p-projects");
+        bringTop(projects);
+        if(isMobile()) projects.scrollIntoView({block:"start"});
+      }
+    });
+  }
+  document.getElementById("btn-load").addEventListener("click", enterPersonal);
+  if(location.hash === "#p-projects") enterPersonal();
 
   initChrome();
-  (isMobile() ? ["p-seraph","p-apple","p-crux","p-vessel"] : ["p-seraph","p-console","p-candle","p-relic","p-apple","p-wave","p-hex","p-crux","p-vessel"]).forEach(function(id){
+  ["p-seraph","p-candle","p-relic","p-apple","p-wave","p-hex","p-crux","p-vessel","p-sigil"].forEach(function(id){
     var el=document.getElementById(id);
     if(!el) return;
     var btn=el.querySelector('.pbtn[data-act="close"]');

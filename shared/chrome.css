@@ -331,7 +331,7 @@ button{cursor:pointer;}
     width:100% !important;margin:0 0 14px;transform:none !important;}
   #hint{display:none;}
   /* strip art / terminal / decorative panels; keep info only */
-  #p-seraph,#p-litany,#p-console,#p-candle,#p-oracle,#p-relic,
+  #p-seraph,#p-litany,#p-candle,#p-oracle,#p-relic,
   #p-apple,#p-wave,#p-hex,#p-crux,#p-sigil,#p-note{display:none !important;}
   #stage .panel.restored{display:block !important;}
   /* let the works list stretch to fit all entries */

@@ -1,0 +1,65 @@
+/* The home desktop keeps its window chrome; content scales independently. */
+.portfolio-home #p-projects{width:min(52vw,820px) !important;}
+.portfolio-home #p-about,.portfolio-home #p-works{width:min(33vw,400px) !important;}
+.portfolio-home #p-projects .pbody{padding:16px 18px;max-height:55vh;overflow:auto;scrollbar-width:thin;scrollbar-color:var(--dust) transparent;text-shadow:none;color:var(--ink);font-size:13px;line-height:1.6;}
+.portfolio-home #p-projects .pbody::after,.portfolio-home #p-projects .asset-tag{display:none;}
+.projects-intro{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 16px;font-size:11px;color:var(--ink-dim);margin-bottom:14px;}
+.projects-intro a{white-space:nowrap;}
+.project-search{display:block;font-size:11px;letter-spacing:1px;}
+.project-search input{display:block;width:100%;margin-top:5px;border:1px solid var(--edge-hi);border-radius:0;background:var(--void);color:var(--ink);font:inherit;font-size:13px;padding:10px;}
+.project-search input::placeholder{color:var(--ink-dim);opacity:1;}
+#project-count{font-size:11px;color:var(--ink-dim);margin:10px 0 0;}
+.project-card{padding:16px 0;border-bottom:1px dashed var(--edge-mid);overflow-wrap:anywhere;}
+.project-card:last-child{border-bottom:0;}
+.project-heading{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:4px 12px;}
+.project-heading h2{font-size:16px;font-weight:normal;letter-spacing:.4px;}
+.project-heading h2 a{text-decoration:none;}
+.project-kind{font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:var(--ink-dim);}
+.project-card p{margin:7px 0;color:var(--ink-dim);}
+.project-tags{display:flex;flex-wrap:wrap;gap:5px;margin:10px 0;list-style:none;}
+.project-tags li{font-size:10px;border:1px solid var(--edge-mid);padding:2px 6px;}
+.project-links{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12px;}
+.project-links a{padding:5px 0;text-underline-offset:4px;}
+#project-empty{padding:20px 0;}
+.portfolio-home #p-works .pbody{max-height:25vh;font-size:12px;line-height:1.5;}
+.work-actions{display:flex;gap:10px;flex-wrap:wrap;padding:0 0 10px;border-bottom:1px solid currentColor;}
+.work-actions a{padding:6px 8px;border:1px solid currentColor;font-size:12px;}
+.portfolio-home .work .wt{flex-wrap:wrap;gap:2px 10px;}
+.portfolio-home .work .wt b{letter-spacing:1px;}
+.portfolio-home .work .wd{display:block;font-size:11px;margin-top:4px;}
+.portfolio-home #p-about .pbody{font-size:13px;line-height:1.6;}
+.portfolio-home #p-litany .litany-track{text-decoration:none;}
+.portfolio-home #p-projects .pbtn,.portfolio-home #p-works .pbtn{width:24px;height:24px;font-size:13px;}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid currentColor;outline-offset:4px;}
+@media (hover:hover){.project-heading a:hover,.project-links a:hover{color:var(--ink-hi);text-decoration:underline;}.work-actions a:hover{background:var(--void);color:var(--ink);}}
+
+/* Tablets and short windows use normal document flow instead of overlapping panels. */
+@media (max-width:1100px), (max-height:780px){
+  body.portfolio-home{overflow:auto;overflow-x:hidden;}
+  .portfolio-home #stage{position:relative;inset:auto;padding:32px 24px 20px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;align-items:start;}
+  .portfolio-home #stage .panel{position:relative !important;left:auto !important;top:auto !important;width:100% !important;min-width:0;margin:0;transform:none !important;}
+  .portfolio-home #wires,.portfolio-home #traces,.portfolio-home #accessories,.portfolio-home #decor,.portfolio-home #hint{display:none;}
+  .portfolio-home #p-name{order:0;}.portfolio-home #p-about{order:1;}.portfolio-home #p-works{order:2;}.portfolio-home #p-contact{order:3;}
+  .portfolio-home #p-projects{order:4;grid-column:1/-1;}
+  .portfolio-home #stage .panel:not(#p-name):not(#p-about):not(#p-works):not(#p-contact):not(#p-projects){order:5;}
+  .portfolio-home #p-litany,.portfolio-home #p-oracle,.portfolio-home #p-note{display:none;}
+  .portfolio-home #stage .panel.restored{display:block !important;}
+  .portfolio-home #p-projects .pbody,.portfolio-home #p-works .pbody{max-height:none;overflow:visible;}
+  .portfolio-home #dock{position:static;transform:none;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;padding:10px 24px 24px;width:100%;max-width:100%;}
+  .portfolio-home #dock button{min-height:36px;}
+}
+@media (max-width:720px){
+  .portfolio-home #stage{grid-template-columns:minmax(0,1fr);padding:24px 16px;gap:20px;}
+  .portfolio-home #p-about{order:1;}.portfolio-home #p-projects{order:2;}.portfolio-home #p-works{order:3;}.portfolio-home #p-contact{order:4;}
+  .portfolio-home #p-projects .pbody{padding:14px;}
+  .portfolio-home #nameart{font-size:clamp(7px,2.35vw,10.5px);}
+  .portfolio-home .titlebar{min-height:40px;}
+  .portfolio-home .pbtn{width:30px !important;height:30px !important;}
+  .project-links a{min-height:44px;display:inline-flex;align-items:center;}
+  .project-heading h2{font-size:17px;}
+  .portfolio-home #dock button{width:auto;}
+  .portfolio-home #p-contact .mail{font-size:11px;letter-spacing:1px;overflow-wrap:anywhere;}
+}
+@media (prefers-reduced-motion:reduce){
+  .portfolio-home *, .portfolio-home *::before,.portfolio-home *::after{animation:none !important;transition:none !important;}
+}

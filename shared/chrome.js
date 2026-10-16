@@ -5,7 +5,7 @@
 
 var W = function(){return window.innerWidth;};
 var H = function(){return window.innerHeight;};
-function isMobile(){return window.matchMedia("(max-width:720px)").matches;}
+function isMobile(){return window.matchMedia(document.body.classList.contains("portfolio-home") ? "(max-width:1100px), (max-height:780px)" : "(max-width:720px)").matches;}
 var chromePanels = {};
 var chromeWires = [];
 var chromeFloor = [];
@@ -64,6 +64,17 @@ function applyPanelLayout(LAYOUT, MAT){
     }
     var mat = MAT[row[0]];
     if(mat) mat.split(" ").forEach(function(c){el.classList.add(c);});
+  });
+  // Reflow on viewport changes, including mobile-to-desktop transitions.
+  window.addEventListener("resize", function(){
+    if(!document.body.classList.contains("portfolio-home") || isMobile()) return;
+    (LAYOUT || []).forEach(function(row){
+      var el = panels[row[0]];
+      el.style.width = (parseInt(el.getAttribute("data-w"),10)||280)+"px";
+      el.style.left = Math.max(8, Math.min(Math.round(row[1]*W()), W()-el.offsetWidth-12))+"px";
+      el.style.top = Math.max(24, Math.min(Math.round(row[2]*H()), H()-el.offsetHeight-55))+"px";
+    });
+    drawWires();
   });
   setupPanelManager(panels);
   return panels;
@@ -376,14 +387,15 @@ document.querySelectorAll(".pbtn").forEach(function(btn){
     e.stopPropagation();
     var el=btn.closest(".panel");
     if(btn.getAttribute("data-act")==="min"){
-      el.classList.toggle("min");drawWires();
+      el.classList.toggle("min");
+      btn.setAttribute("aria-expanded", String(!el.classList.contains("min")));drawWires();
     }else{
       el.classList.remove("restored");
       el.style.setProperty("display","none","important");
       var b=document.createElement("button");
       b.textContent=el.querySelector(".tl").textContent;
       b.addEventListener("click",function(){
-        if(isMobile()) document.getElementById("stage").appendChild(el);
+        if(isMobile() && !document.body.classList.contains("portfolio-home")) document.getElementById("stage").appendChild(el);
         el.style.removeProperty("display");el.classList.add("restored");dock.removeChild(b);bringTop(el);drawWires();
       });
       dock.appendChild(b);drawWires();
