@@ -1,0 +1,3236 @@
+{
+  "r003": {
+    "coordinates": [
+      139.706741,
+      35.69067
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%B0%E5%AE%BF%E5%8C%BA%E6%96%B0%E5%AE%BF3-8-9",
+    "geocodedLabel": "東京都新宿区新宿三丁目８番９号",
+    "geocodeQuery": "東京都新宿区新宿3-8-9",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都新宿区新宿3-8-9 新宿Qビル5階"
+  },
+  "r004": {
+    "coordinates": [
+      139.705917,
+      35.690266
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%B0%E5%AE%BF%E5%8C%BA%E6%96%B0%E5%AE%BF3-1-26",
+    "geocodedLabel": "東京都新宿区新宿三丁目１番２６号",
+    "geocodeQuery": "東京都新宿区新宿3-1-26",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都新宿区新宿3-1-26 新宿マルイアネックス7階"
+  },
+  "r005": {
+    "coordinates": [
+      139.696564,
+      35.689449
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%B0%E5%AE%BF%E5%8C%BA%E8%A5%BF%E6%96%B0%E5%AE%BF1-13-7",
+    "geocodedLabel": "東京都新宿区西新宿一丁目１３番７号",
+    "geocodeQuery": "東京都新宿区西新宿1-13-7",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都新宿区西新宿1-13-7 大和家ビル9F"
+  },
+  "r006": {
+    "coordinates": [
+      139.702591,
+      35.694618
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%B0%E5%AE%BF%E5%8C%BA%E6%AD%8C%E8%88%9E%E4%BC%8E%E7%94%BA1-13-7",
+    "geocodedLabel": "東京都新宿区歌舞伎町一丁目１３番７号",
+    "geocodeQuery": "東京都新宿区歌舞伎町1-13-7",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都新宿区歌舞伎町1-13-7 東京ビルNo.19 2F"
+  },
+  "r007": {
+    "coordinates": [
+      139.707535,
+      35.693554
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%B0%E5%AE%BF%E5%8C%BA%E6%96%B0%E5%AE%BF5-12-4",
+    "geocodedLabel": "東京都新宿区新宿五丁目１２番４号",
+    "geocodeQuery": "東京都新宿区新宿5-12-4",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都新宿区新宿5-12-4 EN新宿ビル1F"
+  },
+  "r010": {
+    "coordinates": [
+      139.704956,
+      35.693829
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%B0%E5%AE%BF%E5%8C%BA%E6%AD%8C%E8%88%9E%E4%BC%8E%E7%94%BA1-1-8",
+    "geocodedLabel": "東京都新宿区歌舞伎町一丁目１番８号",
+    "geocodeQuery": "東京都新宿区歌舞伎町1-1-8",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都新宿区歌舞伎町1-1-8 ゴールデン街3番街"
+  },
+  "r012": {
+    "coordinates": [
+      139.703537,
+      35.69487
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%B0%E5%AE%BF%E5%8C%BA%E6%AD%8C%E8%88%9E%E4%BC%8E%E7%94%BA1-9-8",
+    "geocodedLabel": "東京都新宿区歌舞伎町一丁目９番８号",
+    "geocodeQuery": "東京都新宿区歌舞伎町1-9-8",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都新宿区歌舞伎町1-9-8 ASAHIビルB1"
+  },
+  "r014": {
+    "coordinates": [
+      139.696533,
+      35.694431
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%B0%E5%AE%BF%E5%8C%BA%E8%A5%BF%E6%96%B0%E5%AE%BF7-13-5",
+    "geocodedLabel": "東京都新宿区西新宿七丁目１３番５号",
+    "geocodeQuery": "東京都新宿区西新宿7-13-5",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都新宿区西新宿7-13-5"
+  },
+  "r016": {
+    "coordinates": [
+      139.708206,
+      35.691113
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%B0%E5%AE%BF%E5%8C%BA%E6%96%B0%E5%AE%BF2-18-7",
+    "geocodedLabel": "東京都新宿区新宿二丁目１８番７号",
+    "geocodeQuery": "東京都新宿区新宿2-18-7",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都新宿区新宿2-18-7 S3ビル1F"
+  },
+  "r016-2": {
+    "coordinates": [
+      139.702011,
+      35.696232
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%B0%E5%AE%BF%E5%8C%BA%E6%AD%8C%E8%88%9E%E4%BC%8E%E7%94%BA2-38-2",
+    "geocodedLabel": "東京都新宿区歌舞伎町二丁目３８番２号",
+    "geocodeQuery": "東京都新宿区歌舞伎町2-38-2",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都新宿区歌舞伎町2-38-2 第二メトロビル3A"
+  },
+  "r018": {
+    "coordinates": [
+      139.708588,
+      35.711857
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%B0%E5%AE%BF%E5%8C%BA%E9%AB%98%E7%94%B0%E9%A6%AC%E5%A0%B42-8-3",
+    "geocodedLabel": "東京都新宿区高田馬場二丁目８番３号",
+    "geocodeQuery": "東京都新宿区高田馬場2-8-3",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都新宿区高田馬場2-8-3 佐々木ビル東館B1"
+  },
+  "r020": {
+    "coordinates": [
+      139.703491,
+      35.695538
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%B0%E5%AE%BF%E5%8C%BA%E6%AD%8C%E8%88%9E%E4%BC%8E%E7%94%BA2-25-6",
+    "geocodedLabel": "東京都新宿区歌舞伎町二丁目２５番６号",
+    "geocodeQuery": "東京都新宿区歌舞伎町2-25-6",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都新宿区歌舞伎町2-25-6 ホライゾンビルB2F"
+  },
+  "r021": {
+    "coordinates": [
+      139.703644,
+      35.695633
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%B0%E5%AE%BF%E5%8C%BA%E6%AD%8C%E8%88%9E%E4%BC%8E%E7%94%BA2-24-3",
+    "geocodedLabel": "東京都新宿区歌舞伎町二丁目２４番３号",
+    "geocodeQuery": "東京都新宿区歌舞伎町2-24-3",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都新宿区歌舞伎町2-24-3"
+  },
+  "r021-2": {
+    "coordinates": [
+      139.712692,
+      35.729214
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E8%B1%8A%E5%B3%B6%E5%8C%BA%E5%8D%97%E6%B1%A0%E8%A2%8B1-23-6",
+    "geocodedLabel": "東京都豊島区南池袋一丁目２３番６号",
+    "geocodeQuery": "東京都豊島区南池袋1-23-6",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都豊島区南池袋1-23-6 KDG池袋ビルB2"
+  },
+  "r021-3": {
+    "coordinates": [
+      139.706116,
+      35.714745
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E8%B1%8A%E5%B3%B6%E5%8C%BA%E9%AB%98%E7%94%B03-8-5",
+    "geocodedLabel": "東京都豊島区高田三丁目８番５号",
+    "geocodeQuery": "東京都豊島区高田3-8-5",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都豊島区高田3-8-5 セントラル・ワセダB1F"
+  },
+  "r021-4": {
+    "coordinates": [
+      139.703506,
+      35.688656
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%B0%E5%AE%BF%E5%8C%BA%E6%96%B0%E5%AE%BF4-3-15",
+    "geocodedLabel": "東京都新宿区新宿四丁目３番１５号",
+    "geocodeQuery": "東京都新宿区新宿4-3-15",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都新宿区新宿4-3-15 レイフラットビルB1F"
+  },
+  "r021-5": {
+    "coordinates": [
+      139.724457,
+      35.627491
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%93%81%E5%B7%9D%E5%8C%BA%E6%9D%B1%E4%BA%94%E5%8F%8D%E7%94%B05-25-19",
+    "geocodedLabel": "東京都品川区東五反田五丁目２５番１９号",
+    "geocodeQuery": "東京都品川区東五反田5-25-19",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都品川区東五反田5-25-19 東京デザインセンターB1・B2"
+  },
+  "r021-6": {
+    "coordinates": [
+      139.702606,
+      35.695522
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%B0%E5%AE%BF%E5%8C%BA%E6%AD%8C%E8%88%9E%E4%BC%8E%E7%94%BA1-12-9",
+    "geocodedLabel": "東京都新宿区歌舞伎町一丁目１２番９号",
+    "geocodeQuery": "東京都新宿区歌舞伎町1-12-9",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都新宿区歌舞伎町1-12-9 タテハナビルB2"
+  },
+  "r022": {
+    "coordinates": [
+      139.702423,
+      35.689709
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%B0%E5%AE%BF%E5%8C%BA%E6%96%B0%E5%AE%BF3-35-5",
+    "geocodedLabel": "東京都新宿区新宿三丁目３５番５号",
+    "geocodeQuery": "東京都新宿区新宿3-35-5",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都新宿区新宿3-35-5 守ビル5F"
+  },
+  "r023": {
+    "coordinates": [
+      139.706238,
+      35.71283
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%B0%E5%AE%BF%E5%8C%BA%E9%AB%98%E7%94%B0%E9%A6%AC%E5%A0%B42-14-8",
+    "geocodedLabel": "東京都新宿区高田馬場二丁目１４番８号",
+    "geocodeQuery": "東京都新宿区高田馬場2-14-8",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都新宿区高田馬場2-14-8 NTビルB1"
+  },
+  "r026": {
+    "coordinates": [
+      139.702988,
+      35.690742
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%B0%E5%AE%BF%E5%8C%BA%E6%96%B0%E5%AE%BF3-28-2",
+    "geocodedLabel": "東京都新宿区新宿三丁目２８番２号",
+    "geocodeQuery": "東京都新宿区新宿3-28-2",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都新宿区新宿3-28-2 ルナージュビル1・2F"
+  },
+  "r027": {
+    "coordinates": [
+      139.697784,
+      35.695465
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%B0%E5%AE%BF%E5%8C%BA%E8%A5%BF%E6%96%B0%E5%AE%BF7-15-14",
+    "geocodedLabel": "東京都新宿区西新宿七丁目１５番１４号",
+    "geocodeQuery": "東京都新宿区西新宿7-15-14",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都新宿区西新宿7-15-14 坂本ビル1F"
+  },
+  "r028": {
+    "coordinates": [
+      139.697357,
+      35.689419
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%B0%E5%AE%BF%E5%8C%BA%E8%A5%BF%E6%96%B0%E5%AE%BF1-12-5",
+    "geocodedLabel": "東京都新宿区西新宿一丁目１２番５号",
+    "geocodeQuery": "東京都新宿区西新宿1-12-5",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都新宿区西新宿1-12-5"
+  },
+  "r030": {
+    "coordinates": [
+      139.698929,
+      35.694458
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%B0%E5%AE%BF%E5%8C%BA%E8%A5%BF%E6%96%B0%E5%AE%BF7-1-7",
+    "geocodedLabel": "東京都新宿区西新宿七丁目１番７号",
+    "geocodeQuery": "東京都新宿区西新宿7-1-7",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都新宿区西新宿7-1-7 ダイカンプラザA館721"
+  },
+  "r031": {
+    "coordinates": [
+      139.7061,
+      35.690701
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%B0%E5%AE%BF%E5%8C%BA%E6%96%B0%E5%AE%BF3-3-7",
+    "geocodedLabel": "東京都新宿区新宿三丁目３番７号",
+    "geocodeQuery": "東京都新宿区新宿3-3-7",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都新宿区新宿3-3-7 三慶ビル4F"
+  },
+  "r032": {
+    "coordinates": [
+      139.697861,
+      35.695492
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%B0%E5%AE%BF%E5%8C%BA%E8%A5%BF%E6%96%B0%E5%AE%BF7-8-3",
+    "geocodedLabel": "東京都新宿区西新宿七丁目８番３号",
+    "geocodeQuery": "東京都新宿区西新宿7-8-3",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都新宿区西新宿7-8-3 ミスズビル1F"
+  },
+  "r033": {
+    "coordinates": [
+      139.702728,
+      35.69466
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%B0%E5%AE%BF%E5%8C%BA%E6%AD%8C%E8%88%9E%E4%BC%8E%E7%94%BA1-11-1",
+    "geocodedLabel": "東京都新宿区歌舞伎町一丁目１１番１号",
+    "geocodeQuery": "東京都新宿区歌舞伎町1-11-1",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都新宿区歌舞伎町1-11-1 中野ビルB1"
+  },
+  "r037": {
+    "coordinates": [
+      139.722961,
+      35.689491
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%B0%E5%AE%BF%E5%8C%BA%E8%8D%92%E6%9C%A8%E7%94%BA6-42",
+    "geocodedLabel": "東京都新宿区荒木町６番地",
+    "geocodeQuery": "東京都新宿区荒木町6-42",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都新宿区荒木町6-42 AGビル2F"
+  },
+  "r039": {
+    "coordinates": [
+      139.740402,
+      35.701534
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%B0%E5%AE%BF%E5%8C%BA%E7%A5%9E%E6%A5%BD%E5%9D%823-2",
+    "geocodedLabel": "東京都新宿区神楽坂三丁目２番地",
+    "geocodeQuery": "東京都新宿区神楽坂3-2",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都新宿区神楽坂3-2 サンプレイス神楽坂本多横丁1F"
+  },
+  "r040": {
+    "coordinates": [
+      139.728195,
+      35.686508
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%B0%E5%AE%BF%E5%8C%BA%E5%9B%9B%E8%B0%B71-8",
+    "geocodedLabel": "東京都新宿区四谷一丁目８番地",
+    "geocodeQuery": "東京都新宿区四谷1-8",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都新宿区四谷1-8 B1"
+  },
+  "r043": {
+    "coordinates": [
+      139.70401,
+      35.690571
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%B0%E5%AE%BF%E5%8C%BA%E6%96%B0%E5%AE%BF3-31-3",
+    "geocodedLabel": "東京都新宿区新宿三丁目３１番３号",
+    "geocodeQuery": "東京都新宿区新宿3-31-3",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都新宿区新宿3-31-3"
+  },
+  "r044": {
+    "coordinates": [
+      139.725204,
+      35.68996
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%B0%E5%AE%BF%E5%8C%BA%E5%9B%9B%E8%B0%B7%E4%B8%89%E6%A0%84%E7%94%BA12-16",
+    "geocodedLabel": "東京都新宿区四谷三栄町１２番１６号",
+    "geocodeQuery": "東京都新宿区四谷三栄町12-16",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都新宿区四谷三栄町12-16"
+  },
+  "r046": {
+    "coordinates": [
+      139.70752,
+      35.689178
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%B0%E5%AE%BF%E5%8C%BA%E6%96%B0%E5%AE%BF2-4-9",
+    "geocodedLabel": "東京都新宿区新宿二丁目４番９号",
+    "geocodeQuery": "東京都新宿区新宿2-4-9",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都新宿区新宿2-4-9"
+  },
+  "r049": {
+    "coordinates": [
+      139.697861,
+      35.695492
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%B0%E5%AE%BF%E5%8C%BA%E8%A5%BF%E6%96%B0%E5%AE%BF7-8-3",
+    "geocodedLabel": "東京都新宿区西新宿七丁目８番３号",
+    "geocodeQuery": "東京都新宿区西新宿7-8-3",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都新宿区西新宿7-8-3 ミスズビル1F"
+  },
+  "r053": {
+    "coordinates": [
+      139.700928,
+      35.661354
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%8B%E8%B0%B7%E5%8C%BA%E7%A5%9E%E5%8D%971-22-9",
+    "geocodedLabel": "東京都渋谷区神南一丁目２２番９号",
+    "geocodeQuery": "東京都渋谷区神南1-22-9",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都渋谷区神南1-22-9 サンクスビル1・2F"
+  },
+  "r054": {
+    "coordinates": [
+      139.698929,
+      35.663883
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%8B%E8%B0%B7%E5%8C%BA%E5%AE%87%E7%94%B0%E5%B7%9D%E7%94%BA2-1",
+    "geocodedLabel": "東京都渋谷区宇田川町２番１号",
+    "geocodeQuery": "東京都渋谷区宇田川町2-1",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都渋谷区宇田川町2-1 渋谷ホームズB-15"
+  },
+  "r057": {
+    "coordinates": [
+      139.698654,
+      35.660046
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%8B%E8%B0%B7%E5%8C%BA%E5%AE%87%E7%94%B0%E5%B7%9D%E7%94%BA26-6",
+    "geocodedLabel": "東京都渋谷区宇田川町２６番６号",
+    "geocodeQuery": "東京都渋谷区宇田川町26-6",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都渋谷区宇田川町26-6"
+  },
+  "r058": {
+    "coordinates": [
+      139.696884,
+      35.65855
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%8B%E8%B0%B7%E5%8C%BA%E9%81%93%E7%8E%84%E5%9D%822-16-5",
+    "geocodedLabel": "東京都渋谷区道玄坂二丁目１６番５号",
+    "geocodeQuery": "東京都渋谷区道玄坂2-16-5",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都渋谷区道玄坂2-16-5 セントラル共立ビル1F"
+  },
+  "r059": {
+    "coordinates": [
+      139.701797,
+      35.662716
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%8B%E8%B0%B7%E5%8C%BA%E7%A5%9E%E5%AE%AE%E5%89%8D6-20",
+    "geocodedLabel": "東京都渋谷区神宮前六丁目２０番",
+    "geocodeQuery": "東京都渋谷区神宮前6-20",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都渋谷区神宮前6-20 MIYASHITA PARK SOUTH 3F"
+  },
+  "r060": {
+    "coordinates": [
+      139.687042,
+      35.680305
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%8B%E8%B0%B7%E5%8C%BA%E5%88%9D%E5%8F%B01-38-10",
+    "geocodedLabel": "東京都渋谷区初台一丁目３８番１０号",
+    "geocodeQuery": "東京都渋谷区初台1-38-10",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都渋谷区初台1-38-10 二名ビル2F"
+  },
+  "r061": {
+    "coordinates": [
+      139.702011,
+      35.662376
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%8B%E8%B0%B7%E5%8C%BA%E7%A5%9E%E5%AE%AE%E5%89%8D6-20-10",
+    "geocodedLabel": "東京都渋谷区神宮前六丁目２０番１０号",
+    "geocodeQuery": "東京都渋谷区神宮前6-20-10",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都渋谷区神宮前6-20-10"
+  },
+  "r062": {
+    "coordinates": [
+      139.706055,
+      35.661018
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%8B%E8%B0%B7%E5%8C%BA%E6%B8%8B%E8%B0%B71-5-6",
+    "geocodedLabel": "東京都渋谷区渋谷一丁目５番６号",
+    "geocodeQuery": "東京都渋谷区渋谷1-5-6",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都渋谷区渋谷1-5-6 ラ・コリーナ渋谷B1F"
+  },
+  "r064": {
+    "coordinates": [
+      139.699585,
+      35.656597
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%8B%E8%B0%B7%E5%8C%BA%E6%A1%9C%E4%B8%98%E7%94%BA26-1",
+    "geocodedLabel": "東京都渋谷区桜丘町２６番１号",
+    "geocodeQuery": "東京都渋谷区桜丘町26-1",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都渋谷区桜丘町26-1 セルリアンタワー東急ホテル2F"
+  },
+  "r066": {
+    "coordinates": [
+      139.695343,
+      35.662884
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%8B%E8%B0%B7%E5%8C%BA%E5%AE%87%E7%94%B0%E5%B7%9D%E7%94%BA42-12",
+    "geocodedLabel": "東京都渋谷区宇田川町４２番１２号",
+    "geocodeQuery": "東京都渋谷区宇田川町42-12",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都渋谷区宇田川町42-12 101"
+  },
+  "r067": {
+    "coordinates": [
+      139.696869,
+      35.662498
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%8B%E8%B0%B7%E5%8C%BA%E5%AE%87%E7%94%B0%E5%B7%9D%E7%94%BA10-1",
+    "geocodedLabel": "東京都渋谷区宇田川町１０番１号",
+    "geocodeQuery": "東京都渋谷区宇田川町10-1",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都渋谷区宇田川町10-1 木船ビル"
+  },
+  "r068": {
+    "coordinates": [
+      139.699203,
+      35.662212
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%8B%E8%B0%B7%E5%8C%BA%E5%AE%87%E7%94%B0%E5%B7%9D%E7%94%BA15-1",
+    "geocodedLabel": "東京都渋谷区宇田川町１５番１号",
+    "geocodeQuery": "東京都渋谷区宇田川町15-1",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都渋谷区宇田川町15-1 渋谷PARCO2F"
+  },
+  "r072": {
+    "coordinates": [
+      139.702469,
+      35.660488
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%8B%E8%B0%B7%E5%8C%BA%E6%B8%8B%E8%B0%B71-15-19",
+    "geocodedLabel": "東京都渋谷区渋谷一丁目１５番１９号",
+    "geocodeQuery": "東京都渋谷区渋谷1-15-19",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都渋谷区渋谷1-15-19 二葉ビル2F"
+  },
+  "r075": {
+    "coordinates": [
+      139.700378,
+      35.664783
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%8B%E8%B0%B7%E5%8C%BA%E7%A5%9E%E5%8D%971-5-2",
+    "geocodedLabel": "東京都渋谷区神南一丁目５番２号",
+    "geocodeQuery": "東京都渋谷区神南1-5-2",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都渋谷区神南1-5-2"
+  },
+  "r076": {
+    "coordinates": [
+      139.679977,
+      35.66901
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%8B%E8%B0%B7%E5%8C%BA%E4%B8%8A%E5%8E%9F1-32-16",
+    "geocodedLabel": "東京都渋谷区上原一丁目３２番１６号",
+    "geocodeQuery": "東京都渋谷区上原1-32-16",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都渋谷区上原1-32-16 近藤ビル1F"
+  },
+  "r082": {
+    "coordinates": [
+      139.708176,
+      35.669254
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%8B%E8%B0%B7%E5%8C%BA%E7%A5%9E%E5%AE%AE%E5%89%8D4-26-4",
+    "geocodedLabel": "東京都渋谷区神宮前四丁目２６番４号",
+    "geocodeQuery": "東京都渋谷区神宮前4-26-4",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都渋谷区神宮前4-26-4"
+  },
+  "r084": {
+    "coordinates": [
+      139.704575,
+      35.667591
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%8B%E8%B0%B7%E5%8C%BA%E7%A5%9E%E5%AE%AE%E5%89%8D6-29-3",
+    "geocodedLabel": "東京都渋谷区神宮前六丁目２９番３号",
+    "geocodeQuery": "東京都渋谷区神宮前6-29-3",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都渋谷区神宮前6-29-3 原宿KYビル2F"
+  },
+  "r087": {
+    "coordinates": [
+      139.708084,
+      35.671207
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%8B%E8%B0%B7%E5%8C%BA%E7%A5%9E%E5%AE%AE%E5%89%8D3-25-7",
+    "geocodedLabel": "東京都渋谷区神宮前三丁目２５番７号",
+    "geocodeQuery": "東京都渋谷区神宮前3-25-7",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都渋谷区神宮前3-25-7 丹治ビル2F"
+  },
+  "r088": {
+    "coordinates": [
+      139.705307,
+      35.670979
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%8B%E8%B0%B7%E5%8C%BA%E7%A5%9E%E5%AE%AE%E5%89%8D1-6-11",
+    "geocodedLabel": "東京都渋谷区神宮前一丁目６番１１号",
+    "geocodeQuery": "東京都渋谷区神宮前1-6-11",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都渋谷区神宮前1-6-11 丸一原宿ビル2・3階"
+  },
+  "r090": {
+    "coordinates": [
+      139.706482,
+      35.668793
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%8B%E8%B0%B7%E5%8C%BA%E7%A5%9E%E5%AE%AE%E5%89%8D4-31-3",
+    "geocodedLabel": "東京都渋谷区神宮前四丁目３１番３号",
+    "geocodeQuery": "東京都渋谷区神宮前4-31-3",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都渋谷区神宮前4-31-3 鶴岡ビルB1F"
+  },
+  "r092": {
+    "coordinates": [
+      139.70639,
+      35.667313
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%8B%E8%B0%B7%E5%8C%BA%E7%A5%9E%E5%AE%AE%E5%89%8D6-1-4",
+    "geocodedLabel": "東京都渋谷区神宮前六丁目１番４号",
+    "geocodeQuery": "東京都渋谷区神宮前6-1-4",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都渋谷区神宮前6-1-4 内藤表参道ビル4F"
+  },
+  "r093-2": {
+    "coordinates": [
+      139.667343,
+      35.660301
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%96%E7%94%B0%E8%B0%B7%E5%8C%BA%E5%8C%97%E6%B2%A22-19-17",
+    "geocodedLabel": "東京都世田谷区北沢二丁目１９番１７号",
+    "geocodeQuery": "東京都世田谷区北沢2-19-17",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都世田谷区北沢2-19-17 サワダヤビル3F-A"
+  },
+  "r093-3": {
+    "coordinates": [
+      139.702286,
+      35.663723
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%8B%E8%B0%B7%E5%8C%BA%E7%A5%9E%E5%AE%AE%E5%89%8D6-19-17",
+    "geocodedLabel": "東京都渋谷区神宮前六丁目１９番１７号",
+    "geocodeQuery": "東京都渋谷区神宮前6-19-17",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都渋谷区神宮前6-19-17 ペリエ神宮前3階"
+  },
+  "r093-4": {
+    "coordinates": [
+      139.669281,
+      35.662064
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%96%E7%94%B0%E8%B0%B7%E5%8C%BA%E5%8C%97%E6%B2%A22-8-4",
+    "geocodedLabel": "東京都世田谷区北沢二丁目８番４号",
+    "geocodeQuery": "東京都世田谷区北沢2-8-4",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都世田谷区北沢2-8-4 松田ビル1F"
+  },
+  "r094": {
+    "coordinates": [
+      139.703552,
+      35.664455
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%8B%E8%B0%B7%E5%8C%BA%E7%A5%9E%E5%AE%AE%E5%89%8D5-28-7",
+    "geocodedLabel": "東京都渋谷区神宮前五丁目２８番７号",
+    "geocodeQuery": "東京都渋谷区神宮前5-28-7",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都渋谷区神宮前5-28-7-207"
+  },
+  "r096": {
+    "coordinates": [
+      139.713242,
+      35.670925
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%8B%E8%B0%B7%E5%8C%BA%E7%A5%9E%E5%AE%AE%E5%89%8D3-7-2",
+    "geocodedLabel": "東京都渋谷区神宮前三丁目７番２号",
+    "geocodeQuery": "東京都渋谷区神宮前3-7-2",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都渋谷区神宮前3-7-2 H+神宮前4F"
+  },
+  "r097": {
+    "coordinates": [
+      139.703827,
+      35.666153
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%8B%E8%B0%B7%E5%8C%BA%E7%A5%9E%E5%AE%AE%E5%89%8D6-12-15",
+    "geocodedLabel": "東京都渋谷区神宮前六丁目１２番１５号",
+    "geocodeQuery": "東京都渋谷区神宮前6-12-15",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都渋谷区神宮前6-12-15 ハイネスト原宿"
+  },
+  "r098": {
+    "coordinates": [
+      139.705551,
+      35.668907
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%8B%E8%B0%B7%E5%8C%BA%E7%A5%9E%E5%AE%AE%E5%89%8D1-11-6",
+    "geocodedLabel": "東京都渋谷区神宮前一丁目１１番６号",
+    "geocodeQuery": "東京都渋谷区神宮前1-11-6",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都渋谷区神宮前1-11-6 ラフォーレ原宿B1.5F"
+  },
+  "r099": {
+    "coordinates": [
+      139.707596,
+      35.669834
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%8B%E8%B0%B7%E5%8C%BA%E7%A5%9E%E5%AE%AE%E5%89%8D3-21-12",
+    "geocodedLabel": "東京都渋谷区神宮前三丁目２１番１２号",
+    "geocodeQuery": "東京都渋谷区神宮前3-21-12",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都渋谷区神宮前3-21-12 中田ビルB1F"
+  },
+  "r100": {
+    "coordinates": [
+      139.70549,
+      35.665718
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%8B%E8%B0%B7%E5%8C%BA%E7%A5%9E%E5%AE%AE%E5%89%8D5-17-9",
+    "geocodedLabel": "東京都渋谷区神宮前五丁目１７番９号",
+    "geocodeQuery": "東京都渋谷区神宮前5-17-9",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都渋谷区神宮前5-17-9 ヒューリック神宮前1F・2F"
+  },
+  "r101": {
+    "coordinates": [
+      139.708237,
+      35.669376
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%8B%E8%B0%B7%E5%8C%BA%E7%A5%9E%E5%AE%AE%E5%89%8D4-26-3",
+    "geocodedLabel": "東京都渋谷区神宮前四丁目２６番３号",
+    "geocodeQuery": "東京都渋谷区神宮前4-26-3",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都渋谷区神宮前4-26-3 原宿MITTE A棟"
+  },
+  "r102": {
+    "coordinates": [
+      139.702515,
+      35.664394
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%8B%E8%B0%B7%E5%8C%BA%E7%A5%9E%E5%AE%AE%E5%89%8D6-18-8",
+    "geocodedLabel": "東京都渋谷区神宮前六丁目１８番８号",
+    "geocodeQuery": "東京都渋谷区神宮前6-18-8",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都渋谷区神宮前6-18-8"
+  },
+  "r103": {
+    "coordinates": [
+      139.704788,
+      35.670723
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%8B%E8%B0%B7%E5%8C%BA%E7%A5%9E%E5%AE%AE%E5%89%8D1-15-1",
+    "geocodedLabel": "東京都渋谷区神宮前一丁目１５番１号",
+    "geocodeQuery": "東京都渋谷区神宮前1-15-1",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都渋谷区神宮前1-15-1 VIA原宿103A"
+  },
+  "r104": {
+    "coordinates": [
+      139.707672,
+      35.670895
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%8B%E8%B0%B7%E5%8C%BA%E7%A5%9E%E5%AE%AE%E5%89%8D3-24-2",
+    "geocodedLabel": "東京都渋谷区神宮前三丁目２４番２号",
+    "geocodeQuery": "東京都渋谷区神宮前3-24-2",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "3-24-2 Jingumae, Shibuya-ku, Tokyo"
+  },
+  "r117": {
+    "coordinates": [
+      139.708435,
+      35.647354
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%8B%E8%B0%B7%E5%8C%BA%E6%81%B5%E6%AF%94%E5%AF%BF%E8%A5%BF1-8-10",
+    "geocodedLabel": "東京都渋谷区恵比寿西一丁目８番１０号",
+    "geocodeQuery": "東京都渋谷区恵比寿西1-8-10",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都渋谷区恵比寿西1-8-10 Ebisu髙橋ビル1F"
+  },
+  "r118": {
+    "coordinates": [
+      139.719009,
+      35.644321
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%8B%E8%B0%B7%E5%8C%BA%E6%81%B5%E6%AF%94%E5%AF%BF3-42-12",
+    "geocodedLabel": "東京都渋谷区恵比寿三丁目４２番１２号",
+    "geocodeQuery": "東京都渋谷区恵比寿3-42-12",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都渋谷区恵比寿3-42-12 1F"
+  },
+  "r119": {
+    "coordinates": [
+      139.715027,
+      35.642181
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E7%9B%AE%E9%BB%92%E5%8C%BA%E4%B8%89%E7%94%B01-13-3",
+    "geocodedLabel": "東京都目黒区三田一丁目１３番３号",
+    "geocodeQuery": "東京都目黒区三田1-13-3",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都目黒区三田1-13-3 恵比寿ガーデンプレイス内"
+  },
+  "r123": {
+    "coordinates": [
+      139.774033,
+      35.70071
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%8D%83%E4%BB%A3%E7%94%B0%E5%8C%BA%E7%A5%9E%E7%94%B0%E7%B7%B4%E5%A1%80%E7%94%BA15-1",
+    "geocodedLabel": "東京都千代田区神田練塀町",
+    "geocodeQuery": "東京都千代田区神田練塀町15-1",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都千代田区神田練塀町15-1 SEEKBASE内3区画"
+  },
+  "r125": {
+    "coordinates": [
+      139.764679,
+      35.679085
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%8D%83%E4%BB%A3%E7%94%B0%E5%8C%BA%E4%B8%B8%E3%81%AE%E5%86%852-7-3",
+    "geocodedLabel": "東京都千代田区丸の内二丁目７番",
+    "geocodeQuery": "東京都千代田区丸の内2-7-3",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都千代田区丸の内2-7-3 東京ビルTOKIA2F"
+  },
+  "r126": {
+    "coordinates": [
+      139.777328,
+      35.701187
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%8F%B0%E6%9D%B1%E5%8C%BA%E5%8F%B0%E6%9D%B11-13-9",
+    "geocodedLabel": "東京都台東区台東一丁目１３番９号",
+    "geocodeQuery": "東京都台東区台東1-13-9",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都台東区台東1-13-9 第五光正ビル1F"
+  },
+  "r128": {
+    "coordinates": [
+      139.764267,
+      35.695885
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%8D%83%E4%BB%A3%E7%94%B0%E5%8C%BA%E7%A5%9E%E7%94%B0%E9%A7%BF%E6%B2%B3%E5%8F%B03-3-17",
+    "geocodedLabel": "東京都千代田区神田駿河台三丁目３番",
+    "geocodeQuery": "東京都千代田区神田駿河台3-3-17",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都千代田区神田駿河台3-3-17 UZビル B1F"
+  },
+  "r130": {
+    "coordinates": [
+      139.767288,
+      35.685474
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%8D%83%E4%BB%A3%E7%94%B0%E5%8C%BA%E5%A4%A7%E6%89%8B%E7%94%BA2-2-1",
+    "geocodedLabel": "東京都千代田区大手町二丁目２番",
+    "geocodeQuery": "東京都千代田区大手町2-2-1",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都千代田区大手町2-2-1 新大手町ビル地下1階"
+  },
+  "r132": {
+    "coordinates": [
+      139.77063,
+      35.701408
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%8D%83%E4%BB%A3%E7%94%B0%E5%8C%BA%E5%A4%96%E7%A5%9E%E7%94%B03-10-5",
+    "geocodedLabel": "東京都千代田区外神田三丁目１０番５号",
+    "geocodeQuery": "東京都千代田区外神田3-10-5",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都千代田区外神田3-10-5 イサミヤ第3ビル4F"
+  },
+  "r135": {
+    "coordinates": [
+      139.764679,
+      35.679085
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%8D%83%E4%BB%A3%E7%94%B0%E5%8C%BA%E4%B8%B8%E3%81%AE%E5%86%852-7-2",
+    "geocodedLabel": "東京都千代田区丸の内二丁目７番",
+    "geocodeQuery": "東京都千代田区丸の内2-7-2",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "KITTE 2–3F, 2-7-2 Marunouchi, Chiyoda-ku, Tokyo"
+  },
+  "r141": {
+    "coordinates": [
+      139.759903,
+      35.69524
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%8D%83%E4%BB%A3%E7%94%B0%E5%8C%BA%E7%A5%9E%E7%94%B0%E7%A5%9E%E4%BF%9D%E7%94%BA1-17",
+    "geocodedLabel": "東京都千代田区神田神保町一丁目１７番",
+    "geocodeQuery": "東京都千代田区神田神保町1-17",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都千代田区神田神保町1-17 東京堂神保町第1ビル2階"
+  },
+  "r142": {
+    "coordinates": [
+      139.757355,
+      35.695724
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%8D%83%E4%BB%A3%E7%94%B0%E5%8C%BA%E7%A5%9E%E7%94%B0%E7%A5%9E%E4%BF%9D%E7%94%BA2-3",
+    "geocodedLabel": "東京都千代田区神田神保町二丁目３番地",
+    "geocodeQuery": "東京都千代田区神田神保町2-3",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都千代田区神田神保町2-3 神田古書センター2F"
+  },
+  "r143": {
+    "coordinates": [
+      139.756393,
+      35.697433
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%8D%83%E4%BB%A3%E7%94%B0%E5%8C%BA%E7%A5%9E%E7%94%B0%E7%A5%9E%E4%BF%9D%E7%94%BA2-20",
+    "geocodedLabel": "東京都千代田区神田神保町二丁目２０番",
+    "geocodeQuery": "東京都千代田区神田神保町2-20",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都千代田区神田神保町2-20 城南会館101"
+  },
+  "r145": {
+    "coordinates": [
+      139.758499,
+      35.695465
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%8D%83%E4%BB%A3%E7%94%B0%E5%8C%BA%E7%A5%9E%E7%94%B0%E7%A5%9E%E4%BF%9D%E7%94%BA1-11",
+    "geocodedLabel": "東京都千代田区神田神保町一丁目１１番",
+    "geocodeQuery": "東京都千代田区神田神保町1-11",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都千代田区神田神保町1-11"
+  },
+  "r146": {
+    "coordinates": [
+      139.759888,
+      35.695683
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%8D%83%E4%BB%A3%E7%94%B0%E5%8C%BA%E7%A5%9E%E7%94%B0%E7%A5%9E%E4%BF%9D%E7%94%BA1-3",
+    "geocodedLabel": "東京都千代田区神田神保町一丁目３番",
+    "geocodeQuery": "東京都千代田区神田神保町1-3",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都千代田区神田神保町1-3"
+  },
+  "r147": {
+    "coordinates": [
+      139.753784,
+      35.695591
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%8D%83%E4%BB%A3%E7%94%B0%E5%8C%BA%E7%A5%9E%E7%94%B0%E7%A5%9E%E4%BF%9D%E7%94%BA3-5",
+    "geocodedLabel": "東京都千代田区神田神保町三丁目５番",
+    "geocodeQuery": "東京都千代田区神田神保町3-5",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都千代田区神田神保町3-5 ニュー徳栄ビル1F"
+  },
+  "r151": {
+    "coordinates": [
+      139.771744,
+      35.679047
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%AD%E5%A4%AE%E5%8C%BA%E4%BA%AC%E6%A9%8B1-7-1",
+    "geocodedLabel": "東京都中央区京橋一丁目７番１号",
+    "geocodeQuery": "東京都中央区京橋1-7-1",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都中央区京橋1-7-1 TODA BUILDING6F"
+  },
+  "r154": {
+    "coordinates": [
+      139.77536,
+      35.678242
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%AD%E5%A4%AE%E5%8C%BA%E5%85%AB%E4%B8%81%E5%A0%801-1-4",
+    "geocodedLabel": "東京都中央区八丁堀一丁目１番４号",
+    "geocodeQuery": "東京都中央区八丁堀1-1-4",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都中央区八丁堀1-1-4 B1F"
+  },
+  "r155": {
+    "coordinates": [
+      139.771744,
+      35.679047
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%AD%E5%A4%AE%E5%8C%BA%E4%BA%AC%E6%A9%8B1-7-1",
+    "geocodedLabel": "東京都中央区京橋一丁目７番１号",
+    "geocodeQuery": "東京都中央区京橋1-7-1",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都中央区京橋1-7-1 TODA BUILDING6F"
+  },
+  "r159": {
+    "coordinates": [
+      139.765533,
+      35.673969
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%AD%E5%A4%AE%E5%8C%BA%E9%8A%80%E5%BA%A72-3-12",
+    "geocodedLabel": "東京都中央区銀座二丁目３番１２号",
+    "geocodeQuery": "東京都中央区銀座2-3-12",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都中央区銀座2-3-12 マロニエゲート銀座3 3F・4F"
+  },
+  "r160": {
+    "coordinates": [
+      139.76355,
+      35.672119
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%AD%E5%A4%AE%E5%8C%BA%E9%8A%80%E5%BA%A75-4-1",
+    "geocodedLabel": "東京都中央区銀座五丁目４番１号",
+    "geocodeQuery": "東京都中央区銀座5-4-1",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都中央区銀座5-4-1 銀座メゾンエルメス8・9F"
+  },
+  "r161": {
+    "coordinates": [
+      139.7621,
+      35.671249
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%AD%E5%A4%AE%E5%8C%BA%E9%8A%80%E5%BA%A76-5-16",
+    "geocodedLabel": "東京都中央区銀座六丁目５番１６号",
+    "geocodeQuery": "東京都中央区銀座6-5-16",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都中央区銀座6-5-16 三楽ビル7F"
+  },
+  "r162": {
+    "coordinates": [
+      139.762299,
+      35.667957
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%AD%E5%A4%AE%E5%8C%BA%E9%8A%80%E5%BA%A78-10-15",
+    "geocodedLabel": "東京都中央区銀座八丁目１０番１５号",
+    "geocodeQuery": "東京都中央区銀座8-10-15",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都中央区銀座8-10-15"
+  },
+  "r163": {
+    "coordinates": [
+      139.763626,
+      35.670086
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%AD%E5%A4%AE%E5%8C%BA%E9%8A%80%E5%BA%A76-9-5",
+    "geocodedLabel": "東京都中央区銀座六丁目９番５号",
+    "geocodeQuery": "東京都中央区銀座6-9-5",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "Ginza Komatsu West, 6-9-5 Ginza, Chuo-ku, Tokyo"
+  },
+  "r164": {
+    "coordinates": [
+      139.76355,
+      35.672119
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%AD%E5%A4%AE%E5%8C%BA%E9%8A%80%E5%BA%A75-4-1",
+    "geocodedLabel": "東京都中央区銀座五丁目４番１号",
+    "geocodeQuery": "東京都中央区銀座5-4-1",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都中央区銀座5-4-1 銀座メゾンエルメス8・9F"
+  },
+  "r165": {
+    "coordinates": [
+      139.671463,
+      35.643482
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%96%E7%94%B0%E8%B0%B7%E5%8C%BA%E4%B8%89%E8%BB%92%E8%8C%B6%E5%B1%8B1-38-8",
+    "geocodedLabel": "東京都世田谷区三軒茶屋一丁目３８番８号",
+    "geocodeQuery": "東京都世田谷区三軒茶屋1-38-8",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都世田谷区三軒茶屋1-38-8 ステーションプラザロイヤル601"
+  },
+  "r166": {
+    "coordinates": [
+      139.762833,
+      35.670464
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%AD%E5%A4%AE%E5%8C%BA%E9%8A%80%E5%BA%A76-7-6",
+    "geocodedLabel": "東京都中央区銀座六丁目７番６号",
+    "geocodeQuery": "東京都中央区銀座6-7-6",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都中央区銀座6-7-6 ラペビル7F"
+  },
+  "r167": {
+    "coordinates": [
+      139.766907,
+      35.674801
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%AD%E5%A4%AE%E5%8C%BA%E9%8A%80%E5%BA%A71-5-13",
+    "geocodedLabel": "東京都中央区銀座一丁目５番１３号",
+    "geocodeQuery": "東京都中央区銀座1-5-13",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都中央区銀座1-5-13 MODERNS GINZA B1F"
+  },
+  "r168": {
+    "coordinates": [
+      139.76326,
+      35.670959
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%AD%E5%A4%AE%E5%8C%BA%E9%8A%80%E5%BA%A75-5-11",
+    "geocodedLabel": "東京都中央区銀座五丁目５番１１号",
+    "geocodeQuery": "東京都中央区銀座5-5-11",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都中央区銀座5-5-11 塚本不動産ビルB1F"
+  },
+  "r169": {
+    "coordinates": [
+      139.760773,
+      35.670364
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%AD%E5%A4%AE%E5%8C%BA%E9%8A%80%E5%BA%A77-3-6",
+    "geocodedLabel": "東京都中央区銀座七丁目３番６号",
+    "geocodeQuery": "東京都中央区銀座7-3-6",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都中央区銀座7-3-6"
+  },
+  "r178": {
+    "coordinates": [
+      139.792419,
+      35.712383
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%8F%B0%E6%9D%B1%E5%8C%BA%E6%B5%85%E8%8D%891-24-5",
+    "geocodedLabel": "東京都台東区浅草一丁目２４番５号",
+    "geocodeQuery": "東京都台東区浅草1-24-5",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都台東区浅草1-24-5"
+  },
+  "r178-2": {
+    "coordinates": [
+      139.793655,
+      35.712315
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%8F%B0%E6%9D%B1%E5%8C%BA%E6%B5%85%E8%8D%891-23-8",
+    "geocodedLabel": "東京都台東区浅草一丁目２３番８号",
+    "geocodeQuery": "東京都台東区浅草1-23-8",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都台東区浅草1-23-8"
+  },
+  "r178-3": {
+    "coordinates": [
+      139.795044,
+      35.717003
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%8F%B0%E6%9D%B1%E5%8C%BA%E6%B5%85%E8%8D%893-8-4",
+    "geocodedLabel": "東京都台東区浅草三丁目８番４号",
+    "geocodeQuery": "東京都台東区浅草3-8-4",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都台東区浅草3-8-4"
+  },
+  "r179": {
+    "coordinates": [
+      139.783173,
+      35.697639
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%8F%B0%E6%9D%B1%E5%8C%BA%E6%B5%85%E8%8D%89%E6%A9%8B1-24-2",
+    "geocodedLabel": "東京都台東区浅草橋一丁目２４番２号",
+    "geocodeQuery": "東京都台東区浅草橋1-24-2",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都台東区浅草橋1-24-2"
+  },
+  "r191": {
+    "coordinates": [
+      139.768585,
+      35.727757
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E8%8D%92%E5%B7%9D%E5%8C%BA%E8%A5%BF%E6%97%A5%E6%9A%AE%E9%87%8C3-2-5",
+    "geocodedLabel": "東京都荒川区西日暮里三丁目２番５号",
+    "geocodeQuery": "東京都荒川区西日暮里3-2-5",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都荒川区西日暮里3-2-5"
+  },
+  "r192": {
+    "coordinates": [
+      139.770752,
+      35.721161
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%8F%B0%E6%9D%B1%E5%8C%BA%E8%B0%B7%E4%B8%AD6-1-29",
+    "geocodedLabel": "東京都台東区谷中六丁目１番２９号",
+    "geocodeQuery": "東京都台東区谷中6-1-29",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都台東区谷中6-1-29"
+  },
+  "r193": {
+    "coordinates": [
+      139.770432,
+      35.721832
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%8F%B0%E6%9D%B1%E5%8C%BA%E8%B0%B7%E4%B8%AD6-1-23",
+    "geocodedLabel": "東京都台東区谷中六丁目１番２３号",
+    "geocodeQuery": "東京都台東区谷中6-1-23",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "6-1-23 Yanaka, Taito-ku, Tokyo"
+  },
+  "r194": {
+    "coordinates": [
+      139.770264,
+      35.723972
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%8F%B0%E6%9D%B1%E5%8C%BA%E8%B0%B7%E4%B8%AD7-5-24",
+    "geocodedLabel": "東京都台東区谷中七丁目５番２４号",
+    "geocodeQuery": "東京都台東区谷中7-5-24",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都台東区谷中7-5-24"
+  },
+  "r198": {
+    "coordinates": [
+      139.800385,
+      35.726841
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%8F%B0%E6%9D%B1%E5%8C%BA%E6%97%A5%E6%9C%AC%E5%A0%A41-23-9",
+    "geocodedLabel": "東京都台東区日本堤一丁目２３番９号",
+    "geocodeQuery": "東京都台東区日本堤1-23-9",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "1-23-9 Nihonzutsumi, Taito-ku, Tokyo"
+  },
+  "r202": {
+    "coordinates": [
+      139.752441,
+      35.668018
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%AF%E5%8C%BA%E8%A5%BF%E6%96%B0%E6%A9%8B1-20-11",
+    "geocodedLabel": "東京都港区西新橋一丁目２０番",
+    "geocodeQuery": "東京都港区西新橋1-20-11",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都港区西新橋1-20-11 安藤ビル1S"
+  },
+  "r208": {
+    "coordinates": [
+      139.734314,
+      35.655537
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%AF%E5%8C%BA%E9%BA%BB%E5%B8%83%E5%8D%81%E7%95%AA2-8-3",
+    "geocodedLabel": "東京都港区麻布十番二丁目８番",
+    "geocodeQuery": "東京都港区麻布十番2-8-3",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都港区麻布十番2-8-3 3F"
+  },
+  "r217": {
+    "coordinates": [
+      139.730057,
+      35.663601
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%AF%E5%8C%BA%E5%85%AD%E6%9C%AC%E6%9C%A87-16-11",
+    "geocodedLabel": "東京都港区六本木七丁目１６番",
+    "geocodeQuery": "東京都港区六本木7-16-11",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都港区六本木7-16-11 ヴェルデ六本木3F"
+  },
+  "r221": {
+    "coordinates": [
+      139.732208,
+      35.666023
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%AF%E5%8C%BA%E8%B5%A4%E5%9D%829-7-4",
+    "geocodedLabel": "東京都港区赤坂九丁目７番",
+    "geocodeQuery": "東京都港区赤坂9-7-4",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "9-7-4 Akasaka, Minato-ku, Tokyo, Midtown Garden Terrace 4F"
+  },
+  "r222": {
+    "coordinates": [
+      139.737701,
+      35.674896
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%AF%E5%8C%BA%E8%B5%A4%E5%9D%823-7-15",
+    "geocodedLabel": "東京都港区赤坂三丁目７番",
+    "geocodeQuery": "東京都港区赤坂3-7-15",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都港区赤坂3-7-15 パラダイスⅡ"
+  },
+  "r227": {
+    "coordinates": [
+      139.720688,
+      35.66835
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%AF%E5%8C%BA%E5%8D%97%E9%9D%92%E5%B1%B12-32-2",
+    "geocodedLabel": "東京都港区南青山二丁目３２番",
+    "geocodeQuery": "東京都港区南青山2-32-2",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都港区南青山2-32-2"
+  },
+  "r228": {
+    "coordinates": [
+      139.716278,
+      35.660877
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%AF%E5%8C%BA%E5%8D%97%E9%9D%92%E5%B1%B16-3-16",
+    "geocodedLabel": "東京都港区南青山六丁目３番",
+    "geocodeQuery": "東京都港区南青山6-3-16",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "6-3-16 Minami-Aoyama, Minato-ku, Tokyo"
+  },
+  "r229": {
+    "coordinates": [
+      139.713928,
+      35.66394
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%AF%E5%8C%BA%E5%8D%97%E9%9D%92%E5%B1%B15-2-1",
+    "geocodedLabel": "東京都港区南青山五丁目２番",
+    "geocodeQuery": "東京都港区南青山5-2-1",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都港区南青山5-2-1"
+  },
+  "r230-2": {
+    "coordinates": [
+      139.649643,
+      35.641502
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%96%E7%94%B0%E8%B0%B7%E5%8C%BA%E4%B8%96%E7%94%B0%E8%B0%B71-17-4",
+    "geocodedLabel": "東京都世田谷区世田谷一丁目１７番４号",
+    "geocodeQuery": "東京都世田谷区世田谷1-17-4",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都世田谷区世田谷1-17-4"
+  },
+  "r232": {
+    "coordinates": [
+      139.716034,
+      35.661964
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%AF%E5%8C%BA%E5%8D%97%E9%9D%92%E5%B1%B16-1-19",
+    "geocodedLabel": "東京都港区南青山六丁目１番",
+    "geocodeQuery": "東京都港区南青山6-1-19",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "6-1-19 Minami-Aoyama, Minato-ku, Tokyo"
+  },
+  "r234": {
+    "coordinates": [
+      139.715271,
+      35.66317
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%AF%E5%8C%BA%E5%8D%97%E9%9D%92%E5%B1%B15-3-22",
+    "geocodedLabel": "東京都港区南青山五丁目３番",
+    "geocodeQuery": "東京都港区南青山5-3-22",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都港区南青山5-3-22"
+  },
+  "r238": {
+    "coordinates": [
+      139.774307,
+      35.626797
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%AF%E5%8C%BA%E5%8F%B0%E5%A0%B42-4-8",
+    "geocodedLabel": "東京都港区台場二丁目４番",
+    "geocodeQuery": "東京都港区台場2-4-8",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都港区台場2-4-8"
+  },
+  "r243": {
+    "coordinates": [
+      139.760559,
+      35.706684
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%87%E4%BA%AC%E5%8C%BA%E6%9C%AC%E9%83%B72-39-5",
+    "geocodedLabel": "東京都文京区本郷二丁目３９番５号",
+    "geocodeQuery": "東京都文京区本郷2-39-5",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都文京区本郷2-39-5"
+  },
+  "r244": {
+    "coordinates": [
+      139.752213,
+      35.721989
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%87%E4%BA%AC%E5%8C%BA%E7%99%BD%E5%B1%B15-33-19",
+    "geocodedLabel": "東京都文京区白山五丁目３３番１９号",
+    "geocodeQuery": "東京都文京区白山5-33-19",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都文京区白山5-33-19"
+  },
+  "r245": {
+    "coordinates": [
+      139.726364,
+      35.713558
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%87%E4%BA%AC%E5%8C%BA%E9%96%A2%E5%8F%A33-16-15",
+    "geocodedLabel": "東京都文京区関口三丁目１６番１５号",
+    "geocodeQuery": "東京都文京区関口3-16-15",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "3-16-15 Sekiguchi, Bunkyo-ku, Tokyo"
+  },
+  "r256": {
+    "coordinates": [
+      139.715378,
+      35.731079
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E8%B1%8A%E5%B3%B6%E5%8C%BA%E6%9D%B1%E6%B1%A0%E8%A2%8B1-20-7",
+    "geocodedLabel": "東京都豊島区東池袋一丁目２０番７号",
+    "geocodeQuery": "東京都豊島区東池袋1-20-7",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都豊島区東池袋1-20-7 アニメイト池袋本店8F"
+  },
+  "r257": {
+    "coordinates": [
+      139.718719,
+      35.721268
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E8%B1%8A%E5%B3%B6%E5%8C%BA%E5%8D%97%E6%B1%A0%E8%A2%8B4-25-1",
+    "geocodedLabel": "東京都豊島区南池袋四丁目２５番１号",
+    "geocodeQuery": "東京都豊島区南池袋4-25-1",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都豊島区南池袋4-25-1"
+  },
+  "r258": {
+    "coordinates": [
+      139.719849,
+      35.727917
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E8%B1%8A%E5%B3%B6%E5%8C%BA%E6%9D%B1%E6%B1%A0%E8%A2%8B3-1-4",
+    "geocodedLabel": "東京都豊島区東池袋三丁目１番４号",
+    "geocodeQuery": "東京都豊島区東池袋3-1-4",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都豊島区東池袋3-1-4 サンシャインシティ文化会館ビル7階"
+  },
+  "r260": {
+    "coordinates": [
+      139.713837,
+      35.731247
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E8%B1%8A%E5%B3%B6%E5%8C%BA%E6%9D%B1%E6%B1%A0%E8%A2%8B1-7-2",
+    "geocodedLabel": "東京都豊島区東池袋一丁目７番２号",
+    "geocodeQuery": "東京都豊島区東池袋1-7-2",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都豊島区東池袋1-7-2 東駒ビル1F"
+  },
+  "r261": {
+    "coordinates": [
+      139.707413,
+      35.726425
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E8%B1%8A%E5%B3%B6%E5%8C%BA%E8%A5%BF%E6%B1%A0%E8%A2%8B2-31-3",
+    "geocodedLabel": "東京都豊島区西池袋二丁目３１番３号",
+    "geocodeQuery": "東京都豊島区西池袋2-31-3",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "2-31-3 Nishi-Ikebukuro, Toshima-ku, Tokyo"
+  },
+  "r265": {
+    "coordinates": [
+      139.665665,
+      35.709923
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%AD%E9%87%8E%E5%8C%BA%E4%B8%AD%E9%87%8E5-52-15",
+    "geocodedLabel": "東京都中野区中野五丁目５２番１５号",
+    "geocodeQuery": "東京都中野区中野5-52-15",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都中野区中野5-52-15 中野ブロードウェイ"
+  },
+  "r267": {
+    "coordinates": [
+      139.632553,
+      35.705189
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%9D%89%E4%B8%A6%E5%8C%BA%E9%98%BF%E4%BD%90%E8%B0%B7%E5%8C%972-9-5",
+    "geocodedLabel": "東京都杉並区阿佐谷北二丁目９番５号",
+    "geocodeQuery": "東京都杉並区阿佐谷北2-9-5",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都杉並区阿佐谷北2-9-5"
+  },
+  "r271": {
+    "coordinates": [
+      139.598267,
+      35.704533
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%9D%89%E4%B8%A6%E5%8C%BA%E8%A5%BF%E8%8D%BB%E5%8C%973-4-8",
+    "geocodedLabel": "東京都杉並区西荻北三丁目４番８号",
+    "geocodeQuery": "東京都杉並区西荻北3-4-8",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都杉並区西荻北3-4-8 西荻ビルB1F"
+  },
+  "r272": {
+    "coordinates": [
+      139.634583,
+      35.70462
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%9D%89%E4%B8%A6%E5%8C%BA%E9%98%BF%E4%BD%90%E8%B0%B7%E5%8D%973-37-11",
+    "geocodedLabel": "東京都杉並区阿佐谷南三丁目３７番１１号",
+    "geocodeQuery": "東京都杉並区阿佐谷南3-37-11",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都杉並区阿佐谷南3-37-11 スマイルホテル東京阿佐ヶ谷1F"
+  },
+  "r273": {
+    "coordinates": [
+      139.622803,
+      35.698929
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%9D%89%E4%B8%A6%E5%8C%BA%E8%8D%BB%E7%AA%AA2-42-12",
+    "geocodedLabel": "東京都杉並区荻窪二丁目４２番１２号",
+    "geocodeQuery": "東京都杉並区荻窪2-42-12",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都杉並区荻窪2-42-12"
+  },
+  "r274": {
+    "coordinates": [
+      139.596115,
+      35.706169
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%9D%89%E4%B8%A6%E5%8C%BA%E8%A5%BF%E8%8D%BB%E5%8C%974-3-2",
+    "geocodedLabel": "東京都杉並区西荻北四丁目３番２号",
+    "geocodeQuery": "東京都杉並区西荻北4-3-2",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都杉並区西荻北4-3-2 ベルメゾン西荻2F"
+  },
+  "r277": {
+    "coordinates": [
+      139.633759,
+      35.705032
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%9D%89%E4%B8%A6%E5%8C%BA%E9%98%BF%E4%BD%90%E8%B0%B7%E5%8C%972-4-1",
+    "geocodedLabel": "東京都杉並区阿佐谷北二丁目４番１号",
+    "geocodeQuery": "東京都杉並区阿佐谷北2-4-1",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都杉並区阿佐谷北2-4-1"
+  },
+  "r281": {
+    "coordinates": [
+      139.648727,
+      35.703953
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%9D%89%E4%B8%A6%E5%8C%BA%E9%AB%98%E5%86%86%E5%AF%BA%E5%8D%973-57-8",
+    "geocodedLabel": "東京都杉並区高円寺南三丁目５７番８号",
+    "geocodeQuery": "東京都杉並区高円寺南3-57-8",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "3-57-8 Koenjiminami, Suginami-ku, Tokyo, 2F"
+  },
+  "r285": {
+    "coordinates": [
+      139.652191,
+      35.702477
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%9D%89%E4%B8%A6%E5%8C%BA%E9%AB%98%E5%86%86%E5%AF%BA%E5%8D%974-3-2",
+    "geocodedLabel": "東京都杉並区高円寺南四丁目３番２号",
+    "geocodeQuery": "東京都杉並区高円寺南4-3-2",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "4-3-2 Koenjiminami, Suginami-ku, Tokyo, Sanko Building 1F"
+  },
+  "r287": {
+    "coordinates": [
+      139.649719,
+      35.703754
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%9D%89%E4%B8%A6%E5%8C%BA%E9%AB%98%E5%86%86%E5%AF%BA%E5%8D%974-23-5",
+    "geocodedLabel": "東京都杉並区高円寺南四丁目２３番５号",
+    "geocodeQuery": "東京都杉並区高円寺南4-23-5",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "4-23-5 Koenjiminami, Suginami-ku, Tokyo, ACP Building 3F"
+  },
+  "r288": {
+    "coordinates": [
+      139.648422,
+      35.704025
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%9D%89%E4%B8%A6%E5%8C%BA%E9%AB%98%E5%86%86%E5%AF%BA%E5%8D%973-57-6",
+    "geocodedLabel": "東京都杉並区高円寺南三丁目５７番６号",
+    "geocodeQuery": "東京都杉並区高円寺南3-57-6",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "3-57-6 Koenjiminami, Suginami-ku, Tokyo, 2F"
+  },
+  "r289": {
+    "coordinates": [
+      139.647614,
+      35.706203
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%9D%89%E4%B8%A6%E5%8C%BA%E9%AB%98%E5%86%86%E5%AF%BA%E5%8C%973-17-2",
+    "geocodedLabel": "東京都杉並区高円寺北三丁目１７番２号",
+    "geocodeQuery": "東京都杉並区高円寺北3-17-2",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "3-17-2 Koenjikita, Suginami-ku, Tokyo, Oak Hill Koenji B1"
+  },
+  "r290": {
+    "coordinates": [
+      139.650894,
+      35.706196
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%9D%89%E4%B8%A6%E5%8C%BA%E9%AB%98%E5%86%86%E5%AF%BA%E5%8C%972-4-8",
+    "geocodedLabel": "東京都杉並区高円寺北二丁目４番８号",
+    "geocodeQuery": "東京都杉並区高円寺北2-4-8",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都杉並区高円寺北2-4-8 飯田屋ビル2F"
+  },
+  "r291": {
+    "coordinates": [
+      139.64946,
+      35.702343
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%9D%89%E4%B8%A6%E5%8C%BA%E9%AB%98%E5%86%86%E5%AF%BA%E5%8D%972-49-14",
+    "geocodedLabel": "東京都杉並区高円寺南二丁目４９番１４号",
+    "geocodeQuery": "東京都杉並区高円寺南2-49-14",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都杉並区高円寺南2-49-14"
+  },
+  "r294": {
+    "coordinates": [
+      139.646378,
+      35.706734
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%9D%89%E4%B8%A6%E5%8C%BA%E9%AB%98%E5%86%86%E5%AF%BA%E5%8C%973-8-12",
+    "geocodedLabel": "東京都杉並区高円寺北三丁目８番１２号",
+    "geocodeQuery": "東京都杉並区高円寺北3-8-12",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "3-8-12 Koenjikita, Suginami-ku, Tokyo, Fude Building 402"
+  },
+  "r295": {
+    "coordinates": [
+      139.648193,
+      35.704002
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%9D%89%E4%B8%A6%E5%8C%BA%E9%AB%98%E5%86%86%E5%AF%BA%E5%8D%973-56-7",
+    "geocodedLabel": "東京都杉並区高円寺南三丁目５６番７号",
+    "geocodeQuery": "東京都杉並区高円寺南3-56-7",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都杉並区高円寺南3-56-7"
+  },
+  "r299": {
+    "coordinates": [
+      139.662323,
+      35.642944
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%96%E7%94%B0%E8%B0%B7%E5%8C%BA%E4%B8%89%E8%BB%92%E8%8C%B6%E5%B1%8B2-55-12",
+    "geocodedLabel": "東京都世田谷区三軒茶屋二丁目５５番１２号",
+    "geocodeQuery": "東京都世田谷区三軒茶屋2-55-12",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都世田谷区三軒茶屋2-55-12 ライオンズマンション101"
+  },
+  "r300": {
+    "coordinates": [
+      139.672012,
+      35.642166
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%96%E7%94%B0%E8%B0%B7%E5%8C%BA%E4%B8%89%E8%BB%92%E8%8C%B6%E5%B1%8B1-33-21",
+    "geocodedLabel": "東京都世田谷区三軒茶屋一丁目３３番２１号",
+    "geocodeQuery": "東京都世田谷区三軒茶屋1-33-21",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都世田谷区三軒茶屋1-33-21 3F"
+  },
+  "r301": {
+    "coordinates": [
+      139.652618,
+      35.656216
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%96%E7%94%B0%E8%B0%B7%E5%8C%BA%E6%A2%85%E4%B8%981-33-9",
+    "geocodedLabel": "東京都世田谷区梅丘一丁目３３番９号",
+    "geocodeQuery": "東京都世田谷区梅丘1-33-9",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "1-33-9 Umegaoka, Setagaya-ku, Tokyo, #201"
+  },
+  "r303": {
+    "coordinates": [
+      139.667419,
+      35.650723
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%96%E7%94%B0%E8%B0%B7%E5%8C%BA%E5%A4%AA%E5%AD%90%E5%A0%823-25-6",
+    "geocodedLabel": "東京都世田谷区太子堂三丁目２５番６号",
+    "geocodeQuery": "東京都世田谷区太子堂3-25-6",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都世田谷区太子堂3-25-6 1F"
+  },
+  "r304": {
+    "coordinates": [
+      139.668259,
+      35.649139
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%96%E7%94%B0%E8%B0%B7%E5%8C%BA%E5%A4%AA%E5%AD%90%E5%A0%823-22-10",
+    "geocodedLabel": "東京都世田谷区太子堂三丁目２２番１０号",
+    "geocodeQuery": "東京都世田谷区太子堂3-22-10",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都世田谷区太子堂3-22-10 前田ビル1F"
+  },
+  "r308": {
+    "coordinates": [
+      139.668137,
+      35.663116
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%96%E7%94%B0%E8%B0%B7%E5%8C%BA%E5%8C%97%E6%B2%A22-34-3",
+    "geocodedLabel": "東京都世田谷区北沢二丁目３４番３号",
+    "geocodeQuery": "東京都世田谷区北沢2-34-3",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都世田谷区北沢2-34-3 ミドキタ2F"
+  },
+  "r309": {
+    "coordinates": [
+      139.666199,
+      35.662609
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%96%E7%94%B0%E8%B0%B7%E5%8C%BA%E5%8C%97%E6%B2%A22-26-13",
+    "geocodedLabel": "東京都世田谷区北沢二丁目２６番１３号",
+    "geocodeQuery": "東京都世田谷区北沢2-26-13",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都世田谷区北沢2-26-13"
+  },
+  "r311": {
+    "coordinates": [
+      139.666489,
+      35.661594
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%96%E7%94%B0%E8%B0%B7%E5%8C%BA%E5%8C%97%E6%B2%A22-23-12",
+    "geocodedLabel": "東京都世田谷区北沢二丁目２３番１２号",
+    "geocodeQuery": "東京都世田谷区北沢2-23-12",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都世田谷区北沢2-23-12 下北沢デントビル2A"
+  },
+  "r312": {
+    "coordinates": [
+      139.669128,
+      35.662045
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%96%E7%94%B0%E8%B0%B7%E5%8C%BA%E5%8C%97%E6%B2%A22-9-22",
+    "geocodedLabel": "東京都世田谷区北沢二丁目９番２２号",
+    "geocodeQuery": "東京都世田谷区北沢2-9-22",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都世田谷区北沢2-9-22 EIKO下北ビル3F"
+  },
+  "r314": {
+    "coordinates": [
+      139.667984,
+      35.661755
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%96%E7%94%B0%E8%B0%B7%E5%8C%BA%E5%8C%97%E6%B2%A22-10-10",
+    "geocodedLabel": "東京都世田谷区北沢二丁目１０番１０号",
+    "geocodeQuery": "東京都世田谷区北沢2-10-10",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "2-10-10 Kitazawa, Setagaya-ku, Tokyo, FI Kyodo Building 4F"
+  },
+  "r315": {
+    "coordinates": [
+      139.667511,
+      35.659187
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%96%E7%94%B0%E8%B0%B7%E5%8C%BA%E5%8C%97%E6%B2%A22-1-7",
+    "geocodedLabel": "東京都世田谷区北沢二丁目１番７号",
+    "geocodeQuery": "東京都世田谷区北沢2-1-7",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "2-1-7 Kitazawa, Setagaya-ku, Tokyo, Housing Kitazawa II 4F"
+  },
+  "r316": {
+    "coordinates": [
+      139.668594,
+      35.663132
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%96%E7%94%B0%E8%B0%B7%E5%8C%BA%E5%8C%97%E6%B2%A22-33-6",
+    "geocodedLabel": "東京都世田谷区北沢二丁目３３番６号",
+    "geocodeQuery": "東京都世田谷区北沢2-33-6",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都世田谷区北沢2-33-6 飯嶋ビル202"
+  },
+  "r318": {
+    "coordinates": [
+      139.667984,
+      35.664001
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%96%E7%94%B0%E8%B0%B7%E5%8C%BA%E5%8C%97%E6%B2%A23-27-1",
+    "geocodedLabel": "東京都世田谷区北沢三丁目２７番１号",
+    "geocodeQuery": "東京都世田谷区北沢3-27-1",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都世田谷区北沢3-27-1 YSビル2F"
+  },
+  "r320": {
+    "coordinates": [
+      139.667358,
+      35.659286
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%96%E7%94%B0%E8%B0%B7%E5%8C%BA%E4%BB%A3%E6%B2%A25-36-14",
+    "geocodedLabel": "東京都世田谷区代沢五丁目３６番１４号",
+    "geocodeQuery": "東京都世田谷区代沢5-36-14",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都世田谷区代沢5-36-14 湯浅ビル2F"
+  },
+  "r321": {
+    "coordinates": [
+      139.666626,
+      35.662941
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%96%E7%94%B0%E8%B0%B7%E5%8C%BA%E5%8C%97%E6%B2%A22-29-3",
+    "geocodedLabel": "東京都世田谷区北沢二丁目２９番３号",
+    "geocodeQuery": "東京都世田谷区北沢2-29-3",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都世田谷区北沢2-29-3 パルファンビル2F"
+  },
+  "r321-2": {
+    "coordinates": [
+      139.66803,
+      35.662476
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%96%E7%94%B0%E8%B0%B7%E5%8C%BA%E5%8C%97%E6%B2%A22-31-2",
+    "geocodedLabel": "東京都世田谷区北沢二丁目３１番２号",
+    "geocodeQuery": "東京都世田谷区北沢2-31-2",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都世田谷区北沢2-31-2"
+  },
+  "r322": {
+    "coordinates": [
+      139.664459,
+      35.662186
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%96%E7%94%B0%E8%B0%B7%E5%8C%BA%E4%BB%A3%E7%94%B06-1-18",
+    "geocodedLabel": "東京都世田谷区代田六丁目１番１８号",
+    "geocodeQuery": "東京都世田谷区代田6-1-18",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都世田谷区代田6-1-18"
+  },
+  "r326": {
+    "coordinates": [
+      139.698303,
+      35.646835
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E7%9B%AE%E9%BB%92%E5%8C%BA%E4%B8%8A%E7%9B%AE%E9%BB%921-15-1",
+    "geocodedLabel": "東京都目黒区上目黒一丁目１５番１号",
+    "geocodeQuery": "東京都目黒区上目黒1-15-1",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都目黒区上目黒1-15-1"
+  },
+  "r327": {
+    "coordinates": [
+      139.713303,
+      35.632729
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E7%9B%AE%E9%BB%92%E5%8C%BA%E4%B8%8B%E7%9B%AE%E9%BB%921-8-1",
+    "geocodedLabel": "東京都目黒区下目黒一丁目８番１号",
+    "geocodeQuery": "東京都目黒区下目黒1-8-1",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "1-8-1 Shimomeguro, Meguro-ku, Tokyo"
+  },
+  "r328": {
+    "coordinates": [
+      139.669922,
+      35.60857
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E7%9B%AE%E9%BB%92%E5%8C%BA%E8%87%AA%E7%94%B1%E3%81%8C%E4%B8%981-14-15",
+    "geocodedLabel": "東京都目黒区自由が丘一丁目１４番１５号",
+    "geocodeQuery": "東京都目黒区自由が丘1-14-15",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "1-14-15 Jiyugaoka, Meguro-ku, Tokyo, Yashima Building 1F"
+  },
+  "r330": {
+    "coordinates": [
+      139.706696,
+      35.631748
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E7%9B%AE%E9%BB%92%E5%8C%BA%E4%B8%8B%E7%9B%AE%E9%BB%924-1-1",
+    "geocodedLabel": "東京都目黒区下目黒四丁目１番１号",
+    "geocodeQuery": "東京都目黒区下目黒4-1-1",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "4-1-1 Shimomeguro, Meguro-ku, Tokyo"
+  },
+  "r332": {
+    "coordinates": [
+      139.715424,
+      35.631874
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%93%81%E5%B7%9D%E5%8C%BA%E4%B8%8A%E5%A4%A7%E5%B4%8E4-6-22",
+    "geocodedLabel": "東京都品川区上大崎四丁目６番２２号",
+    "geocodeQuery": "東京都品川区上大崎4-6-22",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都品川区上大崎4-6-22"
+  },
+  "r333": {
+    "coordinates": [
+      139.692734,
+      35.637016
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E7%9B%AE%E9%BB%92%E5%8C%BA%E7%A5%90%E5%A4%A9%E5%AF%BA2-8-1",
+    "geocodedLabel": "東京都目黒区祐天寺二丁目８番１号",
+    "geocodeQuery": "東京都目黒区祐天寺2-8-1",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都目黒区祐天寺2-8-1 1F"
+  },
+  "r338": {
+    "coordinates": [
+      139.739212,
+      35.591084
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%93%81%E5%B7%9D%E5%8C%BA%E5%8B%9D%E5%B3%B62-1-2",
+    "geocodedLabel": "東京都品川区勝島二丁目１番２号",
+    "geocodeQuery": "東京都品川区勝島2-1-2",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都品川区勝島2-1-2"
+  },
+  "r342": {
+    "coordinates": [
+      139.719604,
+      35.621418
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%93%81%E5%B7%9D%E5%8C%BA%E8%A5%BF%E4%BA%94%E5%8F%8D%E7%94%B07-22-17",
+    "geocodedLabel": "東京都品川区西五反田七丁目２２番１７号",
+    "geocodeQuery": "東京都品川区西五反田7-22-17",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "7-22-17 Nishi-Gotanda, Shinagawa-ku, Tokyo, TOC Building 3F"
+  },
+  "r346": {
+    "coordinates": [
+      139.746475,
+      35.619789
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%93%81%E5%B7%9D%E5%8C%BA%E6%9D%B1%E5%93%81%E5%B7%9D1-32-8",
+    "geocodedLabel": "東京都品川区東品川一丁目３２番８号",
+    "geocodeQuery": "東京都品川区東品川1-32-8",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都品川区東品川1-32-8 TERRADA ART COMPLEX II 3F"
+  },
+  "r351": {
+    "coordinates": [
+      139.735077,
+      35.587154
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%A4%A7%E7%94%B0%E5%8C%BA%E5%A4%A7%E6%A3%AE%E5%8C%972-17-2",
+    "geocodedLabel": "東京都大田区大森北二丁目１７番２号",
+    "geocodeQuery": "東京都大田区大森北2-17-2",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都大田区大森北2-17-2 αNEXT大森海岸9F"
+  },
+  "r357": {
+    "coordinates": [
+      139.712341,
+      35.561897
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%A4%A7%E7%94%B0%E5%8C%BA%E8%A5%BF%E8%92%B2%E7%94%B07-61-8",
+    "geocodedLabel": "東京都大田区西蒲田七丁目６１番８号",
+    "geocodeQuery": "東京都大田区西蒲田7-61-8",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都大田区西蒲田7-61-8 エンリコビル"
+  },
+  "r361": {
+    "coordinates": [
+      139.821564,
+      35.639462
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B1%9F%E6%9D%B1%E5%8C%BA%E6%96%B0%E6%9C%A8%E5%A0%B42-15-14",
+    "geocodedLabel": "東京都江東区新木場二丁目１５番１４号",
+    "geocodeQuery": "東京都江東区新木場2-15-14",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "2-15-14 Shinkiba 3F, Koto, Tokyo"
+  },
+  "r362": {
+    "coordinates": [
+      139.824326,
+      35.644241
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B1%9F%E6%9D%B1%E5%8C%BA%E6%96%B0%E6%9C%A8%E5%A0%B41-4-6",
+    "geocodedLabel": "東京都江東区新木場一丁目４番６号",
+    "geocodeQuery": "東京都江東区新木場1-4-6",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "1-4-6 Shinkiba, Koto, Tokyo"
+  },
+  "r364": {
+    "coordinates": [
+      139.781723,
+      35.722168
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%8F%B0%E6%9D%B1%E5%8C%BA%E6%A0%B9%E5%B2%B83-2-6",
+    "geocodedLabel": "東京都台東区根岸三丁目２番６号",
+    "geocodeQuery": "東京都台東区根岸3-2-6",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "3-2-6 Negishi, sakura 1F, Taito, Tokyo"
+  },
+  "r365": {
+    "coordinates": [
+      139.80687,
+      35.679321
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B1%9F%E6%9D%B1%E5%8C%BA%E4%B8%89%E5%A5%BD4-1-1",
+    "geocodedLabel": "東京都江東区三好四丁目１番１号",
+    "geocodeQuery": "東京都江東区三好4-1-1",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都江東区三好4-1-1"
+  },
+  "r367": {
+    "coordinates": [
+      139.790024,
+      35.648884
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B1%9F%E6%9D%B1%E5%8C%BA%E8%B1%8A%E6%B4%B26-1-16",
+    "geocodedLabel": "東京都江東区豊洲六丁目１番１６号",
+    "geocodeQuery": "東京都江東区豊洲6-1-16",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都江東区豊洲6-1-16"
+  },
+  "r382": {
+    "coordinates": [
+      139.721405,
+      35.782059
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%8C%97%E5%8C%BA%E8%B5%A4%E7%BE%BD1-35-8",
+    "geocodedLabel": "東京都北区赤羽一丁目３５番８号",
+    "geocodeQuery": "東京都北区赤羽1-35-8",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都北区赤羽1-35-8"
+  },
+  "r387": {
+    "coordinates": [
+      139.647263,
+      35.68224
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%9D%89%E4%B8%A6%E5%8C%BA%E5%92%8C%E6%B3%893-60-7",
+    "geocodedLabel": "東京都杉並区和泉三丁目６０番７号",
+    "geocodeQuery": "東京都杉並区和泉3-60-7",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "3-60-7 Izumi, Suginami, Tokyo"
+  },
+  "r393": {
+    "coordinates": [
+      139.582809,
+      35.713978
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E7%B7%B4%E9%A6%AC%E5%8C%BA%E7%AB%8B%E9%87%8E%E7%94%BA10-37",
+    "geocodedLabel": "東京都練馬区立野町１０番３７号",
+    "geocodeQuery": "東京都練馬区立野町10-37",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都練馬区立野町10-37"
+  },
+  "r394": {
+    "coordinates": [
+      139.578827,
+      35.705181
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%AD%A6%E8%94%B5%E9%87%8E%E5%B8%82%E5%90%89%E7%A5%A5%E5%AF%BA%E6%9C%AC%E7%94%BA1-8-14",
+    "geocodedLabel": "東京都武蔵野市吉祥寺本町一丁目８番１４号",
+    "geocodeQuery": "東京都武蔵野市吉祥寺本町1-8-14",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都武蔵野市吉祥寺本町1-8-14 山水ビル2F"
+  },
+  "r403": {
+    "coordinates": [
+      139.493698,
+      35.765694
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%9D%B1%E6%9D%91%E5%B1%B1%E5%B8%82%E9%9D%92%E8%91%89%E7%94%BA4-1-13",
+    "geocodedLabel": "東京都東村山市青葉町四丁目１番",
+    "geocodeQuery": "東京都東村山市青葉町4-1-13",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都東村山市青葉町4-1-13"
+  },
+  "r408": {
+    "coordinates": [
+      139.407776,
+      35.71389
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E7%AB%8B%E5%B7%9D%E5%B8%82%E4%BB%99%E5%B7%9D%E7%94%BA1-21-5",
+    "geocodedLabel": "東京都立川市",
+    "geocodeQuery": "東京都立川市仙川町1-21-5",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "1-21-5 Sengawacho, Chofu, Tokyo"
+  },
+  "r413": {
+    "coordinates": [
+      139.473419,
+      35.669476
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%BA%9C%E4%B8%AD%E5%B8%82%E7%89%87%E7%94%BA2-4-1",
+    "geocodedLabel": "東京都府中市片町二丁目４番地",
+    "geocodeQuery": "東京都府中市片町2-4-1",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都府中市片町2-4-1"
+  },
+  "r437": {
+    "coordinates": [
+      135.504318,
+      34.674473
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E5%A4%A7%E9%98%AA%E5%BA%9C%E5%A4%A7%E9%98%AA%E5%B8%82%E4%B8%AD%E5%A4%AE%E5%8C%BA%E6%9D%B1%E5%BF%83%E6%96%8E%E6%A9%8B1-12-3",
+    "geocodedLabel": "大阪府大阪市中央区東心斎橋一丁目１２番３号",
+    "geocodeQuery": "大阪府大阪市中央区東心斎橋1-12-3",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "大阪府大阪市中央区東心斎橋1-12-3 協栄ビル4F"
+  },
+  "r439": {
+    "coordinates": [
+      139.705551,
+      35.668907
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%8B%E8%B0%B7%E5%8C%BA%E7%A5%9E%E5%AE%AE%E5%89%8D1-11-6",
+    "geocodedLabel": "東京都渋谷区神宮前一丁目１１番６号",
+    "geocodeQuery": "東京都渋谷区神宮前1-11-6",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "1-11-6 Jingumae, Laforet Harajuku B1.5F, Shibuya, Tokyo"
+  },
+  "r444": {
+    "coordinates": [
+      139.703674,
+      35.695904
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%B0%E5%AE%BF%E5%8C%BA%E6%AD%8C%E8%88%9E%E4%BC%8E%E7%94%BA2-24-6",
+    "geocodedLabel": "東京都新宿区歌舞伎町二丁目２４番６号",
+    "geocodeQuery": "東京都新宿区歌舞伎町2-24-6",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都新宿区歌舞伎町2-24-6 プランド2246ビル3F"
+  },
+  "r457": {
+    "coordinates": [
+      135.188004,
+      34.686733
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E5%85%B5%E5%BA%AB%E7%9C%8C%E7%A5%9E%E6%88%B8%E5%B8%82%E4%B8%AD%E5%A4%AE%E5%8C%BA%E6%A0%84%E7%94%BA%E9%80%9A2-1-3",
+    "geocodedLabel": "兵庫県神戸市中央区栄町通二丁目１番３号",
+    "geocodeQuery": "兵庫県神戸市中央区栄町通2-1-3",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "兵庫県神戸市中央区栄町通2-1-3 謙昌ビル205"
+  },
+  "r465": {
+    "coordinates": [
+      138.19043,
+      36.661274
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E9%95%B7%E9%87%8E%E7%9C%8C%E9%95%B7%E9%87%8E%E5%B8%82%E7%AE%B1%E6%B8%85%E6%B0%B41-4-4",
+    "geocodedLabel": "長野県長野市箱清水一丁目４番４号",
+    "geocodeQuery": "長野県長野市箱清水1-4-4",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "長野県長野市箱清水1-4-4"
+  },
+  "r484": {
+    "coordinates": [
+      136.514145,
+      36.054554
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E7%A6%8F%E4%BA%95%E7%9C%8C%E5%8B%9D%E5%B1%B1%E5%B8%82%E7%89%87%E7%80%AC%E7%94%BA50%E5%AD%971-1",
+    "geocodedLabel": "福井県勝山市片瀬町",
+    "geocodeQuery": "福井県勝山市片瀬町50字1-1",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "福井県勝山市片瀬町50字1-1"
+  },
+  "r493": {
+    "coordinates": [
+      130.373947,
+      33.589401
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E7%A6%8F%E5%B2%A1%E7%9C%8C%E7%A6%8F%E5%B2%A1%E5%B8%82%E4%B8%AD%E5%A4%AE%E5%8C%BA%E5%A4%A7%E6%BF%A0%E5%85%AC%E5%9C%921-6",
+    "geocodedLabel": "福岡県福岡市中央区大濠公園１番",
+    "geocodeQuery": "福岡県福岡市中央区大濠公園1-6",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "福岡県福岡市中央区大濠公園1-6"
+  },
+  "r507": {
+    "coordinates": [
+      139.707245,
+      35.668972
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%8B%E8%B0%B7%E5%8C%BA%E7%A5%9E%E5%AE%AE%E5%89%8D4-28-8",
+    "geocodedLabel": "東京都渋谷区神宮前四丁目２８番８号",
+    "geocodeQuery": "東京都渋谷区神宮前4-28-8",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "4-28-8 Jingumae, Harajuku White House 2F, Shibuya, Tokyo"
+  },
+  "r513": {
+    "coordinates": [
+      135.498688,
+      34.675915
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E5%A4%A7%E9%98%AA%E5%BA%9C%E5%A4%A7%E9%98%AA%E5%B8%82%E4%B8%AD%E5%A4%AE%E5%8C%BA%E5%8D%97%E8%88%B9%E5%A0%B44-12-24",
+    "geocodedLabel": "大阪府大阪市中央区南船場四丁目１２番２４号",
+    "geocodeQuery": "大阪府大阪市中央区南船場4-12-24",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "大阪府大阪市中央区南船場4-12-24 現代心斎橋ビル3F"
+  },
+  "r518": {
+    "coordinates": [
+      139.69632,
+      35.659344
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%8B%E8%B0%B7%E5%8C%BA%E9%81%93%E7%8E%84%E5%9D%822-19-13",
+    "geocodedLabel": "東京都渋谷区道玄坂二丁目１９番１３号",
+    "geocodeQuery": "東京都渋谷区道玄坂2-19-13",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "2-19-13 Dogenzaka, Shibuya, Tokyo"
+  },
+  "r519": {
+    "coordinates": [
+      139.770248,
+      35.681679
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%AD%E5%A4%AE%E5%8C%BA%E5%85%AB%E9%87%8D%E6%B4%B21-6-1",
+    "geocodedLabel": "東京都中央区八重洲一丁目６番１号",
+    "geocodeQuery": "東京都中央区八重洲1-6-1",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都中央区八重洲1-6-1 TOFROM YAESU TOWER6F"
+  },
+  "r520": {
+    "coordinates": [
+      139.77356,
+      35.710598
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%8F%B0%E6%9D%B1%E5%8C%BA%E4%B8%8A%E9%87%8E%E5%85%AC%E5%9C%921-2",
+    "geocodedLabel": "東京都台東区上野公園１番２号",
+    "geocodeQuery": "東京都台東区上野公園1-2",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都台東区上野公園1-2"
+  },
+  "r412-host0": {
+    "coordinates": [
+      139.702255,
+      35.669868
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%8B%E8%B0%B7%E5%8C%BA%E4%BB%A3%E3%80%85%E6%9C%A8%E7%A5%9E%E5%9C%92%E7%94%BA1-1",
+    "geocodedLabel": "東京都渋谷区代々木神園町１番１号",
+    "geocodeQuery": "東京都渋谷区代々木神園町1-1",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都渋谷区代々木神園町1-1"
+  },
+  "r412-host1": {
+    "coordinates": [
+      139.796585,
+      35.712856
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%8F%B0%E6%9D%B1%E5%8C%BA%E6%B5%85%E8%8D%892-3-1",
+    "geocodedLabel": "東京都台東区浅草二丁目３番１号",
+    "geocodeQuery": "東京都台東区浅草2-3-1",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都台東区浅草2-3-1"
+  },
+  "r412-host2": {
+    "coordinates": [
+      139.748413,
+      35.657249
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%AF%E5%8C%BA%E8%8A%9D%E5%85%AC%E5%9C%924-7-35",
+    "geocodedLabel": "東京都港区芝公園四丁目７番",
+    "geocodeQuery": "東京都港区芝公園4-7-35",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都港区芝公園4-7-35"
+  },
+  "r412-host3": {
+    "coordinates": [
+      139.742813,
+      35.694405
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%8D%83%E4%BB%A3%E7%94%B0%E5%8C%BA%E4%B9%9D%E6%AE%B5%E5%8C%973-1-1",
+    "geocodedLabel": "東京都千代田区九段北三丁目１番",
+    "geocodeQuery": "東京都千代田区九段北3-1-1",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都千代田区九段北3-1-1"
+  },
+  "r184-host0": {
+    "coordinates": [
+      139.772598,
+      35.717754
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%8F%B0%E6%9D%B1%E5%8C%BA%E4%B8%8A%E9%87%8E%E5%85%AC%E5%9C%928-36",
+    "geocodedLabel": "東京都台東区上野公園８番３６号",
+    "geocodeQuery": "東京都台東区上野公園8-36",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都台東区上野公園8-36"
+  },
+  "r185-host0": {
+    "coordinates": [
+      139.775375,
+      35.714954
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%8F%B0%E6%9D%B1%E5%8C%BA%E4%B8%8A%E9%87%8E%E5%85%AC%E5%9C%927-7",
+    "geocodedLabel": "東京都台東区上野公園７番７号",
+    "geocodeQuery": "東京都台東区上野公園7-7",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都台東区上野公園7-7"
+  },
+  "r186-host0": {
+    "coordinates": [
+      139.77356,
+      35.710598
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%8F%B0%E6%9D%B1%E5%8C%BA%E4%B8%8A%E9%87%8E%E5%85%AC%E5%9C%921-2",
+    "geocodedLabel": "東京都台東区上野公園１番２号",
+    "geocodeQuery": "東京都台東区上野公園1-2",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都台東区上野公園1-2"
+  },
+  "r133-host0": {
+    "coordinates": [
+      139.763657,
+      35.674213
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%8D%83%E4%BB%A3%E7%94%B0%E5%8C%BA%E6%9C%89%E6%A5%BD%E7%94%BA2-7-1",
+    "geocodedLabel": "東京都千代田区有楽町二丁目７番",
+    "geocodeQuery": "東京都千代田区有楽町2-7-1",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都千代田区有楽町2-7-1"
+  },
+  "r134-host0": {
+    "coordinates": [
+      139.75444,
+      35.690361
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%8D%83%E4%BB%A3%E7%94%B0%E5%8C%BA%E5%8C%97%E3%81%AE%E4%B8%B8%E5%85%AC%E5%9C%923-1",
+    "geocodedLabel": "東京都千代田区北の丸公園３番",
+    "geocodeQuery": "東京都千代田区北の丸公園3-1",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都千代田区北の丸公園3-1"
+  },
+  "r151-host0": {
+    "coordinates": [
+      139.771744,
+      35.679047
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%AD%E5%A4%AE%E5%8C%BA%E4%BA%AC%E6%A9%8B1-7-1",
+    "geocodedLabel": "東京都中央区京橋一丁目７番１号",
+    "geocodeQuery": "東京都中央区京橋1-7-1",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都中央区京橋1-7-1 TODA BUILDING6F"
+  },
+  "r153-host0": {
+    "coordinates": [
+      139.771896,
+      35.678986
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%AD%E5%A4%AE%E5%8C%BA%E4%BA%AC%E6%A9%8B1-7-2",
+    "geocodedLabel": "東京都中央区京橋一丁目７番２号",
+    "geocodeQuery": "東京都中央区京橋1-7-2",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都中央区京橋1-7-2"
+  },
+  "r191-host0": {
+    "coordinates": [
+      139.768585,
+      35.727757
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E8%8D%92%E5%B7%9D%E5%8C%BA%E8%A5%BF%E6%97%A5%E6%9A%AE%E9%87%8C3-2-5",
+    "geocodedLabel": "東京都荒川区西日暮里三丁目２番５号",
+    "geocodeQuery": "東京都荒川区西日暮里3-2-5",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都荒川区西日暮里3-2-5"
+  },
+  "r207-host0": {
+    "coordinates": [
+      139.74733,
+      35.667068
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%AF%E5%8C%BA%E8%99%8E%E3%83%8E%E9%96%802-6-2",
+    "geocodedLabel": "東京都港区虎ノ門二丁目６番",
+    "geocodeQuery": "東京都港区虎ノ門2-6-2",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都港区虎ノ門2-6-2 虎ノ門ヒルズステーションタワー8F"
+  },
+  "r212-host0": {
+    "coordinates": [
+      139.732208,
+      35.666023
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%AF%E5%8C%BA%E8%B5%A4%E5%9D%829-7-6",
+    "geocodedLabel": "東京都港区赤坂九丁目７番",
+    "geocodeQuery": "東京都港区赤坂9-7-6",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都港区赤坂9-7-6 東京ミッドタウン ミッドタウン・ガーデン"
+  },
+  "r213-host0": {
+    "coordinates": [
+      139.729202,
+      35.660206
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%AF%E5%8C%BA%E5%85%AD%E6%9C%AC%E6%9C%A86-10-1",
+    "geocodedLabel": "東京都港区六本木六丁目１０番",
+    "geocodeQuery": "東京都港区六本木6-10-1",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都港区六本木6-10-1 六本木ヒルズ森タワー52F"
+  },
+  "r214-host0": {
+    "coordinates": [
+      139.729202,
+      35.660206
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%AF%E5%8C%BA%E5%85%AD%E6%9C%AC%E6%9C%A86-10-1",
+    "geocodedLabel": "東京都港区六本木六丁目１０番",
+    "geocodeQuery": "東京都港区六本木6-10-1",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都港区六本木6-10-1 六本木ヒルズ森タワー53F"
+  },
+  "r216-host0": {
+    "coordinates": [
+      139.726776,
+      35.664024
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%AF%E5%8C%BA%E5%85%AD%E6%9C%AC%E6%9C%A87-22-2",
+    "geocodedLabel": "東京都港区六本木七丁目２２番",
+    "geocodeQuery": "東京都港区六本木7-22-2",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都港区六本木7-22-2"
+  },
+  "r223-host0": {
+    "coordinates": [
+      139.729965,
+      35.673843
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%AF%E5%8C%BA%E8%B5%A4%E5%9D%827-2-21",
+    "geocodedLabel": "東京都港区赤坂七丁目２番",
+    "geocodeQuery": "東京都港区赤坂7-2-21",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都港区赤坂7-2-21 草月会館1F"
+  },
+  "r273-host0": {
+    "coordinates": [
+      139.622803,
+      35.698929
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%9D%89%E4%B8%A6%E5%8C%BA%E8%8D%BB%E7%AA%AA2-42-12",
+    "geocodedLabel": "東京都杉並区荻窪二丁目４２番１２号",
+    "geocodeQuery": "東京都杉並区荻窪2-42-12",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都杉並区荻窪2-42-12"
+  },
+  "r365-host0": {
+    "coordinates": [
+      139.80687,
+      35.679321
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B1%9F%E6%9D%B1%E5%8C%BA%E4%B8%89%E5%A5%BD4-1-1",
+    "geocodedLabel": "東京都江東区三好四丁目１番１号",
+    "geocodeQuery": "東京都江東区三好4-1-1",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都江東区三好4-1-1"
+  },
+  "r368-host0": {
+    "coordinates": [
+      139.786209,
+      35.646309
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B1%9F%E6%9D%B1%E5%8C%BA%E8%B1%8A%E6%B4%B26-4-25",
+    "geocodedLabel": "東京都江東区豊洲六丁目４番２５号",
+    "geocodeQuery": "東京都江東区豊洲6-4-25",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都江東区豊洲6-4-25 CREVIA BASE Tokyo"
+  },
+  "r373-host0": {
+    "coordinates": [
+      139.793961,
+      35.696342
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%A2%A8%E7%94%B0%E5%8C%BA%E6%A8%AA%E7%B6%B21-4-1",
+    "geocodedLabel": "東京都墨田区横網一丁目４番１号",
+    "geocodeQuery": "東京都墨田区横網1-4-1",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都墨田区横網1-4-1"
+  },
+  "r465-host0": {
+    "coordinates": [
+      138.19043,
+      36.661274
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E9%95%B7%E9%87%8E%E7%9C%8C%E9%95%B7%E9%87%8E%E5%B8%82%E7%AE%B1%E6%B8%85%E6%B0%B41-4-4",
+    "geocodedLabel": "長野県長野市箱清水一丁目４番４号",
+    "geocodeQuery": "長野県長野市箱清水1-4-4",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "長野県長野市箱清水1-4-4"
+  },
+  "r474-host0": {
+    "coordinates": [
+      138.949646,
+      36.503574
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E7%BE%A4%E9%A6%AC%E7%9C%8C%E6%B8%8B%E5%B7%9D%E5%B8%82%E9%87%91%E4%BA%952855-1",
+    "geocodedLabel": "群馬県渋川市金井２８５５番地",
+    "geocodeQuery": "群馬県渋川市金井2855-1",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "群馬県渋川市金井2855-1"
+  },
+  "r493-host0": {
+    "coordinates": [
+      130.373947,
+      33.589401
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E7%A6%8F%E5%B2%A1%E7%9C%8C%E7%A6%8F%E5%B2%A1%E5%B8%82%E4%B8%AD%E5%A4%AE%E5%8C%BA%E5%A4%A7%E6%BF%A0%E5%85%AC%E5%9C%921-6",
+    "geocodedLabel": "福岡県福岡市中央区大濠公園１番",
+    "geocodeQuery": "福岡県福岡市中央区大濠公園1-6",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "福岡県福岡市中央区大濠公園1-6"
+  },
+  "r350-host0": {
+    "coordinates": [
+      141.209351,
+      40.613899
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E9%9D%92%E6%A3%AE%E7%9C%8C%E5%8D%81%E5%92%8C%E7%94%B0%E5%B8%82%E8%A5%BF%E4%BA%8C%E7%95%AA%E7%94%BA10-9",
+    "geocodedLabel": "青森県十和田市西二番町１０番９号",
+    "geocodeQuery": "青森県十和田市西二番町10-9",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "青森県十和田市西二番町10-9"
+  },
+  "r020-host0": {
+    "coordinates": [
+      139.703491,
+      35.695538
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%B0%E5%AE%BF%E5%8C%BA%E6%AD%8C%E8%88%9E%E4%BC%8E%E7%94%BA2-25-6",
+    "geocodedLabel": "東京都新宿区歌舞伎町二丁目２５番６号",
+    "geocodeQuery": "東京都新宿区歌舞伎町2-25-6",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都新宿区歌舞伎町2-25-6 ホライズンビルディングB2"
+  },
+  "r173-host0": {
+    "coordinates": [
+      139.78006,
+      35.72076
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%8F%B0%E6%9D%B1%E5%8C%BA%E6%A0%B9%E5%B2%B81-1-14",
+    "geocodedLabel": "東京都台東区根岸一丁目１番１４号",
+    "geocodeQuery": "東京都台東区根岸1-1-14",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都台東区根岸1-1-14 6F"
+  },
+  "r319-host0": {
+    "coordinates": [
+      139.664047,
+      35.659206
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%96%E7%94%B0%E8%B0%B7%E5%8C%BA%E4%BB%A3%E7%94%B02-36-15",
+    "geocodedLabel": "東京都世田谷区代田二丁目３６番１５号",
+    "geocodeQuery": "東京都世田谷区代田2-36-15",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都世田谷区代田2-36-15"
+  },
+  "r517-host0": {
+    "coordinates": [
+      139.775543,
+      35.717556
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%8F%B0%E6%9D%B1%E5%8C%BA%E4%B8%8A%E9%87%8E%E5%85%AC%E5%9C%9213-9",
+    "geocodedLabel": "東京都台東区上野公園１３番９号",
+    "geocodeQuery": "東京都台東区上野公園13-9",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都台東区上野公園13-9 東京国立博物館構内"
+  },
+  "r521-host0": {
+    "coordinates": [
+      139.726364,
+      35.667244
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%AF%E5%8C%BA%E5%8D%97%E9%9D%92%E5%B1%B11-24-3",
+    "geocodedLabel": "東京都港区南青山一丁目２４番",
+    "geocodeQuery": "東京都港区南青山1-24-3",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都港区南青山1-24-3 TOTO乃木坂ビル3F"
+  },
+  "r522-host0": {
+    "coordinates": [
+      139.749008,
+      35.620724
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%93%81%E5%B7%9D%E5%8C%BA%E6%9D%B1%E5%93%81%E5%B7%9D2-6-10",
+    "geocodedLabel": "東京都品川区東品川二丁目６番１０号",
+    "geocodeQuery": "東京都品川区東品川2-6-10",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都品川区東品川2-6-10 寺田倉庫G号"
+  },
+  "r011-host0": {
+    "coordinates": [
+      140.466003,
+      36.37785
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E8%8C%A8%E5%9F%8E%E7%9C%8C%E6%B0%B4%E6%88%B8%E5%B8%82%E5%8D%97%E7%94%BA3-6-27",
+    "geocodedLabel": "茨城県水戸市南町三丁目６番２７号",
+    "geocodeQuery": "茨城県水戸市南町3-6-27",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "茨城県水戸市南町3-6-27 ウイング南ビル3F"
+  },
+  "r024-host0": {
+    "coordinates": [
+      139.692459,
+      35.692017
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%B0%E5%AE%BF%E5%8C%BA%E8%A5%BF%E6%96%B0%E5%AE%BF2-6-1",
+    "geocodedLabel": "東京都新宿区西新宿二丁目６番",
+    "geocodeQuery": "東京都新宿区西新宿2-6-1",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都新宿区西新宿2-6-1"
+  },
+  "r035-host0": {
+    "coordinates": [
+      139.698502,
+      35.689999
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%B0%E5%AE%BF%E5%8C%BA%E8%A5%BF%E6%96%B0%E5%AE%BF1-10-1",
+    "geocodedLabel": "東京都新宿区西新宿一丁目１０番１号",
+    "geocodeQuery": "東京都新宿区西新宿1-10-1",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都新宿区西新宿1-10-1 ヨドバシ新宿西口駅前ビル10F"
+  },
+  "r073-host0": {
+    "coordinates": [
+      139.703964,
+      35.659267
+    ],
+    "locationConfidence": "address-block",
+    "locationSource": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%8B%E8%B0%B7%E5%8C%BA%E6%B8%8B%E8%B0%B72-21-1",
+    "geocodedLabel": "東京都渋谷区渋谷二丁目２１番１号",
+    "geocodeQuery": "東京都渋谷区渋谷2-21-1",
+    "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+    "geocodedAt": "2026-10-16",
+    "usesVerifiedAddress": true,
+    "sourceAddress": "東京都渋谷区渋谷2-21-1 渋谷ヒカリエ9F"
+  }
+}

@@ -1,0 +1,706 @@
+[
+  {
+    "id": "r018",
+    "changes": {
+      "category": "Bars & live music"
+    },
+    "reason": "Evidence is a jazz performance venue, not a bookshop.",
+    "sourceUrls": [
+      "https://www.mugi55.com/events/venues/gate-one"
+    ]
+  },
+  {
+    "id": "r057",
+    "changes": {
+      "category": "Records & sound"
+    },
+    "reason": "Official profile explicitly identifies a jazz record shop.",
+    "sourceUrls": [
+      "https://page.line.me/180famog"
+    ]
+  },
+  {
+    "id": "r086",
+    "changes": {
+      "category": "Fashion & objects"
+    },
+    "reason": "BARCON is a Laforet fashion boutique, not a bar.",
+    "sourceUrls": [
+      "https://www.laforet.ne.jp/shop_search/shop539"
+    ]
+  },
+  {
+    "id": "r088",
+    "changes": {
+      "category": "Fashion & objects"
+    },
+    "reason": "Official directory establishes goth/punk/lolita clothing resale.",
+    "sourceUrls": [
+      "https://cc.closet-child.info/realshop"
+    ]
+  },
+  {
+    "id": "r105",
+    "changes": {
+      "category": "Fashion & objects",
+      "coordinates": null,
+      "locationConfidence": "unresolved",
+      "locationSource": null,
+      "geocodedLabel": null,
+      "geocodeQuery": null,
+      "geocodedAt": null,
+      "usesVerifiedAddress": false,
+      "geocodeNote": "Original Omotesando branch is reported closed and absent from official shop list. Suppress visit pin rather than route to former storefront.",
+      "mapLink": null
+    },
+    "reason": "Former fashion branch should be classified as fashion. Original Omotesando branch is reported closed and absent from official shop list. Suppress visit pin rather than route to former storefront.",
+    "sourceUrls": [
+      "https://tornadomart.jp/shoplist/",
+      "https://sonar.tokyo/shops/tornadomart_omotesando/"
+    ]
+  },
+  {
+    "id": "r118",
+    "changes": {
+      "category": "Fashion & objects",
+      "coordinates": null,
+      "locationConfidence": "unresolved",
+      "locationSource": null,
+      "geocodedLabel": null,
+      "geocodeQuery": null,
+      "geocodedAt": null,
+      "usesVerifiedAddress": false,
+      "geocodeNote": "Geocoder used Shibuya 3-42-12 but the cited address is Ebisu 3-42-12. Re-geocode this corrected Japanese address.",
+      "address": "東京都渋谷区恵比寿3-42-12 1F",
+      "mapLink": "https://www.google.com/maps/search/?api=1&query=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%8B%E8%B0%B7%E5%8C%BA%E6%81%B5%E6%AF%94%E5%AF%BF3-42-12%201F"
+    },
+    "reason": "The operator establishes a menswear label flagship. Geocoder used Shibuya 3-42-12 but the cited address is Ebisu 3-42-12. Re-geocode this corrected Japanese address.",
+    "sourceUrls": [
+      "https://viridi-anne.jp/about.html"
+    ]
+  },
+  {
+    "id": "r141",
+    "changes": {
+      "category": "Books & zines"
+    },
+    "reason": "Magazine back-number bookshop, not clothing retail.",
+    "sourceUrls": [
+      "https://www.magnif.jp/blog/2026/01/24/101840"
+    ]
+  },
+  {
+    "id": "r152",
+    "changes": {
+      "category": "Cafés & listening rooms"
+    },
+    "reason": "Operator establishes robot-served experimental cafe, not a bookshop.",
+    "sourceUrls": [
+      "https://dawn2021.orylab.com/en/"
+    ]
+  },
+  {
+    "id": "r163",
+    "changes": {
+      "category": "Fashion & objects"
+    },
+    "reason": "The record represents the fashion retailer.",
+    "sourceUrls": [
+      "https://shop-jp.doverstreetmarket.com/en/pages/faqs_privacy-policy"
+    ]
+  },
+  {
+    "id": "r221",
+    "changes": {
+      "category": "Bars & live music"
+    },
+    "reason": "Official listing identifies the live music club.",
+    "sourceUrls": [
+      "https://www.billboard-live.com/tokyo/show"
+    ]
+  },
+  {
+    "id": "r223",
+    "changes": {
+      "category": "Architecture & sacred spaces"
+    },
+    "reason": "Sogetsu Plaza is an architectural garden/public interior.",
+    "sourceUrls": [
+      "https://www.sogetsu.or.jp/about/hq-building/plaza/"
+    ]
+  },
+  {
+    "id": "r228",
+    "changes": {
+      "category": "Bars & live music"
+    },
+    "reason": "Blue Note is a live jazz venue, not a bookshop.",
+    "sourceUrls": [
+      "https://www.bluenote.co.jp/jp/shoplaw/"
+    ]
+  },
+  {
+    "id": "r239",
+    "changes": {
+      "category": "Games & technology",
+      "kind": "place"
+    },
+    "reason": "Operator establishes permanent robot-combat experience facility, not a dated exhibition. Robot Fight is offered at a permanent facility; no unique dated event was established.",
+    "sourceUrls": [
+      "https://prtimes.jp/main/html/rd/p/000000003.000092911.html"
+    ]
+  },
+  {
+    "id": "r261",
+    "changes": {
+      "category": "Architecture & sacred spaces"
+    },
+    "reason": "Myonichikan is a historic school building opened for architecture visits; coffee is an admission option.",
+    "sourceUrls": [
+      "https://jiyu.jp/calender/"
+    ]
+  },
+  {
+    "id": "r272",
+    "changes": {
+      "category": "Bars & live music",
+      "coordinates": null,
+      "locationConfidence": "unresolved",
+      "locationSource": null,
+      "geocodedLabel": null,
+      "geocodeQuery": null,
+      "geocodedAt": null,
+      "usesVerifiedAddress": false,
+      "geocodeNote": "Geocoder used Asagaya-kita but the operator address is Asagaya-minami. Re-geocode corrected address.",
+      "address": "東京都杉並区阿佐谷南3-37-11 スマイルホテル東京阿佐ヶ谷1F",
+      "mapLink": "https://www.google.com/maps/search/?api=1&query=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%9D%89%E4%B8%A6%E5%8C%BA%E9%98%BF%E4%BD%90%E8%B0%B7%E5%8D%973-37-11%20%E3%82%B9%E3%83%9E%E3%82%A4%E3%83%AB%E3%83%9B%E3%83%86%E3%83%AB%E6%9D%B1%E4%BA%AC%E9%98%BF%E4%BD%90%E3%83%B6%E8%B0%B71F"
+    },
+    "reason": "Operator identifies Jazz Bar DONGARA, with evening bar hours. Geocoder used Asagaya-kita but the operator address is Asagaya-minami. Re-geocode corrected address.",
+    "sourceUrls": [
+      "https://tabelog.com/tokyo/A1319/A131905/13126913/"
+    ]
+  },
+  {
+    "id": "r289",
+    "changes": {
+      "category": "Bars & live music"
+    },
+    "reason": "ShowBoat is a live venue, not a bookshop.",
+    "sourceUrls": [
+      "https://www.showboat1993.com/access"
+    ]
+  },
+  {
+    "id": "r293",
+    "changes": {
+      "category": "Records & sound"
+    },
+    "reason": "Universounds is a record shop, not a live bar.",
+    "sourceUrls": [
+      "https://www.universounds.net/page/6"
+    ]
+  },
+  {
+    "id": "r315",
+    "changes": {
+      "category": "Bars & live music"
+    },
+    "reason": "Operator identifies jazz/cocktail bar and weekend performances.",
+    "sourceUrls": [
+      "https://www.nrfsbar.com/"
+    ]
+  },
+  {
+    "id": "r378",
+    "changes": {
+      "category": "Art & museums"
+    },
+    "reason": "The Subway Museum is a museum, not fashion retail.",
+    "sourceUrls": [
+      "https://www.chikahaku.jp/about/"
+    ]
+  },
+  {
+    "id": "r391",
+    "changes": {
+      "category": "Records & sound"
+    },
+    "reason": "Coconuts Disk is a record retailer.",
+    "sourceUrls": [
+      "https://coconutsdisk.com/ekoda/"
+    ]
+  },
+  {
+    "id": "r402",
+    "changes": {
+      "category": "Cafés & listening rooms"
+    },
+    "reason": "Tourism association identifies Denen as a classical listening cafe.",
+    "sourceUrls": [
+      "https://www.nakano-kanko.com/column/column-3406/"
+    ]
+  },
+  {
+    "id": "r408",
+    "changes": {
+      "category": "Bars & live music"
+    },
+    "reason": "Sengawa is a performing-arts theatre; category chosen as the available live-performance grouping.",
+    "sourceUrls": [
+      "https://www.city.chofu.lg.jp/040010/p020081.html"
+    ]
+  },
+  {
+    "id": "r421",
+    "changes": {
+      "category": "Art & museums"
+    },
+    "reason": "JAXA visitor/exhibition center fits museum category.",
+    "sourceUrls": [
+      "https://www.isas.jaxa.jp/visit/guide/"
+    ]
+  },
+  {
+    "id": "r434",
+    "changes": {
+      "category": "Fashion & objects"
+    },
+    "reason": "Atelier Pierrot Osaka stocks gothic/lolita clothing.",
+    "sourceUrls": [
+      "https://atelier-pierrot.jp/pages/%E5%A4%A7%E9%98%AA%E5%BA%97"
+    ]
+  },
+  {
+    "id": "r440",
+    "changes": {
+      "category": "Records & sound"
+    },
+    "reason": "PUNK AND DESTROY is an Osaka punk record shop.",
+    "sourceUrls": [
+      "https://punx.exblog.jp/"
+    ]
+  },
+  {
+    "id": "r480",
+    "changes": {
+      "category": "Art & museums"
+    },
+    "reason": "Matrix is an artwork installed at Teshima Art Museum.",
+    "sourceUrls": [
+      "https://benesse-artsite.jp/en/art/teshima-artmuseum.html"
+    ]
+  },
+  {
+    "id": "r513",
+    "changes": {
+      "category": "Fashion & objects",
+      "ward": "Osaka"
+    },
+    "reason": "Source explicitly identifies an archive menswear retailer. Use the ward/region established by the researched address or venue, rather than the original section.",
+    "sourceUrls": [
+      "https://osakamania.jp/shop/furugi_13/"
+    ]
+  },
+  {
+    "id": "r021-3",
+    "changes": {
+      "ward": "Toshima"
+    },
+    "reason": "Use the ward/region established by the researched address or venue, rather than the original section.",
+    "sourceUrls": [
+      "https://www.club-phase.com/access.html"
+    ]
+  },
+  {
+    "id": "r191",
+    "changes": {
+      "ward": "Arakawa",
+      "coordinates": null,
+      "locationConfidence": "unresolved",
+      "locationSource": null,
+      "geocodedLabel": null,
+      "geocodeQuery": null,
+      "geocodedAt": null,
+      "usesVerifiedAddress": false,
+      "geocodeNote": "Geocoder substituted Yanaka/Taito for Nishi-Nippori/Arakawa. Suppress wrong pin; confirm/geocode actual Starbucks location.",
+      "address": "東京都荒川区西日暮里3-2-5",
+      "mapLink": "https://www.google.com/maps/search/?api=1&query=東京都荒川区西日暮里3-2-5",
+      "sources": [
+        {
+          "url": "https://stories.starbucks.co.jp/press/presscenter/?nid=mm",
+          "title": "Starbucks press archive",
+          "claim": "Starbucks official press archive confirms the four-artist group exhibition opening October 16 at Yanaka Goten-zaka. Holiday schedule was not established."
+        },
+        {
+          "url": "https://store.starbucks.co.jp/detail-4492/",
+          "title": "Starbucks official store directory",
+          "claim": "Confirms Tokyo Arakawa-ku Nishi-Nippori3-2-5."
+        }
+      ]
+    },
+    "reason": "Use the ward/region established by the researched address or venue, rather than the original section. Geocoder substituted Yanaka/Taito for Nishi-Nippori/Arakawa. Suppress wrong pin; confirm/geocode actual Starbucks location.",
+    "sourceUrls": [
+      "https://stories.starbucks.co.jp/press/presscenter/?nid=mm",
+      "https://store.starbucks.co.jp/detail-4492/"
+    ]
+  },
+  {
+    "id": "r230-3",
+    "changes": {
+      "ward": "Ibaraki",
+      "locationNote": "Ibaraki; exact storefront address unconfirmed"
+    },
+    "reason": "Use the ward/region established by the researched address or venue, rather than the original section. Owner identifies Ibaraki; never place at a Minato/Aoyama area fallback.",
+    "sourceUrls": [
+      "https://note.com/yosuga_0212/n/n0a6a60d72e43"
+    ]
+  },
+  {
+    "id": "r332",
+    "changes": {
+      "ward": "Shinagawa"
+    },
+    "reason": "Use the ward/region established by the researched address or venue, rather than the original section.",
+    "sourceUrls": [
+      "https://new.catholicmeguro.org/information/"
+    ]
+  },
+  {
+    "id": "r517",
+    "changes": {
+      "ward": "Taito"
+    },
+    "reason": "Use the ward/region established by the researched address or venue, rather than the original section.",
+    "sourceUrls": [
+      "https://www.square-enix.com/ff40th/exhibition/en/"
+    ]
+  },
+  {
+    "id": "r519",
+    "changes": {
+      "ward": "Chuo"
+    },
+    "reason": "Use the ward/region established by the researched address or venue, rather than the original section.",
+    "sourceUrls": [
+      "https://heroaca-anime-10th-ex.com/"
+    ]
+  },
+  {
+    "id": "r520",
+    "changes": {
+      "ward": "Taito"
+    },
+    "reason": "Use the ward/region established by the researched address or venue, rather than the original section.",
+    "sourceUrls": [
+      "https://www.kadokawa.co.jp/topics/17848/"
+    ]
+  },
+  {
+    "id": "r110",
+    "changes": {
+      "coordinates": null,
+      "locationConfidence": "unresolved",
+      "locationSource": null,
+      "geocodedLabel": null,
+      "geocodeQuery": null,
+      "geocodedAt": null,
+      "usesVerifiedAddress": false,
+      "geocodeNote": "Original Omotesando address differs from the current official Harajuku directory; suppress old pin until branch identity is resolved.",
+      "mapLink": null
+    },
+    "reason": "Original Omotesando address differs from the current official Harajuku directory; suppress old pin until branch identity is resolved.",
+    "sourceUrls": [
+      "https://www.kind.co.jp/information"
+    ]
+  },
+  {
+    "id": "r192",
+    "changes": {
+      "coordinates": null,
+      "locationConfidence": "unresolved",
+      "locationSource": null,
+      "geocodedLabel": null,
+      "geocodeQuery": null,
+      "geocodedAt": null,
+      "usesVerifiedAddress": false,
+      "geocodeNote": "Geocoder retained the original transposed 6-29-1 after research corrected it to 6-1-29. Re-geocode corrected address.",
+      "address": "東京都台東区谷中6-1-29",
+      "mapLink": "https://www.google.com/maps/search/?api=1&query=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%8F%B0%E6%9D%B1%E5%8C%BA%E8%B0%B7%E4%B8%AD6-1-29"
+    },
+    "reason": "Geocoder retained the original transposed 6-29-1 after research corrected it to 6-1-29. Re-geocode corrected address.",
+    "sourceUrls": [
+      "https://tokyotokyo.jp/assets/downloads/The_Monocle_guide_to_Tokyo.pdf"
+    ]
+  },
+  {
+    "id": "r277",
+    "changes": {
+      "coordinates": null,
+      "locationConfidence": "unresolved",
+      "locationSource": null,
+      "geocodedLabel": null,
+      "geocodeQuery": null,
+      "geocodedAt": null,
+      "usesVerifiedAddress": false,
+      "geocodeNote": "Geocoder retained original 2-4-8 despite source correction to 2-4-1. Re-geocode corrected address.",
+      "address": "東京都杉並区阿佐谷北2-4-1",
+      "mapLink": "https://www.google.com/maps/search/?api=1&query=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%9D%89%E4%B8%A6%E5%8C%BA%E9%98%BF%E4%BD%90%E8%B0%B7%E5%8C%972-4-1"
+    },
+    "reason": "Geocoder retained original 2-4-8 despite source correction to 2-4-1. Re-geocode corrected address.",
+    "sourceUrls": [
+      "https://www.starroad.tokyo/shop/jazz_bar_tsune/"
+    ]
+  },
+  {
+    "id": "r304",
+    "changes": {
+      "coordinates": null,
+      "locationConfidence": "unresolved",
+      "locationSource": null,
+      "geocodedLabel": null,
+      "geocodeQuery": null,
+      "geocodedAt": null,
+      "usesVerifiedAddress": false,
+      "geocodeNote": "Geocoder used Sangenjaya street name instead of sourced Taishido. Re-geocode corrected address.",
+      "address": "東京都世田谷区太子堂3-22-10 前田ビル1F",
+      "mapLink": "https://www.google.com/maps/search/?api=1&query=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%96%E7%94%B0%E8%B0%B7%E5%8C%BA%E5%A4%AA%E5%AD%90%E5%A0%823-22-10%20%E5%89%8D%E7%94%B0%E3%83%93%E3%83%AB1F"
+    },
+    "reason": "Geocoder used Sangenjaya street name instead of sourced Taishido. Re-geocode corrected address.",
+    "sourceUrls": [
+      "https://www.mensnonno.jp/fashion/754344/"
+    ]
+  },
+  {
+    "id": "r282",
+    "changes": {
+      "ward": "Unresolved",
+      "locationNote": "Tokyo; exact ward/address unconfirmed"
+    },
+    "reason": "Event organizer establishes two Tokyo archive stores, but no Koenji address. Do not create an area pin.",
+    "sourceUrls": [
+      "https://whatson.melbourne.vic.gov.au/things-to-do/seldom-x-cvbin-x-salon-archive-pop-up"
+    ]
+  },
+  {
+    "id": "r321",
+    "changes": {
+      "name": "マサコ (Masako) — Parfum branch",
+      "summary": "Current directory listings distinguish the Parfum jazz café at 2-29-3; operator social posts also name this branch. Treat branch relationship separately from Masako 2.0 until directly clarified.",
+      "sources": [
+        {
+          "url": "https://tabelog.com/tokyo/A1318/A131802/13312930/",
+          "title": "マサコ (Masako) source",
+          "claim": "Current directory listings distinguish the Parfum jazz café at 2-29-3; operator social posts also name this branch. Treat branch relationship separately from Masako 2.0 until directly clarified."
+        }
+      ],
+      "verifiedTags": [
+        {
+          "label": "jazz",
+          "sourceUrls": [
+            "https://tabelog.com/tokyo/A1318/A131802/13312930/"
+          ]
+        },
+        {
+          "label": "kissaten",
+          "sourceUrls": [
+            "https://tabelog.com/tokyo/A1318/A131802/13312930/"
+          ]
+        }
+      ],
+      "status": "needs-recheck",
+      "lastChecked": "2026-10-16",
+      "address": "東京都世田谷区北沢2-29-3 パルファンビル2F",
+      "mapLink": "https://www.google.com/maps/search/?api=1&query=東京都世田谷区北沢2-29-3"
+    },
+    "reason": "Wrong evidence merge: Masako 2.0 research overwrote the Parfum branch. Restore the source-confirmed 2-29-3 branch. Restore external map query for this branch.",
+    "sourceUrls": [
+      "https://tabelog.com/tokyo/A1318/A131802/13312930/"
+    ]
+  },
+  {
+    "id": "r321-2",
+    "changes": {
+      "id": "r321-2",
+      "name": "Masako 2.0",
+      "kind": "place",
+      "category": "Cafés & listening rooms",
+      "ward": "Setagaya",
+      "locationNote": "Shimokitazawa, Kitazawa 2-31-2",
+      "originalTags": [
+        "Old-web"
+      ],
+      "originalNotes": [
+        "- [Old-web] **マサコ (Masako)** → Shimokitazawa (2-29-3 Kitazawa, Parfum Bldg 2F) — Showa jazz kissa, wall of LPs, famous an-butter toast; 12:00–19:00, closed Thu, no smoking. (Related: **Masako 2.0**, 2-31-2 Kitazawa — successor preserving the original's records/decor/crockery; may be the same shop under different listings.)"
+      ],
+      "sourceLines": [
+        321
+      ],
+      "originalSection": "Setagaya (Shimokitazawa)",
+      "status": "needs-recheck",
+      "lastChecked": "2026-10-16",
+      "summary": "A specialist on-site jazz guide identifies the 2020 successor at 2-31-2 and explicitly says a second branch opened in October 2025. These should not be collapsed into a single address; current hours need reconfirmation.",
+      "sources": [
+        {
+          "url": "https://tokyojazzsite.com/directory/listing/masako-2-0?category=0&center=35.662577%2C139.668077&directory_radius=0&is_mile=0&p=1&tab=nearby&view=map&zoom=15",
+          "title": "Masako 2.0 source",
+          "claim": "A specialist on-site jazz guide identifies the 2020 successor at 2-31-2 and explicitly says a second branch opened in October 2025. These should not be collapsed into a single address; current hours need reconfirmation."
+        }
+      ],
+      "verifiedTags": [
+        {
+          "label": "jazz",
+          "sourceUrls": [
+            "https://tokyojazzsite.com/directory/listing/masako-2-0?category=0&center=35.662577%2C139.668077&directory_radius=0&is_mile=0&p=1&tab=nearby&view=map&zoom=15"
+          ]
+        },
+        {
+          "label": "kissaten",
+          "sourceUrls": [
+            "https://tokyojazzsite.com/directory/listing/masako-2-0?category=0&center=35.662577%2C139.668077&directory_radius=0&is_mile=0&p=1&tab=nearby&view=map&zoom=15"
+          ]
+        },
+        {
+          "label": "listening café",
+          "sourceUrls": [
+            "https://tokyojazzsite.com/directory/listing/masako-2-0?category=0&center=35.662577%2C139.668077&directory_radius=0&is_mile=0&p=1&tab=nearby&view=map&zoom=15"
+          ]
+        }
+      ],
+      "flags": [
+        "Original contains time-sensitive or unconfirmed claims; check current primary source before visiting."
+      ],
+      "coordinates": null,
+      "locationConfidence": "unresolved",
+      "links": [],
+      "address": "東京都世田谷区北沢2-31-2",
+      "locationSource": null,
+      "geocodedLabel": null,
+      "geocodeQuery": null,
+      "geocodeNote": "Approximate GSI address-block match using the cited current address; not an entrance-level pin.",
+      "geocodedAt": null,
+      "usesVerifiedAddress": false,
+      "mapLink": "https://www.google.com/maps/search/?api=1&query=東京都世田谷区北沢2-31-2"
+    },
+    "reason": "ADD missing independently researched entity from the original multi-entity line; this ID is not currently present.",
+    "sourceUrls": [
+      "https://tokyojazzsite.com/directory/listing/masako-2-0?category=0&center=35.662577%2C139.668077&directory_radius=0&is_mile=0&p=1&tab=nearby&view=map&zoom=15"
+    ]
+  },
+  {
+    "id": "r214-2",
+    "changes": {
+      "id": "r214-2",
+      "name": "Mari Katayama",
+      "kind": "event",
+      "category": "Events & exhibitions",
+      "ward": "Minato",
+      "locationNote": "Mori Art Museum, Roppongi",
+      "originalTags": [
+        "Exhibition"
+      ],
+      "originalNotes": [
+        "- [Exhibition] **Mariko Mori: All That Shines** → Mori Art Museum, Roppongi — Oct 31, 2026–Mar 28, 2027 — **OPEN ALL 6 DAYS** (no year-end closure; Tue Jan 5 closes 17:00) — ¥2,800/¥3,000 (¥2,600/¥2,800 online) — post-human/cyborg identity, Wave UFO biofeedback installation, particle-physics sculptures. Same ticket: MAM Screen 024, MAM Project 035, **Mari Katayama** (Mori Art Award — body-boundary/prosthetics, biomech-adjacent)."
+      ],
+      "sourceLines": [
+        214
+      ],
+      "originalSection": "Minato (Roppongi)",
+      "status": "verified",
+      "lastChecked": "2026-10-16",
+      "summary": "Official museum schedule lists Mori Art Award 2026 Grand Prize Exhibition: Katayama Mari for October 31, 2026–March 28, 2027. This is a separate exhibition entry sharing the museum.",
+      "sources": [
+        {
+          "url": "https://www.mori.art.museum/en/exhibitions/",
+          "title": "Mori Art Museum exhibition calendar",
+          "claim": "Official museum schedule lists Mori Art Award 2026 Grand Prize Exhibition: Katayama Mari for October 31, 2026–March 28, 2027. This is a separate exhibition entry sharing the museum."
+        }
+      ],
+      "verifiedTags": [
+        {
+          "label": "contemporary art",
+          "sourceUrls": [
+            "https://www.mori.art.museum/en/exhibitions/"
+          ]
+        },
+        {
+          "label": "exhibition",
+          "sourceUrls": [
+            "https://www.mori.art.museum/en/exhibitions/"
+          ]
+        }
+      ],
+      "flags": [
+        "Original contains time-sensitive or unconfirmed claims; check current primary source before visiting."
+      ],
+      "coordinates": null,
+      "locationConfidence": "unresolved",
+      "links": [],
+      "mapLink": "https://www.google.com/maps/search/?api=1&query=Mari Katayama+Japan",
+      "locationSource": null,
+      "geocodedLabel": null,
+      "geocodeQuery": null,
+      "geocodedAt": null,
+      "usesVerifiedAddress": false
+    },
+    "reason": "ADD missing independently researched entity from the original multi-entity line; this ID is not currently present.",
+    "sourceUrls": [
+      "https://www.mori.art.museum/en/exhibitions/"
+    ]
+  },
+  {
+    "id": "r126",
+    "changes": {
+      "ward": "Taito"
+    },
+    "reason": "Research explicitly establishes this administrative ward despite the original neighborhood grouping.",
+    "sourceUrls": [
+      "https://igcc.jp/barcade-01/",
+      "https://r.gnavi.co.jp/jh1z597d0000/"
+    ]
+  },
+  {
+    "id": "r393",
+    "changes": {
+      "ward": "Nerima",
+      "category": "Records & sound"
+    },
+    "reason": "Research explicitly establishes this administrative ward despite the original neighborhood grouping. Official shop describes a used-record retailer, not a cafe.",
+    "sourceUrls": [
+      "https://silencio.theshop.jp/about"
+    ]
+  },
+  {
+    "id": "r439",
+    "changes": {
+      "ward": "Shibuya"
+    },
+    "reason": "The original bullet and researched address both specify Laforet Harajuku, despite being filed under the Osaka source section.",
+    "sourceUrls": [
+      "https://metamorphose.gr.jp/en/shoplist"
+    ]
+  },
+  {
+    "id": "r119",
+    "changes": {
+      "ward": "Meguro",
+      "address": "東京都目黒区三田1-13-3 恵比寿ガーデンプレイス内",
+      "sources": [
+        {
+          "url": "https://www.tokyoartbeat.com/en/events/-/Duet-Asian-Contemporary/B6131856/2026-09-30",
+          "title": "TOP Museum, Ebisu — source",
+          "claim": "Exhibition listing supports Duet: Asian Contemporary, September 30–January 17, with Japanese/Chinese photography and video. Other exhibition and holiday/free-entry claims need checking."
+        },
+        {
+          "url": "https://topmuseum.jp/about/",
+          "title": "Tokyo Photographic Art Museum official overview",
+          "claim": "Lists museum address in Mita, Meguro ward."
+        }
+      ],
+      "mapLink": "https://www.google.com/maps/search/?api=1&query=東京都目黒区三田1-13-3"
+    },
+    "reason": "Official museum overview confirms Meguro ward; Ebisu neighborhood was incorrectly treated as Shibuya ward.",
+    "sourceUrls": [
+      "https://topmuseum.jp/about/"
+    ]
+  }
+]

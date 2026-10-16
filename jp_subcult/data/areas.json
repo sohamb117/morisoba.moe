@@ -1,0 +1,338 @@
+{
+  "Shinjuku": {
+    "coordinates": [
+      139.703613,
+      35.69389
+    ],
+    "title": "東京都新宿区",
+    "source": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%B0%E5%AE%BF%E5%8C%BA"
+  },
+  "Shibuya": {
+    "coordinates": [
+      139.697723,
+      35.66367
+    ],
+    "title": "東京都渋谷区",
+    "source": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%8B%E8%B0%B7%E5%8C%BA"
+  },
+  "Chiyoda": {
+    "coordinates": [
+      139.753616,
+      35.69389
+    ],
+    "title": "東京都千代田区",
+    "source": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%8D%83%E4%BB%A3%E7%94%B0%E5%8C%BA"
+  },
+  "Chuo": {
+    "coordinates": [
+      139.772003,
+      35.670601
+    ],
+    "title": "東京都中央区",
+    "source": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%AD%E5%A4%AE%E5%8C%BA"
+  },
+  "Taito": {
+    "coordinates": [
+      139.779678,
+      35.712631
+    ],
+    "title": "東京都台東区",
+    "source": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%8F%B0%E6%9D%B1%E5%8C%BA"
+  },
+  "Arakawa": {
+    "coordinates": [
+      139.78334,
+      35.736111
+    ],
+    "title": "東京都荒川区",
+    "source": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E8%8D%92%E5%B7%9D%E5%8C%BA"
+  },
+  "Minato": {
+    "coordinates": [
+      139.751663,
+      35.658054
+    ],
+    "title": "東京都港区",
+    "source": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%AF%E5%8C%BA"
+  },
+  "Bunkyo": {
+    "coordinates": [
+      139.752655,
+      35.707817
+    ],
+    "title": "東京都文京区",
+    "source": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%87%E4%BA%AC%E5%8C%BA"
+  },
+  "Toshima": {
+    "coordinates": [
+      139.71666,
+      35.726112
+    ],
+    "title": "東京都豊島区",
+    "source": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E8%B1%8A%E5%B3%B6%E5%8C%BA"
+  },
+  "Nakano": {
+    "coordinates": [
+      139.662872,
+      35.708893
+    ],
+    "title": "東京都中野区",
+    "source": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%AD%E9%87%8E%E5%8C%BA"
+  },
+  "Suginami": {
+    "coordinates": [
+      139.636475,
+      35.699532
+    ],
+    "title": "東京都杉並区",
+    "source": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%9D%89%E4%B8%A6%E5%8C%BA"
+  },
+  "Setagaya": {
+    "coordinates": [
+      139.653183,
+      35.64595
+    ],
+    "title": "東京都世田谷区",
+    "source": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%96%E7%94%B0%E8%B0%B7%E5%8C%BA"
+  },
+  "Meguro": {
+    "coordinates": [
+      139.698196,
+      35.641479
+    ],
+    "title": "東京都目黒区",
+    "source": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E7%9B%AE%E9%BB%92%E5%8C%BA"
+  },
+  "Shinagawa": {
+    "coordinates": [
+      139.730225,
+      35.608997
+    ],
+    "title": "東京都品川区",
+    "source": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%93%81%E5%B7%9D%E5%8C%BA"
+  },
+  "Ota": {
+    "coordinates": [
+      139.716019,
+      35.561211
+    ],
+    "title": "東京都大田区",
+    "source": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%A4%A7%E7%94%B0%E5%8C%BA"
+  },
+  "Koto": {
+    "coordinates": [
+      139.817047,
+      35.67318
+    ],
+    "title": "東京都江東区",
+    "source": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B1%9F%E6%9D%B1%E5%8C%BA"
+  },
+  "Sumida": {
+    "coordinates": [
+      139.801514,
+      35.710678
+    ],
+    "title": "東京都墨田区",
+    "source": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%A2%A8%E7%94%B0%E5%8C%BA"
+  },
+  "Edogawa": {
+    "coordinates": [
+      139.868057,
+      35.706738
+    ],
+    "title": "東京都江戸川区",
+    "source": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B1%9F%E6%88%B8%E5%B7%9D%E5%8C%BA"
+  },
+  "Kita": {
+    "coordinates": [
+      139.733612,
+      35.752777
+    ],
+    "title": "東京都北区",
+    "source": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%8C%97%E5%8C%BA"
+  },
+  "Nerima": {
+    "coordinates": [
+      139.65184,
+      35.735641
+    ],
+    "title": "東京都練馬区",
+    "source": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E7%B7%B4%E9%A6%AC%E5%8C%BA"
+  },
+  "Kichijoji": {
+    "coordinates": [
+      139.566116,
+      35.717777
+    ],
+    "title": "東京都武蔵野市",
+    "source": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%AD%A6%E8%94%B5%E9%87%8E%E5%B8%82"
+  },
+  "Western Tokyo": {
+    "coordinates": [
+      139.407776,
+      35.71389
+    ],
+    "title": "東京都立川市",
+    "source": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E7%AB%8B%E5%B7%9D%E5%B8%82"
+  },
+  "Saitama": {
+    "coordinates": [
+      139.754761,
+      35.974045
+    ],
+    "title": "埼玉県春日部市",
+    "source": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E5%9F%BC%E7%8E%89%E7%9C%8C%E6%98%A5%E6%97%A5%E9%83%A8%E5%B8%82"
+  },
+  "Kanagawa": {
+    "coordinates": [
+      139.373337,
+      35.571388
+    ],
+    "title": "神奈川県相模原市",
+    "source": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E7%A5%9E%E5%A5%88%E5%B7%9D%E7%9C%8C%E7%9B%B8%E6%A8%A1%E5%8E%9F%E5%B8%82"
+  },
+  "Yokohama": {
+    "coordinates": [
+      139.634216,
+      35.450336
+    ],
+    "title": "神奈川県横浜市",
+    "source": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E7%A5%9E%E5%A5%88%E5%B7%9D%E7%9C%8C%E6%A8%AA%E6%B5%9C%E5%B8%82"
+  },
+  "Osaka": {
+    "coordinates": [
+      135.502228,
+      34.69389
+    ],
+    "title": "大阪府大阪市",
+    "source": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E5%A4%A7%E9%98%AA%E5%BA%9C%E5%A4%A7%E9%98%AA%E5%B8%82"
+  },
+  "Kyoto": {
+    "coordinates": [
+      135.768112,
+      35.011669
+    ],
+    "title": "京都府京都市",
+    "source": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E4%BA%AC%E9%83%BD%E5%BA%9C%E4%BA%AC%E9%83%BD%E5%B8%82"
+  },
+  "Kobe": {
+    "coordinates": [
+      135.195755,
+      34.689423
+    ],
+    "title": "兵庫県神戸市",
+    "source": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E5%85%B5%E5%BA%AB%E7%9C%8C%E7%A5%9E%E6%88%B8%E5%B8%82"
+  },
+  "Sapporo": {
+    "coordinates": [
+      141.354401,
+      43.062077
+    ],
+    "title": "北海道札幌市",
+    "source": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E5%8C%97%E6%B5%B7%E9%81%93%E6%9C%AD%E5%B9%8C%E5%B8%82"
+  },
+  "Nagano": {
+    "coordinates": [
+      138.194824,
+      36.648537
+    ],
+    "title": "長野県長野市",
+    "source": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E9%95%B7%E9%87%8E%E7%9C%8C%E9%95%B7%E9%87%8E%E5%B8%82"
+  },
+  "Ishikawa": {
+    "coordinates": [
+      136.315002,
+      36.302776
+    ],
+    "title": "石川県加賀市",
+    "source": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E7%9F%B3%E5%B7%9D%E7%9C%8C%E5%8A%A0%E8%B3%80%E5%B8%82"
+  },
+  "Gunma": {
+    "coordinates": [
+      139.000565,
+      36.489445
+    ],
+    "title": "群馬県渋川市",
+    "source": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E7%BE%A4%E9%A6%AC%E7%9C%8C%E6%B8%8B%E5%B7%9D%E5%B8%82"
+  },
+  "Setouchi": {
+    "coordinates": [
+      133.99559,
+      34.459797
+    ],
+    "title": "香川県直島町",
+    "source": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E9%A6%99%E5%B7%9D%E7%9C%8C%E7%9B%B4%E5%B3%B6%E7%94%BA"
+  },
+  "Naoshima": {
+    "coordinates": [
+      133.99559,
+      34.459797
+    ],
+    "title": "香川県直島町",
+    "source": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E9%A6%99%E5%B7%9D%E7%9C%8C%E7%9B%B4%E5%B3%B6%E7%94%BA"
+  },
+  "Teshima": {
+    "coordinates": [
+      134.188629,
+      34.486652
+    ],
+    "title": "香川県土庄町",
+    "source": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E9%A6%99%E5%B7%9D%E7%9C%8C%E5%9C%9F%E5%BA%84%E7%94%BA"
+  },
+  "Fukui": {
+    "coordinates": [
+      136.500565,
+      36.060833
+    ],
+    "title": "福井県勝山市",
+    "source": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E7%A6%8F%E4%BA%95%E7%9C%8C%E5%8B%9D%E5%B1%B1%E5%B8%82"
+  },
+  "Nagasaki": {
+    "coordinates": [
+      129.879807,
+      32.749527
+    ],
+    "title": "長崎県長崎市",
+    "source": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E9%95%B7%E5%B4%8E%E7%9C%8C%E9%95%B7%E5%B4%8E%E5%B8%82"
+  },
+  "Fukuoka": {
+    "coordinates": [
+      130.401672,
+      33.59
+    ],
+    "title": "福岡県福岡市",
+    "source": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E7%A6%8F%E5%B2%A1%E7%9C%8C%E7%A6%8F%E5%B2%A1%E5%B8%82"
+  },
+  "Oita": {
+    "coordinates": [
+      131.491104,
+      33.284721
+    ],
+    "title": "大分県別府市",
+    "source": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E5%A4%A7%E5%88%86%E7%9C%8C%E5%88%A5%E5%BA%9C%E5%B8%82"
+  },
+  "Aomori": {
+    "coordinates": [
+      141.205383,
+      40.612507
+    ],
+    "title": "青森県十和田市",
+    "source": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E9%9D%92%E6%A3%AE%E7%9C%8C%E5%8D%81%E5%92%8C%E7%94%B0%E5%B8%82"
+  },
+  "Kawasaki": {
+    "coordinates": [
+      139.703033,
+      35.530865
+    ],
+    "title": "神奈川県川崎市",
+    "source": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E7%A5%9E%E5%A5%88%E5%B7%9D%E7%9C%8C%E5%B7%9D%E5%B4%8E%E5%B8%82"
+  },
+  "Mito": {
+    "coordinates": [
+      140.471588,
+      36.365852
+    ],
+    "title": "茨城県水戸市",
+    "source": "https://msearch.gsi.go.jp/address-search/AddressSearch?q=%E8%8C%A8%E5%9F%8E%E7%9C%8C%E6%B0%B4%E6%88%B8%E5%B8%82"
+  }
+}
