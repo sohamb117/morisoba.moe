@@ -1,0 +1,38 @@
+name: Sync public library
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+  pull-requests: write
+concurrency:
+  group: library-sync
+  cancel-in-progress: false
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r scripts/requirements.txt
+      - run: python scripts/sync_library.py
+      - run: python -m unittest discover -s tests -v
+      - name: Propose snapshot update
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet -- data/imports; then
+            echo 'Public lists unchanged.'
+            exit 0
+          fi
+          branch="sync/library-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          git switch -c "$branch"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/imports
+          git commit -m 'Refresh public media library snapshots'
+          git push origin "$branch"
+          gh pr create --base main --head "$branch" --title 'Refresh public media library' --body 'Update the verified public Letterboxd and MyAnimeList snapshots. Handwritten entries are unchanged. Import validation passed; review and merge to publish.'

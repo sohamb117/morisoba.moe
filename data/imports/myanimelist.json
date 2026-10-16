@@ -1,0 +1,1918 @@
+{
+  "schemaVersion": 1,
+  "source": "myanimelist",
+  "username": "ch0p1n117",
+  "syncedAt": "2026-10-16T05:52:40.519702+00:00",
+  "counts": {
+    "anime": 71,
+    "manga": 33
+  },
+  "evidence": [
+    {
+      "url": "https://myanimelist.net/animelist/ch0p1n117/load.json?status=7&offset=0",
+      "sha256": "8c6050f718cb86e54863c19357edcf486a4f3040b3e574e1689f066b961dd7ff",
+      "retrievedAt": "2026-10-16T05:29:53.270554+00:00"
+    },
+    {
+      "url": "https://myanimelist.net/animelist/ch0p1n117/load.json?status=7&offset=71",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "retrievedAt": "2026-10-16T05:29:54.185909+00:00"
+    },
+    {
+      "url": "https://myanimelist.net/mangalist/ch0p1n117/load.json?status=7&offset=0",
+      "sha256": "de8a14daccf21b777fbdb8732384b24a959173743876ee24dc9ce6061b19d20e",
+      "retrievedAt": "2026-10-16T05:29:56.442687+00:00"
+    },
+    {
+      "url": "https://myanimelist.net/mangalist/ch0p1n117/load.json?status=7&offset=33",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "retrievedAt": "2026-10-16T05:29:56.715827+00:00"
+    }
+  ],
+  "entries": [
+    {
+      "id": "myanimelist:anime:13759",
+      "source": "myanimelist",
+      "title": "Sakura-sou no Pet na Kanojo",
+      "alternateTitle": "The Pet Girl of Sakurasou",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 9,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/13759",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 24,
+        "total": 24,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:14741",
+      "source": "myanimelist",
+      "title": "Chuunibyou demo Koi ga Shitai!",
+      "alternateTitle": "Love, Chunibyo & Other Delusions!",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 9,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/14741",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 12,
+        "total": 12,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:14749",
+      "source": "myanimelist",
+      "title": "Ore no Kanojo to Osananajimi ga Shuraba Sugiru",
+      "alternateTitle": "Oreshura",
+      "kind": "shows",
+      "format": "TV",
+      "status": "in progress",
+      "rating": 7,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/14749",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 3,
+        "total": 13,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:14813",
+      "source": "myanimelist",
+      "title": "Yahari Ore no Seishun Love Comedy wa Machigatteiru.",
+      "alternateTitle": "My Teen Romantic Comedy SNAFU",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 9,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/14813",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 13,
+        "total": 13,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:1535",
+      "source": "myanimelist",
+      "title": "Death Note",
+      "alternateTitle": "Death Note",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 4,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/1535",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 37,
+        "total": 37,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:16049",
+      "source": "myanimelist",
+      "title": "Toaru Kagaku no Railgun S",
+      "alternateTitle": "A Certain Scientific Railgun S",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 9,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/16049",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 24,
+        "total": 24,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:18671",
+      "source": "myanimelist",
+      "title": "Chuunibyou demo Koi ga Shitai! Ren",
+      "alternateTitle": "Love, Chunibyo & Other Delusions!: Heart Throb",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 7,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/18671",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 12,
+        "total": 12,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:18753",
+      "source": "myanimelist",
+      "title": "Yahari Ore no Seishun Love Comedy wa Machigatteiru. OVA",
+      "alternateTitle": "My Teen Romantic Comedy SNAFU OVA",
+      "kind": "shows",
+      "format": "OVA",
+      "status": "completed",
+      "rating": 8,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/18753",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 1,
+        "total": 1,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:19815",
+      "source": "myanimelist",
+      "title": "No Game No Life",
+      "alternateTitle": "No Game, No Life",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 7,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/19815",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 12,
+        "total": 12,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:2167",
+      "source": "myanimelist",
+      "title": "Clannad",
+      "alternateTitle": "Clannad",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 9,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/2167",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 23,
+        "total": 23,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:22297",
+      "source": "myanimelist",
+      "title": "Fate/stay night: Unlimited Blade Works",
+      "alternateTitle": "Fate/stay night [Unlimited Blade Works]",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 9,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/22297",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 12,
+        "total": 12,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:23273",
+      "source": "myanimelist",
+      "title": "Shigatsu wa Kimi no Uso",
+      "alternateTitle": "Your Lie in April",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 10,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/23273",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 22,
+        "total": 22,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:23847",
+      "source": "myanimelist",
+      "title": "Yahari Ore no Seishun Love Comedy wa Machigatteiru. Zoku",
+      "alternateTitle": "My Teen Romantic Comedy SNAFU TOO!",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 9,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/23847",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 13,
+        "total": 13,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:24833",
+      "source": "myanimelist",
+      "title": "Ansatsu Kyoushitsu",
+      "alternateTitle": "Assassination Classroom",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 8,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/24833",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 22,
+        "total": 22,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:27775",
+      "source": "myanimelist",
+      "title": "Plastic Memories",
+      "alternateTitle": "Plastic Memories",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 8,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/27775",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 13,
+        "total": 13,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:28069",
+      "source": "myanimelist",
+      "title": "Shigatsu wa Kimi no Uso: Moments",
+      "alternateTitle": "Your Lie in April: Moments",
+      "kind": "shows",
+      "format": "OVA",
+      "status": "completed",
+      "rating": 8,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/28069",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 1,
+        "total": 1,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:28701",
+      "source": "myanimelist",
+      "title": "Fate/stay night: Unlimited Blade Works 2nd Season",
+      "alternateTitle": "Fate/stay night [Unlimited Blade Works] Season 2",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 8,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/28701",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 13,
+        "total": 13,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:28851",
+      "source": "myanimelist",
+      "title": "Koe no Katachi",
+      "alternateTitle": "A Silent Voice",
+      "kind": "films",
+      "format": "Movie",
+      "status": "completed",
+      "rating": 10,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/28851",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 1,
+        "total": 1,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:30654",
+      "source": "myanimelist",
+      "title": "Ansatsu Kyoushitsu 2nd Season",
+      "alternateTitle": "Assassination Classroom Second Season",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 9,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/30654",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 25,
+        "total": 25,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:30831",
+      "source": "myanimelist",
+      "title": "Kono Subarashii Sekai ni Shukufuku wo!",
+      "alternateTitle": "KonoSuba: God's Blessing on This Wonderful World!",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 8,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/30831",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 10,
+        "total": 10,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:31240",
+      "source": "myanimelist",
+      "title": "Re:Zero kara Hajimeru Isekai Seikatsu",
+      "alternateTitle": "Re:ZERO -Starting Life in Another World-",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 9,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/31240",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 25,
+        "total": 25,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:31964",
+      "source": "myanimelist",
+      "title": "Boku no Hero Academia",
+      "alternateTitle": "My Hero Academia",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 7,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/31964",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 13,
+        "total": 13,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:32281",
+      "source": "myanimelist",
+      "title": "Kimi no Na wa.",
+      "alternateTitle": "Your Name.",
+      "kind": "films",
+      "format": "Movie",
+      "status": "completed",
+      "rating": 9,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/32281",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 1,
+        "total": 1,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:32937",
+      "source": "myanimelist",
+      "title": "Kono Subarashii Sekai ni Shukufuku wo! 2",
+      "alternateTitle": "KonoSuba: God's Blessing on This Wonderful World! 2",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 7,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/32937",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 10,
+        "total": 10,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:33206",
+      "source": "myanimelist",
+      "title": "Kobayashi-san Chi no Maid Dragon",
+      "alternateTitle": "Miss Kobayashi's Dragon Maid",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 8,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/33206",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 13,
+        "total": 13,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:33486",
+      "source": "myanimelist",
+      "title": "Boku no Hero Academia 2nd Season",
+      "alternateTitle": "My Hero Academia Season 2",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 8,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/33486",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 25,
+        "total": 25,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:33487",
+      "source": "myanimelist",
+      "title": "Masamune-kun no Revenge",
+      "alternateTitle": "Masamune-kun's Revenge",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 8,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/33487",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 12,
+        "total": 12,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:33731",
+      "source": "myanimelist",
+      "title": "Gabriel DropOut",
+      "alternateTitle": "Gabriel DropOut",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 6,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/33731",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 12,
+        "total": 12,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:34240",
+      "source": "myanimelist",
+      "title": "Shelter (Music)",
+      "alternateTitle": "Shelter",
+      "kind": "shows",
+      "format": "Music",
+      "status": "completed",
+      "rating": 9,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/34240",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 1,
+        "total": 1,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:34618",
+      "source": "myanimelist",
+      "title": "Blend S",
+      "alternateTitle": "BLEND-S",
+      "kind": "shows",
+      "format": "TV",
+      "status": "on hold",
+      "rating": 7,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/34618",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 0,
+        "total": 12,
+        "unit": "episodes"
+      },
+      "sourceStarted": "09-17-20"
+    },
+    {
+      "id": "myanimelist:anime:34855",
+      "source": "myanimelist",
+      "title": "Gabriel DropOut Specials",
+      "alternateTitle": "",
+      "kind": "shows",
+      "format": "Special",
+      "status": "completed",
+      "rating": 7,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/34855",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 2,
+        "total": 2,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:35608",
+      "source": "myanimelist",
+      "title": "Chuunibyou demo Koi ga Shitai! Movie: Take On Me",
+      "alternateTitle": "Love, Chunibyo & Other Delusions!: Take On Me",
+      "kind": "films",
+      "format": "Movie",
+      "status": "completed",
+      "rating": 8,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/35608",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 1,
+        "total": 1,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:35849",
+      "source": "myanimelist",
+      "title": "Darling in the FranXX",
+      "alternateTitle": "DARLING in the FRANXX",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 3,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/35849",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 24,
+        "total": 24,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:36286",
+      "source": "myanimelist",
+      "title": "Re:Zero kara Hajimeru Isekai Seikatsu - Memory Snow",
+      "alternateTitle": "Re:ZERO -Starting Life in Another World- Memory Snow",
+      "kind": "films",
+      "format": "Movie",
+      "status": "completed",
+      "rating": 8,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/36286",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 1,
+        "total": 1,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:36456",
+      "source": "myanimelist",
+      "title": "Boku no Hero Academia 3rd Season",
+      "alternateTitle": "My Hero Academia Season 3",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 8,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/36456",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 25,
+        "total": 25,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:37450",
+      "source": "myanimelist",
+      "title": "Seishun Buta Yarou wa Bunny Girl Senpai no Yume wo Minai",
+      "alternateTitle": "Rascal Does Not Dream of Bunny Girl Senpai",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 8,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/37450",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 13,
+        "total": 13,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:37999",
+      "source": "myanimelist",
+      "title": "Kaguya-sama wa Kokurasetai: Tensai-tachi no Renai Zunousen",
+      "alternateTitle": "Kaguya-sama: Love is War",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 8,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/37999",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 12,
+        "total": 12,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:38408",
+      "source": "myanimelist",
+      "title": "Boku no Hero Academia 4th Season",
+      "alternateTitle": "My Hero Academia Season 4",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 6,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/38408",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 25,
+        "total": 25,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:38481",
+      "source": "myanimelist",
+      "title": "Toaru Kagaku no Railgun T",
+      "alternateTitle": "A Certain Scientific Railgun T",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 7,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/38481",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 25,
+        "total": 25,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:38826",
+      "source": "myanimelist",
+      "title": "Tenki no Ko",
+      "alternateTitle": "Weathering with You",
+      "kind": "films",
+      "format": "Movie",
+      "status": "completed",
+      "rating": 9,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/38826",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 1,
+        "total": 1,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:39112",
+      "source": "myanimelist",
+      "title": "Kawaki wo Ameku",
+      "alternateTitle": "Crying for Rain",
+      "kind": "shows",
+      "format": "Music",
+      "status": "completed",
+      "rating": 9,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/39112",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 1,
+        "total": 1,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:39113",
+      "source": "myanimelist",
+      "title": "Lilac",
+      "alternateTitle": "Lilac",
+      "kind": "shows",
+      "format": "Music",
+      "status": "completed",
+      "rating": 8,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/39113",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 1,
+        "total": 1,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:39114",
+      "source": "myanimelist",
+      "title": "Hollowness",
+      "alternateTitle": "Hollowness",
+      "kind": "shows",
+      "format": "Music",
+      "status": "completed",
+      "rating": 7,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/39114",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 1,
+        "total": 1,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:39511",
+      "source": "myanimelist",
+      "title": "Main Actor",
+      "alternateTitle": "",
+      "kind": "shows",
+      "format": "Music",
+      "status": "completed",
+      "rating": 8,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/39511",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 1,
+        "total": 1,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:39547",
+      "source": "myanimelist",
+      "title": "Yahari Ore no Seishun Love Comedy wa Machigatteiru. Kan",
+      "alternateTitle": "My Teen Romantic Comedy SNAFU Climax!",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 10,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/39547",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 12,
+        "total": 12,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:39587",
+      "source": "myanimelist",
+      "title": "Re:Zero kara Hajimeru Isekai Seikatsu 2nd Season",
+      "alternateTitle": "Re:ZERO -Starting Life in Another World- Season 2",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 9,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/39587",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 13,
+        "total": 13,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:39790",
+      "source": "myanimelist",
+      "title": "Adachi to Shimamura",
+      "alternateTitle": "Adachi and Shimamura",
+      "kind": "shows",
+      "format": "TV",
+      "status": "on hold",
+      "rating": 8,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/39790",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 7,
+        "total": 12,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:39975",
+      "source": "myanimelist",
+      "title": "Android Girl feat. Hatsune Miku",
+      "alternateTitle": "Android Girl",
+      "kind": "shows",
+      "format": "Music",
+      "status": "completed",
+      "rating": 8,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/39975",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 1,
+        "total": 1,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:4059",
+      "source": "myanimelist",
+      "title": "Clannad: Mou Hitotsu no Sekai, Tomoyo-hen",
+      "alternateTitle": "Clannad: Another World, Tomoyo Chapter",
+      "kind": "shows",
+      "format": "Special",
+      "status": "completed",
+      "rating": 7,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/4059",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 1,
+        "total": 1,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:40591",
+      "source": "myanimelist",
+      "title": "Kaguya-sama wa Kokurasetai? Tensai-tachi no Renai Zunousen",
+      "alternateTitle": "Kaguya-sama: Love is War?",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 9,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/40591",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 12,
+        "total": 12,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:40748",
+      "source": "myanimelist",
+      "title": "Jujutsu Kaisen",
+      "alternateTitle": "Jujutsu Kaisen",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 9,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/40748",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 24,
+        "total": 24,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:40839",
+      "source": "myanimelist",
+      "title": "Kanojo, Okarishimasu",
+      "alternateTitle": "Rent-a-Girlfriend",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 5,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/40839",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 12,
+        "total": 12,
+        "unit": "episodes"
+      },
+      "sourceFinished": "11-02-20"
+    },
+    {
+      "id": "myanimelist:anime:41195",
+      "source": "myanimelist",
+      "title": "Kokoro Yohou",
+      "alternateTitle": "Heart Forecast",
+      "kind": "shows",
+      "format": "Music",
+      "status": "completed",
+      "rating": 7,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/41195",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 1,
+        "total": 1,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:41389",
+      "source": "myanimelist",
+      "title": "Tonikaku Kawaii",
+      "alternateTitle": "Tonikawa: Over The Moon For You",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 7,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/41389",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 12,
+        "total": 12,
+        "unit": "episodes"
+      },
+      "sourceFinished": "12-30-20"
+    },
+    {
+      "id": "myanimelist:anime:41619",
+      "source": "myanimelist",
+      "title": "Munou na Nana",
+      "alternateTitle": "Talentless Nana",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 8,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/41619",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 13,
+        "total": 13,
+        "unit": "episodes"
+      },
+      "sourceFinished": "12-30-20"
+    },
+    {
+      "id": "myanimelist:anime:4181",
+      "source": "myanimelist",
+      "title": "Clannad: After Story",
+      "alternateTitle": "Clannad: After Story",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 10,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/4181",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 24,
+        "total": 24,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:42203",
+      "source": "myanimelist",
+      "title": "Re:Zero kara Hajimeru Isekai Seikatsu 2nd Season Part 2",
+      "alternateTitle": "Re:ZERO -Starting Life in Another World- Season 2 Part 2",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 9,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/42203",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 12,
+        "total": 12,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:4224",
+      "source": "myanimelist",
+      "title": "Toradora!",
+      "alternateTitle": "Toradora!",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 8,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/4224",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 25,
+        "total": 25,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:42344",
+      "source": "myanimelist",
+      "title": "Ame wo Matsu,",
+      "alternateTitle": "Waiting for Rain",
+      "kind": "shows",
+      "format": "Music",
+      "status": "completed",
+      "rating": 9,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/42344",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 1,
+        "total": 1,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:42897",
+      "source": "myanimelist",
+      "title": "Horimiya",
+      "alternateTitle": "Horimiya",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 9,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/42897",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 13,
+        "total": 13,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:43969",
+      "source": "myanimelist",
+      "title": "Kanojo mo Kanojo",
+      "alternateTitle": "Girlfriend, Girlfriend",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 8,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/43969",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 12,
+        "total": 12,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:44511",
+      "source": "myanimelist",
+      "title": "Chainsaw Man",
+      "alternateTitle": "Chainsaw Man",
+      "kind": "shows",
+      "format": "TV",
+      "status": "planned",
+      "rating": null,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/44511",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 0,
+        "total": 12,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:4654",
+      "source": "myanimelist",
+      "title": "Toaru Majutsu no Index",
+      "alternateTitle": "A Certain Magical Index",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 5,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/4654",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 24,
+        "total": 24,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:5114",
+      "source": "myanimelist",
+      "title": "Fullmetal Alchemist: Brotherhood",
+      "alternateTitle": "Fullmetal Alchemist: Brotherhood",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 8,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/5114",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 64,
+        "total": 64,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:5680",
+      "source": "myanimelist",
+      "title": "K-On!",
+      "alternateTitle": "K-ON!",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 8,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/5680",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 13,
+        "total": 13,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:6213",
+      "source": "myanimelist",
+      "title": "Toaru Kagaku no Railgun",
+      "alternateTitle": "A Certain Scientific Railgun",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 7,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/6213",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 24,
+        "total": 24,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:6351",
+      "source": "myanimelist",
+      "title": "Clannad: After Story - Mou Hitotsu no Sekai, Kyou-hen",
+      "alternateTitle": "Clannad: After Story - Another World, Kyou Chapter",
+      "kind": "shows",
+      "format": "Special",
+      "status": "completed",
+      "rating": 8,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/6351",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 1,
+        "total": 1,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:6547",
+      "source": "myanimelist",
+      "title": "Angel Beats!",
+      "alternateTitle": "Angel Beats!",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 10,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/6547",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 13,
+        "total": 13,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:7791",
+      "source": "myanimelist",
+      "title": "K-On!!",
+      "alternateTitle": "K-ON! Season 2",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 8,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/7791",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 26,
+        "total": 26,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:9756",
+      "source": "myanimelist",
+      "title": "Mahou Shoujo Madoka☆Magica",
+      "alternateTitle": "Puella Magi Madoka Magica",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 8,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/9756",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 12,
+        "total": 12,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:anime:9989",
+      "source": "myanimelist",
+      "title": "Ano Hi Mita Hana no Namae wo Bokutachi wa Mada Shiranai.",
+      "alternateTitle": "Anohana: The Flower We Saw That Day",
+      "kind": "shows",
+      "format": "TV",
+      "status": "completed",
+      "rating": 10,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/anime/9989",
+      "userUrl": "https://myanimelist.net/animelist/ch0p1n117",
+      "progress": {
+        "value": 11,
+        "total": 11,
+        "unit": "episodes"
+      }
+    },
+    {
+      "id": "myanimelist:manga:103851",
+      "source": "myanimelist",
+      "title": "5-toubun no Hanayome",
+      "alternateTitle": "The Quintessential Quintuplets",
+      "kind": "manga",
+      "format": "Manga",
+      "status": "on hold",
+      "rating": 7,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/manga/103851",
+      "userUrl": "https://myanimelist.net/mangalist/ch0p1n117",
+      "progress": {
+        "value": 2,
+        "total": 122,
+        "unit": "chapters"
+      }
+    },
+    {
+      "id": "myanimelist:manga:109909",
+      "source": "myanimelist",
+      "title": "Nettaigyo wa Yuki ni Kogareru",
+      "alternateTitle": "A Tropical Fish Yearns for Snow",
+      "kind": "manga",
+      "format": "Manga",
+      "status": "in progress",
+      "rating": 7,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/manga/109909",
+      "userUrl": "https://myanimelist.net/mangalist/ch0p1n117",
+      "progress": {
+        "value": 4,
+        "total": 34,
+        "unit": "chapters"
+      }
+    },
+    {
+      "id": "myanimelist:manga:110737",
+      "source": "myanimelist",
+      "title": "Ijiranaide, Nagatoro-san",
+      "alternateTitle": "Don't Toy With Me, Miss Nagatoro",
+      "kind": "manga",
+      "format": "Manga",
+      "status": "in progress",
+      "rating": null,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/manga/110737",
+      "userUrl": "https://myanimelist.net/mangalist/ch0p1n117",
+      "progress": {
+        "value": 75,
+        "total": 174,
+        "unit": "chapters"
+      }
+    },
+    {
+      "id": "myanimelist:manga:111996",
+      "source": "myanimelist",
+      "title": "The God of High School",
+      "alternateTitle": "The God of High School",
+      "kind": "manga",
+      "format": "Manhwa",
+      "status": "dropped",
+      "rating": 6,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/manga/111996",
+      "userUrl": "https://myanimelist.net/mangalist/ch0p1n117",
+      "progress": {
+        "value": 0,
+        "total": 569,
+        "unit": "chapters"
+      }
+    },
+    {
+      "id": "myanimelist:manga:112268",
+      "source": "myanimelist",
+      "title": "Sono Bisque Doll wa Koi wo Suru",
+      "alternateTitle": "My Dress-Up Darling",
+      "kind": "manga",
+      "format": "Manga",
+      "status": "in progress",
+      "rating": null,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/manga/112268",
+      "userUrl": "https://myanimelist.net/mangalist/ch0p1n117",
+      "progress": {
+        "value": 50,
+        "total": 119,
+        "unit": "chapters"
+      }
+    },
+    {
+      "id": "myanimelist:manga:112483",
+      "source": "myanimelist",
+      "title": "Super Secret",
+      "alternateTitle": "Super Secret",
+      "kind": "manga",
+      "format": "Manhwa",
+      "status": "completed",
+      "rating": 9,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/manga/112483",
+      "userUrl": "https://myanimelist.net/mangalist/ch0p1n117",
+      "progress": {
+        "value": 143,
+        "total": 144,
+        "unit": "chapters"
+      }
+    },
+    {
+      "id": "myanimelist:manga:112589",
+      "source": "myanimelist",
+      "title": "Tonikaku Kawaii",
+      "alternateTitle": "Fly Me to the Moon",
+      "kind": "manga",
+      "format": "Manga",
+      "status": "in progress",
+      "rating": 8,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/manga/112589",
+      "userUrl": "https://myanimelist.net/mangalist/ch0p1n117",
+      "progress": {
+        "value": 138,
+        "total": null,
+        "unit": "chapters"
+      }
+    },
+    {
+      "id": "myanimelist:manga:116766",
+      "source": "myanimelist",
+      "title": "Hige wo Soru. Soshite Joshikousei wo Hirou.",
+      "alternateTitle": "Higehiro: After Being Rejected, I Shaved and Took in a High School Runaway",
+      "kind": "manga",
+      "format": "Manga",
+      "status": "in progress",
+      "rating": null,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/manga/116766",
+      "userUrl": "https://myanimelist.net/mangalist/ch0p1n117",
+      "progress": {
+        "value": 24,
+        "total": 69,
+        "unit": "chapters"
+      }
+    },
+    {
+      "id": "myanimelist:manga:116778",
+      "source": "myanimelist",
+      "title": "Chainsaw Man",
+      "alternateTitle": "Chainsaw Man",
+      "kind": "manga",
+      "format": "Manga",
+      "status": "in progress",
+      "rating": 8,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/manga/116778",
+      "userUrl": "https://myanimelist.net/mangalist/ch0p1n117",
+      "progress": {
+        "value": 97,
+        "total": 232,
+        "unit": "chapters"
+      }
+    },
+    {
+      "id": "myanimelist:manga:117332",
+      "source": "myanimelist",
+      "title": "Suki na Ko ga Megane wo Wasureta",
+      "alternateTitle": "The Girl I Like Forgot Her Glasses",
+      "kind": "manga",
+      "format": "Manga",
+      "status": "in progress",
+      "rating": 7,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/manga/117332",
+      "userUrl": "https://myanimelist.net/mangalist/ch0p1n117",
+      "progress": {
+        "value": 57,
+        "total": 120,
+        "unit": "chapters"
+      }
+    },
+    {
+      "id": "myanimelist:manga:119216",
+      "source": "myanimelist",
+      "title": "Soredemo Ayumu wa Yosetekuru",
+      "alternateTitle": "When Will Ayumu Make His Move?",
+      "kind": "manga",
+      "format": "Manga",
+      "status": "in progress",
+      "rating": null,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/manga/119216",
+      "userUrl": "https://myanimelist.net/mangalist/ch0p1n117",
+      "progress": {
+        "value": 85,
+        "total": 225,
+        "unit": "chapters"
+      }
+    },
+    {
+      "id": "myanimelist:manga:121496",
+      "source": "myanimelist",
+      "title": "Solo Leveling",
+      "alternateTitle": "Solo Leveling",
+      "kind": "manga",
+      "format": "Manhwa",
+      "status": "in progress",
+      "rating": null,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/manga/121496",
+      "userUrl": "https://myanimelist.net/mangalist/ch0p1n117",
+      "progress": {
+        "value": 134,
+        "total": 201,
+        "unit": "chapters"
+      }
+    },
+    {
+      "id": "myanimelist:manga:122448",
+      "source": "myanimelist",
+      "title": "Kubo-san wa Mob wo Yurusanai",
+      "alternateTitle": "Kubo Won't Let Me Be Invisible",
+      "kind": "manga",
+      "format": "Manga",
+      "status": "in progress",
+      "rating": null,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/manga/122448",
+      "userUrl": "https://myanimelist.net/mangalist/ch0p1n117",
+      "progress": {
+        "value": 54,
+        "total": 152,
+        "unit": "chapters"
+      }
+    },
+    {
+      "id": "myanimelist:manga:123198",
+      "source": "myanimelist",
+      "title": "Osananajimi ga Zettai ni Makenai Love Comedy",
+      "alternateTitle": "",
+      "kind": "manga",
+      "format": "Manga",
+      "status": "in progress",
+      "rating": 7,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/manga/123198",
+      "userUrl": "https://myanimelist.net/mangalist/ch0p1n117",
+      "progress": {
+        "value": 9,
+        "total": 50,
+        "unit": "chapters"
+      }
+    },
+    {
+      "id": "myanimelist:manga:124780",
+      "source": "myanimelist",
+      "title": "Koishita node Cast shitemita",
+      "alternateTitle": "I Fell in Love So I'm Streaming It",
+      "kind": "manga",
+      "format": "Manga",
+      "status": "in progress",
+      "rating": null,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/manga/124780",
+      "userUrl": "https://myanimelist.net/mangalist/ch0p1n117",
+      "progress": {
+        "value": 45,
+        "total": 96,
+        "unit": "chapters"
+      }
+    },
+    {
+      "id": "myanimelist:manga:126140",
+      "source": "myanimelist",
+      "title": "Tonari no Seki ni Natta Bishoujo ga Horesaseyou to Karakattekuru ga Itsunomanika Kaeriuchi ni Shiteita",
+      "alternateTitle": "Turning the Tables on the Seatmate Killer!",
+      "kind": "manga",
+      "format": "Manga",
+      "status": "in progress",
+      "rating": null,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/manga/126140",
+      "userUrl": "https://myanimelist.net/mangalist/ch0p1n117",
+      "progress": {
+        "value": 6,
+        "total": 25,
+        "unit": "chapters"
+      }
+    },
+    {
+      "id": "myanimelist:manga:127062",
+      "source": "myanimelist",
+      "title": "Ichizu Bitch-chan",
+      "alternateTitle": "",
+      "kind": "manga",
+      "format": "Manga",
+      "status": "in progress",
+      "rating": null,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/manga/127062",
+      "userUrl": "https://myanimelist.net/mangalist/ch0p1n117",
+      "progress": {
+        "value": 40,
+        "total": null,
+        "unit": "chapters"
+      }
+    },
+    {
+      "id": "myanimelist:manga:128231",
+      "source": "myanimelist",
+      "title": "Weak Hero",
+      "alternateTitle": "Weak Hero",
+      "kind": "manga",
+      "format": "Manhwa",
+      "status": "in progress",
+      "rating": null,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/manga/128231",
+      "userUrl": "https://myanimelist.net/mangalist/ch0p1n117",
+      "progress": {
+        "value": 126,
+        "total": 267,
+        "unit": "chapters"
+      }
+    },
+    {
+      "id": "myanimelist:manga:128534",
+      "source": "myanimelist",
+      "title": "Kanojo, Hitomishirimasu",
+      "alternateTitle": "Rent-A-(Really Shy!)-Girlfriend",
+      "kind": "manga",
+      "format": "Manga",
+      "status": "in progress",
+      "rating": 7,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/manga/128534",
+      "userUrl": "https://myanimelist.net/mangalist/ch0p1n117",
+      "progress": {
+        "value": 13,
+        "total": 19,
+        "unit": "chapters"
+      }
+    },
+    {
+      "id": "myanimelist:manga:130924",
+      "source": "myanimelist",
+      "title": "Chikan Saresou ni Natteiru S-kyuu Bishoujo wo Tasuketara Tonari no Seki no Osananajimi datta",
+      "alternateTitle": "The Girl I Saved on the Train Turned Out to Be My Childhood Friend",
+      "kind": "manga",
+      "format": "Manga",
+      "status": "in progress",
+      "rating": null,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/manga/130924",
+      "userUrl": "https://myanimelist.net/mangalist/ch0p1n117",
+      "progress": {
+        "value": 15,
+        "total": 96,
+        "unit": "chapters"
+      }
+    },
+    {
+      "id": "myanimelist:manga:19087",
+      "source": "myanimelist",
+      "title": "Boku wa Tomodachi ga Sukunai",
+      "alternateTitle": "Haganai: I Don't Have Many Friends",
+      "kind": "manga",
+      "format": "Manga",
+      "status": "in progress",
+      "rating": null,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/manga/19087",
+      "userUrl": "https://myanimelist.net/mangalist/ch0p1n117",
+      "progress": {
+        "value": 19,
+        "total": 109,
+        "unit": "chapters"
+      }
+    },
+    {
+      "id": "myanimelist:manga:23390",
+      "source": "myanimelist",
+      "title": "Shingeki no Kyojin",
+      "alternateTitle": "Attack on Titan",
+      "kind": "manga",
+      "format": "Manga",
+      "status": "dropped",
+      "rating": 6,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/manga/23390",
+      "userUrl": "https://myanimelist.net/mangalist/ch0p1n117",
+      "progress": {
+        "value": 102,
+        "total": 141,
+        "unit": "chapters"
+      }
+    },
+    {
+      "id": "myanimelist:manga:26769",
+      "source": "myanimelist",
+      "title": "Bokura wa Minna Kawai-sou",
+      "alternateTitle": "The Kawai Complex Guide to Manors and Hostel Behavior",
+      "kind": "manga",
+      "format": "Manga",
+      "status": "completed",
+      "rating": 9,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/manga/26769",
+      "userUrl": "https://myanimelist.net/mangalist/ch0p1n117",
+      "progress": {
+        "value": 93,
+        "total": 93,
+        "unit": "chapters"
+      }
+    },
+    {
+      "id": "myanimelist:manga:30315",
+      "source": "myanimelist",
+      "title": "Last Game",
+      "alternateTitle": "Last Game",
+      "kind": "manga",
+      "format": "Manga",
+      "status": "completed",
+      "rating": 7,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/manga/30315",
+      "userUrl": "https://myanimelist.net/mangalist/ch0p1n117",
+      "progress": {
+        "value": 66,
+        "total": 66,
+        "unit": "chapters"
+      }
+    },
+    {
+      "id": "myanimelist:manga:37707",
+      "source": "myanimelist",
+      "title": "Shigatsu wa Kimi no Uso",
+      "alternateTitle": "Your Lie in April",
+      "kind": "manga",
+      "format": "Manga",
+      "status": "completed",
+      "rating": 10,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/manga/37707",
+      "userUrl": "https://myanimelist.net/mangalist/ch0p1n117",
+      "progress": {
+        "value": 44,
+        "total": 44,
+        "unit": "chapters"
+      }
+    },
+    {
+      "id": "myanimelist:manga:39883",
+      "source": "myanimelist",
+      "title": "Ansatsu Kyoushitsu",
+      "alternateTitle": "Assassination Classroom",
+      "kind": "manga",
+      "format": "Manga",
+      "status": "completed",
+      "rating": 10,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/manga/39883",
+      "userUrl": "https://myanimelist.net/mangalist/ch0p1n117",
+      "progress": {
+        "value": 187,
+        "total": 187,
+        "unit": "chapters"
+      }
+    },
+    {
+      "id": "myanimelist:manga:50027",
+      "source": "myanimelist",
+      "title": "About Death",
+      "alternateTitle": "About Death",
+      "kind": "manga",
+      "format": "Manhwa",
+      "status": "in progress",
+      "rating": null,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/manga/50027",
+      "userUrl": "https://myanimelist.net/mangalist/ch0p1n117",
+      "progress": {
+        "value": 23,
+        "total": 27,
+        "unit": "chapters"
+      }
+    },
+    {
+      "id": "myanimelist:manga:55163",
+      "source": "myanimelist",
+      "title": "Gakkougurashi!",
+      "alternateTitle": "School-Live!",
+      "kind": "manga",
+      "format": "Manga",
+      "status": "completed",
+      "rating": 8,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/manga/55163",
+      "userUrl": "https://myanimelist.net/mangalist/ch0p1n117",
+      "progress": {
+        "value": 78,
+        "total": 78,
+        "unit": "chapters"
+      }
+    },
+    {
+      "id": "myanimelist:manga:70941",
+      "source": "myanimelist",
+      "title": "Domestic na Kanojo",
+      "alternateTitle": "Domestic Girlfriend",
+      "kind": "manga",
+      "format": "Manga",
+      "status": "completed",
+      "rating": 3,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/manga/70941",
+      "userUrl": "https://myanimelist.net/mangalist/ch0p1n117",
+      "progress": {
+        "value": 292,
+        "total": 292,
+        "unit": "chapters"
+      }
+    },
+    {
+      "id": "myanimelist:manga:75989",
+      "source": "myanimelist",
+      "title": "Boku no Hero Academia",
+      "alternateTitle": "My Hero Academia",
+      "kind": "manga",
+      "format": "Manga",
+      "status": "on hold",
+      "rating": 5,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/manga/75989",
+      "userUrl": "https://myanimelist.net/mangalist/ch0p1n117",
+      "progress": {
+        "value": 0,
+        "total": 432,
+        "unit": "chapters"
+      }
+    },
+    {
+      "id": "myanimelist:manga:90125",
+      "source": "myanimelist",
+      "title": "Kaguya-sama wa Kokurasetai: Tensai-tachi no Renai Zunousen",
+      "alternateTitle": "Kaguya-sama: Love Is War",
+      "kind": "manga",
+      "format": "Manga",
+      "status": "in progress",
+      "rating": 9,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/manga/90125",
+      "userUrl": "https://myanimelist.net/mangalist/ch0p1n117",
+      "progress": {
+        "value": 213,
+        "total": 281,
+        "unit": "chapters"
+      }
+    },
+    {
+      "id": "myanimelist:manga:96528",
+      "source": "myanimelist",
+      "title": "Arifureta Shokugyou de Sekai Saikyou",
+      "alternateTitle": "Arifureta: From Commonplace to World's Strongest",
+      "kind": "manga",
+      "format": "Manga",
+      "status": "in progress",
+      "rating": null,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/manga/96528",
+      "userUrl": "https://myanimelist.net/mangalist/ch0p1n117",
+      "progress": {
+        "value": 47,
+        "total": null,
+        "unit": "chapters"
+      }
+    },
+    {
+      "id": "myanimelist:manga:99007",
+      "source": "myanimelist",
+      "title": "Komi-san wa, Comyushou desu.",
+      "alternateTitle": "Komi Can't Communicate",
+      "kind": "manga",
+      "format": "Manga",
+      "status": "dropped",
+      "rating": 6,
+      "ratingMax": 10,
+      "url": "https://myanimelist.net/manga/99007",
+      "userUrl": "https://myanimelist.net/mangalist/ch0p1n117",
+      "progress": {
+        "value": 0,
+        "total": 500,
+        "unit": "chapters"
+      }
+    }
+  ],
+  "reviews": [],
+  "reviewEvidence": [
+    {
+      "url": "https://myanimelist.net/profile/ch0p1n117/reviews",
+      "sha256": "b44900608ea704b3df9f65dbabaf932d4520b923059d615bc21dbc7de76cb1b7",
+      "retrievedAt": "2026-10-16T05:52:40.500092+00:00"
+    }
+  ]
+}
