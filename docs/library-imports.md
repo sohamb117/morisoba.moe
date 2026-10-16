@@ -84,9 +84,9 @@ merging is performed: remakes and translated titles cannot overwrite one
 another accidentally. Handwritten fields always win on linked entries, while
 all source ratings and progress remain visible in details. For example,
 964 Pinocchio retains its handwritten 3/5 alongside Letterboxd's 3.5/5.
-The series/anime shelf and imports window are intentionally omitted from the UI.
-Series records, including Serial Experiments Lain, remain preserved in the source
-files but are not displayed. Verified Your Name and
+The series shelf includes the imported anime records and is labeled simply
+“series.” Serial Experiments Lain remains on that shelf. There is no imports
+window in the UI. Verified Your Name and
 Weathering with You links join the two providers. Other identities remain
 separate until explicitly linked. Source filtering matches any attached source;
 status and sort use the merged entry's primary status/rating. A completed status

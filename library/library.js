@@ -3,7 +3,7 @@
   'use strict';
   const M = LibraryData;
   const names = {local: 'handwritten', letterboxd: 'letterboxd', myanimelist: 'myanimelist'};
-  const labels = {books: 'books', films: 'films', manga: 'manga'};
+  const labels = {books: 'books', films: 'films', shows: 'series', manga: 'manga'};
   const shelves = Object.keys(labels);
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   let items = [], selected = null, returnFocus = null;

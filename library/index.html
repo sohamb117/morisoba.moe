@@ -422,7 +422,7 @@ CODEX ✠ rev.α
       <section class="panel" id="p-about-library" data-w="220" >
       <div class="titlebar"><span class="tl">layer:α.0 premise</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
       <div class="pbody prose">
-        the library holds my records on books read, films seen, and manga read. i will update as i revisit my experiences or watch new media. return to <a href="../">index</a> when done.
+        the library holds my records on books read, films seen, every series watched, and manga read. i will update as i revisit my experiences or watch new media. return to <a href="../">index</a> when done.
       </div>
     </section>
       <section class="panel" id="p-stats" data-w="200" >
@@ -443,6 +443,10 @@ CODEX ✠ rev.α
       <div class="pbody scrollable-body"></div>
     </section>
 
+      <section class="panel" id="p-shows" data-w="300" >
+      <div class="titlebar"><span class="tl">layer:α.3 series</span><span class="shelf-count"></span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
+      <div class="pbody scrollable-body"></div>
+    </section>
       <section class="panel" id="p-manga">
         <div class="titlebar"><span class="tl">layer:α.4 manga</span><span class="shelf-count"></span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
         <div class="pbody scrollable-body"></div>
@@ -479,6 +483,7 @@ CODEX ✠ rev.α
     "p-manga":         "mat-metal",
     "p-books":         "mat-metal",
     "p-films":         "mat-metal",
+    "p-shows":         "mat-metal",
     "p-detail":        "mat-crt scr-green"
   };
 
@@ -586,7 +591,7 @@ CODEX ✠ rev.α
     attachAccessories(document.querySelectorAll(".panel"));
     spawnDecor();
     drawTraces();
-    registerGlitchTargets(["#p-books .row .title", "#p-films .row .title"]);
+    registerGlitchTargets(["#p-books .row .title", "#p-films .row .title", "#p-shows .row .title"]);
     startLoader(BOOT, async function(){
       await startLibrary();
     });
