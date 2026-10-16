@@ -396,6 +396,7 @@ document.querySelectorAll(".pbtn").forEach(function(btn){
 
 /* ================= cursor + traces parallax (rAF + lerp) ================= */
 function startCursorParallax(){
+if(window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 var cur=document.getElementById("cursor");
 if(cur&&!isMobile()){
   var tracesEl=document.getElementById("traces");
@@ -433,6 +434,10 @@ function registerGlitchTargets(selectors){
 (function(){
   var CROSS=["✠","†","☩","♰","✝","☨","✞","♱"];
   function tick(){
+    if(window.matchMedia("(prefers-reduced-motion: reduce)").matches){
+      setTimeout(tick,5000);
+      return;
+    }
     var targets=document.querySelectorAll(glitchSelectors.join(", "));
     if(targets.length){
       var el=targets[Math.floor(Math.random()*targets.length)];
@@ -466,6 +471,10 @@ function registerGlitchTargets(selectors){
 function startPacketBurst(){
   if(isMobile()) return;
   function burst(){
+    if(window.matchMedia("(prefers-reduced-motion: reduce)").matches){
+      setTimeout(burst,20000);
+      return;
+    }
     var b=document.createElement("div");
     b.className="packet-burst";
     var wRatio=0.30+Math.random()*0.40;
