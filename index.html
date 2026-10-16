@@ -28,11 +28,32 @@
 #p-name .glyphrow span:nth-child(7){animation-delay:6s}
 
 /* seraph */
-#p-seraph .pbody{padding:8px 10px;}
+#p-ascii .pbody{padding:8px 10px;}
 #seraph{font-size:10px;line-height:1.08;letter-spacing:0;white-space:pre;
   text-align:center;}
-#p-seraph .caption{font-size:9px;letter-spacing:3px;text-align:center;opacity:.6;
+#p-ascii .caption{font-size:9px;letter-spacing:3px;text-align:center;opacity:.6;
   padding-top:6px;}
+
+
+/* One stable footprint for all three ASCII layers. */
+#p-ascii .pbody{display:grid;padding:8px 10px;overflow:hidden;}
+#p-ascii.min .pbody{display:none;}
+#p-ascii .ascii-layer{grid-area:1/1;align-self:center;justify-self:center;visibility:hidden;}
+#p-ascii .ascii-layer[hidden]{display:block;}
+#p-ascii .ascii-layer:not([hidden]){visibility:visible;}
+/* Reserve the animated eye's full 19 lines before its first frame. */
+#seraph{min-width:39ch;min-height:205.2px;}
+#p-ascii .tl{letter-spacing:1px;}
+#p-ascii.ascii-glitch .ascii-layer:not([hidden]){animation:ascii-switch 560ms steps(1) both;}
+@keyframes ascii-switch{
+  0%,100%{transform:none;opacity:1;filter:none;}
+  12%{transform:translateX(-6px) skewX(5deg);opacity:.65;clip-path:inset(12% 0 20%);}
+  27%{transform:translateX(5px);text-shadow:3px 0 #9c7777,-3px 0 #779c9c;}
+  45%{transform:translateX(-3px);opacity:.25;clip-path:inset(45% 0 8%);}
+  60%{transform:translateX(6px) skewX(-4deg);opacity:.7;}
+  78%{transform:translateX(-2px);clip-path:inset(8% 0 35%);}
+}
+@media(prefers-reduced-motion:reduce){#p-ascii.ascii-glitch .ascii-layer:not([hidden]){animation:none;}}
 
 /* about / works / contact */
 .resume-download{display:grid;place-items:center;width:14px;height:14px;flex:none;border:1px solid currentColor;font:11px/1 var(--mono);letter-spacing:0;text-decoration:none;}
@@ -429,12 +450,47 @@
     </div>
   </section>
 
-  <section class="panel" id="p-seraph" data-w="290" style="--tilt:rotate(.3deg)">
-    <div class="titlebar"><span class="tl">LAYER:12 oculus</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
-    <div class="pbody">
+  <section class="panel" id="p-ascii" data-w="290" style="--tilt:rotate(.3deg)">
+    <div class="titlebar"><span class="tl">layer 10: ascii // EVA</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
+    <div class="pbody"><div class="ascii-layer" data-name="EVA">
+      <pre id="crux">
+   ,--------------v--------------,
+    \             |             /
+   _.-;==;-._     |     _.-;==;/._
+ <`  (    )  `>   |   <`  (    )  `>
+   `^-*v=*-^`     |     `^-*=v*-^`
+   _.-;=\;-._     |     _.-;/=;-._
+ <`  (    )  `>   |   <`  (    )  `>
+   `^-*==*\^`     |     `^r*==*-^`
+   _.-;==;-\_     |     _/-;==;-._
+ <`  (    )  `>   |   <`  (    )  `>
+   `^-*==*-^`\    |    /`^-*==*-^`
+              \   |   / _.-;==;-._
+               \  |  /<`  (    )  `>
+                \ | /   `^-*==*-^`
+                 \|/
+                  `</pre>
+    </div><div class="ascii-layer" data-name="RINGO" hidden>
+      <pre id="apple">
+                __
+              | )
+              |
+          ###   ###
+       ##############
+      #############
+    ##############
+    ################
+    ###################
+    ###################
+      ################
+        #############
+          #########
+    </pre>
+      <div class="pcaption">i'm a huge lain fan</div>
+    </div><div class="ascii-layer" data-name="OCULUS" hidden>
       <pre id="seraph"></pre>
       <div class="caption">▓▒░ aka. morisoba ░▒▓</div>
-    </div>
+    </div></div>
   </section>
 
   <section class="panel" id="p-about" data-w="290" style="--tilt:rotate(.35deg)">
@@ -598,27 +654,7 @@
     </div>
   </section>
 
-  <section class="panel" id="p-apple" data-w="196" style="--tilt:rotate(.4deg)">
-    <div class="titlebar"><span class="tl">l:10 ringo</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
-    <div class="pbody">
-      <pre id="apple">
-                __
-              | )
-              |
-          ###   ###
-       ##############
-      #############
-    ##############
-    ################
-    ###################
-    ###################
-      ################
-        #############
-          #########
-    </pre>
-      <div class="pcaption">i'm a huge lain fan</div>
-    </div>
-  </section>
+
 
   <section class="panel" id="p-wave" data-w="340" style="--tilt:rotate(-.35deg)">
     <div class="titlebar"><span class="tl">layer:11 radio</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
@@ -644,28 +680,7 @@
     <div class="pbody"><pre id="hexcol"></pre></div>
   </section>
 
-  <section class="panel" id="p-crux" data-w="260" style="--tilt:rotate(-.45deg)">
-    <div class="titlebar"><span class="tl">l:13 EVA</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
-    <div class="pbody">
-      <pre id="crux">
-   ,--------------v--------------,
-    \             |             /
-   _.-;==;-._     |     _.-;==;/._
- <`  (    )  `>   |   <`  (    )  `>
-   `^-*v=*-^`     |     `^-*=v*-^`
-   _.-;=\;-._     |     _.-;/=;-._
- <`  (    )  `>   |   <`  (    )  `>
-   `^-*==*\^`     |     `^r*==*-^`
-   _.-;==;-\_     |     _/-;==;-._
- <`  (    )  `>   |   <`  (    )  `>
-   `^-*==*-^`\    |    /`^-*==*-^`
-              \   |   / _.-;==;-._
-               \  |  /<`  (    )  `>
-                \ | /   `^-*==*-^`
-                 \|/
-                  `</pre>
-    </div>
-  </section>
+
 
   <section class="panel" id="p-note" data-w="160" style="--tilt:rotate(-4.2deg)">
     <div class="titlebar"><span class="tl">vitals.txt</span><button class="pbtn" data-act="close">✕</button></div>
@@ -702,7 +717,7 @@
 /* ================= layout ================= */
 var LAYOUT = [
   ["p-name",    .035, .055],
-  ["p-seraph",  .640, .060],
+  ["p-ascii",  .640, .060],
   ["p-about",   .030, .500],
   ["p-works",   .260, .400],
   ["p-contact", .590, .450],
@@ -711,10 +726,8 @@ var LAYOUT = [
   ["p-candle",  .285, .060],
   ["p-oracle",  .500, .055],
   ["p-relic",   .880, .360],
-  ["p-apple",   .485, .400],
   ["p-wave",    .585, .800],
   ["p-hex",     .935, .055],
-  ["p-crux",     .245, .660],
   ["p-note",     .300, .055],
   ["p-vessel",   .680, .300]
 ];
@@ -727,44 +740,39 @@ var WIRES = [
   ["p-works","top","p-candle","bottom"],
   ["p-candle","left","p-name","top"],
   ["p-works","right","p-oracle","left"],
-  ["p-oracle","top","p-seraph","bottom"],
+  ["p-oracle","top","p-ascii","bottom"],
   ["p-oracle","right","p-console","left"],
   ["p-console","top","p-relic","bottom"],
-  ["p-relic","left","p-seraph","right"],
-  ["p-seraph","left","p-candle","right"],
+  ["p-relic","left","p-ascii","right"],
+  ["p-ascii","left","p-candle","right"],
   ["p-console","bottom","p-litany","right"],
   ["p-contact","bottom","p-litany","top"],
   ["p-name","left","p-litany","left"],
-  ["p-apple","top","p-works","bottom"],
-  ["p-apple","right","p-oracle","left"],
   ["p-wave","top","p-console","bottom"],
   ["p-wave","left","p-contact","right"],
   ["p-hex","bottom","p-relic","top"],
-  ["p-hex","left","p-seraph","right"],
-  ["p-crux","bottom","p-litany","top"],
-  ["p-crux","top","p-about","bottom"],
+  ["p-hex","left","p-ascii","right"],
   ["p-name","right","p-relic","left"],
   ["p-candle","bottom","p-console","top"],
   ["p-about","right","p-hex","bottom"],
   ["p-litany","right","p-wave","bottom"],
-  ["p-vessel","left","p-seraph","bottom"],
+  ["p-vessel","left","p-ascii","bottom"],
   ["p-vessel","top","p-hex","left"],
   ["p-vessel","right","p-relic","left"],
   ["p-vessel","bottom","p-oracle","top"],
   ["p-vessel","bottom","p-console","top"],
-  ["p-note","right","p-seraph","left"],
+  ["p-note","right","p-ascii","left"],
   ["p-note","bottom","p-works","top"],
-  ["p-apple","bottom","p-oracle","right"],
   ["p-hex","top","p-vessel","right"],
 ];
 /* cables running down to the floor */
 var FLOOR=[
   ["p-litany",.3],["p-litany",.7],["p-contact",.5],["p-wave",.4],
-  ["p-console",.6],["p-crux",.5],["p-works",.15],["p-oracle",.7],
+  ["p-console",.6],["p-works",.15],["p-oracle",.7],
   ["p-about",.4],["p-relic",.5],
   ["p-vessel",.3],["p-vessel",.7],
-  ["p-note",.5],["p-hex",.5],["p-seraph",.3],["p-seraph",.7],
-  ["p-apple",.5],["p-name",.7],["p-works",.6]
+  ["p-note",.5],["p-hex",.5],["p-ascii",.3],["p-ascii",.7],
+  ["p-name",.7],["p-works",.6]
 ];
 /* cable drops from the top edge onto panels */
 var DROPS = [
@@ -772,23 +780,23 @@ var DROPS = [
   [.30,"p-candle"],[.36,"p-candle"],
   [.42,"p-works"],[.47,"p-works"],
   [.55,"p-oracle"],
-  [.60,"p-seraph"],[.66,"p-seraph"],[.72,"p-seraph"],[.77,"p-seraph"],
+  [.60,"p-ascii"],[.66,"p-ascii"],[.72,"p-ascii"],[.77,"p-ascii"],
   [.84,"p-relic"],[.90,"p-relic"],[.95,"p-relic"],
   [.80,"p-console"],[.87,"p-console"],
   [.10,"p-about"],[.18,"p-about"],
   [.50,"p-contact"],
-  [.53,"p-apple"],[.68,"p-wave"],[.925,"p-hex"],[.97,"p-hex"],[.24,"p-crux"],
+  [.68,"p-wave"],[.925,"p-hex"],[.97,"p-hex"],
   [.63,"p-vessel"],[.70,"p-vessel"],[.76,"p-vessel"],
   [.44,"p-note"],[.39,"p-note"],
-  [.33,"p-works"],[.40,"p-apple"],
-  [.16,"p-candle"],[.27,"p-crux"],
+  [.33,"p-works"],
+  [.16,"p-candle"],
   [.58,"p-oracle"],[.82,"p-console"],[.92,"p-hex"]
 ];
 
 /* material class per panel — chrome stays mono, only .mat-crt bodies get phosphor */
 var MAT = {
   "p-name":    "mat-paper",
-  "p-seraph":  "mat-frame",
+  "p-ascii":  "mat-frame",
   "p-about":   "mat-paper",
   "p-works":   "mat-paper",
   "p-contact": "mat-metal",
@@ -797,10 +805,8 @@ var MAT = {
   "p-candle":  "mat-frame",
   "p-oracle":  "mat-frame",
   "p-relic":   "mat-frame",
-  "p-apple":   "mat-paper",
   "p-wave":    "mat-crt scr-green",
   "p-hex":     "mat-crt scr-blue",
-  "p-crux":    "mat-frame",
   "p-note":    "mat-paper note",
   "p-vessel":  "mat-portrait"
 };
@@ -815,6 +821,35 @@ var BOOT=[
 ];
 
 function startMainAnimations(){
+/* ================= unified ASCII carousel ================= */
+var asciiPanel=document.getElementById("p-ascii");
+var asciiLayers=Array.from(asciiPanel.querySelectorAll(".ascii-layer"));
+var asciiIndex=0;
+function asciiTitle(){
+  asciiPanel.querySelector(".tl").textContent=asciiPanel.classList.contains("min")
+    ? "Layer 10: Ascii" : "layer 10: ascii // "+asciiLayers[asciiIndex].dataset.name;
+}
+new MutationObserver(asciiTitle).observe(asciiPanel,{attributes:true,attributeFilter:["class"]});
+setInterval(function(){
+  if(document.hidden || asciiPanel.classList.contains("min") || asciiPanel.style.display==="none") return;
+  asciiPanel.classList.add("ascii-glitch");
+  setTimeout(function(){
+    asciiLayers[asciiIndex].hidden=true;
+    asciiIndex=(asciiIndex+1)%asciiLayers.length;
+    asciiLayers[asciiIndex].hidden=false;
+    asciiTitle();
+  },280);
+  setTimeout(function(){asciiPanel.classList.remove("ascii-glitch");},560);
+},8000);
+asciiTitle();
+var asciiDock=document.getElementById("dock");
+new MutationObserver(function(){
+  asciiDock.querySelectorAll("button").forEach(function(button){
+    if(/^layer 10: ascii/i.test(button.textContent) && button.textContent!=="Layer 10: Ascii")
+      button.textContent="Layer 10: Ascii";
+  });
+}).observe(asciiDock,{childList:true});
+
 /* ================= litany duplicator ================= */
 (function(){
   var lt=document.getElementById("litany-track");
@@ -1030,7 +1065,7 @@ document.addEventListener("DOMContentLoaded", function(){
   if(location.hash === "#p-console") enterPersonal();
 
   initChrome();
-  (isMobile() ? ["p-seraph","p-apple","p-crux","p-vessel"] : ["p-seraph","p-candle","p-relic","p-apple","p-hex","p-crux","p-vessel"]).forEach(function(id){
+  (isMobile() ? ["p-vessel"] : ["p-candle","p-relic","p-hex","p-vessel"]).forEach(function(id){
     var el=document.getElementById(id);
     if(!el) return;
     var btn=el.querySelector('.pbtn[data-act="close"]');
