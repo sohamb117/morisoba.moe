@@ -104,7 +104,19 @@
 #apple,#crux{font-size:10px;line-height:1.15;white-space:pre;text-align:left;}
 .pcaption{font-size:8px;letter-spacing:3px;text-align:center;opacity:.5;padding-top:5px;text-transform:lowercase;}
 
-/* psyche waveform */
+/* Spotify status */
+.now-playing{display:flex;gap:10px;align-items:center;min-height:72px;margin-bottom:8px}
+.spotify-art{width:68px;height:68px;flex:none;border:1px solid #ffffff30;display:grid;place-items:center;font-size:28px;color:var(--ink-dim);overflow:hidden}
+.spotify-art img{width:100%;height:100%;object-fit:cover;grid-area:1/1;filter:none}
+.spotify-art span{grid-area:1/1}.spotify-meta{min-width:0;font-size:10px;line-height:1.6}
+#spotify-state{font-size:8px;letter-spacing:1px;text-transform:uppercase;opacity:.6}
+#spotify-title{display:block;font-size:12px;line-height:1.4;overflow-wrap:anywhere;margin:3px 0}
+#spotify-artist,#spotify-album{overflow-wrap:anywhere}#spotify-album{opacity:.6;font-size:9px}
+.spotify-progress{display:flex;align-items:center;gap:7px;font-size:8px;font-variant-numeric:tabular-nums;margin-top:5px}
+.spotify-progress progress{appearance:none;flex:1;min-width:0;height:2px;border:0;background:#ffffff20;color:#b4d0b4}
+.spotify-progress progress::-webkit-progress-bar{background:#ffffff20}.spotify-progress progress::-webkit-progress-value{background:#b4d0b4}.spotify-progress progress::-moz-progress-bar{background:#b4d0b4}
+#p-wave .pcaption{font-size:7px;margin-top:7px;opacity:.6}
+
 #p-wave .pbody{padding:8px;}
 #p-wave svg{display:block;width:100%;height:auto;}
 
@@ -608,10 +620,11 @@
     </div>
   </section>
 
-  <section class="panel" id="p-wave" data-w="240" style="--tilt:rotate(-.35deg)">
+  <section class="panel" id="p-wave" data-w="340" style="--tilt:rotate(-.35deg)">
     <div class="titlebar"><span class="tl">layer:11 status</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
     <div class="pbody">
-      <svg id="wavesvg" viewBox="0 0 220 64" fill="none" stroke="#e8e8e8">
+      <div class="now-playing"><div class="spotify-art"><img id="spotify-art" alt="" hidden><span id="spotify-placeholder" aria-hidden="true">♫</span></div><div class="spotify-meta" aria-live="polite"><div id="spotify-state">spotify · connecting</div><a id="spotify-title">Waiting for signal</a><div id="spotify-artist"></div><div id="spotify-album"></div></div></div>
+      <svg aria-hidden="true" id="wavesvg" viewBox="0 0 220 64" fill="none" stroke="#e8e8e8">
         <g opacity=".18" stroke-width="1">
           <line x1="0" y1="16" x2="220" y2="16"/>
           <line x1="0" y1="32" x2="220" y2="32"/>
@@ -622,7 +635,7 @@
         </g>
         <polyline id="waveline" stroke-width="1" points="0,32 220,32"/>
       </svg>
-      <div class="pcaption">this just looks cool · 2.4hz</div>
+      <div class="spotify-progress"><span id="spotify-elapsed">0:00</span><progress id="spotify-progress" value="0" max="1" aria-label="Track progress"></progress><span id="spotify-duration">0:00</span></div><div class="pcaption">playback animation · <a href="https://open.spotify.com/" target="_blank" rel="noopener noreferrer">Spotify</a></div>
     </div>
   </section>
 
@@ -680,6 +693,7 @@
 <div id="grain"></div>
 
 <script src="shared/chrome.js?v=hud-3"></script>
+<script src="shared/spotify-status.js" defer></script>
 <script>
 (function(){
 "use strict";
@@ -969,26 +983,6 @@ setInterval(function(){
   },460+ix*130);
 });
 
-/* ================= psyche waveform (60fps rAF) ================= */
-var waveline=document.getElementById("waveline");
-(function(){
-  var wt=0, lastT=performance.now();
-  function frame(now){
-    var dt=Math.min((now-lastT)/1000,0.05);
-    lastT=now;
-    wt+=dt*2.9;
-    var pts="";
-    for(var x=0;x<=220;x+=2){
-      var y=32+9*Math.sin(x*0.09+wt)+4*Math.sin(x*0.23-wt*1.7);
-      if(Math.random()<0.0022) y+=(Math.random()-.5)*24;
-      pts+=x+","+y.toFixed(1)+" ";
-    }
-    waveline.setAttribute("points",pts);
-    requestAnimationFrame(frame);
-  }
-  requestAnimationFrame(frame);
-})();
-
 /* ================= hex telemetry ================= */
 (function(){
   var HX="0123456789ABCDEF";
@@ -1035,7 +1029,7 @@ document.addEventListener("DOMContentLoaded", function(){
   if(location.hash === "#p-console") enterPersonal();
 
   initChrome();
-  (isMobile() ? ["p-seraph","p-apple","p-crux","p-vessel"] : ["p-seraph","p-candle","p-relic","p-apple","p-wave","p-hex","p-crux","p-vessel"]).forEach(function(id){
+  (isMobile() ? ["p-seraph","p-apple","p-crux","p-vessel"] : ["p-seraph","p-candle","p-relic","p-apple","p-hex","p-crux","p-vessel"]).forEach(function(id){
     var el=document.getElementById(id);
     if(!el) return;
     var btn=el.querySelector('.pbtn[data-act="close"]');
