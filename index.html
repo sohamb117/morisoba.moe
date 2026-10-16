@@ -1257,7 +1257,11 @@ document.addEventListener("DOMContentLoaded", function(){
       if(expanded===panel) event.stopImmediatePropagation();
     },true);
     panel.addEventListener("click",function(event){
-      if(expanded===panel && event.target.closest('[data-act="min"],[data-act="close"]')) restorePanel();
+      if(expanded===panel && event.target.closest('[data-act="min"],[data-act="close"]')){
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        restorePanel();
+      }
     },true);
   });
 
