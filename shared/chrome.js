@@ -189,7 +189,7 @@ function movingCableEnd(key,target,attached){
 }
 
 function drawWires(LAYOUT, WIRES, FLOOR, DROPS){
-  if(isMobile()) return;
+  if(isMobile() || window.chromeCableModal) return;
   if(WIRES) chromeWires=WIRES;
   if(FLOOR) chromeFloor=FLOOR;
   if(DROPS) chromeDrops=DROPS;
@@ -289,7 +289,7 @@ function drawWires(LAYOUT, WIRES, FLOOR, DROPS){
   Object.keys(panels).forEach(function(id,k){
     var el=panels[id];
     if(!visible(el)) return;
-    var x=el.offsetLeft,y=el.offsetTop,w=el.offsetWidth,h=el.offsetHeight;
+    var box=cableBox(el),x=box.x,y=box.y,w=box.w,h=box.h;
     for(var j=0;j<5;j++){
       var sx=x+w*(0.12+0.72*rnd(k*9+j));
       var sy=y+h;
