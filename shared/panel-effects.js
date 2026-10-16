@@ -16,6 +16,10 @@
   document.addEventListener('click', function (event) {
     const button = event.target.closest('.pbtn[data-act="close"], #closeDossier, #closeGuide');
     if (!button || button.closest(".panel-popup")) return;
+    const loader = document.getElementById("loader");
+    const gate = document.getElementById("entry-gate");
+    if ((loader && !loader.classList.contains("done")) ||
+        (gate && !gate.classList.contains("done"))) return;
     if (replay.has(button)) { replay.delete(button); return; }
     const panel = button.closest('.panel, dialog');
     if (!panel || motion.matches || typeof panel.animate !== 'function') return;
