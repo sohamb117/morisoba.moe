@@ -92,8 +92,14 @@ function attachAccessories(panelsCollection){
 }
 
 /* ================= wires ================= */
+function cableBox(el){
+  if(visible(el) && !el.classList.contains("is-maximized")){
+    el._cableBox={x:el.offsetLeft,y:el.offsetTop,w:el.offsetWidth,h:el.offsetHeight};
+  }
+  return el._cableBox || {x:el.offsetLeft,y:el.offsetTop,w:el.offsetWidth,h:el.offsetHeight};
+}
 function pt(el, side){
-  var x=el.offsetLeft,y=el.offsetTop,w=el.offsetWidth,h=el.offsetHeight;
+  var box=cableBox(el),x=box.x,y=box.y,w=box.w,h=box.h;
   switch(side){
     case "left":return [x,y+h/2,-1,0];
     case "right":return [x+w,y+h/2,1,0];
@@ -175,8 +181,17 @@ function drawWires(LAYOUT, WIRES, FLOOR, DROPS){
   /* slack cable bundles between panels */
   WIRES.forEach(function(wr,i){
     var ea=panels[wr[0]], eb=panels[wr[2]];
-    if(!visible(ea)||!visible(eb)) return;
+    if(!ea || !eb) return;
     var a=pt(ea,wr[1]), b=pt(eb,wr[3]);
+    var attachedA=visible(ea),attachedB=visible(eb);
+    var disconnected=!attachedA || !attachedB;
+    if(!attachedA && attachedB){
+      a=[b[0]+(rnd(i+1300)-.5)*90,b[1]+110+150*rnd(i+1301),0,1];
+    }else if(attachedA && !attachedB){
+      b=[a[0]+(rnd(i+1302)-.5)*90,a[1]+110+150*rnd(i+1303),0,1];
+    }else if(!attachedA && !attachedB){
+      a[1]=H()+35;b[1]=H()+70;
+    }
     var dist=Math.sqrt((b[0]-a[0])*(b[0]-a[0])+(b[1]-a[1])*(b[1]-a[1]));
     var bundled=i%3!==2;
     var strands=bundled?3+Math.floor(rnd(i+50)*2):2;
@@ -192,7 +207,7 @@ function drawWires(LAYOUT, WIRES, FLOOR, DROPS){
       var seed=bundled?baseSeed:baseSeed+k*7;
       var d=sagPath(a[0]+ox,a[1]+oy,b[0]+ox,b[1]+oy,sag,seed);
       out+=cableMarkup(d,pickTone(i*13+k+55),i*31+k+90,k!==0);
-      if(k===0&&i%3===0) out+='<path class="flow" d="'+d+'"/>';
+      if(!disconnected&&k===0&&i%3===0) out+='<path class="flow" d="'+d+'"/>';
       if(k===0){
         if(bundled) hardware+=cableHardware(a[0]+ox,a[1]+oy,b[0]+ox,b[1]+oy,sag,seed,.3,'tie',strands*3);
         if(i%4===1||i%7===3) hardware+=cableHardware(a[0]+ox,a[1]+oy,b[0]+ox,b[1]+oy,sag,seed,.59,i%7===3?'transformer':'coupler');
@@ -205,10 +220,15 @@ function drawWires(LAYOUT, WIRES, FLOOR, DROPS){
   /* cables dropping from the top of the screen */
   DROPS.forEach(function(dp,i){
     var el=panels[dp[1]];
-    if(!visible(el)) return;
+    if(!el) return;
+    var box=cableBox(el);
     var tx=dp[0]*W(), ty=-10;
-    var px=el.offsetLeft+el.offsetWidth*(0.15+0.7*rnd(i+200));
-    var py=el.offsetTop;
+    var px=box.x+box.w*(0.15+0.7*rnd(i+200));
+    var py=box.y;
+    if(!visible(el)){
+      px=tx+(rnd(i+1400)-.5)*65;
+      py=Math.max(100,Math.min(H()-35,box.y+box.h+70+100*rnd(i+1401)));
+    }
     var d=sagPath(tx,ty,px,py,40+140*rnd(i+300),i*13+500);
     var tone=pickTone(i+250);
     out+=cableMarkup(d,tone,i+300,false);
@@ -223,9 +243,14 @@ function drawWires(LAYOUT, WIRES, FLOOR, DROPS){
   /* cables running down to the floor */
   FLOOR.forEach(function(fl,i){
     var el=panels[fl[0]];
-    if(!visible(el)) return;
-    var px=el.offsetLeft+el.offsetWidth*fl[1];
-    var py=el.offsetTop+el.offsetHeight;
+    if(!el) return;
+    var box=cableBox(el);
+    var px=box.x+box.w*fl[1];
+    var py=box.y+box.h;
+    if(!visible(el)){
+      px+=(rnd(i+1500)-.5)*65;
+      py=Math.min(H()-35,py+100+80*rnd(i+1501));
+    }
     var bx=px+(rnd(i+700)-.5)*260;
     var d=sagPath(px,py,bx,H()+30,30+95*rnd(i+710),i*19+720);
     var tone=pickTone(i+750);
@@ -410,6 +435,7 @@ document.querySelectorAll(".pbtn").forEach(function(btn){
     if(btn.getAttribute("data-act")==="min"){
       el.classList.toggle("min");drawWires();
     }else{
+      if(!isMobile()) cableBox(el);
       el.classList.remove("restored");
       el.style.setProperty("display","none","important");
       var b=document.createElement("button");
