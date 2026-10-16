@@ -50,7 +50,7 @@ test('source filter includes linked handwritten entries; no-result search works'
 });
 test('ratings compare on normalized scale, keep half scores and unrated last', () => {
   const list=[{title:'A',rating:4,ratingMax:5,imports:[]},{title:'B',rating:9,ratingMax:10,imports:[]},{title:'C',rating:null,imports:[]}];
-  assert.deepEqual(M.filter(list,{sort:'rating'}).map(i=>i.title),['B','A','C']);
+  assert.deepEqual(M.filter(list).map(i=>i.title),['B','A','C']);
   assert.equal(M.rating({rating:3.5}), '3.5/5');
   assert.equal(M.rating({rating:null}), 'unrated');
 });

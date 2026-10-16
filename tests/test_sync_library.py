@@ -125,7 +125,10 @@ class ImportTests(unittest.TestCase):
 
     def test_shelf_counts_survive_shared_heading_animation(self):
         soup = sync.BeautifulSoup((sync.ROOT / 'library/index.html').read_text(), 'html.parser')
-        for panel in ['p-books', 'p-films', 'p-shows', 'p-manga']:
+        self.assertIsNone(soup.select_one('#p-shows'))
+        self.assertIsNone(soup.select_one('#p-sources'))
+        self.assertEqual(soup.select_one('#library-sort option[selected]')['value'], 'rating')
+        for panel in ['p-books', 'p-films', 'p-manga']:
             count = soup.select_one(f'#{panel} .shelf-count')
             self.assertIsNotNone(count)
             self.assertFalse(count.find_parent(class_='tl'), 'Shared glitch animation replaces .tl textContent')

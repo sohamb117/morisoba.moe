@@ -37,7 +37,7 @@
     }
     return items;
   }
-  function filter(items, {query = '', source = 'all', state = 'all', sort = 'title'} = {}) {
+  function filter(items, {query = '', source = 'all', state = 'all', sort = 'rating'} = {}) {
     const q = query.trim().toLocaleLowerCase();
     const result = items.filter(item =>
       (source === 'all' || item.source === source || item.imports.some(e => e.source === source)) &&

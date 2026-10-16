@@ -273,8 +273,7 @@
     .row:focus-visible, .library-controls :focus-visible { outline: 1px solid var(--ink); outline-offset: 2px; }
     .library-controls label { display: block; font: 10px var(--mono); margin: 8px 0 4px; text-transform: uppercase; }
     .library-controls input, .library-controls select { box-sizing: border-box; width: 100%; min-width: 0; background: var(--void); color: var(--ink); border: 1px solid var(--steel); border-radius: 0; padding: 6px; font: 11px var(--mono); }
-    #library-results, .sync-source { font: 10px/1.6 var(--mono); margin-top: 10px; overflow-wrap: anywhere; }
-    .sync-source + .sync-source { border-top: 1px solid var(--graphite); padding-top: 8px; }
+    #library-results { font: 10px/1.6 var(--mono); margin-top: 10px; overflow-wrap: anywhere; }
     .shelf-count { opacity: .65; margin-left: 6px; }
     .source-record { border-top: 1px solid var(--steel); margin-top: 16px; padding-top: 10px; font: 11px/1.7 var(--mono); overflow-wrap: anywhere; }
     .source-record a { color: inherit; text-decoration: underline; }
@@ -301,7 +300,7 @@
       .grid-col-sidebar { display: contents; }
       #p-name { order: 0; } #p-filter { order: 1; }
       .grid-col-stack { order: 2; } #p-stats { order: 3; }
-      #p-sources { order: 4; } #p-about-library { order: 5; }
+      #p-about-library { order: 4; }
       .grid-col-reader { order: 6; }
       body.modal-open #stage.grid #p-detail { max-width: 100%; height: 100dvh !important; }
       .row { padding: 10px 8px; }
@@ -416,14 +415,14 @@ CODEX ✠ rev.α
           <label for="library-search">search titles</label><input id="library-search" type="search" placeholder="title / creator…">
           <label for="library-source">source</label><select id="library-source"><option value="all">all sources</option><option value="local">handwritten</option><option value="letterboxd">letterboxd</option><option value="myanimelist">myanimelist</option></select>
           <label for="library-status">status</label><select id="library-status"><option value="all">all statuses</option><option value="completed">completed</option><option value="in progress">in progress</option><option value="planned">planned / watchlist</option><option value="on hold">on hold</option><option value="dropped">dropped</option><option value="unrecorded">unrecorded</option></select>
-          <label for="library-sort">sort</label><select id="library-sort"><option value="title">title a–z</option><option value="rating">highest rated</option></select>
+          <label for="library-sort">sort</label><select id="library-sort"><option value="rating" selected>highest rated</option><option value="title">title a–z</option></select>
           <div id="library-results" role="status" aria-live="polite"></div>
         </div>
       </section>
       <section class="panel" id="p-about-library" data-w="220" >
       <div class="titlebar"><span class="tl">layer:α.0 premise</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
       <div class="pbody prose">
-        the library holds my records on books read, films seen, every series watched, and manga read. i will update as i revisit my experiences or watch new media. return to <a href="../">index</a> when done.
+        the library holds my records on books read, films seen, and manga read. i will update as i revisit my experiences or watch new media. return to <a href="../">index</a> when done.
       </div>
     </section>
       <section class="panel" id="p-stats" data-w="200" >
@@ -432,10 +431,7 @@ CODEX ✠ rev.α
         <!-- stats rendered via JS -->
       </div>
     </section>
-      <section class="panel" id="p-sources">
-        <div class="titlebar"><span class="tl">layer:α.i imports</span></div>
-        <div class="pbody" id="source-status"></div>
-      </section>
+
     </div>
     <div class="grid-col grid-col-stack">
       <section class="panel" id="p-books" data-w="300" >
@@ -446,10 +442,7 @@ CODEX ✠ rev.α
       <div class="titlebar"><span class="tl">layer:α.2 films</span><span class="shelf-count"></span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
       <div class="pbody scrollable-body"></div>
     </section>
-      <section class="panel" id="p-shows" data-w="300" >
-      <div class="titlebar"><span class="tl">layer:α.3 series / anime</span><span class="shelf-count"></span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
-      <div class="pbody scrollable-body"></div>
-    </section>
+
       <section class="panel" id="p-manga">
         <div class="titlebar"><span class="tl">layer:α.4 manga</span><span class="shelf-count"></span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
         <div class="pbody scrollable-body"></div>
@@ -478,49 +471,16 @@ CODEX ✠ rev.α
   (function(){
   "use strict";
 
-  var LAYOUT = [
-    ["p-name",          .045, .065],
-    ["p-about-library", .050, .200],
-    ["p-stats",         .040, .420],
-    ["p-books",         .280, .120],
-    ["p-films",         .580, .080],
-    ["p-shows",         .250, .580],
-    ["p-detail",        .620, .520]
-  ];
-
   var MAT = {
     "p-name":          "mat-paper",
     "p-about-library": "mat-paper",
     "p-stats":         "mat-worn",
     "p-filter":        "mat-worn",
-    "p-sources":       "mat-paper",
     "p-manga":         "mat-metal",
     "p-books":         "mat-metal",
     "p-films":         "mat-metal",
-    "p-shows":         "mat-metal",
     "p-detail":        "mat-crt scr-green"
   };
-
-  var WIRES = [
-    ["p-name", "bottom", "p-about-library", "top"],
-    ["p-about-library", "bottom", "p-stats", "top"],
-    ["p-name", "right", "p-books", "left"],
-    ["p-books", "right", "p-films", "left"],
-    ["p-books", "bottom", "p-shows", "top"],
-    ["p-films", "bottom", "p-detail", "top"],
-    ["p-shows", "right", "p-detail", "left"],
-    ["p-stats", "right", "p-shows", "left"]
-  ];
-
-  var FLOOR = [
-    ["p-stats", .5], ["p-shows", .3], ["p-shows", .7], ["p-detail", .5]
-  ];
-
-  var DROPS = [
-    [.05, "p-name"], [.10, "p-name"],
-    [.35, "p-books"], [.45, "p-books"],
-    [.65, "p-films"], [.75, "p-films"]
-  ];
 
   var BOOT = [
     "codex online", 
@@ -626,7 +586,7 @@ CODEX ✠ rev.α
     attachAccessories(document.querySelectorAll(".panel"));
     spawnDecor();
     drawTraces();
-    registerGlitchTargets(["#p-books .row .title", "#p-films .row .title", "#p-shows .row .title"]);
+    registerGlitchTargets(["#p-books .row .title", "#p-films .row .title"]);
     startLoader(BOOT, async function(){
       await startLibrary();
     });

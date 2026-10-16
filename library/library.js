@@ -3,7 +3,8 @@
   'use strict';
   const M = LibraryData;
   const names = {local: 'handwritten', letterboxd: 'letterboxd', myanimelist: 'myanimelist'};
-  const labels = {books: 'books', films: 'films', shows: 'series / anime', manga: 'manga'};
+  const labels = {books: 'books', films: 'films', manga: 'manga'};
+  const shelves = Object.keys(labels);
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   let items = [], selected = null, returnFocus = null;
   async function read(path) {
@@ -65,7 +66,7 @@
       state: document.getElementById('library-status').value,
       sort: document.getElementById('library-sort').value
     });
-    for (const kind of M.kinds) {
+    for (const kind of shelves) {
       const rows = filtered.filter(item => item.kind === kind);
       const panel = document.getElementById(`p-${kind}`);
       panel.querySelector('.shelf-count').textContent = rows.length;
@@ -90,11 +91,10 @@
     const local = get(0, {}, 'handwritten library');
     const snapshots = [get(1, null, 'Letterboxd snapshot'), get(2, null, 'MyAnimeList snapshot')].filter(Boolean);
     const links = get(3, [], 'entry links');
-    items = M.merge(local, snapshots, links);
+    items = M.merge(local, snapshots, links).filter(item => shelves.includes(item.kind));
     document.getElementById('library-load-status').textContent = failures.length ? `Could not load ${failures.join(', ')}. Available entries are shown; reload to retry.` : 'public records + personal notes';
     document.getElementById('library-load-status').setAttribute('role', failures.length ? 'alert' : 'status');
-    document.getElementById('source-status').innerHTML = snapshots.map(s => `<div class="sync-source"><strong>${esc(names[s.source])}</strong><br>${esc(s.username)}<br>${esc(Object.entries(s.counts).map(([k,v]) => `${v} ${k}`).join(' · '))}<br><span>snapshot ${esc(s.syncedAt.slice(0,10))}</span></div>`).join('') + '<p class="prose">saved public lists; updates appear after a sync.</p>';
-    document.querySelector('#p-stats .pbody').innerHTML = M.kinds.map(kind => `<div class="stat"><span>${labels[kind]}</span><span>${items.filter(i => i.kind === kind).length}</span></div>`).join('') + `<div class="stat"><span>in progress</span><span>${items.filter(i => M.status(i) === 'in progress').length}</span></div><div class="stat"><span>planned</span><span>${items.filter(i => M.status(i) === 'planned').length}</span></div>`;
+    document.querySelector('#p-stats .pbody').innerHTML = shelves.map(kind => `<div class="stat"><span>${labels[kind]}</span><span>${items.filter(i => i.kind === kind).length}</span></div>`).join('') + `<div class="stat"><span>in progress</span><span>${items.filter(i => M.status(i) === 'in progress').length}</span></div><div class="stat"><span>planned</span><span>${items.filter(i => M.status(i) === 'planned').length}</span></div>`;
     for (const id of ['library-search', 'library-source', 'library-status', 'library-sort']) document.getElementById(id).addEventListener(id === 'library-search' ? 'input' : 'change', render);
     document.querySelector('.grid-col-stack').addEventListener('click', event => {
       const row = event.target.closest('.row');
