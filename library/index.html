@@ -266,6 +266,47 @@
         padding: 4px 8px;
       }
     }
+    /* Imported records use the same paper, metal and CRT surfaces. */
+    .row { display: block; width: 100%; text-align: left; color: inherit; background: transparent; border: 0; border-bottom: 1px solid var(--graphite); font: inherit; }
+    .row .title, .row .meta, .source-tags { display: block; }
+    .source-tags { font: 9px var(--mono); opacity: .65; margin-top: 4px; }
+    .row:focus-visible, .library-controls :focus-visible { outline: 1px solid var(--ink); outline-offset: 2px; }
+    .library-controls label { display: block; font: 10px var(--mono); margin: 8px 0 4px; text-transform: uppercase; }
+    .library-controls input, .library-controls select { box-sizing: border-box; width: 100%; min-width: 0; background: var(--void); color: var(--ink); border: 1px solid var(--steel); border-radius: 0; padding: 6px; font: 11px var(--mono); }
+    #library-results, .sync-source { font: 10px/1.6 var(--mono); margin-top: 10px; overflow-wrap: anywhere; }
+    .sync-source + .sync-source { border-top: 1px solid var(--graphite); padding-top: 8px; }
+    .shelf-count { opacity: .65; margin-left: 6px; }
+    .source-record { border-top: 1px solid var(--steel); margin-top: 16px; padding-top: 10px; font: 11px/1.7 var(--mono); overflow-wrap: anywhere; }
+    .source-record a { color: inherit; text-decoration: underline; }
+    .source-score { float: right; }
+    .d-rating { color: var(--scr-green); letter-spacing: 0; }
+    .d-title, .row .title, #library-load-status { overflow-wrap: anywhere; }
+    #stage.grid .grid-col > .panel { width: 100% !important; }
+    #stage.grid { grid-template-columns: 240px minmax(250px, 1fr) minmax(280px, 400px); padding: 65px 24px; }
+    .grid-col { height: calc(100vh - 130px); padding: 8px; }
+    .grid-col-stack { overflow-y: auto; }
+    .grid-col-stack .panel { flex: 1 0 125px; }
+    .grid-col-sidebar > .panel { flex-shrink: 0; }
+    @media (min-width: 721px) and (max-width: 1050px) {
+      #stage.grid { grid-template-columns: 210px minmax(230px, 1fr); }
+      .grid-col-reader { position: fixed; inset: 65px 24px 65px auto; width: min(430px, 55vw); z-index: 100; pointer-events: none; }
+      #p-detail { pointer-events: auto; box-shadow: 0 0 40px var(--void); }
+      #p-detail:has(.empty) { display: none; }
+    }
+    @media (max-width: 720px) {
+      #stage.grid { padding: 45px 8px 65px; gap: 8px; }
+      .grid-col { height: auto; padding: 4px; gap: 10px; }
+      .grid-col > .panel { max-width: 100%; }
+      .grid-col-stack .panel { flex: none; }
+      .grid-col-sidebar { display: contents; }
+      #p-name { order: 0; } #p-filter { order: 1; }
+      .grid-col-stack { order: 2; } #p-stats { order: 3; }
+      #p-sources { order: 4; } #p-about-library { order: 5; }
+      .grid-col-reader { order: 6; }
+      body.modal-open #stage.grid #p-detail { max-width: 100%; height: 100dvh !important; }
+      .row { padding: 10px 8px; }
+      .library-controls input, .library-controls select { font-size: 16px; }
+    }
   </style>
 </head>
 <body>
@@ -366,13 +407,23 @@ CODEX ✠ rev.α
       <div class="titlebar"><span class="tl">layer:α identity</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
       <div class="pbody">
         <div style="font-weight:bold; font-size:14px;">LIBRARY</div>
-        <div style="font-size:10px; margin-top:5px; color:var(--steel);">SYSTEM.INDEX.OK</div>
+        <div style="font-size:10px; margin-top:5px; color:var(--steel);"><span id="library-load-status" role="status">loading records…</span></div>
       </div>
     </section>
+      <section class="panel" id="p-filter">
+        <div class="titlebar"><span class="tl">layer:α.f query</span></div>
+        <div class="pbody library-controls">
+          <label for="library-search">search titles</label><input id="library-search" type="search" placeholder="title / creator…">
+          <label for="library-source">source</label><select id="library-source"><option value="all">all sources</option><option value="local">handwritten</option><option value="letterboxd">letterboxd</option><option value="myanimelist">myanimelist</option></select>
+          <label for="library-status">status</label><select id="library-status"><option value="all">all statuses</option><option value="completed">completed</option><option value="in progress">in progress</option><option value="planned">planned / watchlist</option><option value="on hold">on hold</option><option value="dropped">dropped</option><option value="unrecorded">unrecorded</option></select>
+          <label for="library-sort">sort</label><select id="library-sort"><option value="title">title a–z</option><option value="rating">highest rated</option></select>
+          <div id="library-results" role="status" aria-live="polite"></div>
+        </div>
+      </section>
       <section class="panel" id="p-about-library" data-w="220" >
       <div class="titlebar"><span class="tl">layer:α.0 premise</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
       <div class="pbody prose">
-        the library holds my records on books read, films seen, every series watched. i will update as i revisit my experiences or watch new media. return to <a href="../">index</a> when done.
+        the library holds my records on books read, films seen, every series watched, and manga read. i will update as i revisit my experiences or watch new media. return to <a href="../">index</a> when done.
       </div>
     </section>
       <section class="panel" id="p-stats" data-w="200" >
@@ -381,23 +432,31 @@ CODEX ✠ rev.α
         <!-- stats rendered via JS -->
       </div>
     </section>
+      <section class="panel" id="p-sources">
+        <div class="titlebar"><span class="tl">layer:α.i imports</span></div>
+        <div class="pbody" id="source-status"></div>
+      </section>
     </div>
     <div class="grid-col grid-col-stack">
       <section class="panel" id="p-books" data-w="300" >
-      <div class="titlebar"><span class="tl">layer:α.1 books</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
+      <div class="titlebar"><span class="tl">layer:α.1 books</span><span class="shelf-count"></span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
       <div class="pbody scrollable-body"></div>
     </section>
       <section class="panel" id="p-films" data-w="300" >
-      <div class="titlebar"><span class="tl">layer:α.2 films</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
+      <div class="titlebar"><span class="tl">layer:α.2 films</span><span class="shelf-count"></span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
       <div class="pbody scrollable-body"></div>
     </section>
       <section class="panel" id="p-shows" data-w="300" >
-      <div class="titlebar"><span class="tl">layer:α.3 series</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
+      <div class="titlebar"><span class="tl">layer:α.3 series / anime</span><span class="shelf-count"></span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
       <div class="pbody scrollable-body"></div>
     </section>
+      <section class="panel" id="p-manga">
+        <div class="titlebar"><span class="tl">layer:α.4 manga</span><span class="shelf-count"></span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
+        <div class="pbody scrollable-body"></div>
+      </section>
     </div>
     <div class="grid-col grid-col-reader">
-      <section class="panel" id="p-detail" data-w="340" >
+      <section class="panel" id="p-detail" aria-label="Entry details" data-w="340" >
       <div class="titlebar"><span class="tl">layer:α.x details</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
       <div class="pbody scrollable-body">
         <div class="empty">[ select an entry ]</div>
@@ -413,6 +472,8 @@ CODEX ✠ rev.α
   <div id="hint">◇ drag panels · scroll to read ◇</div>
 
   <script src="../shared/chrome.js"></script>
+  <script src="data.js"></script>
+  <script src="library.js"></script>
   <script>
   (function(){
   "use strict";
@@ -431,6 +492,9 @@ CODEX ✠ rev.α
     "p-name":          "mat-paper",
     "p-about-library": "mat-paper",
     "p-stats":         "mat-worn",
+    "p-filter":        "mat-worn",
+    "p-sources":       "mat-paper",
+    "p-manga":         "mat-metal",
     "p-books":         "mat-metal",
     "p-films":         "mat-metal",
     "p-shows":         "mat-metal",
@@ -466,139 +530,6 @@ CODEX ✠ rev.α
     "OK."
   ];
 
-
-  function overrideReaderClose(readerId) {
-    var reader = document.getElementById(readerId);
-    if (!reader) return;
-    var closeBtn = reader.querySelector('.pbtn[data-act="close"]');
-    if (closeBtn) {
-      closeBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        e.preventDefault();
-        hideReader(readerId);
-      }, true);
-    }
-    var minBtn = reader.querySelector('.pbtn[data-act="min"]');
-    if (minBtn) minBtn.remove();
-  }
-
-  function hideReader(readerId) {
-    var reader = document.getElementById(readerId);
-    if (!reader) return;
-    reader.style.display = 'none';
-    document.body.classList.remove('modal-open');
-  }
-
-  function showReader(readerId) {
-    var reader = document.getElementById(readerId);
-    if (!reader) return;
-    reader.style.display = '';
-    if (window.matchMedia('(max-width: 720px)').matches) {
-      document.body.classList.add('modal-open');
-    }
-  }
-
-  async function loadLibraryData(){
-
-    try {
-      var res = await fetch("../data/library.json");
-      if(!res.ok) throw new Error("HTTP " + res.status);
-      return await res.json();
-    } catch(e) {
-      console.warn("library.json load failed:", e);
-      return { books: [], films: [], shows: [] };
-    }
-  }
-
-  function statusLabel(item){
-    if(item.finished) return item.finished.slice(0,4);
-    if(item.started && !item.finished) return "in progress";
-    if(!item.started && !item.finished) return "—";
-    return "";
-  }
-
-  function ratingGlyph(rating){
-    if(rating == null) return "";
-    var filled = "●".repeat(rating);
-    var empty = "○".repeat(5 - rating);
-    return filled + empty;
-  }
-
-  function esc(s){
-    return String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  }
-
-  function renderList(panelId, items, kind){
-    var body = document.querySelector("#" + panelId + " .pbody");
-    if(!body) return;
-    if(!items || items.length === 0){
-      body.innerHTML = '<div class="empty">[ nothing catalogued ]</div>';
-      return;
-    }
-    body.innerHTML = items.map((item, i) =>
-      `<div class="row" data-kind="${kind}" data-idx="${i}">
-         <div class="title">${esc(item.title)}</div>
-         <div class="meta">${esc(item.author || item.director || item.creator || "")} · ${esc(statusLabel(item))}</div>
-       </div>`
-    ).join("");
-  }
-
-  function renderDetail(item, kind){
-    var body = document.querySelector("#p-detail .pbody");
-    if(!item){
-      body.innerHTML = '<div class="empty">[ select an entry ]</div>';
-      return;
-    }
-    var role = kind === "film" ? "director" : kind === "show" ? "creator" : "author";
-    var byline = item[role] ? esc(item[role]) : "";
-    var dateInfo = "";
-    if(kind === "film" && item.watched) dateInfo = "watched " + item.watched;
-    else {
-      if(item.started) dateInfo += "started " + item.started;
-      if(item.finished) dateInfo += (dateInfo?" · ":"") + "finished " + item.finished;
-      if(kind === "show" && item.seasons) dateInfo += (dateInfo?" · ":"") + item.seasons + " seasons";
-    }
-    var notesHtml = (typeof markdownToHtml === "function")
-      ? markdownToHtml(item.notes || "")
-      : esc(item.notes || "").replace(/\n/g, "<br>");
-    body.innerHTML = `
-      <div class="d-title">${esc(item.title)}</div>
-      <div class="d-byline">${byline}</div>
-      <div class="d-meta">${esc(dateInfo)}</div>
-      <div class="d-rating">${ratingGlyph(item.rating)}</div>
-      <div class="d-notes">${notesHtml}</div>
-    `;
-  }
-
-  var __data = null;
-  function setupClickHandlers(){
-    document.querySelectorAll(".row").forEach(row => {
-      row.addEventListener("click", () => {
-        var kind = row.dataset.kind;
-        var idx = parseInt(row.dataset.idx, 10);
-        var collection = kind === "book" ? __data.books : kind === "film" ? __data.films : __data.shows;
-        document.querySelectorAll(".row.selected").forEach(r => r.classList.remove("selected"));
-        row.classList.add("selected");
-        showReader("p-detail");
-        renderDetail(collection[idx], kind);
-      });
-    });
-  }
-
-  function renderStats(data){
-    var inProgress = data.books.filter(b => b.started && !b.finished).length
-      + data.shows.filter(s => s.started && !s.finished).length;
-    var unrated = data.books.filter(b => b.rating == null).length
-      + data.films.filter(f => f.rating == null).length
-      + data.shows.filter(s => s.rating == null).length;
-    document.querySelector("#p-stats .pbody").innerHTML = `
-      <div class="stat"><span>books</span> <span>${data.books.length}</span></div>
-      <div class="stat"><span>films</span> <span>${data.films.length}</span></div>
-      <div class="stat"><span>shows</span> <span>${data.shows.length}</span></div>
-      <div class="stat" style="margin-top:8px;"><span>in progress</span> <span>${inProgress}</span></div>
-      <div class="stat"><span>unrated</span> <span>${unrated}</span></div>
-    `;
-  }
 
   /* Column-clamped drag: panels draggable within their .grid-col bounds only.
      Uses transform-based translation so grid/flex flow is preserved. Preempts
@@ -697,13 +628,7 @@ CODEX ✠ rev.α
     drawTraces();
     registerGlitchTargets(["#p-books .row .title", "#p-films .row .title", "#p-shows .row .title"]);
     startLoader(BOOT, async function(){
-      __data = await loadLibraryData();
-      renderList("p-books", __data.books, "book");
-      renderList("p-films", __data.films, "film");
-      renderList("p-shows", __data.shows, "show");
-      renderStats(__data);
-      setupClickHandlers();
-      overrideReaderClose("p-detail");
+      await startLibrary();
     });
     initChrome();
     attachClampedDrag();
