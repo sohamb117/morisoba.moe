@@ -1,3 +1,8 @@
 __pycache__/
 .venv/
 *.json.tmp
+
+.dev.vars*
+.env*
+.wrangler/
+node_modules/

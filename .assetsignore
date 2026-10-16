@@ -1,0 +1,12 @@
+/.git/**
+/.github/**
+/.omo/**
+/.playwright-mcp/**
+/middleware/**
+/worker.mjs
+/wrangler.jsonc
+/tests/**
+/scripts/**
+/docs/**
+/.dev.vars*
+/.env*

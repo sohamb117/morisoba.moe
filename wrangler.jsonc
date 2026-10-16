@@ -1,0 +1,13 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "morisoba",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-10-16",
+  "observability": { "enabled": true },
+  "assets": {
+    "directory": ".",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/spotify"]
+  },
+  "compatibility_flags": ["nodejs_compat"]
+}
