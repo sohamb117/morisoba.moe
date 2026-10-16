@@ -167,6 +167,27 @@ function cableHardware(ax,ay,bx,by,sag,seed,t,type,span){
   }
   return '<g class="cable-hardware '+type+'" transform="translate('+p[0]+' '+p[1]+') rotate('+angle.toFixed(2)+')">'+shape+'</g>';
 }
+/* Animate only attachment changes; dragging keeps cables directly attached. */
+var cableMotionStates=Object.create(null),cableMotionFrame=0;
+function movingCableEnd(key,target,attached){
+  var now=performance.now(),state=cableMotionStates[key];
+  if(!state){state=cableMotionStates[key]={point:target.slice(),attached:attached,start:0};return target;}
+  if(state.attached!==attached){
+    state.from=state.point.slice();state.start=now;state.attached=attached;state.animating=true;
+  }
+  if(window.matchMedia("(prefers-reduced-motion: reduce)").matches) state.animating=false;
+  if(state.animating){
+    var t=Math.min(1,(now-state.start)/950);
+    var ease=1-Math.pow(1-t,3)+Math.sin(t*Math.PI*3)*t*(1-t)*.3;
+    state.point=target.map(function(value,i){return state.from[i]+(value-state.from[i])*ease;});
+    if(t>=1) state.animating=false;
+    else if(!cableMotionFrame){
+      cableMotionFrame=requestAnimationFrame(function(){cableMotionFrame=0;drawWires();});
+    }
+  }else state.point=target.slice();
+  return state.point;
+}
+
 function drawWires(LAYOUT, WIRES, FLOOR, DROPS){
   if(isMobile()) return;
   if(WIRES) chromeWires=WIRES;
@@ -192,6 +213,8 @@ function drawWires(LAYOUT, WIRES, FLOOR, DROPS){
     }else if(!attachedA && !attachedB){
       a[1]=H()+35;b[1]=H()+70;
     }
+    a=movingCableEnd("wire-"+i+"-a",a,attachedA);
+    b=movingCableEnd("wire-"+i+"-b",b,attachedB);
     var dist=Math.sqrt((b[0]-a[0])*(b[0]-a[0])+(b[1]-a[1])*(b[1]-a[1]));
     var bundled=i%3!==2;
     var strands=bundled?3+Math.floor(rnd(i+50)*2):2;
@@ -229,6 +252,8 @@ function drawWires(LAYOUT, WIRES, FLOOR, DROPS){
       px=tx+(rnd(i+1400)-.5)*65;
       py=Math.max(100,Math.min(H()-35,box.y+box.h+70+100*rnd(i+1401)));
     }
+    var end=movingCableEnd("drop-"+i,[px,py],visible(el));
+    px=end[0];py=end[1];
     var d=sagPath(tx,ty,px,py,40+140*rnd(i+300),i*13+500);
     var tone=pickTone(i+250);
     out+=cableMarkup(d,tone,i+300,false);
@@ -247,11 +272,13 @@ function drawWires(LAYOUT, WIRES, FLOOR, DROPS){
     var box=cableBox(el);
     var px=box.x+box.w*fl[1];
     var py=box.y+box.h;
+    var bx=px+(rnd(i+700)-.5)*260;
     if(!visible(el)){
       px+=(rnd(i+1500)-.5)*65;
       py=Math.min(H()-35,py+100+80*rnd(i+1501));
     }
-    var bx=px+(rnd(i+700)-.5)*260;
+    var end=movingCableEnd("floor-"+i,[px,py],visible(el));
+    px=end[0];py=end[1];
     var d=sagPath(px,py,bx,H()+30,30+95*rnd(i+710),i*19+720);
     var tone=pickTone(i+750);
     out+=cableMarkup(d,tone,i+710,false);
