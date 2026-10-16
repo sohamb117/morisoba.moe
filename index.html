@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>✠ SOHAM ✠</title>
-<link rel="stylesheet" href="shared/chrome.css?v=cursor-off">
+<link rel="stylesheet" href="shared/chrome.css?v=choir-projects-2">
 <style>
 /* sticky note micro-styles */
 .panel.note .asset-tag{display:none;}
@@ -66,8 +66,16 @@
 @keyframes litany{to{transform:translateX(-50%);}}
 
 /* console */
-#p-console .pbody{padding:8px 10px;font-size:9px;line-height:1.65;}
-#console-log div{white-space:nowrap;overflow:hidden;}
+#p-console .pbody{padding:8px 10px;font-size:10px;line-height:1.65;}
+#project-list{max-height:clamp(100px,calc(38vh - 150px),240px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--steel) transparent;}
+.project{padding:5px 0;border-bottom:1px dashed var(--edge-mid);overflow-wrap:anywhere;}
+.project:last-child{border-bottom:0;}
+.project a{text-underline-offset:2px;}
+.project > a{font-size:11px;}
+.project p{font-size:10px;opacity:.85;}
+.project-more{font-size:9px;}
+#p-console a:focus-visible{outline:1px solid currentColor;outline-offset:2px;}
+@media (max-width:720px){#project-list{max-height:300px;}}
 #clockline{margin-top:6px;border-top:1px dashed var(--edge-mid);
   padding-top:5px;display:flex;justify-content:space-between;gap:8px;font-size:9px;}
 
@@ -414,8 +422,8 @@
   <section class="panel" id="p-about" data-w="290" style="--tilt:rotate(.35deg)">
     <div class="titlebar"><span class="tl">layer:01 about</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
     <div class="pbody">
-      <p>i'm soham. i'm currently studying cs + econ at new york university.</p>
-      <p>i specialize in critical, high-scale data engineering and applied ai. i'm currently working on ai security at microsoft.</p>
+      <p>i'm soham. cs + econ at new york university, currently on leave.</p>
+      <p>i specialize in critical, high-scale data engineering and applied ai. i previously worked on ai security at microsoft.</p>
       <p>this site contains everything i've publicly worked on. check it out!<a href="library/"></a><a href="atlas/"></a><a href="journal/"></a></p>
     </div>
   </section>
@@ -423,11 +431,13 @@
   <section class="panel inv" id="p-works" data-w="330" style="--tilt:rotate(-.3deg)">
     <div class="titlebar"><span class="tl">layer:02 work</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
     <div class="pbody">
-      <a class="work" href="#"><span class="wt"><b>ironmill</b><i>∞</i></span><span class="wd">worked with ironmill to develop a patented system for selecting optimal zk proofs.</span></a>
-      <a class="work" href="#"><span class="wt"><b>doppio labs</b><i>∞</i></span><span class="wd">raised from lvlup ventures at an 8-figure valuation to build people search tools. shut down.</span></a>
-      <a class="work" href="#"><span class="wt"><b>arenabench</b><i>2026</i></span><span class="wd">simulated competitive environment. cybersecurity benchmark for frontier llm</span></a>
-      <a class="work" href="#"><span class="wt"><b>npx morisoba</b><i>2025</i></span><span class="wd">personal profile, packaged as a rust binary and pushed to npm. also a custom wasm web deployment.</span></a>
-      <a class="work" href="#"><span class="wt"><b>eigenfish</b><i>2025</i></span><span class="wd">eigenfish generator.</span></a>
+      <a class="work" href="resume/"><span class="wt"><b>resume</b><i>read ↗</i></span><span class="wd">experience, education, research &amp; writing</span></a>
+      <a class="work" href="resume/Soham-Bhattacharya-CV.pdf" download><span class="wt"><b>download CV</b><i>PDF ↓</i></span></a>
+      <a class="work" href="resume/#microsoft"><span class="wt"><b>microsoft</b><i>2026</i></span><span class="wd">software engineering intern · security intelligence</span></a>
+      <a class="work" href="resume/#omega"><span class="wt"><b>omega venture partners</b><i>2025–26</i></span><span class="wd">technical consultant · ai systems</span></a>
+      <a class="work" href="resume/#doppio"><span class="wt"><b>doppio labs</b><i>2025–26</i></span><span class="wd">co-founder &amp; cto · people search</span></a>
+      <a class="work" href="resume/#cisco"><span class="wt"><b>cisco systems</b><i>2024–25</i></span><span class="wd">technical intern · control center / ios-xr</span></a>
+      <a class="work" href="resume/#ironmill"><span class="wt"><b>ironmill</b><i>2022–23</i></span><span class="wd">associate distributed computing researcher</span></a>
     </div>
   </section>
 
@@ -449,10 +459,61 @@
   </section>
 
   <section class="panel" id="p-console" data-w="300" style="--tilt:rotate(.3deg)">
-    <div class="titlebar"><span class="tl">layer:06 choir</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
+    <div class="titlebar"><span class="tl">layer:06 projects</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
     <div class="pbody">
-      <div id="console-log"></div>
-      <div id="clockline"><span id="clock">--:--:--</span><span>№ <span id="visits">000000</span></span></div>
+      <div id="project-list" tabindex="0" aria-label="Project list">
+<!-- PROJECTS:START -->
+        <div class="project" id="project-arenabench">
+          <a href="https://github.com/sohamb117/arenabench" target="_blank" rel="noopener noreferrer"><b>ArenaBench</b></a>
+          <p>Adversarial multi-agent cybersecurity evaluation in disposable Linux VMs.</p>
+        </div>
+        <div class="project" id="project-pokeweb">
+          <a href="https://github.com/sohamb117/pokeweb" target="_blank" rel="noopener noreferrer"><b>Pokeweb</b></a>
+          <p>Pokémon DS in the browser, with WASM cores and local or cloud saves.</p><div class="project-more"><a href="https://pokeweb.morisoba.moe" target="_blank" rel="noopener noreferrer">play</a></div>
+        </div>
+        <div class="project" id="project-gen4recomp">
+          <a href="https://github.com/sohamb117/gen4recomp" target="_blank" rel="noopener noreferrer"><b>gen4recomp / nativeplat</b></a>
+          <p>Native Pokémon ports with save tools, rewind, and multiplayer features.</p><div class="project-more"><a href="https://github.com/sohamb117/gen4recomp/releases" target="_blank" rel="noopener noreferrer">releases</a></div>
+        </div>
+        <div class="project" id="project-sokaris">
+          <a href="https://github.com/sohamb117/sokaris" target="_blank" rel="noopener noreferrer"><b>Sokaris</b></a>
+          <p>Composable photo editing and an auto-refreshing image viewer in Julia.</p><div class="project-more"><a href="https://github.com/sohamb117/sokaris-playground" target="_blank" rel="noopener noreferrer">browser playground</a></div>
+        </div>
+        <div class="project" id="project-fruit-fly-heaven">
+          <a href="https://github.com/sohamb117/fruit-fly-heaven" target="_blank" rel="noopener noreferrer"><b>Flytrain / Fruit Fly Heaven</b></a>
+          <p>Connectome / FlyBody simulations and shared parameter search. Experimental.</p><div class="project-more"><a href="https://flytrain.morisoba.moe/train.html" target="_blank" rel="noopener noreferrer">training console</a> · <a href="https://github.com/sohamb117/fruit-fly-heaven/tree/main/experiments/connectome_body" target="_blank" rel="noopener noreferrer">benchmark</a></div>
+        </div>
+        <div class="project" id="project-npx-morisoba">
+          <a href="https://github.com/sohamb117/npx-morisoba" target="_blank" rel="noopener noreferrer"><b>npx morisoba</b></a>
+          <p>A Rust terminal portfolio distributed through npm, with a WASM web version.</p><div class="project-more"><a href="https://www.npmjs.com/package/morisoba" target="_blank" rel="noopener noreferrer">npm</a></div>
+        </div>
+        <div class="project" id="project-eigenself">
+          <a href="https://github.com/sohamb117/eigenself" target="_blank" rel="noopener noreferrer"><b>Eigenfish / eigenself</b></a>
+          <p>Name-seeded eigenvalue projections and generative mathematical images.</p>
+        </div>
+        <div class="project" id="project-love-canvas">
+          <a href="https://github.com/sohamb117/love-canvas" target="_blank" rel="noopener noreferrer"><b>love-canvas</b></a>
+          <p>An experimental Canvas 2D graphics backend for LÖVE running in WASM.</p>
+        </div>
+        <div class="project" id="project-omp-pet">
+          <a href="https://github.com/sohamb117/omp-pet" target="_blank" rel="noopener noreferrer"><b>OMP Pet</b></a>
+          <p>A native Rust / AppKit desktop companion for oh-my-pi.</p>
+        </div>
+        <div class="project" id="project-dream-state-learning">
+          <a href="https://github.com/sohamb117/dream-state-learning" target="_blank" rel="noopener noreferrer"><b>Dream-State Learning</b></a>
+          <p>Continual agent-memory experiments using adapter-weight consolidation.</p>
+        </div>
+        <div class="project" id="project-geoshader">
+          <a href="https://github.com/sohamb117/geoshader" target="_blank" rel="noopener noreferrer"><b>Geoshader</b></a>
+          <p>Neural event studies of geopolitical shocks and defense-equity returns.</p>
+        </div>
+        <div class="project" id="project-greenhouse">
+          <a href="https://github.com/sohamb117/greenhouse" target="_blank" rel="noopener noreferrer"><b>Greenhouse</b></a>
+          <p>A portable macOS setup for development tools and agent configuration.</p>
+        </div>
+<!-- PROJECTS:END -->
+      </div>
+      <div id="clockline"><a href="https://github.com/sohamb117?tab=repositories" target="_blank" rel="noopener noreferrer">all repositories ↗</a><span>12 projects</span></div>
     </div>
   </section>
 
@@ -951,35 +1012,7 @@ var waveline=document.getElementById("waveline");
   document.getElementById("hexcol").textContent=s+s;
 })();
 
-/* ================= console ================= */
-var LOG=[
-  "0x0000 load photos ........ OK",
-  "0x001F populate content ... OK",
-  "0x0033 package npx ........ OK",
-  "0x004C create wasm bin .... OK",
-  "0x005A start webserver .. OPEN",
-  "0x0071 site status ...... LIVE",
-  "0x00FF ✠~ morisoba.moe 2026 ~✠"
-];
-var logEl=document.getElementById("console-log");
-function typeLog(i){
-  if(i>=LOG.length)return;
-  var d=document.createElement("div");
-  d.textContent=LOG[i];
-  logEl.appendChild(d);
-  setTimeout(function(){typeLog(i+1);},100+Math.random()*180);
-}
-var clock=document.getElementById("clock");
-setInterval(function(){
-  var n=new Date();
-  function p(v){return(v<10?"0":"")+v;}
-  clock.textContent="A.D."+n.getFullYear()+" "+p(n.getHours())+":"+p(n.getMinutes())+":"+p(n.getSeconds());
-},1000);
-document.getElementById("visits").textContent=
-  String(100000+Math.floor(Math.random()*899999)).slice(0,6);
 
-
-  typeLog(0);
 }
 
 document.addEventListener("DOMContentLoaded", function(){
@@ -988,19 +1021,28 @@ document.addEventListener("DOMContentLoaded", function(){
   spawnDecor();
   drawTraces();
   drawWires(LAYOUT, WIRES, FLOOR, DROPS);
-  registerGlitchTargets(["#console-log div", "#hexcol", "#p-hex .pcaption", ".work .wt b"]);
+  registerGlitchTargets(["#hexcol", "#p-hex .pcaption", ".work .wt b"]);
 
   var eg = document.getElementById("entry-gate");
   document.getElementById("btn-resume").addEventListener("click", function(){
     window.location.href = "resume/";
   });
-  document.getElementById("btn-load").addEventListener("click", function(){
+  function enterPersonal(){
     eg.classList.add("done");
-    startLoader(BOOT, startMainAnimations);
-  });
+    startLoader(BOOT, function(){
+      startMainAnimations();
+      if(location.hash === "#p-console"){
+        var projects=document.getElementById("p-console");
+        bringTop(projects);
+        if(isMobile()) projects.scrollIntoView({block:"start"});
+      }
+    });
+  }
+  document.getElementById("btn-load").addEventListener("click", enterPersonal);
+  if(location.hash === "#p-console") enterPersonal();
 
   initChrome();
-  (isMobile() ? ["p-seraph","p-apple","p-crux","p-vessel"] : ["p-seraph","p-console","p-candle","p-relic","p-apple","p-wave","p-hex","p-crux","p-vessel"]).forEach(function(id){
+  (isMobile() ? ["p-seraph","p-apple","p-crux","p-vessel"] : ["p-seraph","p-candle","p-relic","p-apple","p-wave","p-hex","p-crux","p-vessel"]).forEach(function(id){
     var el=document.getElementById(id);
     if(!el) return;
     var btn=el.querySelector('.pbtn[data-act="close"]');

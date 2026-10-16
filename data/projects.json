@@ -1,0 +1,236 @@
+{
+  "verifiedOn": "2026-10-16",
+  "owner": "sohamb117",
+  "projects": [
+    {
+      "repo": "arenabench",
+      "name": "ArenaBench",
+      "category": "AI / security",
+      "description": "Adversarial multi-agent cybersecurity evaluation in disposable Linux VMs.",
+      "technologies": [
+        "Python",
+        "Linux VMs",
+        "LLM evaluation"
+      ],
+      "links": [
+        {
+          "label": "source",
+          "url": "https://github.com/sohamb117/arenabench"
+        }
+      ]
+    },
+    {
+      "repo": "pokeweb",
+      "name": "Pokeweb",
+      "category": "Games / web",
+      "description": "Pokémon DS in the browser, with WASM cores and local or cloud saves.",
+      "technologies": [
+        "C",
+        "WebAssembly",
+        "React",
+        "TypeScript"
+      ],
+      "links": [
+        {
+          "label": "source",
+          "url": "https://github.com/sohamb117/pokeweb"
+        },
+        {
+          "label": "play",
+          "url": "https://pokeweb.morisoba.moe"
+        }
+      ]
+    },
+    {
+      "repo": "gen4recomp",
+      "name": "gen4recomp / nativeplat",
+      "category": "Games / native",
+      "description": "Native Pokémon ports with save tools, rewind, and multiplayer features.",
+      "technologies": [
+        "C",
+        "C++",
+        "WebAssembly"
+      ],
+      "links": [
+        {
+          "label": "source",
+          "url": "https://github.com/sohamb117/gen4recomp"
+        },
+        {
+          "label": "releases",
+          "url": "https://github.com/sohamb117/gen4recomp/releases"
+        }
+      ]
+    },
+    {
+      "repo": "sokaris",
+      "name": "Sokaris",
+      "category": "Creative tools",
+      "description": "Composable photo editing and an auto-refreshing image viewer in Julia.",
+      "technologies": [
+        "Julia",
+        "Image processing"
+      ],
+      "links": [
+        {
+          "label": "source",
+          "url": "https://github.com/sohamb117/sokaris"
+        },
+        {
+          "label": "browser playground",
+          "url": "https://github.com/sohamb117/sokaris-playground"
+        }
+      ]
+    },
+    {
+      "repo": "fruit-fly-heaven",
+      "name": "Flytrain / Fruit Fly Heaven",
+      "category": "Neuroscience / research",
+      "description": "Connectome / FlyBody simulations and shared parameter search. Experimental.",
+      "technologies": [
+        "Python",
+        "MuJoCo",
+        "WebGPU",
+        "WebAssembly"
+      ],
+      "links": [
+        {
+          "label": "source",
+          "url": "https://github.com/sohamb117/fruit-fly-heaven"
+        },
+        {
+          "label": "training console",
+          "url": "https://flytrain.morisoba.moe/train.html"
+        },
+        {
+          "label": "benchmark",
+          "url": "https://github.com/sohamb117/fruit-fly-heaven/tree/main/experiments/connectome_body"
+        }
+      ]
+    },
+    {
+      "repo": "npx-morisoba",
+      "name": "npx morisoba",
+      "category": "Developer tools",
+      "description": "A Rust terminal portfolio distributed through npm, with a WASM web version.",
+      "technologies": [
+        "Rust",
+        "Ratatui",
+        "WebAssembly"
+      ],
+      "links": [
+        {
+          "label": "source",
+          "url": "https://github.com/sohamb117/npx-morisoba"
+        },
+        {
+          "label": "npm",
+          "url": "https://www.npmjs.com/package/morisoba"
+        }
+      ]
+    },
+    {
+      "repo": "eigenself",
+      "name": "Eigenfish / eigenself",
+      "category": "Generative art",
+      "description": "Name-seeded eigenvalue projections and generative mathematical images.",
+      "technologies": [
+        "JavaScript",
+        "HTML",
+        "Linear algebra"
+      ],
+      "links": [
+        {
+          "label": "source",
+          "url": "https://github.com/sohamb117/eigenself"
+        }
+      ]
+    },
+    {
+      "repo": "love-canvas",
+      "name": "love-canvas",
+      "category": "Graphics / web",
+      "description": "An experimental Canvas 2D graphics backend for LÖVE running in WASM.",
+      "technologies": [
+        "JavaScript",
+        "Lua",
+        "Canvas 2D",
+        "WebAssembly"
+      ],
+      "links": [
+        {
+          "label": "source",
+          "url": "https://github.com/sohamb117/love-canvas"
+        }
+      ]
+    },
+    {
+      "repo": "omp-pet",
+      "name": "OMP Pet",
+      "category": "Developer tools",
+      "description": "A native Rust / AppKit desktop companion for oh-my-pi.",
+      "technologies": [
+        "Rust",
+        "AppKit",
+        "TypeScript"
+      ],
+      "links": [
+        {
+          "label": "source",
+          "url": "https://github.com/sohamb117/omp-pet"
+        }
+      ]
+    },
+    {
+      "repo": "dream-state-learning",
+      "name": "Dream-State Learning",
+      "category": "AI / research",
+      "description": "Continual agent-memory experiments using adapter-weight consolidation.",
+      "technologies": [
+        "Python",
+        "LLMs",
+        "Continual learning"
+      ],
+      "links": [
+        {
+          "label": "source",
+          "url": "https://github.com/sohamb117/dream-state-learning"
+        }
+      ]
+    },
+    {
+      "repo": "geoshader",
+      "name": "Geoshader",
+      "category": "Economics / research",
+      "description": "Neural event studies of geopolitical shocks and defense-equity returns.",
+      "technologies": [
+        "Python",
+        "Financial NLP",
+        "Event studies"
+      ],
+      "links": [
+        {
+          "label": "source",
+          "url": "https://github.com/sohamb117/geoshader"
+        }
+      ]
+    },
+    {
+      "repo": "greenhouse",
+      "name": "Greenhouse",
+      "category": "Developer tools",
+      "description": "A portable macOS setup for development tools and agent configuration.",
+      "technologies": [
+        "Python",
+        "Shell",
+        "macOS"
+      ],
+      "links": [
+        {
+          "label": "source",
+          "url": "https://github.com/sohamb117/greenhouse"
+        }
+      ]
+    }
+  ]
+}

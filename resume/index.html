@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Soham | Resume</title>
-<link rel="stylesheet" href="../shared/chrome.css?v=cursor-off">
+<link rel="stylesheet" href="../shared/chrome.css?v=projects-20261016">
 <style>
   /* Base Reset & Aesthetics */
   #resume-container {
@@ -12,6 +12,7 @@
     z-index: 10;
     width: 100%;
     height: 100vh;
+    height: 100dvh;
     overflow-y: auto;
     overflow-x: hidden;
     padding: 60px 20px;
@@ -27,9 +28,9 @@
   }
 
   .content {
-    max-width: 680px;
+    max-width: 820px;
     margin: 0 auto;
-    font-size: 11px;
+    font-size: 14px;
     line-height: 1.6;
     letter-spacing: 0.3px;
     text-shadow:0 1px 2px rgba(3,3,3,.95);
@@ -54,7 +55,7 @@
     color: var(--dust);
     font-family: var(--sans);
     letter-spacing: 1px;
-    font-size: 9px;
+    font-size: 12px;
     text-transform: uppercase;
   }
   .home-link {
@@ -64,7 +65,7 @@
     border: var(--line);
     padding: 6px 12px;
     font-family: var(--sans);
-    font-size: 9px;
+    font-size: 12px;
     letter-spacing: 2px;
     text-transform: uppercase;
     transition: background 0.2s, color 0.2s;
@@ -79,7 +80,7 @@
   }
   h2 {
     font-family: var(--sans);
-    font-size: 10px;
+    font-size: 13px;
     letter-spacing: 3px;
     text-transform: uppercase;
     color: var(--ink-dim);
@@ -95,17 +96,19 @@
     display: flex;
     justify-content: space-between;
     align-items: baseline;
+    flex-wrap: wrap;
+    gap: 4px 20px;
     margin-bottom: 4px;
     border-bottom: 1px dashed var(--edge-lo);
     padding-bottom: 4px;
   }
   .item-head strong {
-    font-size: 12px;
+    font-size: 16px;
     letter-spacing: 1px;
   }
   .item-head span {
     font-family: var(--sans);
-    font-size: 9px;
+    font-size: 12px;
     color: var(--dust);
     letter-spacing: 1px;
   }
@@ -138,7 +141,7 @@
   .skill-tag {
     border: 1px solid var(--edge-mid);
     padding: 4px 8px;
-    font-size: 10px;
+    font-size: 13px;
     color: var(--ink-dim);
   }
 
@@ -168,6 +171,25 @@
       padding: 30px 15px;
     }
   }
+  .resume-actions{display:flex;flex-wrap:wrap;gap:10px;}
+  .contact-links{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:18px;overflow-wrap:anywhere;}
+  .contact-links a{margin:0;}
+  .content section,.content .item{scroll-margin-top:24px;}
+  .content h1{font-size:clamp(22px,5vw,32px);letter-spacing:2px;line-height:1.3;}
+  .content h2{font-size:13px;}
+  .content .sub{line-height:1.7;color:var(--ink-dim);}
+  .content .item-head span{color:var(--ink-dim);}
+  a:focus-visible{outline:2px solid currentColor;outline-offset:4px;}
+  @media print{
+    html,body{height:auto;overflow:visible;background:white;color:black;}
+    #traces,#decor,#scanlines,#grain,.resume-actions{display:none;}
+    #resume-container{height:auto;overflow:visible;padding:0;background:none;}
+    .content{max-width:none;font-size:10pt;text-shadow:none;}
+    .content h1{font-size:20pt;}.content h2{font-size:12pt;}
+    .content .sub,.content .item-sub,.content .item-head span,.content .item li,.content .skill-tag{color:black;}
+    .item{break-inside:avoid;margin-bottom:16px;}section{margin-bottom:24px;}
+    h2{break-after:avoid;}
+  }
 </style>
 </head>
 <body>
@@ -180,118 +202,92 @@
 
 <div id="resume-container">
   <div class="content">
-    <a href="../" class="home-link">← Return to Root</a>
-    
+    <nav class="resume-actions" aria-label="Resume actions">
+      <a href="../" class="home-link">← Return to Root</a>
+      <a href="Soham-Bhattacharya-CV.pdf" class="home-link" download>Download CV (PDF) ↓</a>
+    </nav>
     <header>
-      <h1>Soham</h1>
-      <div class="sub">CS + ECON @ NYU · AI SECURITY @ MICROSOFT</div>
+      <h1>Soham Bhattacharya</h1>
+      <div class="sub">Computer Science + Economics · Applied AI &amp; Security<br>New York &amp; San Francisco</div>
+      <div class="contact-links">
+        <a href="mailto:soham.b@nyu.edu">soham.b@nyu.edu</a>
+        <a href="https://github.com/sohamb117">github.com/sohamb117</a>
+        <a href="tel:+14084770079">+1 (408) 477-0079</a>
+      </div>
     </header>
-
-    <section>
-      <h2>Profile</h2>
-      <p>Currently studying computer science and economics at New York University. I specialize in critical, high-scale data engineering and applied AI, and currently work on security intelligence at Microsoft.</p>
-    </section>
-
-    <section>
-      <h2>Experience</h2>
-      <div class="item">
-        <div class="item-head">
-          <strong>Microsoft</strong>
-          <span>Security Intelligence</span>
-        </div>
-        <div class="item-sub">Agent Permissions Management</div>
-        <ul>
-          <li>Built Microsoft's overpermission detection platform and scaled it to all apps and identities.</li>
-          <li>All Microsoft services (3000+) secured, with access from 30k+ apps and agents.</li>
-          <li>Reduced agent and app permission creep by 98%, de-risking access to all Microsoft services.</li>
-        </ul>
-      </div>
-
-      <div class="item">
-        <div class="item-head">
-          <strong>Ironmill</strong>
-          <span></span>
-        </div>
-        <div class="item-sub">Zero-Knowledge Proof Systems</div>
-        <ul>
-          <li>Worked with Ironmill to develop a patented system for selecting optimal zero-knowledge proofs.</li>
-        </ul>
-      </div>
-
-      <div class="item">
-        <div class="item-head">
-          <strong>Doppio Labs</strong>
-          <span></span>
-        </div>
-        <div class="item-sub">People Search Tools</div>
-        <ul>
-          <li>Company backed by LvlUp Ventures at an eight-figure valuation to build people-search tools.</li>
-        </ul>
-      </div>
-    </section>
-
-    <section>
-      <h2>Selected Work</h2>
-      
-      <div class="item">
-        <div class="item-head">
-          <strong>ArenaBench</strong>
-          <span></span>
-        </div>
-        <ul>
-          <li>Simulated competitive environment: a cybersecurity benchmark for frontier LLMs.</li>
-        </ul>
-      </div>
-
-      <div class="item">
-        <div class="item-head">
-          <strong>npx morisoba</strong>
-          <span></span>
-        </div>
-        <ul>
-          <li>Personal profile packaged as a Rust binary, published to npm, with a custom WASM web deployment.</li>
-        </ul>
-      </div>
-
-      <div class="item">
-        <div class="item-head">
-          <strong>eigenfish</strong>
-          <span></span>
-        </div>
-        <ul>
-          <li>Eigenfish generator.</li>
-        </ul>
-      </div>
-    </section>
-
-    <section>
+    <section id="education">
       <h2>Education</h2>
       <div class="item">
-        <div class="item-head">
-          <strong>New York University (NYU)</strong>
-          <span></span>
-        </div>
-        <div class="item-sub">Computer Science + Economics · currently studying</div>
+        <div class="item-head"><strong>New York University</strong><span>New York, NY · On Leave</span></div>
+        <div class="item-sub">Courant Institute of Mathematical Sciences</div>
+        <p>Bachelor of Arts in Computer Science and Economics<br>Minor in Policy and Business Management</p>
+        <ul>
+          <li>GPA: 3.6/4.0 · ACT: 36/36</li>
+          <li>Coursework: Operating Systems, Political Economy, Artificial Intelligence, Macroeconomic Theory, Computer Security.</li>
+          <li>Activities: Tech Correspondent for NYU Econ Review; Infrastructure and Research for NYU OSIRIS (Cybersecurity Lab).</li>
+        </ul>
       </div>
     </section>
-
-    <section>
-      <h2>Skills</h2>
-      <div class="skills-list">
-        <span class="skill-tag">Applied AI</span>
-        <span class="skill-tag">AI Security</span>
-        <span class="skill-tag">AI Memory Systems</span>
-        <span class="skill-tag">Distributed Systems</span>
-        <span class="skill-tag">Data Engineering</span>
-        <span class="skill-tag">Rapid Prototyping</span>
+    <section id="experience"><h2>Professional Experience</h2>
+      <div class="item" id="microsoft">
+        <div class="item-head"><strong>Microsoft</strong><span>Redmond, WA</span></div>
+        <div class="item-head"><span>Software Engineering Intern — Microsoft Security Intelligence</span><span>Jun 2026 – Sep 2026</span></div>
+        <ul><li>Engineered a pipeline to generate rightsized, least-privilege permission sets across 32k+ first- and third-party apps and AI agents.</li><li>Scaled the Azure Detection Platform pipeline to all 1.5k+ Microsoft Graph workloads by mapping endpoints with agentic code analysis.</li><li>Reduced risk ratings of compromised Entra identities by 30%, limiting the attack vector from exploits by agentic actors.</li></ul>
+      </div>
+      <div class="item" id="omega">
+        <div class="item-head"><strong>Omega Venture Partners</strong><span>Menlo Park, CA</span></div>
+        <div class="item-head"><span>Technical Consultant, AI Systems</span><span>Mar 2025 – Aug 2026</span></div>
+        <ul><li>Built a custom AI-driven firm management platform automating email, outreach, and due diligence workflows.</li><li>Reduced firm operations from multiple weeks to hours via an automation pipeline using FastAPI, React, RAG, and SERP APIs.</li><li>Authored technical assessments for prospective investments, benchmarking differentiation and scalability for over $5M in deal value.</li></ul>
+      </div>
+      <div class="item" id="doppio">
+        <div class="item-head"><strong>Doppio Labs</strong><span>New York, NY</span></div>
+        <div class="item-head"><span>Co-Founder &amp; CTO</span><span>Feb 2025 – Mar 2026</span></div>
+        <ul><li>Released the first GDPR-compliant search platform across 800M+ candidate profiles, improving match rate 30x (1% to 30%).</li><li>Built and deployed a containerized FastAPI/Pinecone API with custom RAG context, an LLM harness, and a Next.js frontend.</li><li>Scaled the platform to 5,000+ users and several business clients; secured pre-seed investment from LvlUp Ventures.</li></ul>
+      </div>
+      <div class="item" id="cisco">
+        <div class="item-head"><strong>Cisco Systems</strong><span>San Francisco, CA</span></div>
+        <div class="item-head"><span>Technical Intern — Control Center</span><span>Jun 2025 – Aug 2025</span></div>
+        <ul><li>Built onboarding automation for all 1.5k+ devices across 12 global data centers using PostgreSQL, FastAPI, and Prometheus.</li><li>Engineered a vulnerability tracking API and platform, identifying and surfacing 28K+ threats across all control center hardware.</li></ul>
+      </div>
+      <div class="item" id="cisco-ios-xr">
+        <div class="item-head"><strong>Cisco Systems</strong><span>San Francisco, CA</span></div>
+        <div class="item-head"><span>Technical Intern — IOS-XR</span><span>Jun 2024 – Aug 2024</span></div>
+        <ul><li>Migrated 3K+ OS build packages from NAS to Artifactory across all Cisco regions, enabling caching for global build infrastructure.</li><li>Rewrote the SDK delivery pipeline, cutting 5 redundant processes, storage demand by 1TB+ per release, and build time by 10%.</li></ul>
+      </div>
+      <div class="item" id="ironmill">
+        <div class="item-head"><strong>Ironmill Inc.</strong><span>San Jose, CA</span></div>
+        <div class="item-head"><span>Associate Distributed Computing Researcher</span><span>May 2022 – Aug 2023</span></div>
+        <ul><li>Built a ZK authentication demo using Rust, Tokio, and ZK-SNARKs that was used to close a $2M round; presented the architecture at ETHDenver.</li></ul>
       </div>
     </section>
-
-    <section>
-      <h2>Contact</h2>
-      <div class="contact-links">
-        <a href="mailto:sohamb117@gmail.com">sohamb117@gmail.com</a>
-      </div>
+    <section id="research"><h2>Projects &amp; Research</h2>
+      <div class="item"><div class="item-head"><strong><a href="https://github.com/sohamb117/arenabench">ArenaBench ↗</a></strong></div><p>Engineered an adversarial multi-agent evaluation platform in a sandboxed VM to test lateral movement and permission escalation under competitive pressure; instrumented traces to surface emergent behaviors including cooperation, replication, and communication.</p></div>
+      <div class="item"><div class="item-head"><strong><a href="https://github.com/sohamb117/pokeweb">Pokeweb ↗</a></strong></div><p>Recompiled Pokémon DS games for Windows, macOS, and iOS. First in the world to deliver native releases for 6 out of 7 games. Also ported to the web with optimized WASM, new multiplayer implementations, and server-side saves.</p></div>
+      <div class="item"><div class="item-head"><strong><a href="https://github.com/sohamb117/fruit-fly-heaven">Neural Embodiment Simulations ↗</a></strong></div><p>Benchmarked fruit fly and zebrafish connectomes against RNNs across control and temporal tasks, varying linear/MLP encoders and decoders to test whether connectome structure confers task-specific advantages.</p></div>
+      <p><a href="../#p-console">Explore all projects on the desktop →</a></p>
+    </section>
+    <section id="publications"><h2>Patents &amp; Publications</h2>
+      <div class="item"><p>“Methods and Systems for Selecting an Optimal Proof System for Zero-Knowledge and Other Proofs”</p><div class="item-sub">Patent issued, 2023</div></div>
+      <div class="item"><p>“SyncTCI: Synchronized Context Injection on Distributed Real-Time Inference Hardware”</p><div class="item-sub">Patent pending, 2025</div></div>
+    </section>
+    <section id="writing"><h2>Writing</h2>
+      <div class="item"><p>“Gendered Impact of High-School Financial Literacy Requirements on Young Adults’ Credit Behavior”</p><div class="item-sub">UChicago Econometrics Game</div></div>
+      <div class="item"><p>“Powering the AI Revolution: Inside the Energy Economics of Data Center Development”</p><div class="item-sub">New York University Economics Review</div></div>
+      <div class="item"><p>“Inside the Costs of Compliance, and the Downstream Effects of Delve’s Fraud”</p><div class="item-sub">New York University Economics Review</div></div>
+    </section>
+    <section id="awards"><h2>Awards</h2>
+      <div class="item"><ul>
+        <li><strong>Hack-Nation — Winner, VC Track:</strong> Over 6,000 participants; won with Doppio Labs and received admission to a venture incubation program.</li>
+        <li><strong>A16Z Headstarter GLW Hackathon — Finalist:</strong> Top 5 out of over 3,000; pitched Doppio Labs as a lead-generation tool.</li>
+        <li><strong>Los Altos Hacks V — 2nd Place Overall:</strong> Developed a natural language and OCR system to generate notes from text, before ChatGPT.</li>
+        <li><strong>NYU Dean’s List:</strong> College of Arts and Sciences award for academic achievement.</li>
+      </ul></div>
+    </section>
+    <section id="skills"><h2>Skills &amp; Interests</h2>
+      <div class="item"><p><strong>Languages:</strong> Python, Dart, Go, Rust, C/C++, KQL/SQL</p></div>
+      <div class="item"><p><strong>Frameworks &amp; tools:</strong> FastAPI, PostgreSQL, Apache Spark, Kubernetes, Docker, Git, Pinecone, Azure Data Lake, OpenAI Evals, Entra ID</p></div>
+      <div class="item"><p><strong>Topics:</strong> Agent Identity, Neural Networks, Reinforcement Learning, Post-Training, AI Security, Agent-Driven Threats, AI Alignment</p></div>
+      <div class="item"><p><strong>Interests:</strong> Music Composition &amp; Production, Photography, Film Development, Labor Economics, Psychology</p></div>
     </section>
   </div>
 </div>
