@@ -33,7 +33,7 @@ export async function spotifyMiddleware(request, env, next) {
     if (url.pathname !== '/api/spotify' && !analysis) return next();
     if (request.method !== 'GET') return new Response('Method not allowed', {status: 405});
     if (!cached || Date.now() >= cacheUntil) {
-      if (!pending) pending = nowPlaying(env).then(data => { cached = data; cacheUntil = Date.now() + 10000; }).catch(() => { cached = {state: 'signal unavailable'}; cacheUntil = Math.max(cacheUntil, Date.now() + 15000); }).finally(() => { pending = null; });
+      if (!pending) pending = nowPlaying(env).then(data => { cached = data; cacheUntil = Date.now() + (data.isPlaying ? Math.min(2000, Math.max(250, data.durationMs - data.progressMs)) : 2000); }).catch(() => { cached = {state: 'signal unavailable'}; cacheUntil = Math.max(cacheUntil, Date.now() + 15000); }).finally(() => { pending = null; });
       await pending;
     }
     if (analysis) {

@@ -7,7 +7,7 @@
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   let track = null, received = 0, nextPoll, analysis = null, analysisId = null;
   const analyses = new Map();
-  let analysisPending = null, analysisRetry = 0;
+  let analysisPending = null, analysisRetry = 0, polling = false, failures = 0;
   const time = ms => { const seconds = Math.floor(Math.max(0, ms) / 1000); return Math.floor(seconds / 60) + ':' + String(seconds % 60).padStart(2, '0'); };
   function render(data, state) {
     track = data && data.title ? data : null;
@@ -33,18 +33,40 @@
     tick();
   }
   el('art').addEventListener('error', () => { el('art').hidden = true; el('placeholder').hidden = false; });
+  function schedule(delay) {
+    clearTimeout(nextPoll);
+    nextPoll = setTimeout(poll, delay);
+  }
   async function poll() {
     clearTimeout(nextPoll);
-    if (!visible()) { nextPoll = setTimeout(poll,15000); return; }
-    let delay = 15000;
+    if (polling) return;
+    if (!visible()) { schedule(3000); return; }
+    polling = true;
+    let delay = 3000;
     try {
       const response = await fetch('/api/spotify', {signal: AbortSignal.timeout(8000), cache: 'no-store'});
-      if (response.status === 429) { delay = Math.max(15000, Math.min(300000, Number(response.headers.get('Retry-After') || 30) * 1000)); throw new Error('rate limited'); }
+      if (response.status === 429) {
+        delay = Math.max(3000, Math.min(300000, Number(response.headers.get('Retry-After') || 30) * 1000));
+        throw new Error('rate limited');
+      }
       if (!response.ok) throw new Error('offline');
       const data = await response.json();
       render(data, data.state);
-    } catch (_) { render(null, 'signal unavailable'); }
-    nextPoll = setTimeout(poll, delay);
+      failures = 0;
+      if (data.state === 'signal unavailable') delay = 15000;
+      // Refresh just after the song ends instead of leaving the previous song stuck.
+      if (track?.isPlaying) {
+        const remaining = track.durationMs - position();
+        delay = Math.min(delay, Math.max(750, remaining + 200));
+      }
+    } catch (_) {
+      failures++;
+      delay = Math.max(delay, Math.min(60000, 3000 * 2 ** Math.min(failures, 5)));
+      render(null, 'signal unavailable');
+    } finally {
+      polling = false;
+      schedule(delay);
+    }
   }
   function visible() { return !document.hidden && !panel.classList.contains('shut') && !panel.classList.contains('closed') && panel.getClientRects().length > 0; }
   function position() {
@@ -83,7 +105,19 @@
     }
     requestAnimationFrame(frame);
   }
-  document.addEventListener('visibilitychange', () => { clearTimeout(nextPoll); if (!document.hidden) poll(); });
+  document.addEventListener('visibilitychange', () => {
+    clearTimeout(nextPoll);
+    if (!document.hidden) poll();
+  });
+  ['focus', 'pageshow', 'online'].forEach(event => window.addEventListener(event, () => {
+    if (visible()) poll();
+  }));
+  let wasVisible = visible();
+  new MutationObserver(() => {
+    const isVisible = visible();
+    if (isVisible && !wasVisible) poll();
+    wasVisible = isVisible;
+  }).observe(panel, {attributes:true, attributeFilter:['class','style','hidden']});
   setInterval(tick, 1000);
   requestAnimationFrame(frame);
   poll();

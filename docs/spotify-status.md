@@ -1,6 +1,6 @@
 # Spotify status
 
-The status window opens by default and polls `/api/spotify` every 15 seconds while the page is visible. It shows the owner's current song, artist, album, original cover art, Spotify link, and interpolated track progress. Paused playback freezes the progress and flattens the waveform. No playback shows an off-air state; failed requests clear stale tracks. Reduced-motion uses a flat waveform.
+The status window opens by default and polls `/api/spotify` every 3 seconds while the page is visible. It shows the owner's current song, artist, album, original cover art, Spotify link, and interpolated track progress. Paused playback freezes the progress and flattens the waveform. No playback shows an off-air state; failed requests clear stale tracks. Reduced-motion uses a flat waveform.
 
 The waveform is a decorative playback animation, not an audio spectrum. Spotify's currently-playing API provides metadata and position, not the remote device's audio samples.
 
@@ -44,3 +44,10 @@ Request Brizm API access via https://developers.brizm.dev/docs/quickstart/. Thei
 Brizm is called only when its key **and a readable durable cache** are configured. Grids are stored for 180 days, tempo fallback for 24 hours, total provider failures for an hour. Changing from fallback-only to configured Brizm changes the cache key immediately. An in-memory cache and same-isolate promise sharing reduce duplicate requests; KV is eventually consistent, so concurrent first requests in different isolates/regions can still duplicate a call. This is not an exact global quota limiter.
 
 `node --test tests/spotify-status.test.mjs tests/spotify-analysis.test.mjs`
+
+
+## Automatic playback changes
+
+Visible status panels poll metadata every 3 seconds, even when nothing is playing, so playback starts, skips, pauses and resumes are detected without reloading. The metadata cache lasts up to 2 seconds and expires sooner near track boundaries. The browser schedules a refresh just after the expected song ending, and refreshes immediately on window focus, page restoration, network reconnection or reopening the status panel. Concurrent browser requests are coalesced and failed requests back off. Hidden pages do not poll. Spotify does not provide a playback-change webhook here; changes are detected by polling, usually within about 3–5 seconds plus network latency.
+
+This change does not modify wrangler.jsonc, production variables, secrets or bindings. Keep `keep_vars: true` enabled.
