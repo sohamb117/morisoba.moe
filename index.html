@@ -196,7 +196,8 @@
 /* Focused Work / Projects view: 390 × 844 phone proportions, 50% wider. */
 .panel-popup{position:fixed;inset:0;margin:auto;
   width:min(585px,calc(100vw - 64px),calc((100dvh - 64px) * 585 / 844));
-  aspect-ratio:585 / 844;max-width:none;max-height:none;padding:0;border:0;
+  height:min(844px,calc(100dvh - 64px),calc((100vw - 64px) * 844 / 585));
+  max-width:none;max-height:none;padding:0;border:0;transform-origin:center;
   background:transparent;color:var(--ink);overflow:visible;}
 .panel-popup::backdrop{background:rgba(0,0,0,.94);}
 .panel-popup .panel.is-maximized{position:relative !important;inset:auto !important;
@@ -206,10 +207,13 @@
 .panel-popup .popup-work .pbody,.panel-popup .popup-projects .pbody{
   flex:1;min-height:0;max-height:none !important;overflow-y:auto !important;}
 .panel-popup .popup-project-list{max-height:none;overflow:visible;}
+.panel-popup .popup-projects .pbody{padding:8px 10px;font-size:10px;line-height:1.65;}
+.panel-popup .popup-work .pbody{padding:12px 10px 12px 12px;}
+.panel-popup .panel{transition:none !important;}
 @media(max-width:720px){.pbtn[data-act="maximize"]{display:none;}}
 </style>
 <link rel="stylesheet" href="shared/hud.css?v=3">
-<script defer src="shared/panel-effects.js?v=1"></script>
+<script defer src="shared/panel-effects.js?v=popup-isolated-2"></script>
 </head>
 <body>
 
@@ -1232,7 +1236,9 @@ document.addEventListener("DOMContentLoaded", function(){
     if(list) list.classList.add("popup-project-list");
     // Independent presentation copy: preserve original panel and avoid duplicate IDs.
     [copy].concat(Array.from(copy.querySelectorAll("[id]"))).forEach(function(el){el.removeAttribute("id");});
-    copy.classList.remove("min","dragging");
+    copy.style.cssText="";
+    copy.classList.remove("min","dragging","disconnecting");
+    copy.inert=false;
     copy.classList.add("is-maximized",projects?"popup-projects":"popup-work");
     expanded=copy;
     popup.setAttribute("aria-label",projects?"Projects":"Work");
@@ -1272,7 +1278,7 @@ document.addEventListener("DOMContentLoaded", function(){
       event.preventDefault();maximizePanel(panel);
     });
     bar.addEventListener("pointerdown",function(event){
-      if(expanded===panel) event.stopImmediatePropagation();
+      if(event.target.closest("button,a")) event.stopImmediatePropagation();
     },true);
     panel.addEventListener("click",function(event){
       if(expanded===panel && event.target.closest('[data-act="min"],[data-act="close"]')){
