@@ -3,11 +3,22 @@
   "name": "morisoba",
   "main": "worker.mjs",
   "compatibility_date": "2026-10-16",
-  "observability": { "enabled": true },
+  "observability": {
+    "enabled": true
+  },
   "assets": {
     "directory": ".",
     "binding": "ASSETS",
-    "run_worker_first": ["/api/spotify", "/api/spotify/analysis"]
+    "run_worker_first": [
+      "/api/spotify",
+      "/api/spotify/analysis"
+    ]
   },
-  "compatibility_flags": ["nodejs_compat"]
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "keep_vars": true,
+  "vars": {
+    "SPOTIFY_CLIENT_ID": "58bb81063b87436ba551703d0d8f53c3"
+  }
 }
