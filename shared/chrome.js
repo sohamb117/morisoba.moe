@@ -126,7 +126,7 @@ function sagPt(ax,ay,bx,by,sag,seed,t){
   var y=u*u*u*ay+3*u*u*t*c[1]+3*u*t*t*c[3]+t*t*t*by;
   return [Math.round(x),Math.round(y)];
 }
-function visible(el){return el.style.display!=="none";}
+function visible(el){return el.style.display!=="none"&&!el.classList.contains("disconnecting");}
 /* pick a monochrome tone deterministically; bias toward mid/lo to feel worn */
 function pickTone(seed){
   var r=rnd(seed);
@@ -137,9 +137,29 @@ function pickTone(seed){
 }
 /* Stable sizes and slack: redrawing during drag never reshuffles the loom. */
 function cableMarkup(d,tone,seed,secondary){
-  var width=(secondary?1.7:2.8)+rnd(seed)*2.2;
-  return '<path class="cable-jacket" stroke-width="'+(width+1.8).toFixed(2)+'" d="'+d+'"/>'+
+  var width=((secondary?1.7:2.8)+rnd(seed)*2.2)*.86;
+  return '<path class="cable-jacket" stroke-width="'+(width+1.5).toFixed(2)+'" d="'+d+'"/>'+
     '<path class="'+(secondary?'cable2':'cable')+' '+tone+'" stroke-width="'+width.toFixed(2)+'" d="'+d+'"/>';
+}
+/* Hardware follows the cable tangent, rather than the screen axes. */
+function cableHardware(ax,ay,bx,by,sag,seed,t,type,span){
+  var p=sagPt(ax,ay,bx,by,sag,seed,t);
+  var before=sagPt(ax,ay,bx,by,sag,seed,t-.015), after=sagPt(ax,ay,bx,by,sag,seed,t+.015);
+  var angle=Math.atan2(after[1]-before[1],after[0]-before[0])*180/Math.PI;
+  var shape;
+  if(type==='tie'){
+    var h=span||9;
+    shape='<path class="hardware-shell" d="M-2 -'+h+' Q-5 0 -2 '+h+' L2 '+h+' Q5 0 2 -'+h+' Z"/>';
+  }else if(type==='transformer'){
+    shape='<path class="hardware-collar" d="M-19 -3 L-12 -3 L-12 3 L-19 3 Z M12 -3 L19 -3 L19 3 L12 3 Z"/>'+
+      '<path class="hardware-shell" d="M-12 -5 L-7 -9 L7 -9 L12 -5 L12 5 L7 9 L-7 9 L-12 5 Z"/>'+
+      '<path class="hardware-detail" d="M-6 -6 L-6 6 M-2 -7 L-2 7 M2 -7 L2 7 M6 -6 L6 6"/>';
+  }else{
+    shape='<path class="hardware-collar" d="M-14 -3 L-7 -3 L-7 3 L-14 3 Z M7 -2 L14 -2 L14 2 L7 2 Z"/>'+
+      '<path class="hardware-shell" d="M-7 -4 Q-10 0 -7 4 L-2 4 L0 6 L5 6 Q10 0 5 -6 L0 -6 L-2 -4 Z"/>'+
+      '<path class="hardware-detail" d="M-2 -4 L-2 4 M2 -4 L2 4"/>';
+  }
+  return '<g class="cable-hardware '+type+'" transform="translate('+p[0]+' '+p[1]+') rotate('+angle.toFixed(2)+')">'+shape+'</g>';
 }
 function drawWires(LAYOUT, WIRES, FLOOR, DROPS){
   if(isMobile()) return;
@@ -158,25 +178,27 @@ function drawWires(LAYOUT, WIRES, FLOOR, DROPS){
     if(!visible(ea)||!visible(eb)) return;
     var a=pt(ea,wr[1]), b=pt(eb,wr[3]);
     var dist=Math.sqrt((b[0]-a[0])*(b[0]-a[0])+(b[1]-a[1])*(b[1]-a[1]));
-    var strands=2+Math.floor(rnd(i+50)*3);
-    var tone=pickTone(i+55);
+    var bundled=i%3!==2;
+    var strands=bundled?3+Math.floor(rnd(i+50)*2):2;
+    var extraSlack=rnd(i+411)>.55?1.75:1;
+    var baseSag=(24+dist*.20*(1+rnd(i*7)*.9))*extraSlack;
+    var baseSeed=i*31, hardware='';
     for(var k=0;k<strands;k++){
-      var off=(k-(strands-1)/2)*(5+3*rnd(i*19+k));
-      var extraSlack=rnd(i+411)>.55?1.75:1;
-      var sag=(24+dist*.20*(1+rnd(i*7+k)*.9))*extraSlack;
-      var d=sagPath(a[0]+off,a[1],b[0]+off,b[1],sag,i*31+k*7);
-      out+=cableMarkup(d,tone,i*31+k+90,k!==0);
+      // Shared bend geometry keeps a loom together; excess length bows outward.
+      var off=(k-(strands-1)/2)*(bundled?4:7);
+      var ox=dist?-(b[1]-a[1])/dist*off:off;
+      var oy=dist?(b[0]-a[0])/dist*off:0;
+      var sag=bundled?baseSag+(k===strands-1?24:5)*rnd(i*17+k):baseSag*(.75+.5*rnd(i*7+k));
+      var seed=bundled?baseSeed:baseSeed+k*7;
+      var d=sagPath(a[0]+ox,a[1]+oy,b[0]+ox,b[1]+oy,sag,seed);
+      out+=cableMarkup(d,pickTone(i*13+k+55),i*31+k+90,k!==0);
       if(k===0&&i%3===0) out+='<path class="flow" d="'+d+'"/>';
-      /* bindings taping the bundle together */
       if(k===0){
-        [0.32,0.62].forEach(function(t,bi2){
-          if(rnd(i*5+bi2)<.6){
-            var bp=sagPt(a[0]+off,a[1],b[0]+off,b[1],sag,i*31+k*7,t);
-            out+='<rect class="port" x="'+(bp[0]-2)+'" y="'+(bp[1]-4)+'" width="5" height="9"/>';
-          }
-        });
+        if(bundled) hardware+=cableHardware(a[0]+ox,a[1]+oy,b[0]+ox,b[1]+oy,sag,seed,.3,'tie',strands*3);
+        if(i%4===1||i%7===3) hardware+=cableHardware(a[0]+ox,a[1]+oy,b[0]+ox,b[1]+oy,sag,seed,.59,i%7===3?'transformer':'coupler');
       }
     }
+    out+=hardware;
     out+='<rect class="port" x="'+(a[0]-3)+'" y="'+(a[1]-3)+'" width="6" height="6"/>';
     out+='<rect class="port" x="'+(b[0]-3)+'" y="'+(b[1]-3)+'" width="6" height="6"/>';
   });
@@ -190,6 +212,7 @@ function drawWires(LAYOUT, WIRES, FLOOR, DROPS){
     var d=sagPath(tx,ty,px,py,40+140*rnd(i+300),i*13+500);
     var tone=pickTone(i+250);
     out+=cableMarkup(d,tone,i+300,false);
+    if(i%3===1) out+=cableHardware(tx,ty,px,py,40+140*rnd(i+300),i*13+500,.42,'coupler');
     if(i%2===1){
       var d2=sagPath(tx+4,ty,px+4,py,55+120*rnd(i+310),i*17+900);
       out+=cableMarkup(d2,tone,i+310,true);
@@ -207,6 +230,7 @@ function drawWires(LAYOUT, WIRES, FLOOR, DROPS){
     var d=sagPath(px,py,bx,H()-26,30+95*rnd(i+710),i*19+720);
     var tone=pickTone(i+750);
     out+=cableMarkup(d,tone,i+710,false);
+    if(i%3===0) out+=cableHardware(px,py,bx,H()-26,30+95*rnd(i+710),i*19+720,.54,'transformer');
     out+='<circle class="via" cx="'+Math.round(bx)+'" cy="'+(H()-26)+'" r="2"/>';
   });
   /* limp dead cables hanging off every panel */
@@ -224,7 +248,7 @@ function drawWires(LAYOUT, WIRES, FLOOR, DROPS){
         " C "+Math.round(sx+(rnd(k+j+7)-.5)*20)+" "+Math.round(sy+len*.65)+
         ", "+Math.round(ex)+" "+Math.round(ey-len*.35)+
         ", "+Math.round(ex)+" "+Math.round(ey);
-      out+='<path class="dead" style="stroke-width:'+(1.5+2*rnd(k*11+j)).toFixed(2)+'" d="'+d+'"/>';
+      out+='<path class="dead" style="stroke-width:'+((1.5+2*rnd(k*11+j))*.86).toFixed(2)+'" d="'+d+'"/>';
       if(j===1){
         /* electrode pad on this loose end */
         out+='<circle class="dead-end" cx="'+Math.round(ex)+'" cy="'+Math.round(ey)+'" r="4.5"/>';
@@ -255,11 +279,11 @@ function drawTraces(){
     var dd="M0 "+Math.round(y1)+" C "+Math.round(W()/3)+" "+Math.round(c1y)+
       ", "+Math.round(2*W()/3)+" "+Math.round(c2y)+", "+W()+" "+Math.round(y2);
     var oo=(.06+Math.random()*.10).toFixed(2);
-    out+='<path d="'+dd+'" fill="none" stroke="'+TR+'" stroke-width="'+(1.4+rnd(sp+940)*1.6).toFixed(2)+'" opacity="'+oo+'"/>';
+    out+='<path d="'+dd+'" fill="none" stroke="'+TR+'" stroke-width="'+((1.4+rnd(sp+940)*1.6)*.86).toFixed(2)+'" opacity="'+oo+'"/>';
     if(sp%3===0){
       var dd2="M0 "+Math.round(y1+5)+" C "+Math.round(W()/3)+" "+Math.round(c1y+14)+
         ", "+Math.round(2*W()/3)+" "+Math.round(c2y+9)+", "+W()+" "+Math.round(y2+4);
-      out+='<path d="'+dd2+'" fill="none" stroke="'+TR+'" stroke-width="'+(1.4+rnd(sp+940)*1.6).toFixed(2)+'" opacity="'+oo+'"/>';
+      out+='<path d="'+dd2+'" fill="none" stroke="'+TR+'" stroke-width="'+((1.4+rnd(sp+940)*1.6)*.86).toFixed(2)+'" opacity="'+oo+'"/>';
     }
   }
   for(var i=0;i<30;i++){
