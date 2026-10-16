@@ -154,7 +154,7 @@
 /* hex telemetry strip */
 #p-hex .pbody{padding:4px 7px;height:224px;overflow:hidden;}
 #p-hex .titlebar{overflow:visible;}
-#p-hex .tl{flex:1;overflow:visible;}
+#p-hex .tl{flex:1;min-width:0;white-space:normal;overflow:visible;}
 #p-hex .led-strip{display:none;}
 #hexcol{font-size:10px;line-height:1.8;opacity:.7;}
 #hexcol.gitlog-ready{animation:hexscroll 52s linear infinite;}
@@ -706,7 +706,7 @@ body.desktop-ready #wires{visibility:visible;opacity:1;}
     </div>
   </section>
 
-  <section class="panel" id="p-hex" data-w="160" style="--tilt:rotate(.5deg)">
+  <section class="panel" id="p-hex" data-w="120" style="--tilt:rotate(.5deg)">
     <div class="titlebar"><span class="tl">L:12 GITLOG</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
     <div class="pbody"><div id="hexcol" aria-label="Latest GitHub commits"><span class="gitlog-status">connecting…</span></div></div>
   </section>
