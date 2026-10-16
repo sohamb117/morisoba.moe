@@ -813,8 +813,15 @@ function asciiTitle(){
     ? "Layer 10: Ascii" : "layer 10: ascii // "+asciiLayers[asciiIndex].dataset.name;
 }
 new MutationObserver(asciiTitle).observe(asciiPanel,{attributes:true,attributeFilter:["class"]});
-setInterval(function(){
-  if(document.hidden || asciiPanel.classList.contains("min") || asciiPanel.style.display==="none") return;
+var asciiDurations={EVA:7000,RINGO:9000,OCULUS:12000};
+function scheduleAsciiSwitch(){
+  setTimeout(switchAsciiLayer,asciiDurations[asciiLayers[asciiIndex].dataset.name]);
+}
+function switchAsciiLayer(){
+  if(document.hidden || asciiPanel.classList.contains("min") || asciiPanel.style.display==="none"){
+    setTimeout(switchAsciiLayer,500);
+    return;
+  }
   asciiPanel.classList.add("ascii-glitch");
   setTimeout(function(){
     asciiLayers[asciiIndex].hidden=true;
@@ -822,8 +829,12 @@ setInterval(function(){
     asciiLayers[asciiIndex].hidden=false;
     asciiTitle();
   },280);
-  setTimeout(function(){asciiPanel.classList.remove("ascii-glitch");},560);
-},8000);
+  setTimeout(function(){
+    asciiPanel.classList.remove("ascii-glitch");
+    scheduleAsciiSwitch();
+  },560);
+}
+scheduleAsciiSwitch();
 asciiTitle();
 var asciiDock=document.getElementById("dock");
 new MutationObserver(function(){
