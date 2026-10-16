@@ -6,7 +6,7 @@
       "repo": "arenabench",
       "name": "ArenaBench",
       "category": "AI / security",
-      "description": "An adversarial benchmark where LLM agents compete inside a disposable Linux VM. Traces capture system exploration, privilege escalation, and emergent multi-agent behavior.",
+      "description": "Adversarial multi-agent cybersecurity evaluation in disposable Linux VMs.",
       "technologies": [
         "Python",
         "Linux VMs",
@@ -23,7 +23,7 @@
       "repo": "pokeweb",
       "name": "Pokeweb",
       "category": "Games / web",
-      "description": "Pokémon Diamond, Pearl, and Platinum in the browser: recompiled WASM cores in Web Workers, a React interface, local saves, and optional cloud saves.",
+      "description": "Pokémon DS in the browser, with WASM cores and local or cloud saves.",
       "technologies": [
         "C",
         "WebAssembly",
@@ -45,7 +45,7 @@
       "repo": "gen4recomp",
       "name": "gen4recomp / nativeplat",
       "category": "Games / native",
-      "description": "Native Pokémon ports built from decompilations and static recompilation, with a desktop launcher, save tools, display effects, rewind, and multiplayer features. Coverage varies by game.",
+      "description": "Native Pokémon ports with save tools, rewind, and multiplayer features.",
       "technologies": [
         "C",
         "C++",
@@ -66,7 +66,7 @@
       "repo": "sokaris",
       "name": "Sokaris",
       "category": "Creative tools",
-      "description": "A Julia toolkit for programmatic photo editing: composable image operations, editing macros, and an automatically refreshing image viewer.",
+      "description": "Composable photo editing and an auto-refreshing image viewer in Julia.",
       "technologies": [
         "Julia",
         "Image processing"
@@ -86,7 +86,7 @@
       "repo": "fruit-fly-heaven",
       "name": "Flytrain / Fruit Fly Heaven",
       "category": "Neuroscience / research",
-      "description": "A browser neuromechanics experiment connecting the BANC fruit fly connectome to FlyBody in MuJoCo. Flytrain coordinates shared parameter search; autonomous behavior remains an open research goal.",
+      "description": "Connectome / FlyBody simulations and shared parameter search. Experimental.",
       "technologies": [
         "Python",
         "MuJoCo",
@@ -112,7 +112,7 @@
       "repo": "npx-morisoba",
       "name": "npx morisoba",
       "category": "Developer tools",
-      "description": "A Rust terminal portfolio with ASCII imagery and keyboard navigation, distributed through npm. The same application also runs in the browser through WebAssembly.",
+      "description": "A Rust terminal portfolio distributed through npm, with a WASM web version.",
       "technologies": [
         "Rust",
         "Ratatui",
@@ -133,7 +133,7 @@
       "repo": "eigenself",
       "name": "Eigenfish / eigenself",
       "category": "Generative art",
-      "description": "Name-seeded eigenvalue projections: an interactive generator that turns a name into a family of mathematical images.",
+      "description": "Name-seeded eigenvalue projections and generative mathematical images.",
       "technologies": [
         "JavaScript",
         "HTML",
@@ -150,7 +150,7 @@
       "repo": "love-canvas",
       "name": "love-canvas",
       "category": "Graphics / web",
-      "description": "An experimental Canvas 2D backend for a subset of LÖVE’s graphics API, with Lua running in WASM. Includes a WebGL-free demo and browser tests.",
+      "description": "An experimental Canvas 2D graphics backend for LÖVE running in WASM.",
       "technologies": [
         "JavaScript",
         "Lua",
@@ -168,7 +168,7 @@
       "repo": "omp-pet",
       "name": "OMP Pet",
       "category": "Developer tools",
-      "description": "A native macOS desktop companion for oh-my-pi, built with Rust and AppKit. Session events travel over a private Unix socket to an animated pet and status readout.",
+      "description": "A native Rust / AppKit desktop companion for oh-my-pi.",
       "technologies": [
         "Rust",
         "AppKit",
@@ -185,7 +185,7 @@
       "repo": "dream-state-learning",
       "name": "Dream-State Learning",
       "category": "AI / research",
-      "description": "Experiments in continual agent memory: consolidating experience into adapter weights and measuring transfer with controlled environments and baseline comparisons.",
+      "description": "Continual agent-memory experiments using adapter-weight consolidation.",
       "technologies": [
         "Python",
         "LLMs",
@@ -202,7 +202,7 @@
       "repo": "geoshader",
       "name": "Geoshader",
       "category": "Economics / research",
-      "description": "A neural event-study pipeline exploring geopolitical shocks and defense-equity returns, with GDELT events, market data, and model interpretation.",
+      "description": "Neural event studies of geopolitical shocks and defense-equity returns.",
       "technologies": [
         "Python",
         "Financial NLP",
@@ -219,7 +219,7 @@
       "repo": "greenhouse",
       "name": "Greenhouse",
       "category": "Developer tools",
-      "description": "A portable macOS development setup with workstation tools, language runtimes, diagnostics, and reusable agent configuration.",
+      "description": "A portable macOS setup for development tools and agent configuration.",
       "technologies": [
         "Python",
         "Shell",

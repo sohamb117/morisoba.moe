@@ -24,14 +24,12 @@ def render():
                 raise ValueError('Expected an absolute HTTPS link')
         esc = html.escape
         source = esc(p['links'][0]['url'], quote=True)
-        tags = ''.join('<li>' + esc(t) + '</li>' for t in p['technologies'])
-        links = ' '.join(f'<a href="{esc(l["url"], quote=True)}" target="_blank" rel="noopener noreferrer">{esc(l["label"])} ↗</a>' for l in p['links'])
-        blocks.append(f'''        <article class="project-card" id="project-{esc(p['repo'])}">
-          <div class="project-heading"><h2><a href="{source}" target="_blank" rel="noopener noreferrer">{esc(p['name'])}</a></h2><span class="project-kind">{esc(p['category'])}</span></div>
-          <p>{esc(p['description'])}</p>
-          <ul class="project-tags" aria-label="Technologies">{tags}</ul>
-          <div class="project-links">{links}</div>
-        </article>''')
+        extra = ' · '.join(f'<a href="{esc(l["url"], quote=True)}" target="_blank" rel="noopener noreferrer">{esc(l["label"])}</a>' for l in p['links'][1:])
+        extra = f'<div class="project-more">{extra}</div>' if extra else ''
+        blocks.append(f'''        <div class="project" id="project-{esc(p['repo'])}">
+          <a href="{source}" target="_blank" rel="noopener noreferrer"><b>{esc(p['name'])}</b></a>
+          <p>{esc(p['description'])}</p>{extra}
+        </div>''')
     return '\n' + '\n'.join(blocks) + '\n'
 
 if __name__ == '__main__':
