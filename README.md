@@ -15,7 +15,7 @@ python3 scripts/build_projects.py --check
 
 ## Resume
 
-Work links to the HTML resume and the unchanged supplied `Soham_Bhattacharya_CV_-_SWE(5).pdf`, stored as `resume/Soham-Bhattacharya-CV.pdf`. The HTML includes the CV's experience, research, education, patents, writing, awards, and skills, with grammar and punctuation cleanup.
+Work has one PDF download in its titlebar. Experience entries link to the matching HTML resume sections. The unchanged supplied `Soham_Bhattacharya_CV_-_SWE(5).pdf` is stored as `resume/Soham-Bhattacharya-CV.pdf`. The HTML includes the CV's experience, research, education, patents, writing, awards, and skills, with grammar and punctuation cleanup.
 
 PDF SHA-256: `f4d2ada919b73a32a0c0d072059ce3e86aa25b077678487ab2e9dd39591cd1c0`.
 

@@ -34,6 +34,8 @@
   padding-top:6px;}
 
 /* about / works / contact */
+.resume-download{display:grid;place-items:center;width:14px;height:14px;flex:none;border:1px solid currentColor;font:11px/1 var(--mono);letter-spacing:0;text-decoration:none;}
+.resume-download:focus-visible{outline:1px solid currentColor;outline-offset:3px;}
 #p-about .pbody p+p{margin-top:8px;}
 .work{display:block;text-decoration:none;padding:7px 2px;
   border-bottom:1px dashed rgba(3,3,3,.5);}
@@ -429,10 +431,8 @@
   </section>
 
   <section class="panel inv" id="p-works" data-w="330" style="--tilt:rotate(-.3deg)">
-    <div class="titlebar"><span class="tl">layer:02 work</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
+    <div class="titlebar"><span class="tl">layer:02 work</span><a class="resume-download" href="resume/Soham-Bhattacharya-CV.pdf" download aria-label="Download resume (PDF)" title="Download resume (PDF)" onpointerdown="event.stopPropagation()">↓</a><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
     <div class="pbody">
-      <a class="work" href="resume/"><span class="wt"><b>resume</b><i>read ↗</i></span><span class="wd">experience, education, research &amp; writing</span></a>
-      <a class="work" href="resume/Soham-Bhattacharya-CV.pdf" download><span class="wt"><b>download CV</b><i>PDF ↓</i></span></a>
       <a class="work" href="resume/#microsoft"><span class="wt"><b>microsoft</b><i>2026</i></span><span class="wd">software engineering intern · security intelligence</span></a>
       <a class="work" href="resume/#omega"><span class="wt"><b>omega venture partners</b><i>2025–26</i></span><span class="wd">technical consultant · ai systems</span></a>
       <a class="work" href="resume/#doppio"><span class="wt"><b>doppio labs</b><i>2025–26</i></span><span class="wd">co-founder &amp; cto · people search</span></a>
@@ -626,13 +626,6 @@
     <div class="pbody"><pre id="hexcol"></pre></div>
   </section>
 
-  <section class="panel" id="p-sigil" data-w="160" style="--tilt:rotate(.3deg)">
-    <div class="titlebar"><span class="tl">l:14</span><button class="pbtn" data-act="close">✕</button></div>
-    <div class="pbody" style="text-align:center;padding:10px 8px;">
-      <a href="resume/" class="mail" style="display:block;text-decoration:none;padding:8px 10px;border:1px solid var(--dust);letter-spacing:3px;font-size:11px;">resume</a>
-    </div>
-  </section>
-
   <section class="panel" id="p-crux" data-w="260" style="--tilt:rotate(-.45deg)">
     <div class="titlebar"><span class="tl">l:13 EVA</span><button class="pbtn" data-act="min">–</button><button class="pbtn" data-act="close">✕</button></div>
     <div class="pbody">
@@ -702,7 +695,6 @@ var LAYOUT = [
   ["p-wave",    .585, .800],
   ["p-hex",     .935, .055],
   ["p-crux",     .245, .660],
-  ["p-sigil",    .820, .055],
   ["p-note",     .300, .055],
   ["p-vessel",   .680, .300]
 ];
@@ -735,8 +727,6 @@ var WIRES = [
   ["p-candle","bottom","p-console","top"],
   ["p-about","right","p-hex","bottom"],
   ["p-litany","right","p-wave","bottom"],
-  ["p-sigil","top","p-contact","bottom"],
-  ["p-sigil","right","p-wave","left"],
   ["p-vessel","left","p-seraph","bottom"],
   ["p-vessel","top","p-hex","left"],
   ["p-vessel","right","p-relic","left"],
@@ -746,7 +736,6 @@ var WIRES = [
   ["p-note","bottom","p-works","top"],
   ["p-apple","bottom","p-oracle","right"],
   ["p-hex","top","p-vessel","right"],
-  ["p-sigil","left","p-crux","right"]
 ];
 /* cables running down to the floor */
 var FLOOR=[
@@ -755,7 +744,7 @@ var FLOOR=[
   ["p-about",.4],["p-relic",.5],
   ["p-vessel",.3],["p-vessel",.7],
   ["p-note",.5],["p-hex",.5],["p-seraph",.3],["p-seraph",.7],
-  ["p-apple",.5],["p-name",.7],["p-sigil",.5],["p-works",.6]
+  ["p-apple",.5],["p-name",.7],["p-works",.6]
 ];
 /* cable drops from the top edge onto panels */
 var DROPS = [
@@ -791,7 +780,6 @@ var MAT = {
   "p-apple":   "mat-paper",
   "p-wave":    "mat-crt scr-green",
   "p-hex":     "mat-crt scr-blue",
-  "p-sigil":   "mat-worn",
   "p-crux":    "mat-frame",
   "p-note":    "mat-paper note",
   "p-vessel":  "mat-portrait"
