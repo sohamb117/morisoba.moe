@@ -813,7 +813,11 @@ function asciiTitle(){
     ? "Layer 10: Ascii" : "layer 10: ascii // "+asciiLayers[asciiIndex].dataset.name;
 }
 new MutationObserver(asciiTitle).observe(asciiPanel,{attributes:true,attributeFilter:["class"]});
-var asciiDurations={EVA:12000,RINGO:9000,OCULUS:12000};
+var EYE_PHASES=["opening","staring","closing","melting","holding","reforming"];
+var EYE_FRAMES={opening:16,staring:24,closing:9,melting:34,holding:10,reforming:28};
+var eyeCycleMs=EYE_PHASES.reduce(function(total,phase){return total+EYE_FRAMES[phase]*100;},0);
+var oculusStartedAt=0;
+var asciiDurations={EVA:9000,RINGO:7000,OCULUS:eyeCycleMs+1000};
 function scheduleAsciiSwitch(){
   setTimeout(switchAsciiLayer,asciiDurations[asciiLayers[asciiIndex].dataset.name]);
 }
@@ -827,11 +831,12 @@ function switchAsciiLayer(){
     asciiLayers[asciiIndex].hidden=true;
     asciiIndex=(asciiIndex+1)%asciiLayers.length;
     asciiLayers[asciiIndex].hidden=false;
+    if(asciiLayers[asciiIndex].dataset.name==="OCULUS") oculusStartedAt=performance.now();
     asciiTitle();
+    scheduleAsciiSwitch();
   },280);
   setTimeout(function(){
     asciiPanel.classList.remove("ascii-glitch");
-    scheduleAsciiSwitch();
   },560);
 }
 scheduleAsciiSwitch();
@@ -947,20 +952,17 @@ function corruptText(txt){
   return out.join("");
 }
 
-var EYE_PHASES=["opening","staring","closing","melting","holding","reforming"];
-var EYE_FRAMES={opening:16, staring:24, closing:9, melting:34, holding:10, reforming:28};
-var eyePhaseIdx=0, eyeT=0;
 setInterval(function(){
-  eyeT++;
+  // Restart on entry; hold the initial/final frame for 500ms on either side.
+  var elapsed=Math.max(0,Math.min(eyeCycleMs,performance.now()-oculusStartedAt-500));
+  var frame=elapsed/100,eyePhaseIdx=0;
+  while(eyePhaseIdx<EYE_PHASES.length-1 && frame>=EYE_FRAMES[EYE_PHASES[eyePhaseIdx]]){
+    frame-=EYE_FRAMES[EYE_PHASES[eyePhaseIdx]];
+    eyePhaseIdx++;
+  }
   var phase=EYE_PHASES[eyePhaseIdx];
   var dur=EYE_FRAMES[phase];
-  if(eyeT>=dur){
-    eyeT=0;
-    eyePhaseIdx=(eyePhaseIdx+1)%EYE_PHASES.length;
-    phase=EYE_PHASES[eyePhaseIdx];
-    dur=EYE_FRAMES[phase];
-  }
-  var t=eyeT/dur;
+  var t=Math.min(1,frame/dur);
   var open=1, melt=0;
   if(phase==="opening"){
     open=1-Math.pow(1-t,3);
