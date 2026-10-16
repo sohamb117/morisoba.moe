@@ -1,0 +1,5 @@
+name = "morisoba-spotify-status"
+main = "index.mjs"
+compatibility_date = "2026-10-16"
+workers_dev = false
+routes = [{ pattern = "morisoba.moe/api/spotify", zone_name = "morisoba.moe" }]
