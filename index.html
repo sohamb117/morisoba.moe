@@ -94,6 +94,13 @@
 #project-list{max-height:clamp(100px,calc(38vh - 150px),240px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--steel) transparent;}
 .project{padding:5px 0;border-bottom:1px dashed var(--edge-mid);overflow-wrap:anywhere;}
 .project:last-child{border-bottom:0;}
+.project{transition:background-color .15s,color .15s,box-shadow .15s;}
+@media(hover:hover){
+  .project:hover{background:rgba(232,232,232,.08);box-shadow:inset 2px 0 var(--ink);}
+  .project:hover > a{color:var(--ink);text-decoration:underline;}
+}
+.project:focus-within{background:rgba(232,232,232,.08);box-shadow:inset 2px 0 var(--ink);}
+@media(prefers-reduced-motion:reduce){.project{transition:none;}}
 .project a{text-underline-offset:2px;}
 .project > a{font-size:11px;}
 .project p{font-size:10px;opacity:.85;}
@@ -185,18 +192,19 @@
   #stage #p-litany.restored,#stage #p-candle.restored{display:none !important;}
 }
 
-/* Focused Work / Projects view. */
-.panel-popup{position:fixed;inset:0;margin:auto;width:min(900px,calc(100vw - 32px));
-  max-width:none;max-height:calc(100dvh - 32px);padding:5px;border:0;
+/* Focused Work / Projects view: 390 × 844 phone proportions, 50% wider. */
+.panel-popup{position:fixed;inset:0;margin:auto;
+  width:min(585px,calc(100vw - 64px),calc((100dvh - 64px) * 585 / 844));
+  aspect-ratio:585 / 844;max-width:none;max-height:none;padding:0;border:0;
   background:transparent;color:var(--ink);overflow:visible;}
 .panel-popup::backdrop{background:rgba(0,0,0,.78);}
 .panel-popup .panel.is-maximized{position:relative !important;inset:auto !important;
-  width:100% !important;margin:0 !important;transform:none !important;opacity:1;
-  display:block !important;max-height:calc(100dvh - 42px);}
+  width:100% !important;height:100% !important;margin:0 !important;
+  transform:none !important;opacity:1;display:flex !important;flex-direction:column;}
+.panel-popup .titlebar{flex:none;cursor:default;}
 .panel-popup #p-works .pbody,.panel-popup #p-console .pbody{
-  max-height:calc(100dvh - 100px) !important;overflow-y:auto !important;}
+  flex:1;min-height:0;max-height:none !important;overflow-y:auto !important;}
 .panel-popup #project-list{max-height:none;overflow:visible;}
-.panel-popup .titlebar{cursor:default;}
 @media(max-width:720px){.pbtn[data-act="maximize"]{display:none;}}
 </style>
 <link rel="stylesheet" href="shared/hud.css?v=3">
