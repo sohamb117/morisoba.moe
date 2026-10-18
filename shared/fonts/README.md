@@ -1,6 +1,6 @@
 # Typeface sources
 
-Topaz a500 is the original Topaz Kickstart 1.x face. Topaz and MicroKnight are unmodified TrueType files from TrueSchool's Multi Platform Amiga Fonts v1.02, maintained at https://github.com/rewtnull/amigafonts (revision d42987535d94ebbfb51e64fee76f9974c6ae145a). The upstream README, including original authors, credits, GPL font exception declaration, and embedding instructions, is included as AMIGA-README.txt.
+MicroKnight is an unmodified TrueType file from TrueSchool's Multi Platform Amiga Fonts v1.02, maintained at https://github.com/rewtnull/amigafonts (revision d42987535d94ebbfb51e64fee76f9974c6ae145a). The upstream README, including original authors, credits, GPL font exception declaration, and embedding instructions, is included as AMIGA-README.txt.
 
 Xerox Classic comes from Interlisp's preserved CLASSIC18-MRR and CLASSIC24-MRR Medley display fonts at https://github.com/Interlisp/medley/tree/b542b8e7449cc4d4d4709eea13301c15c107d638/fonts/medleydisplayfonts. These are the archived Classic display glyphs, rather than a contemporary substitute. Xerox's historical OIS Classic identification appears in the 1983 Print Service Fonts document: https://www.bitsavers.org/pdf/xerox/xns_services/services_8.0/Print_Service_Fonts_Jan1983.pdf.
 

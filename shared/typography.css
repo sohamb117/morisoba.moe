@@ -1,8 +1,7 @@
-@font-face{font-family:'Topaz 1';src:url('fonts/Topaz_a500_v1.0.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
 @font-face{font-family:'MicroKnight';src:url('fonts/MicroKnight_v1.0.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
 @font-face{font-family:'Xerox Classic';src:url('fonts/XeroxClassic24-Regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
 @font-face{font-family:'Xerox Classic Small';src:url('fonts/XeroxClassic18-Regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
-:root{--mono:'Topaz 1','Courier New',monospace;--sans:'MicroKnight','Courier New',monospace;--serif:'Xerox Classic','Times New Roman',serif;--serif-small:'Xerox Classic Small','Times New Roman',serif}
+:root{--mono:'MicroKnight','Courier New',monospace;--sans:'MicroKnight','Courier New',monospace;--serif:'Xerox Classic','Times New Roman',serif;--serif-small:'Xerox Classic Small','Times New Roman',serif}
 body{font-synthesis:none}
 button,input,select,textarea,pre,code,kbd,samp{font-family:var(--mono)}
 svg text{font-family:var(--mono)}
@@ -62,7 +61,7 @@ h1,h2,h3,h4,h5,h6{font-family:var(--serif);font-weight:400}
 .jp-hud .maplibregl-popup-content strong{font-family:var(--serif-small)}
 /* Narrow system windows retain readable labels without growing their frames. */
 #p-ascii .titlebar .tl,#p-hex .titlebar .tl,#p-note .titlebar .tl{font-size:12px;letter-spacing:0}
-#p-relic .titlebar .tl{font:400 10px/16px var(--sans);letter-spacing:0;padding-inline:1px}
+#p-relic .titlebar .tl{font:400 11px/16px var(--serif-small);letter-spacing:0;padding-inline:1px}
 #p-name .pbody>div:first-child{font-family:var(--serif-small);font-weight:400}
 
 .jp-hud .maplibregl-ctrl-attrib,.jp-hud .maplibregl-ctrl button{font-family:var(--mono)}
