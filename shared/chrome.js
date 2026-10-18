@@ -594,7 +594,7 @@ var loadTimer=setInterval(function(){
   pct.textContent=("00"+Math.floor(p)).slice(-3)+"%";
 },60);
 function finishLoad(){
-  hexEl.innerHTML="product by sybil research";
+  hexEl.innerHTML="product by vesperglass institute";
   setTimeout(function(){
     document.getElementById("loader").classList.add("done");
     var panels=chromePanels;
