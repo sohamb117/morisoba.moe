@@ -11,7 +11,11 @@
     "binding": "ASSETS",
     "run_worker_first": [
       "/api/spotify",
-      "/api/spotify/analysis"
+      "/api/spotify/analysis",
+      "/api/mimorigasaka",
+      "/api/mimorigasaka/*",
+      "/mimorigasaka",
+      "/mimorigasaka/*"
     ]
   },
   "compatibility_flags": [
@@ -19,6 +23,7 @@
   ],
   "keep_vars": true,
   "vars": {
-    "SPOTIFY_CLIENT_ID": "58bb81063b87436ba551703d0d8f53c3"
+    "SPOTIFY_CLIENT_ID": "58bb81063b87436ba551703d0d8f53c3",
+    "MIMORI_ORIGIN": "https://morisoba.moe"
   }
 }
