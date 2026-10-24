@@ -10,3 +10,11 @@
 /docs/**
 /.dev.vars*
 /.env*
+
+/node_modules/**
+/.wrangler/**
+/migrations/**
+/package.json
+/package-lock.json
+/wrangler.local.jsonc
+/AGENTS.md
