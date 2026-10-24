@@ -1,29 +1,36 @@
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "morisoba",
-  "main": "worker.mjs",
-  "compatibility_date": "2026-10-16",
-  "observability": {
-    "enabled": true
-  },
-  "assets": {
-    "directory": ".",
-    "binding": "ASSETS",
-    "run_worker_first": [
-      "/api/spotify",
-      "/api/spotify/analysis",
-      "/api/mimorigasaka",
-      "/api/mimorigasaka/*",
-      "/mimorigasaka",
-      "/mimorigasaka/*"
-    ]
-  },
-  "compatibility_flags": [
-    "nodejs_compat"
-  ],
-  "keep_vars": true,
-  "vars": {
-    "SPOTIFY_CLIENT_ID": "58bb81063b87436ba551703d0d8f53c3",
-    "MIMORI_ORIGIN": "https://morisoba.moe"
-  }
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "morisoba",
+	"main": "worker.mjs",
+	"compatibility_date": "2026-10-16",
+	"observability": {
+		"enabled": true
+	},
+	"assets": {
+		"directory": ".",
+		"binding": "ASSETS",
+		"run_worker_first": [
+			"/api/spotify",
+			"/api/spotify/analysis",
+			"/api/mimorigasaka",
+			"/api/mimorigasaka/*",
+			"/mimorigasaka",
+			"/mimorigasaka/*"
+		]
+	},
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"keep_vars": true,
+	"vars": {
+		"SPOTIFY_CLIENT_ID": "58bb81063b87436ba551703d0d8f53c3",
+		"MIMORI_ORIGIN": "https://morisoba.moe"
+	},
+	"d1_databases": [
+		{
+			"binding": "MIMORI_DB",
+			"database_name": "morisoba-mimorigasaka",
+			"database_id": "f43ff1cb-49cb-4713-baa2-48586de779c4"
+		}
+	]
 }
