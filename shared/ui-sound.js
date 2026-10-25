@@ -101,6 +101,12 @@
       if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
       var targetName = (link.getAttribute('target') || '').toLowerCase();
       if (targetName && targetName !== '_self') return;
+      // Preserve native external-link behavior (referrer policy, link tracking,
+      // downloads, browser gesture handling); only hold same-origin page loads.
+      var destination;
+      try { destination = new URL(link.href, location.href); } catch (_) { return; }
+      if (destination.origin !== location.origin || link.hasAttribute('ping') ||
+          link.hasAttribute('referrerpolicy') || /\\bnoreferrer\\b/.test(link.rel || '')) return;
       if (!event.cancelable) return;
       event.preventDefault();
       var url = link.href;
