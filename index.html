@@ -218,6 +218,8 @@ body.desktop-ready #wires{visibility:visible;opacity:1;}
 <link rel="stylesheet" href="shared/hud.css?v=3">
 <script defer src="shared/panel-effects.js?v=boot-isolated-3"></script>
 <link rel="stylesheet" href="shared/typography.css?v=2">
+<link rel="stylesheet" href="shared/cursors.css?v=1">
+<script defer src="shared/ui-sound.js?v=1"></script>
 </head>
 <body>
 
@@ -573,7 +575,7 @@ body.desktop-ready #wires{visibility:visible;opacity:1;}
     </div>
   </section>
 
-  <section class="panel" id="p-litany" data-w="410" style="--tilt:rotate(-.25deg);cursor:pointer;" onclick="window.open('npx/','_blank','noopener')">
+  <section class="panel ui-sound-nav" id="p-litany" data-w="410" style="--tilt:rotate(-.25deg);cursor:pointer;" onclick="window.open('npx/','_blank','noopener')">
     <div class="titlebar"><span class="tl">layer:05 npx morisoba</span><button class="pbtn" data-act="close">✕</button></div>
     <div class="pbody">
       <div class="litany-track" id="litany-track">
@@ -1184,7 +1186,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
   var eg = document.getElementById("entry-gate");
   document.getElementById("btn-resume").addEventListener("click", function(){
-    window.location.href = "resume/";
+    window.MorisobaUI.navigate("resume/");
   });
   function enterPersonal(){
     eg.classList.add("done");
