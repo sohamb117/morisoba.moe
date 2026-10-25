@@ -172,7 +172,7 @@ body.desktop-ready #btn-logout{display:block;}
 #btn-logout:focus-visible{outline:2px solid var(--ink);outline-offset:3px;}
 @media(max-width:720px){#btn-logout{min-height:44px;top:auto;bottom:48px;right:8px;}}
 /* entry gate */
-#entry-gate{position:fixed;inset:0;z-index:10001;background:var(--void);display:grid;place-items:center;overflow:hidden;transition:opacity .4s,visibility .4s;}
+#entry-gate{position:fixed;inset:0;z-index:10001;background:var(--void);display:grid;place-items:center;align-items:safe center;overflow-x:hidden;overflow-y:auto;padding:44px 0;box-sizing:border-box;transition:opacity .4s,visibility .4s;}
 #entry-gate::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 43%,rgba(232,232,232,.11),transparent 30%),repeating-linear-gradient(0deg,transparent 0 3px,rgba(232,232,232,.035) 3px 4px);pointer-events:none;}
 #entry-gate.done{opacity:0;visibility:hidden;pointer-events:none;}
 .entry-noise{position:absolute;inset:0;overflow:hidden;pointer-events:none;}.entry-noise::before{content:"";position:absolute;inset:0;background-image:linear-gradient(135deg,transparent 49.8%,rgba(232,232,232,.07) 50%,transparent 50.2%),linear-gradient(45deg,transparent 49.8%,rgba(232,232,232,.045) 50%,transparent 50.2%);background-size:260px 260px;opacity:.3;}.entry-trace{position:absolute;bottom:9vh;left:6vw;font-size:8px;line-height:2;letter-spacing:4px;color:var(--dust);opacity:.24;white-space:pre;animation:entry-drift 18s linear infinite;}
@@ -187,6 +187,7 @@ body.desktop-ready #btn-logout{display:block;}
 @keyframes entry-drift{to{transform:translateX(20vw)}}
 @keyframes entry-signal{0%,100%{opacity:.64;transform:scale(.985)}50%{opacity:.78;transform:scale(1)}}
 @media (max-width:720px){.entry-shell{width:calc(100vw - 32px);}.entry-titlebar{top:-28px;font-size:7px;}.entry-sigil-wrap{width:min(270px,72vw);margin-bottom:20px;}.entry-product{font-size:31px;line-height:1;}.entry-maker{font-size:15px;}.entry-actions{flex-direction:column;gap:8px;}.entry-actions button{min-height:48px;}.entry-trace{bottom:5vh;left:-30vw;}}
+@media (max-height:650px){.entry-sigil-wrap{width:min(180px,44vw);margin-bottom:14px;}.entry-rule{margin-top:18px;}.entry-footer{margin-top:16px;}}
 
 /* Mobile home: information first; optional panels stay in the dock. */
 @media(max-width:720px){
