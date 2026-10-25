@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="Mimorigasaka · morisoba">
+  <title>Mimorigasaka · morisoba</title>
+  <link rel="stylesheet" href="/shared/typography.css?v=2">
+  <link rel="stylesheet" href="/mimorigasaka/style.css">
+  <link rel="stylesheet" href="/shared/cursors.css?v=2">
+  <script defer src="/shared/ui-sound.js?v=2"></script>
+  <script src="/mimorigasaka/app.js" type="module"></script>
+</head>
+<body>
+  <a class="skip" href="#viewer">Skip to posts</a>
+  <div class="cables" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+  <div class="scene">
+    <header class="page-header"><a href="/">✧ COPLAND OS ✧ rev.2.6</a><button id="identity-toggle" aria-controls="identity" aria-expanded="false">login</button></header>
+    <div id="page-status" class="status" role="status"></div>
+    <div class="layout">
+      <aside id="identity" class="identity" hidden aria-labelledby="identity-title">
+        <div class="titlebar"><h1 id="identity-title">LAYER:00 IDENTITY</h1></div>
+        <form id="login-form" class="identity-form">
+          <p id="invite-notice" hidden>Create your invited account.</p>
+          <label for="login-id">ID</label><input id="login-id" name="username" autocomplete="username" required minlength="3" maxlength="24" pattern="[A-Za-z0-9_]+" spellcheck="false" autocapitalize="none">
+          <label for="login-password">PASSCODE</label><input id="login-password" name="password" type="password" autocomplete="current-password" required minlength="12" maxlength="128">
+          <p id="password-hint" class="hint" hidden>12–128 characters. ID: letters, numbers, underscores.</p>
+          <div class="form-actions"><button type="submit" id="login-submit">ENTER</button></div>
+          <p id="login-status" class="status" role="status"></p>
+        </form>
+        <div id="profile" hidden>
+          <div class="profile-head"><img id="profile-picture" src="/shared/morisoba-lily.svg" width="104" height="104" alt="Profile picture"><span id="profile-handle"></span></div>
+          <div class="profile-info"><p id="profile-bio"></p><button id="edit-profile" aria-controls="profile-settings" aria-expanded="false">Edit profile</button></div>
+          <form id="profile-settings" class="settings" hidden>
+            <label for="display-name">Name</label><input id="display-name" required maxlength="48" autocomplete="nickname">
+            <label for="bio">Bio</label><textarea id="bio" maxlength="280" rows="3"></textarea>
+            <label for="picture">Picture</label><input id="picture" type="file" accept="image/png,image/jpeg,image/webp">
+            <button id="remove-picture" type="button">Remove picture</button>
+            <div class="form-actions"><button type="submit">Save</button><button id="cancel-profile" type="button">Cancel</button></div>
+            <p id="profile-status" class="status" role="status"></p>
+          </form>
+          <section class="composer" aria-labelledby="composer-heading">
+            <h2 id="composer-heading">New post</h2>
+            <form id="post-form"><label class="sr-only" for="draft">Post</label><textarea id="draft" maxlength="2000" rows="5" placeholder="Write a post…" required></textarea><div class="compose-actions"><span id="count" class="hint">0 / 2000</span><button class="primary" type="submit" id="publish">Post</button></div><p id="post-status" class="status" role="status"></p><button id="cancel-edit" type="button" hidden>Cancel edit</button></form>
+          </section>
+          <div class="account-tools">
+            <details><summary>Account</summary><form id="password-form"><label for="current-password">Current passcode</label><input id="current-password" type="password" autocomplete="current-password" required minlength="12" maxlength="128"><label for="new-password">New passcode</label><input id="new-password" type="password" autocomplete="new-password" required minlength="12" maxlength="128"><button type="submit">Change passcode</button><p id="password-status" class="status" role="status"></p></form><button id="logout" type="button">Sign out</button></details>
+            <details id="admin-tools" hidden><summary>Invitations &amp; members</summary><button id="create-invite" type="button">Create invitation</button><div id="new-invite" hidden><label for="invite-link">Single-use link · expires in 7 days</label><input id="invite-link" readonly><button id="copy-invite" type="button">Copy link</button></div><p id="admin-status" class="status" role="status"></p><div id="invites"></div><h3>Members</h3><div id="members"></div></details>
+          </div>
+        </div>
+      </aside>
+      <main id="viewer" class="viewer" aria-label="Posts">
+        <div id="lock" class="lock"><svg viewBox="0 0 32 38" width="32" height="38" aria-hidden="true"><path d="M8 15V9a8 8 0 0116 0v6M3 15h26v21H3zM16 23v5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg><h2>Locked</h2><button class="ui-sound-select" id="unlock">Sign in</button></div>
+        <div id="feed" hidden>
+          <div class="feed-tools"><div class="filters" aria-label="Filter posts"><button class="ui-sound-select" data-filter="all" aria-pressed="true">All</button><button class="ui-sound-select" data-filter="pinned" aria-pressed="false">Pinned</button><button class="ui-sound-select" data-filter="mine" aria-pressed="false">Mine</button></div><button id="refresh" aria-label="Refresh posts">↻</button></div>
+          <p id="feed-status" class="status" role="status"></p><div id="posts"></div><button id="load-more" hidden>Older posts</button>
+        </div>
+      </main>
+    </div>
+    <noscript><p>JavaScript is needed to sign in and load posts.</p></noscript>
+  </div>
+  <dialog id="delete-dialog"><form method="dialog"><h2>Delete this post?</h2><p>It will be removed from the feed.</p><div class="form-actions"><button value="cancel">Cancel</button><button value="delete">Delete</button></div></form></dialog>
+</body>
+</html>

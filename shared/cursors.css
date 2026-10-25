@@ -1,25 +1,26 @@
 /* morisoba // vintage pointer set. All visible cursor roles use local 32x32 sprites.
    Cursor_4.cur was entirely transparent; crosshair is a drawn replacement.
+   Arrow is shared by default/hover. No native fallback cursors.
    Change a variable here to remap a role site-wide. */
-@media (pointer: fine) {
+@media (any-pointer: fine) {
   :root {
-    --cur-arrow: url("/shared/cursors/arrow.png") 0 0, url("/shared/cursors/alternate-arrow.png") 10 10, auto;
-    --cur-pointer: url("/shared/cursors/pointer.png") 11 3, url("/shared/cursors/arrow.png") 0 0, pointer;
-    --cur-text: url("/shared/cursors/text.png") 16 15, url("/shared/cursors/arrow.png") 0 0, text;
-    --cur-vertical-text: url("/shared/cursors/vertical-text.png") 15 15, url("/shared/cursors/text.png") 16 15, vertical-text;
-    --cur-move: url("/shared/cursors/move.png") 10 10, url("/shared/cursors/arrow.png") 0 0, move;
-    --cur-grab: url("/shared/cursors/pointer.png") 11 3, url("/shared/cursors/move.png") 10 10, grab;
-    --cur-grabbing: url("/shared/cursors/grabbing.png") 15 17, url("/shared/cursors/move.png") 10 10, grabbing;
-    --cur-ns: url("/shared/cursors/vertical.png") 10 10, url("/shared/cursors/arrow.png") 0 0, ns-resize;
-    --cur-ew: url("/shared/cursors/horizontal.png") 15 15, url("/shared/cursors/arrow.png") 0 0, ew-resize;
-    --cur-nwse: url("/shared/cursors/diagonal-nwse.png") 10 10, url("/shared/cursors/arrow.png") 0 0, nwse-resize;
-    --cur-nesw: url("/shared/cursors/diagonal-nesw.png") 15 15, url("/shared/cursors/arrow.png") 0 0, nesw-resize;
-    --cur-crosshair: url("/shared/cursors/crosshair.png") 15 15, url("/shared/cursors/arrow.png") 0 0, crosshair;
-    --cur-wait: url("/shared/cursors/busy.png") 10 10, url("/shared/cursors/arrow.png") 0 0, wait;
-    --cur-progress: url("/shared/cursors/progress.png") 10 10, url("/shared/cursors/arrow.png") 0 0, progress;
-    --cur-disabled: url("/shared/cursors/forbidden.png") 10 10, url("/shared/cursors/arrow.png") 0 0, not-allowed;
-    --cur-zoom-in: url("/shared/cursors/zoom-in.png") 12 11, url("/shared/cursors/crosshair.png") 15 15, zoom-in;
-    --cur-zoom-out: url("/shared/cursors/zoom-out.png") 12 11, url("/shared/cursors/crosshair.png") 15 15, zoom-out;
+    --cur-arrow: url("/shared/cursors/arrow.png") 0 0, url("/shared/cursors/alternate-arrow.png") 10 10, none;
+    --cur-pointer: var(--cur-arrow);
+    --cur-text: url("/shared/cursors/text.png") 16 15, url("/shared/cursors/arrow.png") 0 0, none;
+    --cur-vertical-text: url("/shared/cursors/vertical-text.png") 15 15, url("/shared/cursors/text.png") 16 15, none;
+    --cur-move: url("/shared/cursors/move.png") 10 10, url("/shared/cursors/arrow.png") 0 0, none;
+    --cur-grab: var(--cur-move);
+    --cur-grabbing: url("/shared/cursors/grabbing.png") 15 17, url("/shared/cursors/move.png") 10 10, none;
+    --cur-ns: url("/shared/cursors/vertical.png") 10 10, url("/shared/cursors/arrow.png") 0 0, none;
+    --cur-ew: url("/shared/cursors/horizontal.png") 15 15, url("/shared/cursors/arrow.png") 0 0, none;
+    --cur-nwse: url("/shared/cursors/diagonal-nwse.png") 10 10, url("/shared/cursors/arrow.png") 0 0, none;
+    --cur-nesw: url("/shared/cursors/diagonal-nesw.png") 15 15, url("/shared/cursors/arrow.png") 0 0, none;
+    --cur-crosshair: url("/shared/cursors/crosshair.png") 15 15, url("/shared/cursors/arrow.png") 0 0, none;
+    --cur-wait: url("/shared/cursors/busy.png") 10 10, url("/shared/cursors/arrow.png") 0 0, none;
+    --cur-progress: url("/shared/cursors/progress.png") 10 10, url("/shared/cursors/arrow.png") 0 0, none;
+    --cur-disabled: url("/shared/cursors/forbidden.png") 10 10, url("/shared/cursors/arrow.png") 0 0, none;
+    --cur-zoom-in: url("/shared/cursors/zoom-in.png") 12 11, url("/shared/cursors/crosshair.png") 15 15, none;
+    --cur-zoom-out: url("/shared/cursors/zoom-out.png") 12 11, url("/shared/cursors/crosshair.png") 15 15, none;
   }
 
   /* Force the custom arrow even over old cursor:auto/default/none declarations
@@ -28,13 +29,23 @@
     cursor: var(--cur-arrow) !important;
   }
 
+  /* Selectable reading text, including nested inline markup. Controls below
+     deliberately override this so their labels keep the arrow. */
+  html body :is(p, h1, h2, h3, h4, h5, h6, li, dt, dd, blockquote, pre, code,
+    span, b, strong, em, i, small, td, th, label, .post-body, .cursor-text),
+  html body :is(p, blockquote, pre, .post-body, .cursor-text) * {
+    cursor: var(--cur-text) !important;
+  }
+
   html body :is(a[href], button:not(:disabled), summary, select:not(:disabled),
     input[type="button"], input[type="submit"], input[type="reset"],
     input[type="checkbox"], input[type="radio"], input[type="range"],
     label[for], [role="button"], [role="link"], [role="menuitem"],
     [role="tab"], [role="option"], [onclick], [data-ui-sound],
     [style*="cursor: pointer"], [style*="cursor:pointer"],
-    .row, .tag-pill, .ui-sound-nav, .ui-sound-select, .imported-review summary) {
+    .row, .tag-pill, .ui-sound-nav, .ui-sound-select, .imported-review summary),
+  html body :is(a[href], button, summary, [role="button"], [role="tab"], [onclick],
+    .row, .tag-pill) *, html body input::file-selector-button {
     cursor: var(--cur-pointer) !important;
   }
 
@@ -47,7 +58,7 @@
   }
   html body :is([style*="vertical-text"], .cursor-vertical-text) { cursor: var(--cur-vertical-text) !important; }
 
-  html body :is(.titlebar, .titlebar .tl, [draggable="true"], [style*="cursor: move"],
+  html body :is(.panel .titlebar, .panel .titlebar .tl, [draggable="true"], [style*="cursor: move"],
     [style*="cursor:move"], .cursor-move) {
     cursor: var(--cur-move) !important;
   }
