@@ -1,6 +1,6 @@
 # Shared cursors and selection sounds
 
-Every document loads `shared/cursors.css?v=2` and `shared/ui-sound.js?v=2`, including Mimorigasaka. Default and actionable hover use the vintage arrow; reading text and editable fields use the I-beam. Drag/resize/disabled roles retain their custom sprites. Cursor lists end in `none` rather than a native OS cursor; all referenced sprites ship with the site.
+Every document loads `shared/cursors.css?v=2` and `shared/ui-sound.js?v=3`, including Mimorigasaka. Default and actionable hover use the vintage arrow; reading text and editable fields use the I-beam. Drag/resize/disabled roles retain their custom sprites. Cursor lists end in `none` rather than a native OS cursor; all referenced sprites ship with the site.
 
 Use `.ui-sound-select` or `data-ui-sound="select"` for a new selection control, and `.ui-sound-nav` or `data-ui-sound="nav"` for a programmatic page-launch control. Ordinary page links are automatic. JavaScript navigation uses `MorisobaUI.navigate(url, {replace, newTab})`. `data-ui-sound="off"` opts out, and `MorisobaUI.setMuted(true)` persists the sound preference.
 
@@ -11,3 +11,9 @@ The homepage Log Out button reloads the homepage path without its query or fragm
 ## Restoration regression
 
 Mimorigasaka was deployed from `feature/mimorigasaka` while PR #8 remained open. A later deployment from main omitted the page, Worker routes and D1 binding. The restoration merges that feature history into current main and retains the existing database ID. `tests/deployment-routes.test.cjs` guards the shell, routes, binding and cursor assets; `tests/ui-sound.test.cjs` covers sound deduplication, synthetic replay, disabled/muted controls and navigation semantics.
+
+## Stable return to the entry screen
+
+The homepage paints a dark document canvas before external styles arrive. Its entry content stays hidden until the three entry fonts, lily image and page handlers are ready; font requests are preloaded. The old entry fade/slide is removed so returning does not replay a blank-to-text animation. A two-second asset deadline selects a fixed monospace fallback if needed, preventing both an inaccessible blank screen and a later font swap. Desktop decorations and the loader stay hidden until Personal starts.
+
+`shared/navigation.css` covers outgoing same-tab root navigations, including Log Out, while preserving the navigation chirp. Modified/external/new-tab links are untouched. The `pageshow` handler clears the cover on back/forward-cache restoration.

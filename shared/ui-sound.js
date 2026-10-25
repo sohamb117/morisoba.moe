@@ -60,6 +60,18 @@
     return muted;
   }
 
+  function coverRootNavigation(destination) {
+    var url;
+    try { url = new URL(destination, location.href); } catch (_) { return; }
+    if (url.origin === location.origin && (url.pathname === '/' || url.pathname === '/index.html')) {
+      document.documentElement.classList.add('root-leaving');
+    }
+  }
+  // Back/forward cache restores the outgoing DOM, including its cover class.
+  window.addEventListener('pageshow', function () {
+    document.documentElement.classList.remove('root-leaving');
+  });
+
   function navigate(url, options) {
     options = options || {};
     play('nav');
@@ -68,6 +80,7 @@
       window.open(destination, '_blank', 'noopener');
       return;
     }
+    coverRootNavigation(destination);
     // Preserve the brief click before unloading the audio context.
     window.setTimeout(function () {
       if (options.replace) location.replace(destination);
@@ -122,6 +135,7 @@
       if (!event.cancelable) return;
       event.preventDefault();
       var url = link.href;
+      coverRootNavigation(url);
       window.setTimeout(function () { location.assign(url); }, 72);
       return;
     }

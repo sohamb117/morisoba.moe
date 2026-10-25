@@ -1,0 +1,9 @@
+/* Cover the outgoing document while returning to the root entry screen. */
+html.root-leaving::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  background: #030303;
+  cursor: var(--cur-arrow, none);
+}
