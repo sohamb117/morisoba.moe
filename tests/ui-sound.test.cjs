@@ -4,7 +4,7 @@ const vm=require('node:vm');
 const fs=require('node:fs');
 function harness(){
   let now=100, sounds=0, navigations=[];
-  const listeners={},timers=[];
+  const listeners={},timers=[],classes=new Set();
   const param=()=>({setValueAtTime(){},exponentialRampToValueAtTime(){}});
   class AudioContext {
     state='running';currentTime=0;destination={};
@@ -14,7 +14,7 @@ function harness(){
   }
   const location={href:'https://morisoba.moe/',origin:'https://morisoba.moe',pathname:'/',search:'',assign:u=>navigations.push(u),replace:u=>navigations.push(u)};
   const window={AudioContext,setTimeout:fn=>timers.push(fn),addEventListener:(type,fn)=>listeners['capture:'+type]=fn,open:u=>navigations.push(u)};
-  vm.runInNewContext(fs.readFileSync('shared/ui-sound.js','utf8'),{window,location,URL,localStorage:{getItem(){},setItem(){}},performance:{now:()=>now},document:{addEventListener:(type,fn)=>listeners[type]=fn}});
+  vm.runInNewContext(fs.readFileSync('shared/ui-sound.js','utf8'),{window,location,URL,localStorage:{getItem(){},setItem(){}},performance:{now:()=>now},document:{documentElement:{classList:{add:x=>classes.add(x),remove:x=>classes.delete(x)}},addEventListener:(type,fn)=>listeners[type]=fn}});
   function click({control=false,trusted=true,disabled=false,link=null,marked=false,mod=false}={}){
     const target={closest(selector){
       if(selector.includes('[inert]'))return disabled?{}:null;
@@ -26,7 +26,7 @@ function harness(){
     const e={isTrusted:trusted,target,button:0,defaultPrevented:false,cancelable:true,ctrlKey:mod,preventDefault(){this.defaultPrevented=true}};
     listeners['capture:click'](e);listeners.click(e);return e;
   }
-  return {click,ui:window.MorisobaUI,advance:()=>now+=500,flush:()=>timers.splice(0).forEach(fn=>fn()),sounds:()=>sounds,navigations};
+  return {click,classes,restore:()=>listeners['capture:pageshow'](),ui:window.MorisobaUI,advance:()=>now+=500,flush:()=>timers.splice(0).forEach(fn=>fn()),sounds:()=>sounds,navigations};
 }
 function link(href,attrs={}){return {href,dataset:{},rel:'',hasAttribute:k=>Object.hasOwn(attrs,k),getAttribute:k=>k==='href'?href:attrs[k]??null};}
 test('selection capture sounds stopped panel clicks but not delayed synthetic replay or boot clicks',()=>{
@@ -43,4 +43,11 @@ test('same-document hashes and downloads do not navigate or sound',()=>{
 });
 test('programmatic Business and Log Out navigation sounds once and respects replace',()=>{
   const h=harness();h.ui.navigate('resume/');assert.equal(h.sounds(),1);h.flush();assert.deepEqual(h.navigations,['resume/']);h.advance();h.ui.navigate('/',{replace:true});assert.equal(h.sounds(),2);h.flush();assert.deepEqual(h.navigations,['resume/','/']);
+});
+
+test('root links and logout cover the outgoing page; back-forward restore clears it',()=>{
+  const h=harness();h.ui.navigate('/',{replace:true});assert.ok(h.classes.has('root-leaving'));h.restore();assert.ok(!h.classes.has('root-leaving'));h.advance();h.click({link:link('https://morisoba.moe/index.html')});assert.ok(h.classes.has('root-leaving'));
+});
+test('external, modified and new-tab navigation never cover the current page',()=>{
+  const h=harness();h.ui.navigate('https://example.com/');assert.equal(h.classes.size,0);h.ui.navigate('/',{newTab:true});assert.equal(h.classes.size,0);h.click({link:link('https://morisoba.moe/index.html'),mod:true});assert.equal(h.classes.size,0);
 });
