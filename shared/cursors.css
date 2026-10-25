@@ -18,6 +18,8 @@
     --cur-wait: url("/shared/cursors/busy.png") 10 10, url("/shared/cursors/arrow.png") 0 0, wait;
     --cur-progress: url("/shared/cursors/progress.png") 10 10, url("/shared/cursors/arrow.png") 0 0, progress;
     --cur-disabled: url("/shared/cursors/forbidden.png") 10 10, url("/shared/cursors/arrow.png") 0 0, not-allowed;
+    --cur-zoom-in: url("/shared/cursors/zoom-in.png") 12 11, url("/shared/cursors/crosshair.png") 15 15, zoom-in;
+    --cur-zoom-out: url("/shared/cursors/zoom-out.png") 12 11, url("/shared/cursors/crosshair.png") 15 15, zoom-out;
   }
 
   /* Force the custom arrow even over old cursor:auto/default/none declarations
@@ -31,7 +33,8 @@
     input[type="checkbox"], input[type="radio"], input[type="range"],
     label[for], [role="button"], [role="link"], [role="menuitem"],
     [role="tab"], [role="option"], [onclick], [data-ui-sound],
-    [style*="cursor: pointer"], [style*="cursor:pointer"]) {
+    [style*="cursor: pointer"], [style*="cursor:pointer"],
+    .row, .tag-pill, .ui-sound-nav, .ui-sound-select, .imported-review summary) {
     cursor: var(--cur-pointer) !important;
   }
 
@@ -49,13 +52,16 @@
     cursor: var(--cur-move) !important;
   }
   html body :is([style*="cursor: grab"], [style*="cursor:grab"], .cursor-grab,
-    .maplibregl-canvas-container.maplibregl-interactive, .maplibregl-canvas-container.maplibregl-interactive canvas) {
+    .maplibregl-canvas-container.maplibregl-interactive, .maplibregl-canvas-container.maplibregl-interactive canvas,
+    #volume, #volume canvas, .directory > .titlebar, .dossier > .titlebar,
+    #stage.grid .panel .titlebar) {
     cursor: var(--cur-grab) !important;
   }
   html body :is(.dragging, .dragging .titlebar, .dragging .tl, .cursor-grabbing,
     [style*="cursor: grabbing"], [style*="cursor:grabbing"],
     .maplibregl-canvas-container.maplibregl-interactive:active,
-    .maplibregl-canvas-container.maplibregl-interactive:active canvas) {
+    .maplibregl-canvas-container.maplibregl-interactive:active canvas,
+    #volume.dragging, #volume.dragging canvas, #stage.grid .panel.dragging .titlebar) {
     cursor: var(--cur-grabbing) !important;
   }
 
@@ -70,8 +76,15 @@
   html body :is(.cursor-crosshair, [style*="cursor: crosshair"]) { cursor: var(--cur-crosshair) !important; }
   html body :is(.cursor-wait, [aria-busy="true"], [style*="cursor: wait"]) { cursor: var(--cur-wait) !important; }
   html body :is(.cursor-progress, [style*="cursor: progress"]) { cursor: var(--cur-progress) !important; }
-  html body :is(:disabled, [aria-disabled="true"], [inert], .cursor-disabled,
+  html body :is(:disabled, [aria-disabled="true"], [inert], [inert] *, .cursor-disabled,
     [style*="cursor: not-allowed"], [style*="cursor: no-drop"]) { cursor: var(--cur-disabled) !important; }
+
+  html body :is(.cursor-help, [style*="cursor: help"], .cursor-context-menu,
+    .cursor-alias, .cursor-copy) { cursor: var(--cur-pointer) !important; }
+  html body :is(.cursor-cell, [style*="cursor: cell"]) { cursor: var(--cur-crosshair) !important; }
+  html body :is(.cursor-all-scroll, [style*="cursor: all-scroll"]) { cursor: var(--cur-move) !important; }
+  html body :is(.cursor-zoom-in, [style*="cursor: zoom-in"]) { cursor: var(--cur-zoom-in) !important; }
+  html body :is(.cursor-zoom-out, [style*="cursor: zoom-out"]) { cursor: var(--cur-zoom-out) !important; }
 
   /* Explicit utilities take precedence over broad component defaults. */
   html body .cursor-arrow { cursor: var(--cur-arrow) !important; }
