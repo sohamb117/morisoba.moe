@@ -106,7 +106,7 @@
       var destination;
       try { destination = new URL(link.href, location.href); } catch (_) { return; }
       if (destination.origin !== location.origin || link.hasAttribute('ping') ||
-          link.hasAttribute('referrerpolicy') || /\\bnoreferrer\\b/.test(link.rel || '')) return;
+          link.hasAttribute('referrerpolicy') || (" " + (link.rel || "") + " ").includes(" noreferrer ")) return;
       if (!event.cancelable) return;
       event.preventDefault();
       var url = link.href;
