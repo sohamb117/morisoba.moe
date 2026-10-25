@@ -99,6 +99,7 @@ html.entry-font-fallback #entry-gate .entry-shell *{font-family:monospace!import
 
 /* litany */
 #p-litany .pbody{padding:6px 0;overflow:hidden;}
+#p-litany .npx-link{display:block;color:inherit;text-decoration:none;}
 .litany-track{display:flex;width:max-content;animation:litany 52s linear infinite;}
 .litany-track span{white-space:pre;font-size:13px;letter-spacing:5px;padding:0 4px;}
 
@@ -596,12 +597,14 @@ body.desktop-ready #wires{visibility:visible;opacity:1;}
     </div>
   </section>
 
-  <section class="panel ui-sound-nav" id="p-litany" data-w="410" style="--tilt:rotate(-.25deg);cursor:pointer;" onclick="window.open('npx/','_blank','noopener')">
+  <section class="panel" id="p-litany" data-w="410" style="--tilt:rotate(-.25deg)">
     <div class="titlebar"><span class="tl">layer:05 npx morisoba</span><button class="pbtn" data-act="close">✕</button></div>
     <div class="pbody">
-      <div class="litany-track" id="litany-track">
+      <a class="npx-link" href="https://npx.morisoba.moe/" target="_blank" rel="noopener noreferrer" aria-label="Open npx morisoba portfolio (new tab)">
+      <div class="litany-track" id="litany-track" aria-hidden="true">
         <span>sync_err loop:0x7f3a ▓ &gt; npx morisoba ▒ &gt; npx morisoba ▓ &gt; npx morisoba ░ &gt; npx morisoba ▓▒░ &gt; npx morisoba ▓ &gt; npx morisoba ▒ &gt; npx morisoba ░ &gt; npx morisoba ▓ &gt; npx morisoba ░ &gt; npx morisoba ▓▒ &gt; npx morisoba ▚▞ &gt; npx morisoba ░▒▓ </span>
       </div>
+      </a>
     </div>
   </section>
 
@@ -632,7 +635,7 @@ body.desktop-ready #wires{visibility:visible;opacity:1;}
         </div>
         <div class="project" id="project-npx-morisoba">
           <a href="https://github.com/sohamb117/npx-morisoba" target="_blank" rel="noopener noreferrer"><b>npx morisoba</b></a>
-          <p>A Rust terminal portfolio distributed through npm, with a WASM web version.</p><div class="project-more"><a href="https://www.npmjs.com/package/morisoba" target="_blank" rel="noopener noreferrer">npm</a></div>
+          <p>A Rust terminal portfolio distributed through npm, with a WASM web version.</p><div class="project-more"><a href="https://www.npmjs.com/package/morisoba" target="_blank" rel="noopener noreferrer">npm</a> · <a href="https://npx.morisoba.moe/" target="_blank" rel="noopener noreferrer">web</a></div>
         </div>
         <div class="project" id="project-eigenself">
           <a href="https://github.com/sohamb117/eigenself" target="_blank" rel="noopener noreferrer"><b>Eigenfish / eigenself</b></a>
