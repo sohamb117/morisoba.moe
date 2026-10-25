@@ -166,8 +166,13 @@
 @keyframes hexscroll{to{transform:translateY(-50%);}}
 #seraph{text-shadow:1.1px 0 rgba(111,182,194,.35), -1.1px 0 rgba(200,80,80,.30);}
 
+/* Entry exit stays reachable on desktop and touch layouts. */
+#btn-logout{display:none;position:fixed;top:8px;right:12px;z-index:9990;min-height:36px;padding:7px 12px;border:1px solid var(--edge-hi);background:var(--void);color:var(--ink);font:12px var(--mono);}
+body.desktop-ready #btn-logout{display:block;}
+#btn-logout:focus-visible{outline:2px solid var(--ink);outline-offset:3px;}
+@media(max-width:720px){#btn-logout{min-height:44px;top:auto;bottom:48px;right:8px;}}
 /* entry gate */
-#entry-gate{position:fixed;inset:0;z-index:10001;background:var(--void);display:grid;place-items:center;overflow:hidden;transition:opacity .4s,visibility .4s;}
+#entry-gate{position:fixed;inset:0;z-index:10001;background:var(--void);display:grid;place-items:center;align-items:safe center;overflow-x:hidden;overflow-y:auto;padding:44px 0;box-sizing:border-box;transition:opacity .4s,visibility .4s;}
 #entry-gate::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 43%,rgba(232,232,232,.11),transparent 30%),repeating-linear-gradient(0deg,transparent 0 3px,rgba(232,232,232,.035) 3px 4px);pointer-events:none;}
 #entry-gate.done{opacity:0;visibility:hidden;pointer-events:none;}
 .entry-noise{position:absolute;inset:0;overflow:hidden;pointer-events:none;}.entry-noise::before{content:"";position:absolute;inset:0;background-image:linear-gradient(135deg,transparent 49.8%,rgba(232,232,232,.07) 50%,transparent 50.2%),linear-gradient(45deg,transparent 49.8%,rgba(232,232,232,.045) 50%,transparent 50.2%);background-size:260px 260px;opacity:.3;}.entry-trace{position:absolute;bottom:9vh;left:6vw;font-size:8px;line-height:2;letter-spacing:4px;color:var(--dust);opacity:.24;white-space:pre;animation:entry-drift 18s linear infinite;}
@@ -182,6 +187,7 @@
 @keyframes entry-drift{to{transform:translateX(20vw)}}
 @keyframes entry-signal{0%,100%{opacity:.64;transform:scale(.985)}50%{opacity:.78;transform:scale(1)}}
 @media (max-width:720px){.entry-shell{width:calc(100vw - 32px);}.entry-titlebar{top:-28px;font-size:7px;}.entry-sigil-wrap{width:min(270px,72vw);margin-bottom:20px;}.entry-product{font-size:31px;line-height:1;}.entry-maker{font-size:15px;}.entry-actions{flex-direction:column;gap:8px;}.entry-actions button{min-height:48px;}.entry-trace{bottom:5vh;left:-30vw;}}
+@media (max-height:650px){.entry-sigil-wrap{width:min(180px,44vw);margin-bottom:14px;}.entry-rule{margin-top:18px;}.entry-footer{margin-top:16px;}}
 
 /* Mobile home: information first; optional panels stay in the dock. */
 @media(max-width:720px){
@@ -218,12 +224,12 @@ body.desktop-ready #wires{visibility:visible;opacity:1;}
 <link rel="stylesheet" href="shared/hud.css?v=3">
 <script defer src="shared/panel-effects.js?v=boot-isolated-3"></script>
 <link rel="stylesheet" href="shared/typography.css?v=2">
-<link rel="stylesheet" href="shared/cursors.css?v=1">
-<script defer src="shared/ui-sound.js?v=1"></script>
+<link rel="stylesheet" href="shared/cursors.css?v=2">
+<script defer src="shared/ui-sound.js?v=2"></script>
 </head>
 <body>
 
-<div id="entry-gate">
+<div id="entry-gate" role="dialog" aria-modal="true" aria-label="Select user environment">
   <div class="entry-noise"></div>
   <div class="entry-trace">0xCF01  IRQ:07  MASK  ACK  NAK  RETRY  object[LAYER]-&gt;world.coord[2] = 0;  DrawSync(0);  protocol_7 :: init_g_pass()  ▓▒░ ▚▞ ░▒▓</div>
   <div class="entry-shell">
@@ -237,7 +243,7 @@ body.desktop-ready #wires{visibility:visible;opacity:1;}
       <div class="entry-prompt">Select user environment</div>
       <div class="entry-actions">
         <button id="btn-resume">BUSINESS</button>
-        <button id="btn-load">PERSONAL</button>
+        <button id="btn-load" class="ui-sound-select">PERSONAL</button>
       </div>
     </div>
     <div class="entry-footer"></div>
@@ -485,7 +491,7 @@ body.desktop-ready #wires{visibility:visible;opacity:1;}
   =====
 </pre>
 
-<div id="stage">
+<div id="stage" inert>
   <svg id="wires" xmlns="http://www.w3.org/2000/svg"></svg>
 
   <section class="panel" id="p-name" data-w="336" style="--tilt:rotate(-.4deg)">
@@ -652,6 +658,7 @@ body.desktop-ready #wires{visibility:visible;opacity:1;}
     <div class="titlebar"><span class="tl">l:08 links</span><button class="pbtn" data-act="close">✕</button></div>
     <div class="pbody">
       <a href="/library/">/library/</a><br>
+      <a href="/mimorigasaka/">/mimorigasaka/</a><br>
       <a href="/jp_subcult/">/jp_subcult/</a><br>
       <a href="https://pokeweb.morisoba.moe">/pokeweb/</a>
       <!--
@@ -736,7 +743,8 @@ body.desktop-ready #wires{visibility:visible;opacity:1;}
   </section>
 </div>
 
-<div id="dock"></div>
+<button id="btn-logout" type="button" aria-label="Log Out — return to Personal or Business">Log Out</button>
+<div id="dock" inert></div>
 <div id="hint">present day · present time</div>
 
 <div id="scanlines"></div>
@@ -1188,10 +1196,29 @@ document.addEventListener("DOMContentLoaded", function(){
   document.getElementById("btn-resume").addEventListener("click", function(){
     window.MorisobaUI.navigate("resume/");
   });
+  var entering = false;
+  document.getElementById("btn-resume").focus({preventScroll:true});
+  eg.addEventListener("keydown", function(event){
+    if(event.key !== "Tab") return;
+    event.preventDefault();
+    var next = document.activeElement.id === "btn-resume" ? "btn-load" : "btn-resume";
+    document.getElementById(next).focus();
+  });
+  document.getElementById("btn-logout").addEventListener("click", function(){
+    // A fresh document clears boot timers, panel clones, dock and deep-link state.
+    window.MorisobaUI.navigate(location.pathname, {replace:true});
+  });
   function enterPersonal(){
+    if(entering) return;
+    entering = true;
+    eg.inert = true;
+    eg.setAttribute("aria-hidden", "true");
     eg.classList.add("done");
     startLoader(BOOT, function(){
+      document.getElementById("stage").inert = false;
+      document.getElementById("dock").inert = false;
       document.body.classList.add("desktop-ready");
+      document.getElementById("btn-logout").focus({preventScroll:true});
       startMainAnimations();
       if(location.hash === "#p-console"){
         var projects=document.getElementById("p-console");
@@ -1215,6 +1242,7 @@ document.addEventListener("DOMContentLoaded", function(){
   var popupClosing=false,popupAnimation=null;
   function restorePanel(immediate){
     if(!expanded || popupClosing) return;
+    if(!immediate && window.MorisobaUI) window.MorisobaUI.play("select");
     if(popupAnimation){popupAnimation.cancel();popupAnimation=null;}
     if(!immediate && !window.matchMedia("(prefers-reduced-motion: reduce)").matches){
       popupClosing=true;
@@ -1236,6 +1264,7 @@ document.addEventListener("DOMContentLoaded", function(){
   function maximizePanel(panel){
     if(isMobile()) return;
     if(popupClosing) return;
+    if(window.MorisobaUI) window.MorisobaUI.play("select");
     if(expanded) restorePanel(true);
     drawWires();
     window.chromeCableModal=true;

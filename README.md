@@ -22,3 +22,7 @@ PDF SHA-256: `f4d2ada919b73a32a0c0d072059ce3e86aa25b077678487ab2e9dd39591cd1c0`.
 ## Deployment
 
 The checked-in GitHub Pages workflow publishes on main. A separate Cloudflare Workers integration also runs on this branch. During verification, the branch's homepage appeared on morisoba.moe while `/resume/` still served the old version, even after reload and a cache-busting query. A green Cloudflare build check alone does not establish that all routes have updated. The branch remains available in PR #3; verify both the homepage and resume route after release.
+
+## Mimorigasaka
+
+Invite-only profiles and microblog at `/mimorigasaka/`. See [setup, security, and deployment](docs/mimorigasaka.md). Requires the Cloudflare Worker and a D1 binding; static preview alone cannot authenticate or serve posts.

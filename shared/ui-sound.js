@@ -88,10 +88,22 @@
     return true;
   }
 
-  document.addEventListener('click', function (event) {
-    if (event.defaultPrevented || event.button !== 0) return;
+  // Capture on window before panel-effects stops and later replays a close.
+  // Synthetic boot/replay clicks stay silent; keyboard activations are trusted.
+  window.addEventListener('click', function (event) {
+    if (!event.isTrusted || event.defaultPrevented || event.button !== 0) return;
     var target = event.target;
     if (!target || !target.closest) return;
+    if (target.closest('[data-ui-sound="off"], :disabled, [aria-disabled="true"], [inert]')) return;
+    var control = target.closest('.pbtn, #dock button, summary, [role="tab"], button[aria-expanded], .row, .tag-pill, .record, [data-kind], #closeDossier, #closeGuide, #help, #toggleDirectory, #collapseDirectory, .ui-sound-select, [data-ui-sound="select"]');
+    if (control) play('select');
+  }, true);
+
+  document.addEventListener('click', function (event) {
+    if (!event.isTrusted || event.defaultPrevented || event.button !== 0) return;
+    var target = event.target;
+    if (!target || !target.closest) return;
+    if (target.closest('[data-ui-sound="off"], :disabled, [aria-disabled="true"], [inert]')) return;
     var link = target.closest('a[href]');
     if (link) {
       if (!documentChange(link)) return;
