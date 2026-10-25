@@ -126,6 +126,10 @@
         {
           "label": "npm",
           "url": "https://www.npmjs.com/package/morisoba"
+        },
+        {
+          "label": "web",
+          "url": "https://npx.morisoba.moe/"
         }
       ]
     },
