@@ -1,0 +1,33 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {createIdentity,signRecord} from '../protocol/records.mjs';
+import {createEvent,encryptEvent,decryptEvent,project,makeHistoryJob,replayHistory} from '../protocol/social.mjs';
+const event=(type,audience,rest={})=>({type,eventId:crypto.randomUUID(),createdAt:Date.now(),audience,...rest});
+test('profiles, replies, likes and removals respect signatures, authors and audience',async()=>{
+ const a=await createIdentity(),b=await createIdentity(),c=await createIdentity(),audience=[a.id,b.id];
+ const post=await createEvent(a,event('post',audience,{body:'hello'}));
+ const profile=await createEvent(a,event('profile',audience,{displayName:'Alice',bio:'private profile'}));
+ const reply=await createEvent(b,event('reply',audience,{body:'reply',target:post.id,root:post.id}));
+ const like=await createEvent(b,event('like.add',audience,{target:post.id}));
+ const duplicate=await createEvent(b,event('like.add',audience,{target:post.id}));
+ let view=await project([post,profile,reply,like,duplicate],a.id);assert.equal(view.posts.length,2);assert.equal(view.likes.get(post.id).size,1);assert.equal(view.profiles.get(a.id).payload.bio,'private profile');
+ const remove=await createEvent(b,event('like.remove',audience,{target:post.id,removes:[like.id,duplicate.id]}));
+ view=await project([remove,post,reply,duplicate,like],a.id);assert.equal(view.likes.size,0);
+ assert.equal((await project([post,profile,reply,like],c.id)).posts.length,0);
+ const badDelete=await createEvent(b,event('delete',audience,{target:post.id}));assert.equal((await project([post,badDelete],a.id)).posts.length,1);
+ const goodDelete=await createEvent(a,event('delete',audience,{target:post.id}));assert.equal((await project([post,goodDelete],a.id)).posts.length,0);
+ await assert.rejects(createEvent(a,event('post',audience,{body:'mention',mentions:[c.id]})));
+});
+test('history opt-in reuses encrypted bodies with fresh authorized envelopes and skips deleted posts',async()=>{
+ const a=await createIdentity(),b=await createIdentity(),entry=await encryptEvent(a,event('post',[a.id],{body:'old post'}));
+ assert.equal(await makeHistoryJob(a,b.id,[entry]),null);const job=await makeHistoryJob(a,b.id,[entry],{shareOlderPosts:true});assert.equal(job.total,1);
+ await assert.rejects(decryptEvent(entry.object,entry.key,b.id));
+ const queued=[];let saved;
+ const result=await replayHistory({job,identity:a,archive:async()=>entry,isPartner:async()=>true,atomic:fn=>fn(),wrap:async(partner,payload)=>({partner,payload}),enqueue:async x=>queued.push(x),saveJob:async x=>{saved=x;}});
+ assert.equal(result.status,'complete');assert.equal(saved.cursor,1);assert.equal(queued.length,1);
+ const decrypted=await decryptEvent(entry.object,entry.key,b.id,{historyGrant:queued[0].payload.historyGrant});assert.equal(decrypted.payload.body,'old post');
+ assert.equal(queued[0].payload.object,entry.object.id);
+ const deletedQueue=[];await replayHistory({job,identity:a,archive:async()=>({...entry,deleted:true}),isPartner:async()=>true,atomic:fn=>fn(),wrap:async()=>{throw Error('Should not wrap');},enqueue:async x=>deletedQueue.push(x),saveJob:async()=>{}});assert.equal(deletedQueue.length,0);
+ const paused=await replayHistory({job,identity:a,isPartner:async()=>false,saveJob:async()=>{}});assert.equal(paused.status,'paused');assert.equal(paused.cursor,0);
+ const foreign=await encryptEvent(b,event('post',[b.id],{body:'not mine'}));assert.equal((await makeHistoryJob(a,b.id,[foreign],{shareOlderPosts:true})).total,0);
+});

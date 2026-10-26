@@ -24,7 +24,7 @@ function cookieValue(request, env) {
   const parts = (request.headers.get('Cookie') || '').split(';').map(s => s.trim());
   return parts.find(s => s.startsWith(name + '='))?.slice(name.length + 1) || '';
 }
-async function session(request, env) {
+export async function session(request, env) {
   const raw = cookieValue(request, env);
   if (!/^[a-f0-9]{64}$/.test(raw)) return null;
   return one(env.MIMORI_DB, `SELECT u.*, s.csrf, s.token_hash AS session_hash FROM mimori_sessions s JOIN mimori_users u ON s.user_id=u.id WHERE s.token_hash=? AND s.expires_at>? AND u.disabled=0`, digest(raw), Date.now());

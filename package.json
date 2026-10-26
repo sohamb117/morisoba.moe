@@ -5,16 +5,26 @@
     "dev": "wrangler dev --config wrangler.local.jsonc",
     "test": "node --test tests/*.test.cjs tests/*.test.mjs",
     "test:mimorigasaka": "node --test tests/mimorigasaka.test.mjs",
-    "check": "node --check middleware/mimorigasaka.mjs && node --check mimorigasaka/app.js",
+    "check": "node --check worker.mjs && node --check middleware/mimorigasaka.mjs && node --check mimorigasaka/app.js && node --check protocol/browser.mjs",
     "deploy:check": "wrangler deploy --dry-run",
-    "setup:local": "node scripts/mimori-local.mjs"
+    "setup:local": "node scripts/mimori-local.mjs",
+    "build:protocol": "node scripts/build-protocol.mjs",
+    "test:protocol": "node --test tests/protocol*.test.mjs",
+    "setup:protocol": "node scripts/mimori-protocol-local.mjs",
+    "dev:protocol": "npm run build:protocol && wrangler dev --config wrangler.protocol.local.jsonc --port 8789"
   },
   "devDependencies": {
-    "wrangler": "4.152.0",
     "esbuild": "0.28.2",
-    "miniflare": "5.20261019.2-beta"
+    "fake-indexeddb": "6.2.4",
+    "miniflare": "5.20261019.2-beta",
+    "wrangler": "4.152.0"
   },
   "overrides": {
     "undici": "^7.30.1"
+  },
+  "dependencies": {
+    "@noble/hashes": "2.0.1",
+    "@open-e2ee/signal-protocol-sdk": "13.2.0",
+    "json-canonicalize": "2.0.0"
   }
 }

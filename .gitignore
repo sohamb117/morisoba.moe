@@ -8,3 +8,6 @@ __pycache__/
 node_modules/
 
 wrangler.local.jsonc
+
+wrangler.protocol.local.jsonc
+mimorigasaka/protocol/app.bundle.js

@@ -15,7 +15,9 @@
 			"/api/mimorigasaka",
 			"/api/mimorigasaka/*",
 			"/mimorigasaka",
-			"/mimorigasaka/*"
+			"/mimorigasaka/*",
+			"/api/mimorigasaka-protocol/*",
+			"/.well-known/mimorigasaka"
 		]
 	},
 	"compatibility_flags": [
