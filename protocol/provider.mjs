@@ -1,5 +1,5 @@
 import {verifyRecord,canonical,unb64,VERSION} from './records.mjs';
-const BASE='/api/mimorigasaka-protocol/v1';
+const BASE='/api/mimori/v1',LEGACY_BASE='/api/mimorigasaka-protocol/v1';
 const headers={'Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer','Access-Control-Allow-Origin':'*'};
 const reply=(value,status=200)=>Response.json(value,{status,headers});
 class Fault extends Error{constructor(status,message){super(message);this.status=status;}}
@@ -34,10 +34,11 @@ function validate(record,allowLocal=false){
  }
 }
 export async function protocolMiddleware(request,env,next,{authenticate}={}){
- const url=new URL(request.url),discovery=url.pathname==='/.well-known/mimorigasaka';
- if(!discovery&&!url.pathname.startsWith(BASE+'/'))return next();
+ const url=new URL(request.url),discovery=['/.well-known/mimori','/.well-known/mimorigasaka'].includes(url.pathname);
+ const matchedBase=url.pathname.startsWith(LEGACY_BASE+'/')?LEGACY_BASE:BASE;
+ if(!discovery&&!url.pathname.startsWith(matchedBase+'/'))return next();
  if(env.MIMORI_PROTOCOL_ENABLED!=='true'||!env.MIMORI_PROTOCOL_DB)return reply({error:'Protocol is not enabled'},404);
- const db=env.MIMORI_PROTOCOL_DB,route=url.pathname.slice(BASE.length),method=request.method;
+ const db=env.MIMORI_PROTOCOL_DB,route=url.pathname.slice(matchedBase.length),method=request.method;
  try{
  if(method==='OPTIONS'&&(route==='/prekeys/claim'||route==='/records'||route.startsWith('/objects/')||route.startsWith('/identities/')))return new Response(null,{status:204,headers:{...headers,'Access-Control-Allow-Methods':'GET, POST, OPTIONS','Access-Control-Allow-Headers':'Content-Type','Access-Control-Max-Age':'600'}});
  if(discovery){requireThat(method==='GET',405,'GET only');return reply({protocol:VERSION,experimental:true,api:url.origin+BASE,registration:'existing-provider-account',suites:['mimori-open-e2ee-13.2.0-experimental']});}

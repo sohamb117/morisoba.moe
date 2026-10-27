@@ -1,10 +1,10 @@
 name: Mimorigasaka checks
 on:
   pull_request:
-    paths: ['mimorigasaka/**', 'middleware/**', 'migrations/**', 'worker.mjs', 'wrangler.jsonc', 'package*.json', '.assetsignore', 'tests/**', 'scripts/mimori-*.mjs', '.github/workflows/mimorigasaka-checks.yml']
+    paths: ['mimorigasaka/**', 'mimori/**', 'protocol/**', 'scripts/build-protocol.mjs', 'middleware/**', 'migrations/**', 'worker.mjs', 'wrangler.jsonc', 'package*.json', '.assetsignore', 'tests/**', 'scripts/mimori-*.mjs', '.github/workflows/mimorigasaka-checks.yml']
   push:
     branches: [main]
-    paths: ['mimorigasaka/**', 'middleware/**', 'migrations/**', 'worker.mjs', 'wrangler.jsonc', 'package*.json', '.assetsignore', 'tests/**', 'scripts/mimori-*.mjs', '.github/workflows/mimorigasaka-checks.yml']
+    paths: ['mimorigasaka/**', 'mimori/**', 'protocol/**', 'scripts/build-protocol.mjs', 'middleware/**', 'migrations/**', 'worker.mjs', 'wrangler.jsonc', 'package*.json', '.assetsignore', 'tests/**', 'scripts/mimori-*.mjs', '.github/workflows/mimorigasaka-checks.yml']
 permissions:
   contents: read
 jobs:

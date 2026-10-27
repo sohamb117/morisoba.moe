@@ -1,14 +1,14 @@
-# Mimorigasaka protocol implementation
+# Mimori protocol implementation
 
-Status: experimental implementation of [Draft 0.1](https://chatgpt.com/space/page_9fefb250d03c8191a141dd2bac4d3663). This branch is not a production protocol release. The existing feed, authentication, accounts, and database remain in place. No production schema migration, data import, push, or deployment is part of this change.
+Status: experimental Mimori preview, authorized for hosting at `https://morisoba.moe/mimori/`, implementing [Draft 0.1](https://chatgpt.com/space/page_9fefb250d03c8191a141dd2bac4d3663). This branch is not a production protocol release. The existing feed, authentication, accounts, and database remain in place. The preview uses its own database; hosting it does not migrate or publish existing posts. Registration on morisoba.moe remains invite-only.
 
 ## Data preservation
 
 Before implementation, a read-only snapshot of production was saved outside the repository with owner-only file permissions. It contains 4 users, 16 posts (including any retained soft-deleted rows), 5 invitations, 5 sessions, 5 rate-limit entries and the migration record. Its SHA-256 checksum, SQLite integrity check, foreign keys, and every table count were verified by restoring into an isolated in-memory database. The backup contains private data and must never be committed or served as an asset.
 
-The protocol has a separate `MIMORI_PROTOCOL_DB` binding and migration directory. Its migration creates new tables only. The production configuration intentionally supplies neither this binding nor the `MIMORI_PROTOCOL_ENABLED=true` flag. The legacy middleware change only exports its existing session reader for the first provider's authentication adapter.
+The protocol has a separate `MIMORI_PROTOCOL_DB` binding and migration directory. Its migration creates new tables only. The deployment configuration supplies this separate binding and `MIMORI_PROTOCOL_ENABLED=true`. The original `MIMORI_DB` binding is unchanged. The legacy middleware change only exports its existing session reader for the first provider's authentication adapter.
 
-`GET /api/mimorigasaka-protocol/v1/legacy-export` requires the existing user's session and returns only their own posts and profile. `client.importLegacy(selectedIds)` requires an explicit selection, excludes deleted posts, marks imports with original provenance, deduplicates them, and never updates or deletes the legacy rows. Enrollment does not call it.
+`GET /api/mimori/v1/legacy-export` requires the existing user's session and returns only their own posts and profile. `client.importLegacy(selectedIds)` requires an explicit selection, excludes deleted posts, marks imports with original provenance, deduplicates them, and never updates or deletes the legacy rows. Enrollment does not call it.
 
 ## Implemented
 
@@ -21,7 +21,7 @@ The protocol has a separate `MIMORI_PROTOCOL_DB` binding and migration directory
 - Protected posts, profile events, replies, likes and like removals. Likes are deduplicated per identity and remove-before-add works. Reply/like fanout through the root author's client preserves the original signature and checks the signed audience. The coordinator must be online to forward.
 - Optional mentions are stable identity IDs inside encrypted events; they cannot expand the audience.
 - `Share older posts` defaults off. A confirmed job has a fixed manifest/cutoff, visits only the author's own nondeleted posts, wraps archived keys in fresh ratchet envelopes, persists its cursor, supports pause/resume, and creates read-only history grants. It does not replay other people's replies or likes. The ciphertext body is reused.
-- A separate browser preview at `/mimorigasaka/protocol/`, retaining the existing page's fonts and layout. Existing accounts sign in before explicit protocol enrollment. The main `/mimorigasaka/` page is unchanged.
+- A separate browser preview at `/mimori/`, retaining the existing page's fonts and layout. Existing accounts sign in before explicit protocol enrollment. The main `/mimorigasaka/` page is unchanged.
 
 ## Suite and implementation limits
 
@@ -61,10 +61,16 @@ The production Worker returns 404 for the preview and protocol API unless the fe
 
 ## Validation on this branch
 
-- Full test suite: 72 passed, 0 failed.
+- Full test suite: 73 passed, 0 failed.
 - Two independent provider databases exchanged encrypted posts, replies, likes, removals and history replay.
 - Three identities exercised coordinator forwarding between two people who are not keyring partners.
 - Encrypted archive backup/restore and legacy export isolation passed.
 - The IndexedDB adapter passed all 16 SDK backend-conformance cases, including reopen. A simulated failed outer transaction committed neither ratchet state nor outbox; a successful transaction survived reopen with identical ciphertext.
 - The actual browser preview passed login, explicit enrollment, encrypted-backup download, protected profile saving, posting, refresh/backup, lock/reload/unlock and retained-post checks. Responsive styling inherits the original breakpoints; a separate mobile-device runtime check is still pending.
 - Production bundle dry-run passed with the new protocol flag absent and only the original production D1 binding. No deployment was performed.
+
+## Hosted preview rollout
+
+The user authorized deploying the experimental preview and renaming it Mimori. The canonical page is `/mimori/`, the API is `/api/mimori/v1/`, and discovery is `/.well-known/mimori`. The old preview URL redirects with query parameters preserved; old protocol API/discovery URLs remain aliases. Existing `/mimorigasaka/` posts and invitation management remain available.
+
+A fresh prelaunch backup was restore-verified again: 4 accounts and 16 post rows. Only the separate `morisoba-mimori-protocol` database receives protocol migrations. The build generates the browser bundle automatically on deployment. Hosting this experimental preview does not remove the review and device-recovery limitations above.

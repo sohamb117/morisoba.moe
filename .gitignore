@@ -10,4 +10,6 @@ node_modules/
 wrangler.local.jsonc
 
 wrangler.protocol.local.jsonc
+mimori/app.bundle.js
+
 mimorigasaka/protocol/app.bundle.js

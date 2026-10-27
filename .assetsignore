@@ -21,3 +21,5 @@
 
 /protocol/**
 /wrangler.protocol*.jsonc
+
+/mimorigasaka/protocol/**

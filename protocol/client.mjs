@@ -3,7 +3,7 @@ import {createVault,unlockVault} from './vault.mjs';
 import {createRatchet,SUITE} from './ratchet.mjs';
 import {openLocalStore} from './local-store.mjs';
 import {encryptEvent,decryptEvent,project,makeHistoryJob,replayHistory} from './social.mjs';
-const BASE='/api/mimorigasaka-protocol/v1';
+const BASE='/api/mimori/v1';
 export class ProviderClient {
  constructor(origin,{csrf,fetch:transport=globalThis.fetch.bind(globalThis)}={}){this.origin=new URL(origin).origin;this.csrf=csrf;this.fetch=transport;}
  async request(path,{data,method=data===undefined?'GET':'POST',privateAccess=false}={}){

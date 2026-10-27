@@ -119,3 +119,9 @@ test('pagination returns each post once and static routes keep working',async()=
  const staticResponse=await mf.dispatchFetch(origin+'/mimorigasaka/');assert.equal(await staticResponse.text(),'static');assert.match(staticResponse.headers.get('Content-Security-Policy'),/frame-ancestors 'none'/);
  const home=await mf.dispatchFetch(origin+'/');assert.equal(await home.text(),'static');
 });
+test('Mimori rename preserves old links and keeps experimental routes gated',async()=>{
+ const old=await mf.dispatchFetch(origin+'/mimorigasaka/protocol/?request=example',{redirect:'manual'});
+ assert.equal(old.status,308);assert.equal(old.headers.get('Location'),origin+'/mimori/?request=example');
+ assert.equal((await mf.dispatchFetch(origin+'/mimori/')).status,404);
+ assert.equal((await mf.dispatchFetch(origin+'/api/mimori/v1/records')).status,404);
+});
