@@ -74,8 +74,12 @@ test('end-to-end clients on separate providers exchange posts, replies, likes an
  const pc=new ProviderClient(providers[0].origin,{csrf:'cara',fetch:transport(providers[0],'cara')}),pd=new ProviderClient(providers[1].origin,{csrf:'dan',fetch:transport(providers[1],'dan')});
  const secrets=identity=>({identity,storeKey:b64(randomKey()),archiveKey:b64(randomKey()),epoch:crypto.randomUUID()});let cara,dan;
  try{
- cara=await openProtocolClient({provider:pc,secrets:secrets(c),indexedDB,locks,createDevice:true});dan=await openProtocolClient({provider:pd,secrets:secrets(d),indexedDB,locks,createDevice:true});
+ const saved=secrets(c);
+ await assert.rejects(openProtocolClient({provider:pc,secrets:saved,indexedDB,locks}),{code:'DEVICE_STATE_MISSING'});
+ cara=await openProtocolClient({provider:pc,secrets:saved,indexedDB,locks,createDevice:true});dan=await openProtocolClient({provider:pd,secrets:secrets(d),indexedDB,locks,createDevice:true});
  await cara.post('before we became partners');await cara.flush();
+ await cara.close();cara=await openProtocolClient({provider:pc,secrets:saved,indexedDB,locks});
+ assert.equal((await cara.view()).posts[0].payload.body,'before we became partners');
  await cara.publishPrekeys();await dan.publishPrekeys();
  const req=await cara.requestPartner(d.id,pd.origin),accept=await dan.acceptPartner(req,pc.origin);await cara.confirmPartner(accept);await cara.connect(d.id);
  const post=await cara.post('hello across providers');await cara.flush();let view=await dan.sync();assert.equal(view.posts.length,1);assert.equal(view.posts[0].payload.body,'hello across providers');

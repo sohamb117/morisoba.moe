@@ -23,7 +23,7 @@ export async function enroll(provider,password){
 export async function unlock(provider,password){const {vault}=await provider.request('/vault',{privateAccess:true});return unlockVault(vault,vault.owner,password);}
 export async function openProtocolClient({provider,secrets,indexedDB,locks,createDevice=false}){
  const {identity}=secrets,local=await openLocalStore({name:identity.id+':'+secrets.epoch,key:unb64(secrets.storeKey,32),indexedDB,locks});
- if(!await local.storage.getMetadata('mimori:device-present')&&!createDevice){local.close();throw Error('This device has no ratchet state. Recovery requires a new device enrollment; old sessions cannot be restored.');}
+ if(!await local.storage.getMetadata('mimori:device-present')&&!createDevice){local.close();throw Object.assign(Error('Messaging session unavailable on this browser.'),{code:'DEVICE_STATE_MISSING'});}
  const ratchet=await createRatchet({identity,storage:local.storage}),archiveKey=unb64(secrets.archiveKey,32);
  await local.storage.setMetadata('mimori:device-present','1');
  const getState=async()=>JSON.parse(await local.storage.getMetadata('mimori:app')??JSON.stringify(empty()));

@@ -212,7 +212,9 @@ async function restoreSession(){
     status('page-status');
     if(!data.user){clearSession();return;}
     if(state.user?.id!==data.user.id)clearSession();
-    state.user=data.user;state.csrf=data.csrf;render();await loadPosts();await showLinkedPost();
+    state.user=data.user;state.csrf=data.csrf;
+    if(location.hash==='#admin-tools'&&state.user.role==='admin'){state.panelOpen=true;$('admin-tools').open=true;}
+    render();await loadPosts();await showLinkedPost();
   }catch(error){if(epoch!==state.authEpoch)return;clearSession();status('page-status',error.message,true);}
 }
 channel?.addEventListener('message',()=>{clearSession();restoreSession();});

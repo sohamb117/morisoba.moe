@@ -6,12 +6,38 @@ async function busy(fn){const buttons=[...document.querySelectorAll('button')],p
 const form=(id,fn)=>$(id).addEventListener('submit',e=>{e.preventDefault();busy(fn);});
 const click=(id,fn)=>$(id).addEventListener('click',()=>busy(fn));
 function download(name,value){const url=URL.createObjectURL(new Blob([JSON.stringify(value)],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
-async function session(){const r=await fetch('/api/mimorigasaka/session'),s=await r.json();if(s.user){user=s.user;provider=new ProviderClient(location.origin,{csrf:s.csrf});$('login-form').hidden=true;$('unlock-form').hidden=false;}}
+async function accountRequest(path,{method='GET',data}={}){
+ const r=await fetch('/api/mimorigasaka'+path,{method,credentials:'same-origin',cache:'no-store',headers:{'Content-Type':'application/json','X-CSRF-Token':provider.csrf},body:data===undefined?undefined:JSON.stringify(data)}),result=await r.json();
+ if(!r.ok)throw Error(result.error??'Account request failed');return result;
+}
+async function session(){
+ const r=await fetch('/api/mimorigasaka/session',{cache:'no-store'}),s=await r.json();
+ if(!r.ok)throw Error(s.error??'Unable to check account');
+ if(s.user){
+ user=s.user;provider=new ProviderClient(location.origin,{csrf:s.csrf});
+ $('login-form').hidden=true;$('unlock-form').hidden=false;$('account').hidden=false;
+ $('account-name').textContent='Signed in as @'+user.username;$('identity-toggle').textContent='C:'+user.username+'>';
+ $('account-admin').hidden=user.role!=='admin';
+ try{await provider.request('/vault',{privateAccess:true});}
+ catch(e){if(!['No vault','Enroll first'].includes(e.message))throw e;
+ $('unlock-submit').textContent='Create identity';$('unlock-help').textContent='Choose a password for your encrypted identity. Your account password stays unchanged.';$('vault-password').autocomplete='new-password';}
+ }
+}
+click('invite-people',async()=>{
+ const result=await accountRequest('/invites',{method:'POST',data:{}});
+ $('account-invite-link').value=location.origin+'/mimorigasaka/#invite='+result.token;
+ $('account-invite').hidden=false;status('Copy this private invitation link. It is shown only once.');
+});
+click('copy-account-invite',async()=>{try{await navigator.clipboard.writeText($('account-invite-link').value);status('Invitation copied.');}catch{$('account-invite-link').select();status('Select and copy the invitation link.');}});
+click('sign-out',async()=>{await accountRequest('/logout',{method:'POST',data:{}});if(client)await client.close();location.reload();});
 form('login-form',async()=>{const r=await fetch('/api/mimorigasaka/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:$('username').value,password:$('password').value})}),data=await r.json();$('password').value='';if(!r.ok)throw Error(data.error??'Login failed');await session();status('Unlock your identity or create one.');});
 form('unlock-form',async()=>{
  const password=$('vault-password').value;$('vault-password').value='';status('Unlocking…');
  let exists=true;try{await provider.request('/vault',{privateAccess:true});}catch(e){if(['No vault','Enroll first'].includes(e.message))exists=false;else throw e;}
- if(exists)await activate(await unlock(provider,password));
+ if(exists){
+ try{await activate(await unlock(provider,password));}
+ catch(e){if(e.code!=='DEVICE_STATE_MISSING')throw e;$('device-unavailable').hidden=false;status('Identity unlocked; messaging session unavailable on this browser.');}
+ }
  else{pending=await enroll(provider,password);$('unlock-form').hidden=true;$('enrollment').hidden=false;status('Save the encrypted backup to finish creating your identity.');}
 });
 click('save-backup',async()=>{download('mimori-identity-encrypted.json',pending.vault);backupSaved=true;$('finish-enrollment').disabled=false;});
@@ -39,4 +65,4 @@ async function render(){const view=await client.view(),feed=$('feed');feed.repla
  if(record.payload.audience.includes(client.identity.id)){const actions=document.createElement('div');actions.className='post-actions';const liked=view.likes.get(record.id)?.has(client.identity.id),like=document.createElement('button');like.textContent=(liked?'Unlike':'Like')+' ('+(view.likes.get(record.id)?.size??0)+')';like.onclick=()=>busy(async()=>{await client.like(record.id,{remove:liked});await client.flush();await render();});const reply=document.createElement('button');reply.textContent='Reply';reply.onclick=()=>{const form=document.createElement('form'),input=document.createElement('textarea'),send=document.createElement('button');input.required=true;input.maxLength=10000;input.setAttribute('aria-label','Reply');send.textContent='Send';form.append(input,send);form.onsubmit=e=>{e.preventDefault();busy(async()=>{await client.reply(record.id,input.value);await client.flush();await render();});};article.append(form);input.focus();};actions.append(like,reply);article.append(actions);}else{const note=document.createElement('small');note.textContent='Shared history';article.append(note);}feed.append(article);}}
 click('refresh',async()=>{if(!client)return;await client.sync();await client.flush();await render();status('Updated.');});
 click('lock',async()=>{await client.close();location.reload();});
-await session();
+session().catch(e=>status(e.message));
