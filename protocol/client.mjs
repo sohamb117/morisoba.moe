@@ -1,18 +1,12 @@
+import {mapLimit} from './concurrency.mjs';
 import {createIdentity,signRecord,verifyRecord,randomKey,b64,unb64,canonical,hash,encode,seal,open} from './records.mjs';
 import {createVault,unlockVault} from './vault.mjs';
 import {createRatchet,SUITE} from './ratchet.mjs';
 import {openLocalStore} from './local-store.mjs';
 import {encryptEvent,decryptEvent,project,makeHistoryJob,replayHistory} from './social.mjs';
-const BASE='/api/mimori/v1';
-export class ProviderClient {
- constructor(origin,{csrf,fetch:transport=globalThis.fetch.bind(globalThis)}={}){this.origin=new URL(origin).origin;this.csrf=csrf;this.fetch=transport;}
- async request(path,{data,method=data===undefined?'GET':'POST',privateAccess=false}={}){
- const response=await this.fetch(this.origin+BASE+path,{method,credentials:privateAccess?'same-origin':'omit',headers:{...(data===undefined?{}:{'Content-Type':'application/json'}),...(privateAccess&&this.csrf?{'X-CSRF-Token':this.csrf}:{})},body:data===undefined?undefined:canonical(data)});
- const result=await response.json();if(!response.ok)throw Error(result.error??'Provider request failed');return result;
- }
- publish(record){return this.request('/records',{data:record,privateAccess:true});}
-}
-const empty=()=>({partners:{},events:[],archive:{},seen:{},outbox:[],jobs:{},cursors:{},historyGrants:{}});
+import {ProviderClient} from './provider-client.mjs';
+export {ProviderClient} from './provider-client.mjs';
+const empty=()=>({partners:{},events:[],archive:{},seen:{},outbox:[],jobs:{},cursors:{},historyGrants:{},archiveDirty:{},archiveRevisions:{},archiveCursor:0});
 export async function enroll(provider,password){
  // Publish the identity and its password-encrypted vault in one provider transaction.
  const identity=await createIdentity(),secrets={identity,storeKey:b64(randomKey()),archiveKey:b64(randomKey()),epoch:crypto.randomUUID()};
@@ -45,7 +39,11 @@ export async function openProtocolClient({provider,secrets,indexedDB,locks,creat
  }
  const ratchet=await createRatchet({identity,deviceId,storage:local.storage}),archiveKey=unb64(secrets.archiveKey,32);
  await local.storage.setMetadata('mimori:device-present','1');
- const getState=async()=>JSON.parse(await local.storage.getMetadata('mimori:app')??JSON.stringify(empty()));
+ const getState=async()=>{
+ const state=JSON.parse(await local.storage.getMetadata('mimori:app')??JSON.stringify(empty()));
+ state.archiveDirty??=Object.fromEntries(Object.keys(state.archive).map(id=>[id,true]));
+ state.archiveRevisions??={};state.archiveCursor??=0;return state;
+ };
  const save=state=>local.storage.setMetadata('mimori:app',canonical(state));
  async function transaction(fn){return local.atomic(async()=>{const state=await getState(),result=await fn(state);await save(state);return result;});}
  async function wrap(partner,payload){
@@ -66,7 +64,7 @@ export async function openProtocolClient({provider,secrets,indexedDB,locks,creat
  async function queueEvent(state,event){
  const entry=await encryptEvent(identity,event);state.events.push(entry.event);
  state.archive[entry.object.id]={object:entry.object,event:entry.event,archivedKey:await seal(archiveKey,{key:entry.key},{object:entry.object.id}),deleted:false};
- state.outbox.push(entry.object);
+ state.archiveDirty[entry.object.id]=true;state.outbox.push(entry.object);
  for(const partner of event.audience.filter(id=>id!==identity.id)){
  if(!state.partners[partner]?.accepted){if(event.relay&&partner!==event.relay)continue;throw Error('Recipient is not an accepted partner');}
  state.outbox.push(...await wrap(partner,{object:entry.object.id,key:entry.key,provider:provider.origin}));
@@ -78,11 +76,20 @@ export async function openProtocolClient({provider,secrets,indexedDB,locks,creat
  async partners(){return (await getState()).partners;},
  async refreshPartners(){
  const previous=await getState();
+ if(!await local.storage.getMetadata('mimori:origins-synced')){
  for(const [partner,p] of Object.entries(previous.partners))await provider.request('/partners',{method:'PUT',data:{partner,origin:p.origin},privateAccess:true});
+ await local.storage.setMetadata('mimori:origins-synced','1');}
  const {partners}=await provider.request('/partners',{privateAccess:true});
  await transaction(async state=>{for(const p of partners){const {id,...details}=p;state.partners[id]=details;}});
  },
- async publishPrekeys(){await local.atomic(()=>ratchet.replenish());for(const r of await ratchet.bundles())await provider.publish(r);},
+ async publishPrekeys(){
+ const {available,published}=await provider.request('/prekeys/status?device='+deviceId,{privateAccess:true});
+ if(available>=10)return;
+ const known=new Set(published);let bundles=await ratchet.bundles({allowEmpty:true});
+ let pending=bundles.filter(r=>!known.has(r.id));
+ if(pending.length<10-available){await local.atomic(()=>ratchet.replenish(10-available-pending.length));bundles=await ratchet.bundles();pending=bundles.filter(r=>!known.has(r.id));}
+ await mapLimit(pending.slice(0,10-available),4,r=>provider.publish(r));
+ },
  async requestPartner(partner,origin){
  if(partner===identity.id)throw Error('Cannot add yourself');const remote=new ProviderClient(origin,{fetch:provider.fetch});
  const record=await remote.request('/identities/'+encodeURIComponent(partner));if(!await verifyRecord(record)||record.author!==partner)throw Error('Partner identity mismatch');
@@ -129,36 +136,64 @@ export async function openProtocolClient({provider,secrets,indexedDB,locks,creat
  });},
  async removePartner(partner){const state=await getState(),p=state.partners[partner];if(!p)throw Error('Unknown partner');await provider.publish(await signRecord(identity,'keyring.remove',{request:p.request.id}));await transaction(async state=>{state.partners[partner].accepted=false;});},
  async backupArchive(){
- const state=await getState();
- for(const [id,entry] of Object.entries(state.archive)){
- let revision=0;const context={identity:identity.id,object:id,purpose:'archive'};
- try{const remote=await provider.request('/archive/'+id,{privateAccess:true});revision=remote.revision;const old=await open(archiveKey,remote.archive,context);if(old.deleted)entry.deleted=true;if(canonical(old)===canonical(entry))continue;}catch(e){if(e.message!=='No archive')throw e;}
- const archive=await seal(archiveKey,entry,context);await provider.request('/archive/'+id,{method:'PUT',data:{revision,archive},privateAccess:true});
- }
+ const state=await getState(),ids=Object.keys(state.archiveDirty);
+ const results=await mapLimit(ids,4,async id=>{
+  const entry=structuredClone(state.archive[id]),before=canonical(entry);let revision=state.archiveRevisions[id]??0;
+  const context={identity:identity.id,object:id,purpose:'archive'};
+  for(let attempt=0;attempt<3;attempt++){
+   try{
+    const archive=await seal(archiveKey,entry,context);
+    const saved=await provider.request('/archive/'+id,{method:'PUT',data:{revision,archive},privateAccess:true});
+    return {id,revision:saved.revision,entry,before};
+   }catch(error){
+    if(error.message!=='Archive changed; merge before saving')throw error;
+    const remote=await provider.request('/archive/'+id,{privateAccess:true});revision=remote.revision;
+    const old=await open(archiveKey,remote.archive,context);if(old.deleted)entry.deleted=true;
+    if(canonical(old)===canonical(entry))return {id,revision,entry,before};
+   }
+  }throw Error('Archive changed on another device. Try syncing again.');
+ });
+ if(results.length)await transaction(async current=>{for(const result of results){
+  const {id,entry,revision,before}=result,unchanged=canonical(current.archive[id])===before;
+  if(entry.deleted)current.archive[id].deleted=true;
+  current.archiveRevisions[id]=revision;
+  if(unchanged)delete current.archiveDirty[id];
+ }});
  },
  async restoreArchive(){
- let cursor='',restored=0;
- while(true){const page=await provider.request('/archive?cursor='+cursor,{privateAccess:true});
- await transaction(async state=>{for(const item of page.entries){
- const id=item.id,entry=await open(archiveKey,item.archive,{identity:identity.id,object:id,purpose:'archive'});
- const {key}=await open(archiveKey,entry.archivedKey,{object:id});const event=await decryptEvent(entry.object,key,identity.id,{historyGrant:entry.historyGrant});
- if(entry.object.id!==id||event.id!==entry.event.id)throw Error('Invalid archive entry');
- if(!state.archive[id])state.archive[id]=entry;else if(entry.deleted)state.archive[id].deleted=true;
- if(entry.historyGrant)state.historyGrants[event.id]=entry.historyGrant;
- if(!state.events.some(r=>r.id===event.id))state.events.push(event);restored++;
- }});
- if(page.entries.length<50)break;cursor=page.cursor;
+ let cursor=(await getState()).archiveCursor,restored=0;
+ while(true){
+  const page=await provider.request('/archive-changes?since='+cursor,{privateAccess:true});
+  const known=await getState();
+  const entries=await mapLimit(page.entries.filter(item=>(known.archiveRevisions[item.id]??0)<item.revision),4,async item=>{
+   const {id}=item,entry=await open(archiveKey,item.archive,{identity:identity.id,object:id,purpose:'archive'});
+   const {key}=await open(archiveKey,entry.archivedKey,{object:id});
+   const event=await decryptEvent(entry.object,key,identity.id,{historyGrant:entry.historyGrant});
+   if(entry.object.id!==id||event.id!==entry.event.id)throw Error('Invalid archive entry');
+   return {...item,entry,event};
+  });
+  if(entries.length||page.cursor!==cursor)await transaction(async state=>{
+   for(const {id,revision,entry,event} of entries){
+    if(!state.archive[id])state.archive[id]=entry;else if(entry.deleted)state.archive[id].deleted=true;
+    if(canonical(state.archive[id])===canonical(entry))delete state.archiveDirty[id];
+    state.archiveRevisions[id]=revision;
+    if(entry.historyGrant)state.historyGrants[event.id]=entry.historyGrant;
+    if(!state.events.some(r=>r.id===event.id))state.events.push(event);
+   }state.archiveCursor=page.cursor;
+  });
+  restored+=entries.length;cursor=page.cursor;
+  if(page.entries.length<50)break;
  }return restored;
  },
  async deletePost(target){return transaction(async state=>{
  const event=state.events.find(r=>r.id===target);if(event?.author!==identity.id)throw Error('Only the author can delete a post');
  const tombstone=await queueEvent(state,{type:'delete',eventId:crypto.randomUUID(),createdAt:Date.now(),audience:event.payload.audience,target});
- for(const entry of Object.values(state.archive))if(entry.event.id===target)entry.deleted=true;return tombstone;
+ for(const [id,entry] of Object.entries(state.archive))if(entry.event.id===target){entry.deleted=true;state.archiveDirty[id]=true;}return tombstone;
  });},
  async flush(){
  await api.backupArchive();
  // Network retries send exactly the already-committed signed bytes.
- while(true){const state=await getState(),record=state.outbox[0];if(!record){await api.backupArchive();return;}await provider.publish(record);await transaction(async state=>{state.outbox=state.outbox.filter(r=>r.id!==record.id);});}
+ while(true){const state=await getState(),record=state.outbox[0];if(!record)return;await provider.publish(record);await transaction(async state=>{state.outbox=state.outbox.filter(r=>r.id!==record.id);});}
  },
  async receive(record,origin){
  if(record.kind!=='envelope'||record.payload.recipient!==identity.id||record.payload.suite!==SUITE||!await verifyRecord(record))throw Error('Invalid envelope');
@@ -181,15 +216,20 @@ export async function openProtocolClient({provider,secrets,indexedDB,locks,creat
  state.outbox.push(...await wrap(partner,{object:object.id,key:payload.key,provider:remote.origin}));}
  }
 
- state.archive[object.id]={object,event,archivedKey:await seal(archiveKey,{key:payload.key},{object:object.id}),deleted:false,...(payload.historyGrant?{historyGrant:payload.historyGrant}:{})};
+ if(!state.archive[object.id]){state.archiveDirty[object.id]=true;state.archive[object.id]={object,event,archivedKey:await seal(archiveKey,{key:payload.key},{object:object.id}),deleted:false,...(payload.historyGrant?{historyGrant:payload.historyGrant}:{})};}
  if(payload.historyGrant)state.historyGrants[event.id]=payload.historyGrant;
  if(!state.events.some(r=>r.id===event.id))state.events.push(event);state.seen[record.id]=true;return event;
  });
  },
- async sync(){const state=await getState();for(const [partner,p] of Object.entries(state.partners)){if(!p.accepted)continue;const remote=new ProviderClient(p.origin,{fetch:provider.fetch});let cursor=state.cursors[p.origin]??0;
- const page=await remote.request('/records?recipient='+encodeURIComponent(identity.id)+'&cursor='+cursor);
- for(const record of page.records)if(record.kind==='envelope')await api.receive(record,p.origin);await transaction(async state=>{state.cursors[p.origin]=page.cursor;});
- }await api.backupArchive();return api.view();},
+ async sync(){const state=await getState();
+ const origins=new Set(Object.values(state.partners).filter(p=>p.accepted).map(p=>p.origin));
+ for(const origin of origins){const remote=new ProviderClient(origin,{fetch:provider.fetch});let cursor=state.cursors[origin]??0;
+ while(true){const page=await remote.request('/records?recipient='+encodeURIComponent(identity.id)+'&cursor='+cursor);
+ for(const record of page.records)if(record.kind==='envelope')await api.receive(record,origin);
+ if(page.cursor===cursor)break;
+ await transaction(async state=>{state.cursors[origin]=page.cursor;});cursor=page.cursor;
+ if(page.records.length<100)break;
+ }}await api.backupArchive();return api.view();},
  async view(){const state=await getState();return project(state.events,identity.id,{historyGrants:state.historyGrants});},
  async history(partner,{shareOlderPosts=false}={}){return transaction(async state=>{if(!state.partners[partner]?.accepted)throw Error('Partner is not accepted');const job=await makeHistoryJob(identity,partner,Object.values(state.archive),{shareOlderPosts});if(job)state.jobs[job.id]=job;return job;});},
  async replay(jobId){

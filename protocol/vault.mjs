@@ -1,10 +1,11 @@
+import {cryptoEngine} from './crypto-engine.mjs';
 import {argon2idAsync} from '@noble/hashes/argon2.js';
 import {b64,unb64,randomKey,seal,open,VERSION} from './records.mjs';
 const KDF=Object.freeze({name:'argon2id',m:65536,t:3,p:4,dkLen:32});
 const context=owner=>({version:VERSION,purpose:'identity-vault',owner});
 async function derive(password,salt){
  if(typeof password!=='string'||password.length<12||password.length>1024)throw Error('Use a password of 12–1024 characters');
- return argon2idAsync(password,unb64(salt,16),KDF);
+ return cryptoEngine()?.derive(password,unb64(salt,16))??argon2idAsync(password,unb64(salt,16),KDF);
 }
 export async function createVault(owner,password,contents){
  const salt=b64(crypto.getRandomValues(new Uint8Array(16))),master=randomKey(),key=await derive(password,salt);

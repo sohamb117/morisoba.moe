@@ -112,6 +112,11 @@ export async function protocolMiddleware(request,env,next,{authenticate}={}){
  requireThat(await one(db,'SELECT request_id FROM protocol_links WHERE (sender=? AND recipient=?) OR (sender=? AND recipient=?)',account.identity,data.partner,data.partner,account.identity),403,'Unknown partner');
  await db.prepare('INSERT INTO protocol_partner_origins(identity,partner,origin) VALUES(?,?,?) ON CONFLICT(identity,partner) DO UPDATE SET origin=excluded.origin').bind(account.identity,data.partner,origin).run();return reply({ok:true});
  }
+ if(route==='/prekeys/status'&&method==='GET'){
+ const device=Number(url.searchParams.get('device'));requireThat(Number.isSafeInteger(device)&&device>=1&&device<=2147483647,400,'Invalid device');
+ const rows=(await db.prepare('SELECT id,claim_id FROM protocol_prekeys WHERE identity=? AND device=?').bind(account.identity,String(device)).all()).results;
+ return reply({available:rows.filter(r=>r.claim_id===null).length,published:rows.map(r=>r.id)});
+ }
  if(route==='/prekeys/claim'&&method==='POST'){
  const data=await read(request);exact(data,['identity','device','claim']);requireThat(validId(data.identity)&&Number.isSafeInteger(data.device)&&data.device>=1&&data.device<=2147483647&&validHash(data.claim),400,'Invalid claim');
  const link=await one(db,'SELECT request_id FROM protocol_links WHERE accepted=1 AND revoked=0 AND ((sender=? AND recipient=?) OR (sender=? AND recipient=?))',account.identity,data.identity,data.identity,account.identity);requireThat(link,403,'Mutual keyring acceptance required');
@@ -119,6 +124,11 @@ export async function protocolMiddleware(request,env,next,{authenticate}={}){
  if(row)requireThat(row.claimed_by===account.identity&&row.identity===data.identity&&row.device===String(data.device),409,'Claim already used');
  else row=await one(db,'UPDATE protocol_prekeys SET claimed_by=?,claim_id=? WHERE id=(SELECT id FROM protocol_prekeys WHERE identity=? AND device=? AND claim_id IS NULL ORDER BY id LIMIT 1) RETURNING bundle',account.identity,data.claim,data.identity,String(data.device));
  requireThat(row,409,'No one-time prekeys available; wait for partner');return reply(JSON.parse(row.bundle));
+ }
+ if(route==='/archive-changes'&&method==='GET'){
+ const since=Number(url.searchParams.get('since')??0);requireThat(Number.isSafeInteger(since)&&since>=0,400,'Invalid archive cursor');
+ const rows=(await db.prepare('SELECT c.sequence,a.id,a.revision,a.encrypted FROM protocol_archive_changes c JOIN protocol_archives a ON a.identity=c.identity AND a.id=c.id AND a.revision=c.revision WHERE c.identity=? AND c.sequence>? ORDER BY c.sequence LIMIT 50').bind(account.identity,since).all()).results;
+ return reply({entries:rows.map(r=>({id:r.id,revision:r.revision,archive:JSON.parse(r.encrypted)})),cursor:rows.at(-1)?.sequence??since});
  }
  if(route==='/archive'&&method==='GET'){
  const cursor=url.searchParams.get('cursor')??'';requireThat(cursor===''||validHash(cursor),400,'Invalid archive cursor');
@@ -130,8 +140,13 @@ export async function protocolMiddleware(request,env,next,{authenticate}={}){
  if(method==='GET'){const row=await one(db,'SELECT revision,encrypted FROM protocol_archives WHERE identity=? AND id=?',account.identity,id);requireThat(row,404,'No archive');return reply({revision:row.revision,archive:JSON.parse(row.encrypted)});}
  if(method==='PUT'){
  const data=await read(request);exact(data,['revision','archive']);requireThat(Number.isSafeInteger(data.revision)&&data.revision>=0,400,'Invalid revision');box(data.archive);
- const initial=await one(db,'INSERT INTO protocol_archives(identity,id,revision,encrypted) SELECT ?,?,1,? WHERE ?=0 ON CONFLICT(identity,id) DO NOTHING RETURNING revision',account.identity,id,canonical(data.archive),data.revision);
- const updated=initial??await one(db,'UPDATE protocol_archives SET revision=revision+1,encrypted=? WHERE identity=? AND id=? AND revision=? RETURNING revision',canonical(data.archive),account.identity,id,data.revision);requireThat(updated,409,'Archive changed; merge before saving');return reply(updated);
+ const encrypted=canonical(data.archive);
+ const writes=await db.batch([
+ db.prepare('INSERT INTO protocol_archives(identity,id,revision,encrypted) SELECT ?,?,1,? WHERE ?=0 ON CONFLICT(identity,id) DO NOTHING RETURNING revision').bind(account.identity,id,encrypted,data.revision),
+ db.prepare('UPDATE protocol_archives SET revision=revision+1,encrypted=? WHERE identity=? AND id=? AND revision=? RETURNING revision').bind(encrypted,account.identity,id,data.revision),
+ db.prepare('INSERT INTO protocol_archive_changes(identity,id,revision) SELECT identity,id,revision FROM protocol_archives WHERE identity=? AND id=? AND revision=? AND encrypted=? ON CONFLICT(identity,id,revision) DO NOTHING').bind(account.identity,id,data.revision+1,encrypted)
+ ]);
+ const updated=writes[0].results[0]??writes[1].results[0];requireThat(updated,409,'Archive changed; merge before saving');return reply(updated);
  }
  }
  if(route==='/vault'&&method==='GET'){

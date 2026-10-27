@@ -13,3 +13,6 @@ wrangler.protocol.local.jsonc
 mimori/app.bundle.js
 
 mimorigasaka/protocol/app.bundle.js
+
+protocol/wasm/target/
+mimori/crypto.worker.js

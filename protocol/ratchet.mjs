@@ -22,9 +22,9 @@ export async function createRatchet({identity,deviceId=1,storage}){
  await storage.storeEcOneTimePreKeys(await generateEcOneTimePreKeys(count,start));
  await storage.storeKemOneTimePreKeys(await generateKemOneTimePreKeys(keys,count,start));
  },
- async bundles(){
+ async bundles({allowEmpty=false}={}){
  const keys=await storage.getIdentityKey(),signed=await storage.getEcSignedPreKey(),ec=await storage.getEcOneTimePreKeys(),kem=await storage.getKemOneTimePreKeys();
- if(!signed||!ec.length||!kem.length)throw Error('One-time prekeys must be replenished');
+ if(!signed||!ec.length||!kem.length){if(allowEmpty)return [];throw Error('One-time prekeys must be replenished');}
  const pub=k=>({keyId:k.keyId,publicKey:k.publicKey,...(k.signature?{signature:k.signature}:{})});
  const composite=createCompositeIdentityV1(keys);
  return Promise.all(ec.slice(0,Math.min(ec.length,kem.length)).map((key,i)=>signRecord(identity,'device.prekey',{suite:SUITE,device:deviceId,...(deviceId!==1?{addressing:'per-device-v1'}:{}),bundle:{registrationId:keys.registrationId,deviceId:1,identity:composite,ecSignedPreKey:pub(signed),ecOneTimePreKey:pub(key),kemOneTimePreKey:pub(kem[i])}})));
