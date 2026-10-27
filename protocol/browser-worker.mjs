@@ -1,6 +1,7 @@
+import wasmBytes from '../mimori/crypto/mimori_crypto_bg.wasm';
 import {enableWasm} from './wasm-backend.mjs';
 import {ProviderClient,signInIdentity,openProtocolClient} from './client.mjs';
-const ready=enableWasm();
+const ready=enableWasm(wasmBytes);
 const methods=new Set(['partners','refreshPartners','publishPrekeys','requestPartner','acceptPartner','confirmPartner','connect','post','profile','reply','like','removePartner','backupArchive','restoreArchive','deletePost','flush','sync','view','history','replay']);
 let client,provider,queue=Promise.resolve();
 self.onmessage=({data})=>{

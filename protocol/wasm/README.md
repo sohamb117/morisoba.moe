@@ -2,7 +2,7 @@
 
 Thin wasm-bindgen bindings to pinned RustCrypto `aes-gcm` 0.10.3 and `argon2` 0.5.3. No cryptographic primitive is implemented here. Cargo.lock pins transitive dependencies. This adapter itself has not undergone an independent security audit.
 
-The browser worker requires WASM and fails closed if it cannot load. AES-256-GCM retains the existing 12-byte nonce, 16-byte appended tag and canonical JSON associated data. Argon2id retains version 19, 64 MiB, three passes, four lanes and a 32-byte result. There is no ciphertext or vault migration. The ratchet SDK remains pinned and runs in the same worker; its internal primitives are not replaced by these bindings. Native WebCrypto remains used for signatures and hashing, and by the server-side password-change path.
+The browser worker embeds the WASM bytes at build time and fails closed if they cannot compile. This avoids a separate fetch that a provider firewall could challenge. AES-256-GCM retains the existing 12-byte nonce, 16-byte appended tag and canonical JSON associated data. Argon2id retains version 19, 64 MiB, three passes, four lanes and a 32-byte result. There is no ciphertext or vault migration. The ratchet SDK remains pinned and runs in the same worker; its internal primitives are not replaced by these bindings. Native WebCrypto remains used for signatures and hashing, and by the server-side password-change path.
 
 Build (Rust 1.99.0, wasm-pack 0.15.0):
 
