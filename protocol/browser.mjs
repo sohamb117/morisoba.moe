@@ -1,11 +1,18 @@
 import {buildThreads} from './threads.mjs';
-import {ProviderClient,signInIdentity,openProtocolClient} from './client.mjs';
+import {ProviderClient} from './provider-client.mjs';
+import {openWorkerClient} from './worker-client.mjs';
 import {verifyRecord} from './records.mjs';
 const $=id=>document.getElementById(id),status=text=>{$('page-status').textContent=text;};
 let user,provider,client,legacyPosts=[],partners=new Map();
-async function busy(fn){const buttons=[...document.querySelectorAll('button')],previous=buttons.map(b=>b.disabled);buttons.forEach(b=>b.disabled=true);try{await fn();}catch(e){status(e.message);}finally{buttons.forEach((b,i)=>b.disabled=previous[i]);}}
-const form=(id,fn)=>$(id).addEventListener('submit',e=>{e.preventDefault();busy(fn);});
-const click=(id,fn)=>$(id).addEventListener('click',()=>busy(fn));
+const running=new WeakSet();
+async function busy(fn,scope=null){
+ if(scope&&running.has(scope))return;
+ const buttons=scope?.matches?.('button')?[scope]:[...(scope?.querySelectorAll?.('button')??[])],previous=buttons.map(b=>b.disabled);
+ if(scope)running.add(scope);buttons.forEach(b=>b.disabled=true);
+ try{await fn();}catch(e){status(e.message);}finally{buttons.forEach((b,i)=>b.disabled=previous[i]);if(scope)running.delete(scope);}
+}
+const form=(id,fn)=>$(id).addEventListener('submit',e=>{e.preventDefault();busy(fn,$(id));});
+const click=(id,fn)=>$(id).addEventListener('click',()=>busy(fn,$(id)));
 async function accountRequest(path,{method='GET',data}={}){
  const r=await fetch('/api/mimorigasaka'+path,{method,credentials:'same-origin',cache:'no-store',headers:{'Content-Type':'application/json','X-CSRF-Token':provider.csrf},body:data===undefined?undefined:JSON.stringify(data)}),result=await r.json();
  if(!r.ok)throw Error(result.error??'Account request failed');return result;
@@ -32,21 +39,23 @@ form('login-form',async()=>{
  try{
  const r=await fetch('/api/mimorigasaka/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:$('username').value,password})}),data=await r.json();
  if(!r.ok)throw Error(data.error??'Login failed');
- await session();await activate(await signInIdentity(provider,password));
+ await session();await activate(password);
  }finally{$('password').value='';}
 });
-async function activate(secrets){
- client=await openProtocolClient({provider,secrets,automaticDevice:true});
- await client.restoreArchive();await client.refreshPartners();
- legacyPosts=(await provider.request('/legacy-export',{privateAccess:true})).posts.filter(p=>!p.deleted_at);
+async function activate(password){
+ client=await openWorkerClient(provider,password);
  $('login-form').hidden=true;$('profile').hidden=false;$('identity').classList.add('signed-in');$('feed-lock').hidden=true;
  $('identity-title').textContent=user.displayName;$('identity-toggle').textContent='C:'+user.username+'>';$('profile-handle').textContent='@'+user.username;$('name').value=user.displayName;$('bio').value=user.bio??'';$('profile-bio').textContent=user.bio??'';$('fingerprint').textContent=client.identity.id;
  $('profile-picture').src=user.avatarVersion?'/api/mimorigasaka/avatars/'+user.id+'?v='+user.avatarVersion:'/shared/morisoba-lily.svg';
- await client.publishPrekeys();await client.flush();status('');if(matchMedia('(max-width:650px)').matches){$('identity').hidden=true;$('identity-toggle').setAttribute('aria-expanded','false');}await render();partners=new Map(Object.entries(await client.partners()));renderPartners();
- try{await client.sync();await render();}catch(e){status('Signed in. '+e.message);}
+ status('');if(matchMedia('(max-width:650px)').matches){$('identity').hidden=true;$('identity-toggle').setAttribute('aria-expanded','false');}await render();partners=new Map(Object.entries(await client.partners()));renderPartners();
+ void (async()=>{try{
+ legacyPosts=(await provider.request('/legacy-export',{privateAccess:true})).posts.filter(p=>!p.deleted_at);
+ await client.restoreArchive();await render();await client.refreshPartners();partners=new Map(Object.entries(await client.partners()));renderPartners();
+ await client.sync();await render();await client.flush();await client.publishPrekeys();
+ }catch(e){status('Signed in. '+e.message);}})();
  const params=new URLSearchParams(location.search);if(params.has('request')&&params.has('provider')){
  const remote=new ProviderClient(params.get('provider')),record=await remote.request('/objects/'+params.get('request'));if(!await verifyRecord(record))throw Error('Invalid partner request');
- const button=document.createElement('button');button.textContent='Accept '+record.author.slice(-12);button.onclick=()=>busy(async()=>{await client.acceptPartner(record,remote.origin);partners.set(record.author,{origin:remote.origin,accepted:true});button.remove();status('Accepted. Your partner can now connect.');renderPartners();});$('partners').append(button);$('identity').hidden=false;
+ const button=document.createElement('button');button.textContent='Accept '+record.author.slice(-12);button.onclick=()=>busy(async()=>{await client.acceptPartner(record,remote.origin);partners.set(record.author,{origin:remote.origin,accepted:true});button.remove();status('Accepted. Your partner can now connect.');renderPartners();},button);$('partner-result').append(button);$('identity').hidden=false;
  }
 }
 $('identity-toggle').onclick=()=>{const panel=$('identity');panel.hidden=false;$('identity-toggle').setAttribute('aria-expanded','true');panel.querySelector('input:not([hidden])')?.focus();};
@@ -54,14 +63,14 @@ form('password-form',async()=>{
  await accountRequest('/password',{method:'POST',data:{currentPassword:$('current-password').value,password:$('new-password').value}});
  $('current-password').value='';$('new-password').value='';await session();if(client)client.provider.csrf=provider.csrf;status('Password changed.');
 });
-form('post-form',async()=>{await client.refreshPartners();await client.post($('draft').value);await client.flush();$('draft').value='';await render();status('Posted.');});
+form('post-form',async()=>{const draft=$('draft').value;await client.refreshPartners();await client.post(draft);if($('draft').value===draft)$('draft').value='';await render();status('Sending…');await client.flush();status('Posted.');});
 form('profile-form',async()=>{await client.profile($('name').value,$('bio').value);await client.flush();$('profile-bio').textContent=$('bio').value;$('identity-title').textContent=$('name').value;$('profile-form').hidden=true;await render();status('Profile shared with your keyring.');});
 click('edit-profile',async()=>{$('profile-form').hidden=!$('profile-form').hidden;});
 click('copy-address',async()=>{const url=new URL(location.pathname,location.origin);url.searchParams.set('identity',client.identity.id);url.searchParams.set('provider',location.origin);await navigator.clipboard.writeText(url.href);status('Identity link copied.');});
 form('partner-form',async()=>{const url=new URL($('partner-link').value),id=url.searchParams.get('identity'),origin=url.searchParams.get('provider')??url.origin;if(!id)throw Error('This link has no identity');const request=await client.requestPartner(id,origin);partners.set(id,{origin,accepted:false,request});const link=new URL(location.pathname,origin);link.searchParams.set('request',request.id);link.searchParams.set('provider',location.origin);const a=document.createElement('a');a.href=link.href;a.textContent='Partner acceptance link';$('partner-result').replaceChildren(a);renderPartners();});
 function renderPartners(){const list=$('partners');list.replaceChildren();for(const [id,p] of partners){const row=document.createElement('div');row.className='partner';row.textContent=id.slice(-12)+(p.accepted?' · accepted':' · pending');
- const connect=document.createElement('button');connect.textContent=p.accepted?'Connect':'Check acceptance';connect.onclick=()=>busy(async()=>{if(!p.accepted){const remote=new ProviderClient(p.origin);let cursor=0,found;for(let i=0;i<20;i++){const page=await remote.request('/records?cursor='+cursor);found=page.records.find(r=>r.kind==='keyring.accept'&&r.author===id&&r.payload.request===p.request.id);if(found||page.cursor===cursor)break;cursor=page.cursor;}if(!found)throw Error('Your partner has not accepted yet');await client.confirmPartner(found);p.accepted=true;}await client.connect(id);status('Connected.');renderPartners();});
- const share=document.createElement('button');share.textContent='Share';share.onclick=()=>busy(async()=>{if(!$('share-history').checked)throw Error('Select Share older posts first');const job=await client.history(id,{shareOlderPosts:true});if(!confirm('Share '+job.total+' older posts with '+id.slice(-12)+'?'))return;let next=job;while(next.status!=='complete'&&next.status!=='paused'){next=await client.replay(next.id);await client.flush();status('History: '+next.cursor+' / '+next.total);}status('History '+next.status+'.');$('share-history').checked=false;});row.append(connect,share);list.append(row);}}
+ const connect=document.createElement('button');connect.textContent=p.accepted?'Connect':'Check acceptance';connect.onclick=()=>busy(async()=>{if(!p.accepted){const remote=new ProviderClient(p.origin);let cursor=0,found;for(let i=0;i<20;i++){const page=await remote.request('/records?cursor='+cursor);found=page.records.find(r=>r.kind==='keyring.accept'&&r.author===id&&r.payload.request===p.request.id);if(found||page.cursor===cursor)break;cursor=page.cursor;}if(!found)throw Error('Your partner has not accepted yet');await client.confirmPartner(found);p.accepted=true;}await client.connect(id);status('Connected.');renderPartners();},connect);
+ const share=document.createElement('button');share.textContent='Share';share.onclick=()=>busy(async()=>{if(!$('share-history').checked)throw Error('Select Share older posts first');const job=await client.history(id,{shareOlderPosts:true});if(!confirm('Share '+job.total+' older posts with '+id.slice(-12)+'?'))return;let next=job;while(next.status!=='complete'&&next.status!=='paused'){next=await client.replay(next.id);await client.flush();status('History: '+next.cursor+' / '+next.total);}status('History '+next.status+'.');$('share-history').checked=false;},share);row.append(connect,share);list.append(row);}}
 const replyDrafts=new Map(),sendingReplies=new Set();
 async function render(){
  const view=await client.view(),feed=$('feed');feed.replaceChildren();
@@ -84,7 +93,7 @@ async function render(){
    const actions=document.createElement('div');actions.className='post-actions';
    const liked=view.likes.get(record.id)?.has(client.identity.id),like=document.createElement('button');
    like.textContent=(liked?'Unlike':'Like')+' ('+(view.likes.get(record.id)?.size??0)+')';
-   like.onclick=()=>busy(async()=>{await client.like(record.id,{remove:liked});await client.flush();await render();});
+   like.onclick=()=>busy(async()=>{await client.like(record.id,{remove:liked});await render();await client.flush();},like);
    const reply=document.createElement('button');reply.textContent='Reply';reply.setAttribute('aria-expanded',String(replyDrafts.has(record.id)));
    const editorId='reply-'+record.id;reply.setAttribute('aria-controls',editorId);
    function showEditor(){
@@ -107,7 +116,7 @@ async function render(){
        await client.flush();replyDrafts.delete(record.id);await render();status('Reply sent.');
       }catch(error){if(draft.queued){send.textContent='Retry sending';cancel.textContent='Close';}throw error;}
       finally{sendingReplies.delete(record.id);}
-     });
+     },form);
     };
    }
    reply.onclick=()=>{showEditor();article.querySelector('textarea')?.focus();};

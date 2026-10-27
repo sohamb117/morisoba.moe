@@ -24,7 +24,7 @@ before(async()=>{
  const sql=(await readFile(new URL('../migrations/0001_mimorigasaka.sql',import.meta.url),'utf8'))+(await readFile(new URL('../migrations/0002_identity_vaults.sql',import.meta.url),'utf8'));
  for(const statement of sql.split(';').filter(s=>s.trim()))await db.prepare(statement).run();
  const protocol=await mf.getD1Database('MIMORI_PROTOCOL_DB');
- for(const file of ['0001_protocol.sql','0002_archives.sql','0003_devices.sql'])for(const statement of (await readFile('protocol/migrations/'+file,'utf8')).split(';').filter(s=>s.trim()))await protocol.prepare(statement).run();
+ for(const file of ['0001_protocol.sql','0002_archives.sql','0003_devices.sql','0004_archive_changes.sql'])for(const statement of (await readFile('protocol/migrations/'+file,'utf8')).split(';').filter(s=>s.trim()))await protocol.prepare(statement).run();
  owner=await register('morisoba','admin');alice=await register('alice');bob=await register('bob');
 });
 after(async()=>{await mf?.dispose();});

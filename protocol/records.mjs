@@ -1,3 +1,4 @@
+import {encryptBytes,decryptBytes} from './crypto-engine.mjs';
 import {canonicalize} from 'json-canonicalize/bundles/index.umd.js';
 export const VERSION = 'mimori/0.1-experimental';
 export const encode = value => new TextEncoder().encode(value);
@@ -47,12 +48,11 @@ export async function verifyRecord(record){
 export function randomKey(){return crypto.getRandomValues(new Uint8Array(32));}
 export async function seal(key,value,context){
   const nonce=crypto.getRandomValues(new Uint8Array(12));
-  const imported=await crypto.subtle.importKey('raw',key,'AES-GCM',false,['encrypt']);
-  const ciphertext=await crypto.subtle.encrypt({name:'AES-GCM',iv:nonce,additionalData:encode(canonical(context))},imported,encode(canonical(value)));
+  const plaintext=encode(canonical(value));
+  let ciphertext;try{ciphertext=await encryptBytes(key,nonce,plaintext,encode(canonical(context)));}finally{plaintext.fill(0);}
   return {nonce:b64(nonce),ciphertext:b64(new Uint8Array(ciphertext))};
 }
 export async function open(key,box,context){
-  const imported=await crypto.subtle.importKey('raw',key,'AES-GCM',false,['decrypt']);
-  const plain=await crypto.subtle.decrypt({name:'AES-GCM',iv:unb64(box.nonce,12),additionalData:encode(canonical(context))},imported,unb64(box.ciphertext));
-  return JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(plain));
+  const plain=await decryptBytes(key,unb64(box.nonce,12),unb64(box.ciphertext),encode(canonical(context)));
+  try{return JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(plain));}finally{plain.fill(0);}
 }

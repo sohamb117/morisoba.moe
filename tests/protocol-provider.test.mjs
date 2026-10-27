@@ -15,7 +15,7 @@ before(async()=>{
  for(const origin of ['https://provider-one.test','https://provider-two.test']){
  const mf=new Miniflare(convertV4MiniflareOptions({modules:true,script:bundle.outputFiles[0].text,compatibilityDate:'2026-10-16',d1Databases:['MIMORI_PROTOCOL_DB','MIMORI_DB'],bindings:{MIMORI_PROTOCOL_ENABLED:'true'}}));
  const db=await mf.getD1Database('MIMORI_PROTOCOL_DB'),legacy=await mf.getD1Database('MIMORI_DB');
- for(const statement of ((await readFile('protocol/migrations/0001_protocol.sql','utf8'))+(await readFile('protocol/migrations/0002_archives.sql','utf8'))+(await readFile('protocol/migrations/0003_devices.sql','utf8'))).split(';').filter(s=>s.trim()))await db.prepare(statement).run();
+ for(const statement of ((await readFile('protocol/migrations/0001_protocol.sql','utf8'))+(await readFile('protocol/migrations/0002_archives.sql','utf8'))+(await readFile('protocol/migrations/0003_devices.sql','utf8'))+(await readFile('protocol/migrations/0004_archive_changes.sql','utf8'))).split(';').filter(s=>s.trim()))await db.prepare(statement).run();
  await legacy.prepare('CREATE TABLE mimori_identity_vaults(identity TEXT PRIMARY KEY,legacy_user TEXT,revision INTEGER,encrypted TEXT)').run();
  await legacy.prepare('CREATE TABLE mimori_posts(id INTEGER,user_id TEXT,body TEXT,pinned INTEGER,created_at INTEGER,updated_at INTEGER,deleted_at INTEGER)').run();
  await legacy.prepare("INSERT INTO mimori_posts VALUES(1,'alice','legacy private post',0,1,1,NULL),(2,'bob','another private post',0,1,1,NULL)").run();
@@ -86,7 +86,7 @@ test('end-to-end clients on separate providers exchange posts, replies, likes an
  const post=await cara.post('hello across providers');await cara.flush();let view=await dan.sync();assert.equal(view.posts.length,1);assert.equal(view.posts[0].payload.body,'hello across providers');
  await dan.reply(post.id,'reply across providers');await dan.like(post.id);await dan.flush();view=await cara.sync();assert.equal(view.posts.length,3);assert.equal(view.likes.get(post.id).size,1);
  await dan.like(post.id,{remove:true});await dan.flush();view=await cara.sync();assert.equal(view.likes.size,0);
- assert.ok(await cara.restoreArchive()>0);assert.equal((await pd.request('/archive',{privateAccess:true})).entries.length,4);
+ assert.equal(await cara.restoreArchive(),0);assert.equal((await pd.request('/archive',{privateAccess:true})).entries.length,4);
  assert.equal(await cara.history(d.id),null);const job=await cara.history(d.id,{shareOlderPosts:true});await cara.replay(job.id);await cara.flush();view=await dan.sync();assert.ok(view.posts.some(r=>r.payload.body==='before we became partners'));
  const publicData=(await providers[0].db.prepare("SELECT record FROM protocol_records WHERE kind IN ('object','envelope')").all()).results;assert.ok(!JSON.stringify(publicData).includes('hello across providers'));
  }finally{await cara?.close();await dan?.close();}
@@ -147,4 +147,32 @@ test('upgrading a legacy browser after a second device preserves its original ra
  first=await openProtocolClient({provider,secrets:pending.secrets,indexedDB,locks,automaticDevice:true});assert.equal(first.deviceId,1);assert.equal((await first.view()).posts.length,1);
  assert.deepEqual((await home.db.prepare("SELECT bundle FROM protocol_prekeys WHERE identity=? AND device='1' ORDER BY id").bind(pending.identity.id).all()).results,prekeys.results);
  }finally{await first?.close();await second?.close();}
+});
+
+test('incremental archive reads include updates behind the old cursor and remain account-private',async()=>{
+ const p=providers[0],id=await hash(encode('archive-incremental-test')),archive=await seal(randomKey(),{test:true},{});
+ const initial=await request(p,'/archive-changes',{actor:'alice'});assert.equal(initial.status,200);
+ assert.equal((await request(p,'/archive/'+id,{actor:'alice',method:'PUT',data:{revision:0,archive}})).status,200);
+ const first=await request(p,'/archive-changes?since='+initial.data.cursor,{actor:'alice'});assert.equal(first.data.entries.length,1);assert.equal(first.data.entries[0].revision,1);
+ assert.equal((await request(p,'/archive-changes?since='+first.data.cursor,{actor:'alice'})).data.entries.length,0);
+ assert.equal((await request(p,'/archive/'+id,{actor:'alice',method:'PUT',data:{revision:1,archive}})).status,200);
+ const next=await request(p,'/archive-changes?since='+first.data.cursor,{actor:'alice'});assert.equal(next.data.entries[0].revision,2);assert.ok(next.data.cursor>first.data.cursor);
+ assert.equal((await request(p,'/archive-changes')).status,401);
+ assert.ok(!(await request(p,'/archive-changes',{actor:'bob'})).data.entries.some(e=>e.id===id));
+ assert.equal((await request(p,'/archive-changes?since=-1',{actor:'alice'})).status,400);
+});
+
+test('no-op backup sends no writes and prekeys are not republished on repeated maintenance',async()=>{
+ const {ProviderClient,openProtocolClient}=await import('../protocol/client.mjs'),{IDBFactory}=await import('fake-indexeddb'),{b64}=await import('../protocol/records.mjs');
+ const p=providers[0],identity=await createIdentity(),actor='incremental';
+ await request(p,'/enroll',{actor,method:'POST',data:await signRecord(identity,'identity',{revision:1,previous:null,providers:[p.origin]})});
+ const calls=[];
+ const provider=new ProviderClient(p.origin,{csrf:actor,fetch:async(url,init={})=>{calls.push({url,method:init.method});const headers=new Headers(init.headers);headers.set('X-Test-User',actor);headers.set('Origin',p.origin);return p.mf.dispatchFetch(url,{...init,headers});}});
+ const client=await openProtocolClient({provider,secrets:{identity,storeKey:b64(randomKey()),archiveKey:b64(randomKey()),epoch:crypto.randomUUID()},indexedDB:new IDBFactory(),locks:{request:(_,fn)=>fn()},automaticDevice:true});
+ try{
+ await client.post('first');await client.flush();calls.length=0;await client.flush();assert.equal(calls.length,0);
+ await client.post('second');calls.length=0;await client.flush();assert.equal(calls.filter(c=>c.url.includes('/archive/')).length,1);
+ await client.restoreArchive();calls.length=0;assert.equal(await client.restoreArchive(),0);assert.equal(calls.length,1);assert.ok(calls[0].url.includes('/archive-changes?since='));
+ await client.publishPrekeys();calls.length=0;await client.publishPrekeys();assert.equal(calls.length,1);assert.equal(calls[0].method,'GET');
+ }finally{await client.close();}
 });
