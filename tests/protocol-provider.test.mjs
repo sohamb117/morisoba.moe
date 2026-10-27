@@ -16,6 +16,7 @@ before(async()=>{
  const mf=new Miniflare(convertV4MiniflareOptions({modules:true,script:bundle.outputFiles[0].text,compatibilityDate:'2026-10-16',d1Databases:['MIMORI_PROTOCOL_DB','MIMORI_DB'],bindings:{MIMORI_PROTOCOL_ENABLED:'true'}}));
  const db=await mf.getD1Database('MIMORI_PROTOCOL_DB'),legacy=await mf.getD1Database('MIMORI_DB');
  for(const statement of ((await readFile('protocol/migrations/0001_protocol.sql','utf8'))+(await readFile('protocol/migrations/0002_archives.sql','utf8'))+(await readFile('protocol/migrations/0003_devices.sql','utf8'))).split(';').filter(s=>s.trim()))await db.prepare(statement).run();
+ await legacy.prepare('CREATE TABLE mimori_identity_vaults(identity TEXT PRIMARY KEY,legacy_user TEXT,revision INTEGER,encrypted TEXT)').run();
  await legacy.prepare('CREATE TABLE mimori_posts(id INTEGER,user_id TEXT,body TEXT,pinned INTEGER,created_at INTEGER,updated_at INTEGER,deleted_at INTEGER)').run();
  await legacy.prepare("INSERT INTO mimori_posts VALUES(1,'alice','legacy private post',0,1,1,NULL),(2,'bob','another private post',0,1,1,NULL)").run();
  providers.push({mf,db,legacy,origin});

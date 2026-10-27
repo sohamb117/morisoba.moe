@@ -21,7 +21,7 @@ before(async()=>{
  const bundle=await build({entryPoints:['worker.mjs'],bundle:true,write:false,format:'esm',platform:'neutral',external:['node:*']});
  mf=new Miniflare(convertV4MiniflareOptions({modules:true,script:bundle.outputFiles[0].text,compatibilityDate:'2026-10-16',compatibilityFlags:['nodejs_compat'],d1Databases:['MIMORI_DB','MIMORI_PROTOCOL_DB'],bindings:{MIMORI_ORIGIN:origin,MIMORI_PROTOCOL_ENABLED:'true'},serviceBindings:{ASSETS:()=>new Response('static')}}));
  db=await mf.getD1Database('MIMORI_DB');
- const sql=await readFile(new URL('../migrations/0001_mimorigasaka.sql',import.meta.url),'utf8');
+ const sql=(await readFile(new URL('../migrations/0001_mimorigasaka.sql',import.meta.url),'utf8'))+(await readFile(new URL('../migrations/0002_identity_vaults.sql',import.meta.url),'utf8'));
  for(const statement of sql.split(';').filter(s=>s.trim()))await db.prepare(statement).run();
  const protocol=await mf.getD1Database('MIMORI_PROTOCOL_DB');
  for(const file of ['0001_protocol.sql','0002_archives.sql','0003_devices.sql'])for(const statement of (await readFile('protocol/migrations/'+file,'utf8')).split(';').filter(s=>s.trim()))await protocol.prepare(statement).run();
@@ -143,4 +143,12 @@ test('account password changes preserve encryption keys and existing posts for a
  const restored=await unlock(provider(),next);assert.deepEqual(restored,secrets);
  const second=await openProtocolClient({provider:provider(),secrets:restored,indexedDB:new IDBFactory(),locks:{request:(_,fn)=>fn()},automaticDevice:true});
  try{await second.restoreArchive();assert.equal((await second.view()).posts[0].payload.body,'keep this encrypted post');}finally{await second.close();}
+ const candidates=['concurrent password alpha 123!','concurrent password beta 456!'];
+ const attempts=await Promise.all(candidates.map(password=>request('/password',{actor,method:'POST',data:{currentPassword:next,password}})));
+ assert.equal(attempts.filter(r=>r.status===200).length,1);
+ const winner=candidates[attempts.findIndex(r=>r.status===200)];
+ const winningLogin=await request('/login',{method:'POST',data:{username:'portablepassword',password:winner}});assert.equal(winningLogin.status,200);
+ actor={...winningLogin.data,cookie:winningLogin.headers.get('Set-Cookie').split(';')[0]};
+ assert.deepEqual(await unlock(provider(),winner),secrets);
+
 });

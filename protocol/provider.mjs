@@ -134,10 +134,15 @@ export async function protocolMiddleware(request,env,next,{authenticate}={}){
  const updated=initial??await one(db,'UPDATE protocol_archives SET revision=revision+1,encrypted=? WHERE identity=? AND id=? AND revision=? RETURNING revision',canonical(data.archive),account.identity,id,data.revision);requireThat(updated,409,'Archive changed; merge before saving');return reply(updated);
  }
  }
- if(route==='/vault'&&method==='GET'){const row=await one(db,'SELECT revision,encrypted FROM protocol_vaults WHERE identity=?',account.identity);requireThat(row,404,'No vault');const backup=await one(db,'SELECT encrypted FROM protocol_password_backups WHERE identity=?',account.identity);return reply({revision:row.revision,vault:JSON.parse(row.encrypted),...(backup?{previousVault:JSON.parse(backup.encrypted)}:{})});}
+ if(route==='/vault'&&method==='GET'){
+ const row=await one(env.MIMORI_DB,'SELECT revision,encrypted FROM mimori_identity_vaults WHERE identity=? AND legacy_user=?',account.identity,user.id)??await one(db,'SELECT revision,encrypted FROM protocol_vaults WHERE identity=?',account.identity);
+ requireThat(row,404,'No vault');return reply({revision:row.revision,vault:JSON.parse(row.encrypted)});
+ }
  if(route==='/vault'&&method==='PUT'){
  const data=await read(request);exact(data,['revision','vault']);requireThat(Number.isSafeInteger(data.revision)&&data.revision>=0,400,'Invalid revision');
  validateVault(data.vault,account.identity);
+ const accountVault=await one(env.MIMORI_DB,'SELECT revision FROM mimori_identity_vaults WHERE identity=? AND legacy_user=?',account.identity,user.id);
+ if(accountVault)throw new Fault(409,'Use account password settings to change this vault');
  const row=await one(db,'INSERT INTO protocol_vaults(identity,revision,encrypted) SELECT ?,1,? WHERE ?=0 ON CONFLICT(identity) DO NOTHING RETURNING revision',account.identity,canonical(data.vault),data.revision);
  const updated=row??await one(db,'UPDATE protocol_vaults SET revision=revision+1,encrypted=? WHERE identity=? AND revision=? RETURNING revision',canonical(data.vault),account.identity,data.revision);
  requireThat(updated,409,'Vault changed; reload before saving');return reply(updated);
