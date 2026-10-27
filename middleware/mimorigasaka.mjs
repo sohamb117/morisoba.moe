@@ -1,3 +1,4 @@
+import {changeVaultPassword} from '../protocol/vault.mjs';
 import {token, digest, hashPassword, verifyPassword} from './mimori-crypto.mjs';
 const BASE = '/api/mimorigasaka';
 const WEEK = 7 * 86400000;
@@ -143,8 +144,24 @@ export async function mimorigasakaMiddleware(request, env, next) {
     if (route === '/password' && method === 'POST') {
       const data = await body(request); await limit(db, 'password:' + user.id, 5);
       if (!await verifyPassword(password(data.currentPassword), user.password_hash)) fail(400, 'Current passcode is incorrect.');
-      const hash = await hashPassword(password(data.password));
-      await db.batch([db.prepare('UPDATE mimori_users SET password_hash=? WHERE id=?').bind(hash,user.id), db.prepare('DELETE FROM mimori_sessions WHERE user_id=?').bind(user.id)]);
+      const nextPassword=password(data.password),hash = await hashPassword(nextPassword);
+      let vaultWrite=null,vaultGuard=null;
+      if(env.MIMORI_PROTOCOL_DB&&env.MIMORI_PROTOCOL_ENABLED==='true'){
+        // Use the account database for subsequent wrappers so password and key
+        // updates are one transaction, including concurrent changes and crashes.
+        const saved=await one(db,'SELECT * FROM mimori_identity_vaults WHERE legacy_user=?',user.id)
+          ??await one(env.MIMORI_PROTOCOL_DB,'SELECT v.* FROM protocol_vaults v JOIN protocol_accounts a ON a.identity=v.identity WHERE a.legacy_user=?',user.id);
+        if(saved){
+          const vault=await changeVaultPassword(JSON.parse(saved.encrypted),saved.identity,data.currentPassword,nextPassword),encrypted=JSON.stringify(vault);
+          vaultWrite=db.prepare(`INSERT INTO mimori_identity_vaults(identity,legacy_user,revision,encrypted) SELECT ?,?,?,? WHERE EXISTS(SELECT 1 FROM mimori_users WHERE id=? AND password_hash=?) ON CONFLICT(identity) DO UPDATE SET revision=excluded.revision,encrypted=excluded.encrypted WHERE mimori_identity_vaults.revision=?`).bind(saved.identity,user.id,saved.revision+1,encrypted,user.id,user.password_hash,saved.revision);
+          vaultGuard={identity:saved.identity,revision:saved.revision+1,encrypted};
+        }
+      }
+      const update=vaultGuard
+        ?db.prepare('UPDATE mimori_users SET password_hash=? WHERE id=? AND password_hash=? AND EXISTS(SELECT 1 FROM mimori_identity_vaults WHERE identity=? AND revision=? AND encrypted=?)').bind(hash,user.id,user.password_hash,vaultGuard.identity,vaultGuard.revision,vaultGuard.encrypted)
+        :db.prepare('UPDATE mimori_users SET password_hash=? WHERE id=? AND password_hash=?').bind(hash,user.id,user.password_hash);
+      const changed=await db.batch([...(vaultWrite?[vaultWrite]:[]),update,db.prepare('DELETE FROM mimori_sessions WHERE user_id=?').bind(user.id)]);
+      if(changed[vaultWrite?1:0].meta.changes!==1)fail(409,'Account changed. Sign in again.');
       return issueSession(request, env, user);
     }
     if (route === '/profile' && method === 'PATCH') {
