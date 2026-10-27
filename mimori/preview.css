@@ -1,5 +1,40 @@
-.feed-wrap{padding:18px}.settings{display:grid;gap:10px}.settings summary{cursor:pointer}.hint,#fingerprint{overflow-wrap:anywhere}.history-choice{display:flex;align-items:center;gap:8px}.history-choice input{width:auto}.post-actions{gap:14px}.post textarea{width:100%;margin:10px 0}.post button{font-size:13px}.partner{padding:12px 0;border-bottom:1px dashed var(--line);overflow-wrap:anywhere}.partner button{margin:6px 8px 0 0}#profile>a{display:block;margin:16px}#profile>#lock{margin:16px}#feed-lock{padding:40px 10px;color:var(--dim)}[hidden]{display:none!important}#identity-title{overflow-wrap:anywhere}#identity{min-width:0}#viewer{min-width:0}#profile-handle{overflow-wrap:anywhere}#partner-form{display:grid;gap:8px}.status{overflow-wrap:anywhere}
-
-.viewer>.titlebar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 15px;border-bottom:1px solid var(--line)}.viewer>.titlebar h2{font:18px/1.3 var(--serif);margin:0}.viewer>.titlebar button{font-size:14px}.feed-wrap #feed{padding:0}
-
-#account-admin{display:grid;gap:10px}#account-invite{display:grid;gap:8px}#account-invite-link{width:100%;min-width:0}#account-name{margin:0}#device-unavailable p{margin:0}
+/* Keep the profile and composer ahead of account administration. */
+[hidden]{display:none!important}
+#identity,#viewer{min-width:0}
+#identity-title,#profile-handle,.hint,.status{overflow-wrap:anywhere}
+.profile-head{flex-direction:row;align-items:center;gap:12px;padding:16px 16px 0}
+.profile-head img{width:56px;height:56px;margin:0;flex:none;object-fit:cover}
+.profile-head span{font-size:12px}
+.profile-info{padding:12px 16px 16px}
+.profile-info p{margin-bottom:8px}
+.quiet{border:0;padding:0;color:var(--dim);text-decoration:underline;text-underline-offset:3px}
+.composer textarea{min-height:100px}
+.composer .form-actions{margin-top:10px}
+.tools{border-top:1px solid var(--line);font-size:12px}
+.tools>summary{padding:10px 16px;cursor:pointer;color:var(--dim)}
+.tools[open]>summary{color:var(--ink)}
+.settings{padding:0 16px 14px}
+.settings>button,.settings form>button{margin-top:10px}
+.settings input,.settings textarea{font-size:13px}
+.account-settings{display:grid;gap:14px}
+.tool-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.tool-row a,.tool-row button{font-size:11px}
+#account-invite{margin-top:10px}
+#account-invite input{font-size:11px}
+#account-invite button{margin-top:8px}
+.password-settings summary{cursor:pointer;color:var(--dim);font-size:11px}
+#fingerprint{font-size:10px;overflow-wrap:anywhere;margin:0 0 8px}
+.history-choice{display:flex;align-items:center;gap:8px}
+.history-choice input{width:auto}
+.partner{padding:10px 0;border-bottom:1px dashed var(--line);overflow-wrap:anywhere}
+.partner button{margin:6px 8px 0 0}
+#partner-form{margin-top:12px}
+.viewer>.titlebar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 15px;border-bottom:1px solid var(--line)}
+.viewer>.titlebar h2{font:18px/1.3 var(--serif);margin:0}
+.feed-wrap{padding:0 18px 12px}
+.feed-wrap #feed{padding:0}
+.post{padding-left:0}
+.post textarea{width:100%;margin:10px 0}
+.post button{font-size:11px}
+#feed-lock{padding:54px 10px;color:var(--dim);text-align:center;font-size:13px}
+@media(max-width:650px){.profile-head{padding-top:14px}.settings input,.settings textarea{font-size:16px}.composer textarea{min-height:90px}}

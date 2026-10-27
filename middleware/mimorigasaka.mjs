@@ -1,3 +1,4 @@
+import {changeVaultPassword} from '../protocol/vault.mjs';
 import {token, digest, hashPassword, verifyPassword} from './mimori-crypto.mjs';
 const BASE = '/api/mimorigasaka';
 const WEEK = 7 * 86400000;
@@ -143,8 +144,30 @@ export async function mimorigasakaMiddleware(request, env, next) {
     if (route === '/password' && method === 'POST') {
       const data = await body(request); await limit(db, 'password:' + user.id, 5);
       if (!await verifyPassword(password(data.currentPassword), user.password_hash)) fail(400, 'Current passcode is incorrect.');
-      const hash = await hashPassword(password(data.password));
-      await db.batch([db.prepare('UPDATE mimori_users SET password_hash=? WHERE id=?').bind(hash,user.id), db.prepare('DELETE FROM mimori_sessions WHERE user_id=?').bind(user.id)]);
+      const nextPassword=password(data.password),hash = await hashPassword(nextPassword);
+      // Cross-database changes retain the old encrypted wrapper until the account
+      // update succeeds. A crash between writes remains recoverable by either
+      // valid account password; identity contents and private keys never change.
+      if(env.MIMORI_PROTOCOL_DB&&env.MIMORI_PROTOCOL_ENABLED==='true'){
+        const protocol=env.MIMORI_PROTOCOL_DB;
+        const saved=await one(protocol,'SELECT v.* FROM protocol_vaults v JOIN protocol_accounts a ON a.identity=v.identity WHERE a.legacy_user=?',user.id);
+        if(saved){
+          let vault=JSON.parse(saved.encrypted),rewrapped;
+          try{rewrapped=await changeVaultPassword(vault,saved.identity,data.currentPassword,nextPassword);}
+          catch{
+            const backup=await one(protocol,'SELECT encrypted FROM protocol_password_backups WHERE identity=?',saved.identity);
+            if(!backup)fail(409,'Cannot update encrypted account keys. Password was not changed.');
+            vault=JSON.parse(backup.encrypted);rewrapped=await changeVaultPassword(vault,saved.identity,data.currentPassword,nextPassword);
+          }
+          const writes=await protocol.batch([
+            protocol.prepare('INSERT INTO protocol_password_backups(identity,encrypted) SELECT identity,? FROM protocol_vaults WHERE identity=? AND revision=? ON CONFLICT(identity) DO UPDATE SET encrypted=excluded.encrypted').bind(JSON.stringify(vault),saved.identity,saved.revision),
+            protocol.prepare('UPDATE protocol_vaults SET encrypted=?,revision=revision+1 WHERE identity=? AND revision=?').bind(JSON.stringify(rewrapped),saved.identity,saved.revision)
+          ]);
+          if(writes[1].meta.changes!==1)fail(409,'Account changed. Try again.');
+        }
+      }
+      const changed=await db.batch([db.prepare('UPDATE mimori_users SET password_hash=? WHERE id=? AND password_hash=?').bind(hash,user.id,user.password_hash), db.prepare('DELETE FROM mimori_sessions WHERE user_id=?').bind(user.id)]);
+      if(changed[0].meta.changes!==1)fail(409,'Account changed. Sign in again.');
       return issueSession(request, env, user);
     }
     if (route === '/profile' && method === 'PATCH') {

@@ -5,9 +5,9 @@ import vm from 'node:vm';
 const source=(await readFile(new URL('../protocol/browser.mjs',import.meta.url),'utf8')).replace(/^import .*;\n/gm,'');
 async function page(role){
  const elements=new Map(),requests=[];
- const element=id=>{if(!elements.has(id))elements.set(id,{hidden:true,disabled:false,value:'',textContent:'',handlers:{},addEventListener(event,fn){this.handlers[event]=fn;}});return elements.get(id);};
+ const element=id=>{if(!elements.has(id))elements.set(id,{hidden:true,disabled:false,value:'',textContent:'',setAttribute(){},handlers:{},addEventListener(event,fn){this.handlers[event]=fn;}});return elements.get(id);};
  class ProviderClient{constructor(origin,{csrf}){this.csrf=csrf;}async request(){return {vault:{}};}}
- const context=vm.createContext({document:{getElementById:element,querySelectorAll:()=>[]},location:{origin:'https://example.test'},ProviderClient,fetch:async(path,options)=>{requests.push({path,options});return {ok:true,json:async()=>path.endsWith('/session')?{user:{username:'morisoba',role},csrf:'csrf-token'}:{token:'test-invite'}};},console});
+ const context=vm.createContext({document:{getElementById:element,querySelectorAll:()=>[]},location:{origin:'https://example.test'},ProviderClient,matchMedia:()=>({matches:false,addEventListener(){}}),fetch:async(path,options)=>{requests.push({path,options});return {ok:true,json:async()=>path.endsWith('/session')?{user:{username:'morisoba',role},csrf:'csrf-token'}:{token:'test-invite'}};},console});
  vm.runInContext(source,context);await new Promise(resolve=>setImmediate(resolve));
  return {element,requests};
 }

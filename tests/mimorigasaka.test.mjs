@@ -19,10 +19,12 @@ async function register(username,role='member'){
 }
 before(async()=>{
  const bundle=await build({entryPoints:['worker.mjs'],bundle:true,write:false,format:'esm',platform:'neutral',external:['node:*']});
- mf=new Miniflare(convertV4MiniflareOptions({modules:true,script:bundle.outputFiles[0].text,compatibilityDate:'2026-10-16',compatibilityFlags:['nodejs_compat'],d1Databases:['MIMORI_DB'],bindings:{MIMORI_ORIGIN:origin},serviceBindings:{ASSETS:()=>new Response('static')}}));
+ mf=new Miniflare(convertV4MiniflareOptions({modules:true,script:bundle.outputFiles[0].text,compatibilityDate:'2026-10-16',compatibilityFlags:['nodejs_compat'],d1Databases:['MIMORI_DB','MIMORI_PROTOCOL_DB'],bindings:{MIMORI_ORIGIN:origin,MIMORI_PROTOCOL_ENABLED:'true'},serviceBindings:{ASSETS:()=>new Response('static')}}));
  db=await mf.getD1Database('MIMORI_DB');
  const sql=await readFile(new URL('../migrations/0001_mimorigasaka.sql',import.meta.url),'utf8');
  for(const statement of sql.split(';').filter(s=>s.trim()))await db.prepare(statement).run();
+ const protocol=await mf.getD1Database('MIMORI_PROTOCOL_DB');
+ for(const file of ['0001_protocol.sql','0002_archives.sql','0003_devices.sql'])for(const statement of (await readFile('protocol/migrations/'+file,'utf8')).split(';').filter(s=>s.trim()))await protocol.prepare(statement).run();
  owner=await register('morisoba','admin');alice=await register('alice');bob=await register('bob');
 });
 after(async()=>{await mf?.dispose();});
@@ -119,9 +121,26 @@ test('pagination returns each post once and static routes keep working',async()=
  const staticResponse=await mf.dispatchFetch(origin+'/mimorigasaka/');assert.equal(await staticResponse.text(),'static');assert.match(staticResponse.headers.get('Content-Security-Policy'),/frame-ancestors 'none'/);
  const home=await mf.dispatchFetch(origin+'/');assert.equal(await home.text(),'static');
 });
-test('Mimori rename preserves old links and keeps experimental routes gated',async()=>{
+test('Mimori rename preserves old links and serves enabled routes',async()=>{
  const old=await mf.dispatchFetch(origin+'/mimorigasaka/protocol/?request=example',{redirect:'manual'});
  assert.equal(old.status,308);assert.equal(old.headers.get('Location'),origin+'/mimori/?request=example');
- assert.equal((await mf.dispatchFetch(origin+'/mimori/')).status,404);
- assert.equal((await mf.dispatchFetch(origin+'/api/mimori/v1/records')).status,404);
+ assert.equal((await mf.dispatchFetch(origin+'/mimori/')).status,200);
+ assert.equal((await mf.dispatchFetch(origin+'/api/mimori/v1/records')).status,200);
+});
+
+test('account password changes preserve encryption keys and existing posts for a new browser',async()=>{
+ const {ProviderClient,signInIdentity,unlock,openProtocolClient}=await import('../protocol/client.mjs');
+ const {IDBFactory}=await import('fake-indexeddb');
+ let actor=await register('portablepassword');
+ const provider=()=>new ProviderClient(origin,{csrf:actor.csrf,fetch:async(url,init={})=>{const headers=new Headers(init.headers);if(init.credentials==='same-origin')headers.set('Cookie',actor.cookie);if(init.method!=='GET')headers.set('Origin',origin);return mf.dispatchFetch(url,{...init,headers});}});
+ const secrets=await signInIdentity(provider(),password),first=await openProtocolClient({provider:provider(),secrets,indexedDB:new IDBFactory(),locks:{request:(_,fn)=>fn()},automaticDevice:true});
+ await first.post('keep this encrypted post');await first.flush();await first.close();
+ const next='replacement account password 987!';
+ const result=await request('/password',{actor,method:'POST',data:{currentPassword:password,password:next}});assert.equal(result.status,200,JSON.stringify(result.data));
+ assert.equal((await request('/login',{method:'POST',data:{username:'portablepassword',password}})).status,401);
+ const login=await request('/login',{method:'POST',data:{username:'portablepassword',password:next}});assert.equal(login.status,200);
+ actor={...login.data,cookie:login.headers.get('Set-Cookie').split(';')[0]};
+ const restored=await unlock(provider(),next);assert.deepEqual(restored,secrets);
+ const second=await openProtocolClient({provider:provider(),secrets:restored,indexedDB:new IDBFactory(),locks:{request:(_,fn)=>fn()},automaticDevice:true});
+ try{await second.restoreArchive();assert.equal((await second.view()).posts[0].payload.body,'keep this encrypted post');}finally{await second.close();}
 });

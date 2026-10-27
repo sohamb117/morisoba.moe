@@ -14,46 +14,87 @@ export class ProviderClient {
 }
 const empty=()=>({partners:{},events:[],archive:{},seen:{},outbox:[],jobs:{},cursors:{},historyGrants:{}});
 export async function enroll(provider,password){
- // Save the encrypted recovery artifact locally BEFORE publishing this identity.
+ // Publish the identity and its password-encrypted vault in one provider transaction.
  const identity=await createIdentity(),secrets={identity,storeKey:b64(randomKey()),archiveKey:b64(randomKey()),epoch:crypto.randomUUID()};
  const vault=await createVault(identity.id,password,secrets);
  const record=await signRecord(identity,'identity',{revision:1,previous:null,providers:[provider.origin]});
- return {identity,secrets,vault,record,async commit(){await provider.request('/enroll',{data:record,privateAccess:true});await provider.request('/vault',{method:'PUT',data:{revision:0,vault},privateAccess:true});}};
+ return {identity,secrets,vault,record,async commit(){await provider.request('/enroll',{data:{record,vault},privateAccess:true});}};
 }
-export async function unlock(provider,password){const {vault}=await provider.request('/vault',{privateAccess:true});return unlockVault(vault,vault.owner,password);}
-export async function openProtocolClient({provider,secrets,indexedDB,locks,createDevice=false}){
+export async function unlock(provider,password){
+ const {vault,previousVault}=await provider.request('/vault',{privateAccess:true});
+ try{return await unlockVault(vault,vault.owner,password);}catch(e){if(!previousVault)throw e;return unlockVault(previousVault,previousVault.owner,password);}
+}
+export async function signInIdentity(provider,password){
+ try{return await unlock(provider,password);}catch(e){
+ if(!['No vault','Enroll first'].includes(e.message))throw e;
+ const pending=await enroll(provider,password);try{await pending.commit();return pending.secrets;}catch(error){if(error.message!=='Account already enrolled')throw error;return unlock(provider,password);}
+ }
+}
+export async function openProtocolClient({provider,secrets,indexedDB,locks,createDevice=false,automaticDevice=false}){
  const {identity}=secrets,local=await openLocalStore({name:identity.id+':'+secrets.epoch,key:unb64(secrets.storeKey,32),indexedDB,locks});
- if(!await local.storage.getMetadata('mimori:device-present')&&!createDevice){local.close();throw Object.assign(Error('Messaging session unavailable on this browser.'),{code:'DEVICE_STATE_MISSING'});}
- const ratchet=await createRatchet({identity,storage:local.storage}),archiveKey=unb64(secrets.archiveKey,32);
+ if(!await local.storage.getMetadata('mimori:device-present')&&!createDevice&&!automaticDevice){local.close();throw Object.assign(Error('Messaging session unavailable on this browser.'),{code:'DEVICE_STATE_MISSING'});}
+ let deviceId=Number(await local.storage.getMetadata('mimori:device-id')??1);
+ if(automaticDevice&&!await local.storage.getMetadata('mimori:device-id')){
+ await local.atomic(async()=>{
+ if(await local.storage.getMetadata('mimori:device-id')){deviceId=Number(await local.storage.getMetadata('mimori:device-id'));return;}
+ // Registration is account-scoped; no existing ratchet is replaced.
+ let token=await local.storage.getMetadata('mimori:device-token');if(!token){token=await hash(randomKey());await local.storage.setMetadata('mimori:device-token',token);}
+ const result=await provider.request('/devices/register',{data:{token,existing:await local.storage.getMetadata('mimori:device-present')?1:null},privateAccess:true});
+ deviceId=result.device;await local.storage.setMetadata('mimori:device-id',String(deviceId));
+ });
+ }
+ const ratchet=await createRatchet({identity,deviceId,storage:local.storage}),archiveKey=unb64(secrets.archiveKey,32);
  await local.storage.setMetadata('mimori:device-present','1');
  const getState=async()=>JSON.parse(await local.storage.getMetadata('mimori:app')??JSON.stringify(empty()));
  const save=state=>local.storage.setMetadata('mimori:app',canonical(state));
  async function transaction(fn){return local.atomic(async()=>{const state=await getState(),result=await fn(state);await save(state);return result;});}
- async function wrap(partner,payload){const message=await ratchet.encrypt(partner,1,payload);return signRecord(identity,'envelope',{recipient:partner,device:'1',suite:SUITE,message:canonical(message)});}
+ async function wrap(partner,payload){
+ const state=await getState(),remote=new ProviderClient(state.partners[partner].origin,{fetch:provider.fetch});
+ const devices=automaticDevice?(await remote.request('/devices/'+encodeURIComponent(partner))).devices:[1];
+ if(!devices.length)throw Error('Your partner has not signed in yet.');
+ const envelopes=[];
+ for(const device of devices){
+ if(automaticDevice&&!await ratchet.hasSession(partner,device))await connectDevice(partner,remote,device);
+ const message=await ratchet.encrypt(partner,device,payload);
+ envelopes.push(await signRecord(identity,'envelope',{recipient:partner,device:String(device),...(deviceId!==1?{senderDevice:deviceId}:{}),suite:SUITE,message:canonical(message)}));
+ }return envelopes;
+ }
+ async function connectDevice(partner,remote,device){
+ const claim=await signRecord(identity,'prekey.claim',{identity:partner,device,nonce:await hash(randomKey()),expires:Date.now()+240000,provider:remote.origin});
+ await ratchet.connect(await remote.request('/prekeys/claim-signed',{data:claim}),partner);
+ }
  async function queueEvent(state,event){
  const entry=await encryptEvent(identity,event);state.events.push(entry.event);
  state.archive[entry.object.id]={object:entry.object,event:entry.event,archivedKey:await seal(archiveKey,{key:entry.key},{object:entry.object.id}),deleted:false};
  state.outbox.push(entry.object);
  for(const partner of event.audience.filter(id=>id!==identity.id)){
  if(!state.partners[partner]?.accepted){if(event.relay&&partner!==event.relay)continue;throw Error('Recipient is not an accepted partner');}
- state.outbox.push(await wrap(partner,{object:entry.object.id,key:entry.key,provider:provider.origin}));
+ state.outbox.push(...await wrap(partner,{object:entry.object.id,key:entry.key,provider:provider.origin}));
  }
  return entry.event;
  }
  const api={
- identity,provider,
+ identity,provider,deviceId,
  async partners(){return (await getState()).partners;},
+ async refreshPartners(){
+ const previous=await getState();
+ for(const [partner,p] of Object.entries(previous.partners))await provider.request('/partners',{method:'PUT',data:{partner,origin:p.origin},privateAccess:true});
+ const {partners}=await provider.request('/partners',{privateAccess:true});
+ await transaction(async state=>{for(const p of partners){const {id,...details}=p;state.partners[id]=details;}});
+ },
  async publishPrekeys(){await local.atomic(()=>ratchet.replenish());for(const r of await ratchet.bundles())await provider.publish(r);},
  async requestPartner(partner,origin){
  if(partner===identity.id)throw Error('Cannot add yourself');const remote=new ProviderClient(origin,{fetch:provider.fetch});
  const record=await remote.request('/identities/'+encodeURIComponent(partner));if(!await verifyRecord(record)||record.author!==partner)throw Error('Partner identity mismatch');
  const request=await signRecord(identity,'keyring.request',{recipient:partner});await provider.publish(request);
- await transaction(async state=>{state.partners[partner]={origin:remote.origin,accepted:false,request};});return request;
+ await transaction(async state=>{state.partners[partner]={origin:remote.origin,accepted:false,request};});
+ if(automaticDevice)await provider.request('/partners',{method:'PUT',data:{partner,origin:remote.origin},privateAccess:true});return request;
  },
  async acceptPartner(request,origin){
  if(request.kind!=='keyring.request'||request.payload.recipient!==identity.id||!await verifyRecord(request))throw Error('Invalid partner request');
  await provider.publish(request);const accept=await signRecord(identity,'keyring.accept',{request:request.id});await provider.publish(accept);
- await transaction(async state=>{state.partners[request.author]={origin:new URL(origin).origin,accepted:true,request,accept};});return accept;
+ await transaction(async state=>{state.partners[request.author]={origin:new URL(origin).origin,accepted:true,request,accept};});
+ if(automaticDevice)await provider.request('/partners',{method:'PUT',data:{partner:request.author,origin:new URL(origin).origin},privateAccess:true});return accept;
  },
  async confirmPartner(accept){
  if(!await verifyRecord(accept)||accept.kind!=='keyring.accept')throw Error('Invalid acceptance');
@@ -63,8 +104,8 @@ export async function openProtocolClient({provider,secrets,indexedDB,locks,creat
  async connect(partner){
  const state=await getState(),p=state.partners[partner];if(!p?.accepted)throw Error('Mutual acceptance required');
  const remote=new ProviderClient(p.origin,{fetch:provider.fetch});
- const claim=await signRecord(identity,'prekey.claim',{identity:partner,device:1,nonce:await hash(randomKey()),expires:Date.now()+240000,provider:remote.origin});
- const bundle=await remote.request('/prekeys/claim-signed',{data:claim});await local.atomic(()=>ratchet.connect(bundle,partner));
+ const devices=automaticDevice?(await remote.request('/devices/'+encodeURIComponent(partner))).devices:[1];
+ for(const device of devices)await local.atomic(()=>connectDevice(partner,remote,device));
  },
  async post(body,{mentions=[]}={}){return transaction(state=>queueEvent(state,{type:'post',eventId:crypto.randomUUID(),createdAt:Date.now(),audience:[identity.id,...Object.keys(state.partners).filter(id=>state.partners[id].accepted)],body,mentions}));},
  async importLegacy(selected){
@@ -100,9 +141,10 @@ export async function openProtocolClient({provider,secrets,indexedDB,locks,creat
  while(true){const page=await provider.request('/archive?cursor='+cursor,{privateAccess:true});
  await transaction(async state=>{for(const item of page.entries){
  const id=item.id,entry=await open(archiveKey,item.archive,{identity:identity.id,object:id,purpose:'archive'});
- const {key}=await open(archiveKey,entry.archivedKey,{object:id});const event=await decryptEvent(entry.object,key,identity.id);
- if(entry.object.id!==id||event.author!==identity.id||event.id!==entry.event.id)throw Error('Invalid archive entry');
+ const {key}=await open(archiveKey,entry.archivedKey,{object:id});const event=await decryptEvent(entry.object,key,identity.id,{historyGrant:entry.historyGrant});
+ if(entry.object.id!==id||event.id!==entry.event.id)throw Error('Invalid archive entry');
  if(!state.archive[id])state.archive[id]=entry;else if(entry.deleted)state.archive[id].deleted=true;
+ if(entry.historyGrant)state.historyGrants[event.id]=entry.historyGrant;
  if(!state.events.some(r=>r.id===event.id))state.events.push(event);restored++;
  }});
  if(page.entries.length<50)break;cursor=page.cursor;
@@ -114,6 +156,7 @@ export async function openProtocolClient({provider,secrets,indexedDB,locks,creat
  for(const entry of Object.values(state.archive))if(entry.event.id===target)entry.deleted=true;return tombstone;
  });},
  async flush(){
+ await api.backupArchive();
  // Network retries send exactly the already-committed signed bytes.
  while(true){const state=await getState(),record=state.outbox[0];if(!record){await api.backupArchive();return;}await provider.publish(record);await transaction(async state=>{state.outbox=state.outbox.filter(r=>r.id!==record.id);});}
  },
@@ -123,7 +166,8 @@ export async function openProtocolClient({provider,secrets,indexedDB,locks,creat
  return transaction(async state=>{
  if(state.seen[record.id])return null;
  if(!state.partners[record.author]?.accepted)throw Error('Sender is not an accepted partner');
- const payload=await ratchet.decrypt(record.author,1,JSON.parse(record.payload.message));
+ if(record.payload.device!==String(deviceId))return null;
+ const payload=await ratchet.decrypt(record.author,record.payload.senderDevice??1,JSON.parse(record.payload.message));
  const source=new ProviderClient(payload.provider??remote.origin,{fetch:provider.fetch});const object=await source.request('/objects/'+payload.object);if(object.id!==payload.object)throw Error('Object hash mismatch');
  const event=await decryptEvent(object,payload.key,identity.id,{historyGrant:payload.historyGrant});
  if(event.author!==record.author){
@@ -134,9 +178,10 @@ export async function openProtocolClient({provider,secrets,indexedDB,locks,creat
  const root=state.events.find(r=>r.id===event.payload.root),target=state.events.find(r=>r.id===event.payload.target);
  if(root?.author!==identity.id||!target||!event.payload.audience.every(id=>root.payload.audience.includes(id)&&target.payload.audience.includes(id)))throw Error('Invalid relay audience');
  for(const partner of event.payload.audience){if(partner===identity.id||partner===event.author||!state.partners[partner]?.accepted)continue;
- state.outbox.push(await wrap(partner,{object:object.id,key:payload.key,provider:remote.origin}));}
+ state.outbox.push(...await wrap(partner,{object:object.id,key:payload.key,provider:remote.origin}));}
  }
 
+ state.archive[object.id]={object,event,archivedKey:await seal(archiveKey,{key:payload.key},{object:object.id}),deleted:false,...(payload.historyGrant?{historyGrant:payload.historyGrant}:{})};
  if(payload.historyGrant)state.historyGrants[event.id]=payload.historyGrant;
  if(!state.events.some(r=>r.id===event.id))state.events.push(event);state.seen[record.id]=true;return event;
  });
@@ -144,7 +189,7 @@ export async function openProtocolClient({provider,secrets,indexedDB,locks,creat
  async sync(){const state=await getState();for(const [partner,p] of Object.entries(state.partners)){if(!p.accepted)continue;const remote=new ProviderClient(p.origin,{fetch:provider.fetch});let cursor=state.cursors[p.origin]??0;
  const page=await remote.request('/records?recipient='+encodeURIComponent(identity.id)+'&cursor='+cursor);
  for(const record of page.records)if(record.kind==='envelope')await api.receive(record,p.origin);await transaction(async state=>{state.cursors[p.origin]=page.cursor;});
- }return api.view();},
+ }await api.backupArchive();return api.view();},
  async view(){const state=await getState();return project(state.events,identity.id,{historyGrants:state.historyGrants});},
  async history(partner,{shareOlderPosts=false}={}){return transaction(async state=>{if(!state.partners[partner]?.accepted)throw Error('Partner is not accepted');const job=await makeHistoryJob(identity,partner,Object.values(state.archive),{shareOlderPosts});if(job)state.jobs[job.id]=job;return job;});},
  async replay(jobId){
@@ -152,7 +197,7 @@ export async function openProtocolClient({provider,secrets,indexedDB,locks,creat
  // Each bounded replay step uses one outer local transaction, including ratchet state.
  return transaction(async state=>replayHistory({job:state.jobs[jobId],identity,
  archive:async id=>{const e=state.archive[id];return e?{...e,...await open(archiveKey,e.archivedKey,{object:id})}:null;},
- isPartner:async partner=>Boolean(state.partners[partner]?.accepted),atomic:fn=>fn(),wrap:async(partner,payload)=>wrap(partner,{...payload,provider:provider.origin}),enqueue:async r=>state.outbox.push(r),saveJob:async j=>{state.jobs[j.id]=j;}}));
+ isPartner:async partner=>Boolean(state.partners[partner]?.accepted),atomic:fn=>fn(),wrap:async(partner,payload)=>wrap(partner,{...payload,provider:provider.origin}),enqueue:async r=>state.outbox.push(...r),saveJob:async j=>{state.jobs[j.id]=j;}}));
  },
  async close(){await ratchet.stop();archiveKey.fill(0);local.close();}
  };

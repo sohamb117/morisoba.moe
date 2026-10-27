@@ -4,10 +4,14 @@ import {canonical,signRecord,verifyRecord} from './records.mjs';
 // This suite is deliberately NOT advertised as the draft's unfrozen classical suite.
 // The pinned library requires PQXDH and its braid ratchet; no downgrade is allowed.
 export const SUITE='mimori-open-e2ee-13.2.0-experimental';
+// Transport identities are per browser, authenticated by the stable account's
+// signed prekey record. Device 1 retains the original wire address unchanged.
+const address=(identity,device)=>ProtocolAddress.create(device===1?identity:identity+'/device/'+device,1);
 export async function createRatchet({identity,deviceId=1,storage}){
- const client=await createSignalProtocolClient({identity:{userId:identity.id,deviceId},adapters:{storage},protocol:{postQuantum:'required',braid:'required',contentRecovery:{mode:'off'}},ratchetConfig:{maxSkip:1000,keyExpirationMs:7*86400000},enableDebugLogging:false});
+ const client=await createSignalProtocolClient({identity:{userId:address(identity.id,deviceId).userId,deviceId:1},adapters:{storage},protocol:{postQuantum:'required',braid:'required',contentRecovery:{mode:'off'}},ratchetConfig:{maxSkip:1000,keyExpirationMs:7*86400000},enableDebugLogging:false});
  return {
  client,
+ hasSession:(partner,device)=>client.hasSession(address(partner,device)),
  async replenish(count=10){
  if(!Number.isSafeInteger(count)||count<1||count>50)throw Error('Invalid prekey count');
  const keys=await storage.getIdentityKey();
@@ -23,15 +27,15 @@ export async function createRatchet({identity,deviceId=1,storage}){
  if(!signed||!ec.length||!kem.length)throw Error('One-time prekeys must be replenished');
  const pub=k=>({keyId:k.keyId,publicKey:k.publicKey,...(k.signature?{signature:k.signature}:{})});
  const composite=createCompositeIdentityV1(keys);
- return Promise.all(ec.slice(0,Math.min(ec.length,kem.length)).map((key,i)=>signRecord(identity,'device.prekey',{suite:SUITE,device:deviceId,bundle:{registrationId:keys.registrationId,deviceId,identity:composite,ecSignedPreKey:pub(signed),ecOneTimePreKey:pub(key),kemOneTimePreKey:pub(kem[i])}})));
+ return Promise.all(ec.slice(0,Math.min(ec.length,kem.length)).map((key,i)=>signRecord(identity,'device.prekey',{suite:SUITE,device:deviceId,...(deviceId!==1?{addressing:'per-device-v1'}:{}),bundle:{registrationId:keys.registrationId,deviceId:1,identity:composite,ecSignedPreKey:pub(signed),ecOneTimePreKey:pub(key),kemOneTimePreKey:pub(kem[i])}})));
  },
  async connect(record,expectedIdentity){
  if(!await verifyRecord(record)||record.author!==expectedIdentity||record.kind!=='device.prekey'||record.payload.suite!==SUITE)throw Error('Invalid device certificate');
- const {bundle,device}=record.payload;if(!bundle.ecOneTimePreKey||!bundle.kemOneTimePreKey||bundle.deviceId!==device)throw Error('One-time prekey required');
- await client.establishSession(ProtocolAddress.create(expectedIdentity,device),bundle);
+ const {bundle,device}=record.payload;if(!bundle.ecOneTimePreKey||!bundle.kemOneTimePreKey||bundle.deviceId!==1||(device!==1&&record.payload.addressing!=='per-device-v1'))throw Error('One-time prekey required');
+ await client.establishSession(address(expectedIdentity,device),bundle);
  },
- async encrypt(partner,device,content){return client.encryptMessage(ProtocolAddress.create(partner,device),canonical(content));},
- async decrypt(partner,device,ciphertext){return JSON.parse(await client.decryptMessage(ProtocolAddress.create(partner,device),ciphertext));},
+ async encrypt(partner,device,content){return client.encryptMessage(address(partner,device),canonical(content));},
+ async decrypt(partner,device,ciphertext){return JSON.parse(await client.decryptMessage(address(partner,device),ciphertext));},
  async stop(){await client.stop();}
  };
 }

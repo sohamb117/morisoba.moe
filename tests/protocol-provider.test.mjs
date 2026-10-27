@@ -15,7 +15,7 @@ before(async()=>{
  for(const origin of ['https://provider-one.test','https://provider-two.test']){
  const mf=new Miniflare(convertV4MiniflareOptions({modules:true,script:bundle.outputFiles[0].text,compatibilityDate:'2026-10-16',d1Databases:['MIMORI_PROTOCOL_DB','MIMORI_DB'],bindings:{MIMORI_PROTOCOL_ENABLED:'true'}}));
  const db=await mf.getD1Database('MIMORI_PROTOCOL_DB'),legacy=await mf.getD1Database('MIMORI_DB');
- for(const statement of ((await readFile('protocol/migrations/0001_protocol.sql','utf8'))+(await readFile('protocol/migrations/0002_archives.sql','utf8'))).split(';').filter(s=>s.trim()))await db.prepare(statement).run();
+ for(const statement of ((await readFile('protocol/migrations/0001_protocol.sql','utf8'))+(await readFile('protocol/migrations/0002_archives.sql','utf8'))+(await readFile('protocol/migrations/0003_devices.sql','utf8'))).split(';').filter(s=>s.trim()))await db.prepare(statement).run();
  await legacy.prepare('CREATE TABLE mimori_posts(id INTEGER,user_id TEXT,body TEXT,pinned INTEGER,created_at INTEGER,updated_at INTEGER,deleted_at INTEGER)').run();
  await legacy.prepare("INSERT INTO mimori_posts VALUES(1,'alice','legacy private post',0,1,1,NULL),(2,'bob','another private post',0,1,1,NULL)").run();
  providers.push({mf,db,legacy,origin});
@@ -85,7 +85,7 @@ test('end-to-end clients on separate providers exchange posts, replies, likes an
  const post=await cara.post('hello across providers');await cara.flush();let view=await dan.sync();assert.equal(view.posts.length,1);assert.equal(view.posts[0].payload.body,'hello across providers');
  await dan.reply(post.id,'reply across providers');await dan.like(post.id);await dan.flush();view=await cara.sync();assert.equal(view.posts.length,3);assert.equal(view.likes.get(post.id).size,1);
  await dan.like(post.id,{remove:true});await dan.flush();view=await cara.sync();assert.equal(view.likes.size,0);
- assert.ok(await cara.restoreArchive()>0);assert.equal((await pd.request('/archive',{privateAccess:true})).entries.length,3);
+ assert.ok(await cara.restoreArchive()>0);assert.equal((await pd.request('/archive',{privateAccess:true})).entries.length,4);
  assert.equal(await cara.history(d.id),null);const job=await cara.history(d.id,{shareOlderPosts:true});await cara.replay(job.id);await cara.flush();view=await dan.sync();assert.ok(view.posts.some(r=>r.payload.body==='before we became partners'));
  const publicData=(await providers[0].db.prepare("SELECT record FROM protocol_records WHERE kind IN ('object','envelope')").all()).results;assert.ok(!JSON.stringify(publicData).includes('hello across providers'));
  }finally{await cara?.close();await dan?.close();}
@@ -105,4 +105,45 @@ test('root coordinator forwards signed replies between two friends who are not p
  const post=await root.post('a shared thread');await root.flush();await one.sync();await two.sync();
  await one.reply(post.id,'reply through the coordinator');await one.like(post.id);await one.flush();await root.sync();await root.flush();const view=await two.sync();assert.ok(view.posts.some(r=>r.author===one.identity.id&&r.payload.body==='reply through the coordinator'));assert.equal(view.likes.get(post.id).size,1);
  }finally{for(const client of people)await client.close();}
+});
+test('fresh browsers keep identity, restore posts, and receive on independent device sessions',async()=>{
+ const {ProviderClient,signInIdentity,openProtocolClient}=await import('../protocol/client.mjs');
+ const {IDBFactory}=await import('fake-indexeddb');
+ const password='one account password 123!',clients=[];
+ const makeProvider=(home,actor)=>new ProviderClient(home.origin,{csrf:actor,fetch:async(url,init={})=>{
+ const dst=providers.find(p=>url.startsWith(p.origin)),headers=new Headers(init.headers);
+ if(init.credentials==='same-origin'&&dst===home)headers.set('X-Test-User',actor);
+ if(init.method!=='GET')headers.set('Origin',home.origin);
+ return dst.mf.dispatchFetch(url,{...init,headers});
+ }});
+ const p=makeProvider(providers[0],'portable'),q=makeProvider(providers[1],'portablefriend');
+ const open=async(provider)=>{const client=await openProtocolClient({provider,secrets:await signInIdentity(provider,password),indexedDB:new IDBFactory(),locks:{request:(_,fn)=>fn()},automaticDevice:true});clients.push(client);await client.publishPrekeys();await client.restoreArchive();await client.refreshPartners();return client;};
+ try{
+ const first=await open(p);await first.post('post before second browser');await first.flush();
+ const second=await open(p);assert.equal(second.identity.id,first.identity.id);assert.notEqual(second.deviceId,first.deviceId);
+ assert.equal((await second.view()).posts[0].payload.body,'post before second browser');
+ await second.post('post from second browser');await second.flush();await first.restoreArchive();assert.equal((await first.view()).posts.length,2);
+ const friend=await open(q),req=await first.requestPartner(friend.identity.id,q.origin),accept=await friend.acceptPartner(req,p.origin);await first.confirmPartner(accept);
+ await first.refreshPartners();await friend.refreshPartners();await second.refreshPartners();
+ await friend.post('delivered to both browsers');await friend.flush();
+ await first.sync();await second.sync();
+ for(const client of [first,second])assert.ok((await client.view()).posts.some(r=>r.payload.body==='delivered to both browsers'));
+ const third=await open(p);assert.equal((await third.view()).posts.length,3);
+ assert.equal((await third.partners())[friend.identity.id].origin,q.origin);
+ assert.equal((await p.request('/devices/'+encodeURIComponent(first.identity.id))).devices.length,3);
+ }finally{for(const client of clients)await client.close();}
+});
+test('upgrading a legacy browser after a second device preserves its original ratchet and post',async()=>{
+ const {ProviderClient,enroll,openProtocolClient}=await import('../protocol/client.mjs'),{IDBFactory}=await import('fake-indexeddb');
+ const home=providers[0],actor='legacydevice';
+ const provider=new ProviderClient(home.origin,{csrf:actor,fetch:async(url,init={})=>{const headers=new Headers(init.headers);if(init.credentials==='same-origin')headers.set('X-Test-User',actor);if(init.method!=='GET')headers.set('Origin',home.origin);return home.mf.dispatchFetch(url,{...init,headers});}});
+ const pending=await enroll(provider,'one account password 123!');await pending.commit();
+ const indexedDB=new IDBFactory(),locks={request:(_,fn)=>fn()};let first,second;
+ try{
+ first=await openProtocolClient({provider,secrets:pending.secrets,indexedDB,locks,createDevice:true});await first.publishPrekeys();await first.post('legacy browser content');await first.flush();await first.close();first=null;
+ const prekeys=await home.db.prepare('SELECT bundle FROM protocol_prekeys WHERE identity=? ORDER BY id').bind(pending.identity.id).all();
+ second=await openProtocolClient({provider,secrets:pending.secrets,indexedDB:new IDBFactory(),locks,automaticDevice:true});assert.equal(second.deviceId,2);await second.restoreArchive();assert.equal((await second.view()).posts.length,1);
+ first=await openProtocolClient({provider,secrets:pending.secrets,indexedDB,locks,automaticDevice:true});assert.equal(first.deviceId,1);assert.equal((await first.view()).posts.length,1);
+ assert.deepEqual((await home.db.prepare("SELECT bundle FROM protocol_prekeys WHERE identity=? AND device='1' ORDER BY id").bind(pending.identity.id).all()).results,prekeys.results);
+ }finally{await first?.close();await second?.close();}
 });
