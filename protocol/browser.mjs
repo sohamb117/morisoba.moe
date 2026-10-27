@@ -1,3 +1,4 @@
+import {buildThreads} from './threads.mjs';
 import {ProviderClient,signInIdentity,openProtocolClient} from './client.mjs';
 import {verifyRecord} from './records.mjs';
 const $=id=>document.getElementById(id),status=text=>{$('page-status').textContent=text;};
@@ -61,11 +62,70 @@ form('partner-form',async()=>{const url=new URL($('partner-link').value),id=url.
 function renderPartners(){const list=$('partners');list.replaceChildren();for(const [id,p] of partners){const row=document.createElement('div');row.className='partner';row.textContent=id.slice(-12)+(p.accepted?' · accepted':' · pending');
  const connect=document.createElement('button');connect.textContent=p.accepted?'Connect':'Check acceptance';connect.onclick=()=>busy(async()=>{if(!p.accepted){const remote=new ProviderClient(p.origin);let cursor=0,found;for(let i=0;i<20;i++){const page=await remote.request('/records?cursor='+cursor);found=page.records.find(r=>r.kind==='keyring.accept'&&r.author===id&&r.payload.request===p.request.id);if(found||page.cursor===cursor)break;cursor=page.cursor;}if(!found)throw Error('Your partner has not accepted yet');await client.confirmPartner(found);p.accepted=true;}await client.connect(id);status('Connected.');renderPartners();});
  const share=document.createElement('button');share.textContent='Share';share.onclick=()=>busy(async()=>{if(!$('share-history').checked)throw Error('Select Share older posts first');const job=await client.history(id,{shareOlderPosts:true});if(!confirm('Share '+job.total+' older posts with '+id.slice(-12)+'?'))return;let next=job;while(next.status!=='complete'&&next.status!=='paused'){next=await client.replay(next.id);await client.flush();status('History: '+next.cursor+' / '+next.total);}status('History '+next.status+'.');$('share-history').checked=false;});row.append(connect,share);list.append(row);}}
-async function render(){const view=await client.view(),feed=$('feed');feed.replaceChildren();
+const replyDrafts=new Map(),sendingReplies=new Set();
+async function render(){
+ const view=await client.view(),feed=$('feed');feed.replaceChildren();
  const imported=new Set(view.posts.filter(r=>r.author===client.identity.id&&r.payload.legacy).map(r=>r.payload.legacy.id));
- const timeline=[...view.posts,...legacyPosts.filter(p=>!imported.has(p.id)).map(p=>({author:client.identity.id,payload:{body:p.body,createdAt:p.created_at,audience:[],original:true}}))].sort((a,b)=>b.payload.createdAt-a.payload.createdAt);
- for(const record of timeline){const article=document.createElement('article');article.className='post';const meta=document.createElement('div');meta.className='post-meta';meta.textContent=(view.profiles.get(record.author)?.payload.displayName??(record.author===client.identity.id?user.displayName:record.author.slice(-12)))+' · '+new Date(record.payload.createdAt).toLocaleString();const body=document.createElement('p');body.className='post-body';body.textContent=record.payload.body;article.append(meta,body);
- if(record.payload.audience.includes(client.identity.id)){const actions=document.createElement('div');actions.className='post-actions';const liked=view.likes.get(record.id)?.has(client.identity.id),like=document.createElement('button');like.textContent=(liked?'Unlike':'Like')+' ('+(view.likes.get(record.id)?.size??0)+')';like.onclick=()=>busy(async()=>{await client.like(record.id,{remove:liked});await client.flush();await render();});const reply=document.createElement('button');reply.textContent='Reply';reply.onclick=()=>{const form=document.createElement('form'),input=document.createElement('textarea'),send=document.createElement('button');input.required=true;input.maxLength=10000;input.setAttribute('aria-label','Reply');send.textContent='Send';form.append(input,send);form.onsubmit=e=>{e.preventDefault();busy(async()=>{await client.reply(record.id,input.value);await client.flush();await render();});};article.append(form);input.focus();};actions.append(like,reply);article.append(actions);}else if(!record.payload.original){const note=document.createElement('small');note.textContent='Shared history';article.append(note);}feed.append(article);}}
+ const timeline=[...view.posts,...legacyPosts.filter(p=>!imported.has(p.id)).map(p=>({id:'original-'+p.id,author:client.identity.id,payload:{body:p.body,createdAt:p.created_at,audience:[],original:true}}))];
+ const records=new Map(timeline.map(r=>[r.id,r]));
+ const name=author=>view.profiles.get(author)?.payload.displayName??(author===client.identity.id?user.displayName:author.slice(-12));
+ function drawPost(record){
+  const article=document.createElement('article');article.className='post';article.id='post-'+record.id;
+  if(record.payload.type==='reply'){
+   article.classList.add('thread-reply');
+   const parent=records.get(record.payload.target),context=document.createElement(parent?'a':'span');
+   context.className='reply-context';context.textContent=parent?'Replying to '+name(parent.author):'Replying to an unavailable post';
+   if(parent)context.href='#post-'+parent.id;
+   article.append(context);
+  }
+  const meta=document.createElement('div');meta.className='post-meta';meta.textContent=name(record.author)+' · '+new Date(record.payload.createdAt).toLocaleString();
+  const body=document.createElement('p');body.className='post-body';body.textContent=record.payload.body;article.append(meta,body);
+  if(record.payload.audience.includes(client.identity.id)){
+   const actions=document.createElement('div');actions.className='post-actions';
+   const liked=view.likes.get(record.id)?.has(client.identity.id),like=document.createElement('button');
+   like.textContent=(liked?'Unlike':'Like')+' ('+(view.likes.get(record.id)?.size??0)+')';
+   like.onclick=()=>busy(async()=>{await client.like(record.id,{remove:liked});await client.flush();await render();});
+   const reply=document.createElement('button');reply.textContent='Reply';reply.setAttribute('aria-expanded',String(replyDrafts.has(record.id)));
+   const editorId='reply-'+record.id;reply.setAttribute('aria-controls',editorId);
+   function showEditor(){
+    const existing=article.querySelector('.reply-form');if(existing){existing.querySelector('textarea').focus();return;}
+    if(!replyDrafts.has(record.id))replyDrafts.set(record.id,{text:'',queued:false});
+    const draft=replyDrafts.get(record.id),form=document.createElement('form'),input=document.createElement('textarea');
+    form.className='reply-form';form.id=editorId;input.required=true;input.maxLength=10000;input.rows=3;input.value=draft.text;
+    input.setAttribute('aria-label','Reply to '+name(record.author));input.disabled=draft.queued;
+    input.oninput=()=>{draft.text=input.value;};
+    const controls=document.createElement('div');controls.className='reply-controls';
+    const cancel=document.createElement('button');cancel.type='button';cancel.textContent=draft.queued?'Close':'Cancel';
+    cancel.onclick=()=>{replyDrafts.delete(record.id);form.remove();reply.setAttribute('aria-expanded','false');reply.focus();};
+    const send=document.createElement('button');send.type='submit';send.textContent=draft.queued?'Retry sending':'Send reply';
+    controls.append(cancel,send);form.append(input,controls);article.append(form);reply.setAttribute('aria-expanded','true');
+    form.onsubmit=e=>{
+     e.preventDefault();if(sendingReplies.has(record.id))return;sendingReplies.add(record.id);
+     busy(async()=>{
+      try{
+       if(!draft.queued){await client.reply(record.id,input.value);draft.queued=true;input.disabled=true;}
+       await client.flush();replyDrafts.delete(record.id);await render();status('Reply sent.');
+      }catch(error){if(draft.queued){send.textContent='Retry sending';cancel.textContent='Close';}throw error;}
+      finally{sendingReplies.delete(record.id);}
+     });
+    };
+   }
+   reply.onclick=()=>{showEditor();article.querySelector('textarea')?.focus();};
+   actions.append(like,reply);article.append(actions);if(replyDrafts.has(record.id))showEditor();
+  }else if(!record.payload.original){const note=document.createElement('small');note.textContent='Shared history';article.append(note);}
+  return article;
+ }
+ for(const thread of buildThreads(timeline)){
+  const section=document.createElement('section');section.className='thread';section.setAttribute('aria-label','Post and replies');
+  if(thread.post)section.append(drawPost(thread.post));
+  else{const missing=document.createElement('p');missing.className='missing-post';missing.textContent='Original post unavailable';section.append(missing);}
+  if(thread.replies.length){
+   const replies=document.createElement('div');replies.className='thread-replies';
+   for(const reply of thread.replies)replies.append(drawPost(reply));section.append(replies);
+  }
+  feed.append(section);
+ }
+}
 click('refresh',async()=>{if(!client)return;await client.restoreArchive();await client.refreshPartners();await client.sync();await client.flush();await render();status('Updated.');});
 const mobile=matchMedia('(max-width:650px)');
  $('identity').hidden=mobile.matches;$('identity-toggle').setAttribute('aria-expanded',String(!mobile.matches));

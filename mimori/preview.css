@@ -38,3 +38,16 @@
 .post button{font-size:11px}
 #feed-lock{padding:54px 10px;color:var(--dim);text-align:center;font-size:13px}
 @media(max-width:650px){.profile-head{padding-top:14px}.settings input,.settings textarea{font-size:16px}.composer textarea{min-height:90px}}
+
+.thread{border-bottom:1px dashed var(--line);padding-bottom:12px}
+.thread:last-child{border-bottom:0}
+.thread>.post{border-bottom:0}
+.thread-replies{margin:0 0 4px 8px;padding-left:16px;border-left:1px solid var(--line)}
+.thread-reply{padding-top:14px;padding-bottom:14px}
+.reply-context{display:block;color:var(--dim);font-size:11px;margin-bottom:8px;text-underline-offset:3px}
+.reply-form{margin-top:12px}
+.reply-form textarea{min-height:76px;font:13px/1.6 var(--mono)}
+.reply-controls{display:flex;justify-content:flex-end;gap:12px}
+.reply-controls button{font-size:11px}
+.missing-post{padding:18px 0;color:var(--dim);font-size:12px}
+@media(max-width:650px){.thread-replies{margin-left:4px;padding-left:12px}.reply-form textarea{font-size:16px}}
