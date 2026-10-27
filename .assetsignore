@@ -18,3 +18,8 @@
 /package-lock.json
 /wrangler.local.jsonc
 /AGENTS.md
+
+/protocol/**
+/wrangler.protocol*.jsonc
+
+/mimorigasaka/protocol/**

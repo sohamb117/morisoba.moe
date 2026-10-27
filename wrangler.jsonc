@@ -15,7 +15,13 @@
 			"/api/mimorigasaka",
 			"/api/mimorigasaka/*",
 			"/mimorigasaka",
-			"/mimorigasaka/*"
+			"/mimorigasaka/*",
+			"/api/mimorigasaka-protocol/*",
+			"/.well-known/mimorigasaka",
+			"/mimori",
+			"/mimori/*",
+			"/api/mimori/*",
+			"/.well-known/mimori"
 		]
 	},
 	"compatibility_flags": [
@@ -24,13 +30,23 @@
 	"keep_vars": true,
 	"vars": {
 		"SPOTIFY_CLIENT_ID": "58bb81063b87436ba551703d0d8f53c3",
-		"MIMORI_ORIGIN": "https://morisoba.moe"
+		"MIMORI_ORIGIN": "https://morisoba.moe",
+		"MIMORI_PROTOCOL_ENABLED": "true"
 	},
 	"d1_databases": [
 		{
 			"binding": "MIMORI_DB",
 			"database_name": "morisoba-mimorigasaka",
 			"database_id": "f43ff1cb-49cb-4713-baa2-48586de779c4"
+		},
+		{
+			"binding": "MIMORI_PROTOCOL_DB",
+			"database_name": "morisoba-mimori-protocol",
+			"database_id": "012834c3-f4c5-42a8-944a-b07411cafafb",
+			"migrations_dir": "protocol/migrations"
 		}
-	]
+	],
+	"build": {
+		"command": "npm run build:protocol"
+	}
 }
