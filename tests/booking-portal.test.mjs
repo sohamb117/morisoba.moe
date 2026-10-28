@@ -20,7 +20,7 @@ before(async()=>{
  const bundle=await build({stdin:{contents:code,resolveDir:process.cwd()},bundle:true,write:false,format:'esm',platform:'neutral',external:['node:*']});
  mf=new Miniflare(convertV4MiniflareOptions({modules:true,script:bundle.outputFiles[0].text,compatibilityDate:'2026-10-16',compatibilityFlags:['nodejs_compat'],d1Databases:['MIMORI_DB'],bindings:{BOOKING_ADMIN_PASSWORD_HASH:await hashPassword(password)},serviceBindings:{ASSETS:r=>new Response(new URL(r.url).pathname)}}));
  db=await mf.getD1Database('MIMORI_DB');
- for(const file of ['0003_booking.sql','0004_booking_portal.sql','0005_booking_password.sql','0006_booking_management.sql','0007_booking_options.sql'])for(const s of (await readFile('migrations/'+file,'utf8')).split(';').filter(s=>s.trim()))await db.prepare(s).run();
+ for(const file of ['0003_booking.sql','0004_booking_portal.sql','0005_booking_password.sql','0006_booking_management.sql','0007_booking_options.sql','0008_booking_verification.sql'])for(const s of (await readFile('migrations/'+file,'utf8')).split(';').filter(s=>s.trim()))await db.prepare(s).run();
 });
 after(async()=>{await mf?.dispose();});
 test('portal pages and all management endpoints require authentication',async()=>{
