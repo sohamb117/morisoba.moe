@@ -19,7 +19,7 @@ export async function adminSession(request,e){
 export function validateType(d){
  const slug=String(d.slug||''),title=String(d.title||'').trim(),description=String(d.description||'').trim(),location=String(d.location||'').trim(),timezone=String(d.timezone||'');
  const reserved=['default','admin','api','book','shared','signin-with-chatgpt','signout-with-chatgpt','callback'];
- if(!/^[a-z][a-z0-9_-]{0,63}$/.test(slug)||reserved.includes(slug))throw new HttpError(400,'Use a booking name beginning with a letter, with lowercase letters, numbers, hyphens or underscores.');
+ if(!/^[a-z0-9][a-z0-9_-]{0,63}$/.test(slug)||reserved.includes(slug))throw new HttpError(400,'Use lowercase letters, numbers, hyphens or underscores. Start with a letter or number.');
  if(!title||title.length>100||description.length>500||location.length>200)throw new HttpError(400,'Check the title, description and location.');
  try{new Intl.DateTimeFormat('en-US',{timeZone:timezone}).format();}catch{throw new HttpError(400,'Choose a valid timezone.');}
  if(![15,30,45,60,90,120].includes(d.duration)||!Number.isInteger(d.startMinute)||!Number.isInteger(d.endMinute)||d.startMinute<0||d.endMinute>1440||d.startMinute%15||d.endMinute%15||d.endMinute-d.startMinute<d.duration)throw new HttpError(400,'Check the duration and available hours.');
@@ -56,7 +56,7 @@ export async function adminApi(request,e){
  const t=validateType(await body(request));const r=await db.prepare('INSERT INTO booking_types(slug,settings,enabled,created_ms,updated_ms) VALUES(?,?,?,?,?) ON CONFLICT(slug) DO NOTHING RETURNING slug').bind(t.slug,JSON.stringify(t),+t.enabled,Date.now(),Date.now()).first();
  if(!r)return json({error:'That booking name is already used.'},409);return json({type:t},201);
  }
- const match=/^\/types\/([a-z][a-z0-9_-]{0,63})$/.exec(path);
+ const match=/^\/types\/([a-z0-9][a-z0-9_-]{0,63})$/.exec(path);
  if(match&&request.method==='PUT'){
  const d=await body(request),t=validateType({...d,slug:match[1]});
  const r=await db.prepare('UPDATE booking_types SET settings=?,enabled=?,updated_ms=? WHERE slug=? RETURNING slug').bind(JSON.stringify(t),+t.enabled,Date.now(),t.slug).first();

@@ -50,7 +50,7 @@ export async function bookingMiddleware(request,e,next){
  return secure(await e.ASSETS.fetch(new Request(new URL(asset,u),request)));
  }
  if(u.pathname.startsWith('/shared/')||['/book/app.js','/book/style.css','/book/admin/app.js','/book/admin/login.js','/book/admin/style.css'].includes(u.pathname))return e.ASSETS.fetch(request);
- const m=/^\/([a-z][a-z0-9_-]{0,63})\/?$/.exec(u.pathname);
+ const m=/^\/([a-z0-9][a-z0-9_-]{0,63})\/?$/.exec(u.pathname);
  if(m){const t=await getType(e,m[1]);if(t)return secure(await e.ASSETS.fetch(new Request(new URL('/book/index.html',u),request)));}
  return new Response('Booking page not found',{status:404});
  }

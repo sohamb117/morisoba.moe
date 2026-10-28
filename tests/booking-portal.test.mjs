@@ -49,6 +49,18 @@ test('create, edit and pause a named page; disabled pages expose no configuratio
  await req('/api/booking/admin/types/intro',{method:'PUT',auth:true,data:{...changed,enabled:false}});
  assert.equal((await req('/intro')).status,404);assert.equal((await req('/api/booking/config?slug=intro')).status,404);
 });
+test('booking names may begin with numbers for create, edit and guest routing',async()=>{
+ const html=await readFile('book/admin/index.html','utf8');
+ const pattern=html.match(/name="slug"[^>]*pattern="([^"]+)"/)[1];
+ assert.equal(new RegExp('^(?:'+pattern+')$','v').test('30min'),true);
+ const numeric={...example,slug:'30min',duration:30};
+ assert.equal(validateType(numeric).slug,'30min');
+ assert.equal((await req('/api/booking/admin/types',{method:'POST',auth:true,data:numeric})).status,201);
+ assert.equal((await req('/30min')).data,'/book/index.html');
+ assert.equal((await req('/api/booking/config?slug=30min')).data.duration,30);
+ assert.equal((await req('/api/booking/admin/types/30min',{method:'PUT',auth:true,data:{...numeric,title:'30 minute meeting'}})).status,200);
+ assert.equal((await req('/api/booking/config?slug=30min')).data.title,'30 minute meeting');
+});
 test('settings reject reserved names, invalid schedules and unsupported timezones',()=>{
  for(const t of [{slug:'admin'},{slug:'../hi'},{duration:17},{timezone:'Mars'},{days:[]},{startMinute:1000,endMinute:1020},{noticeHours:100,horizonDays:1}])assert.throws(()=>validateType({...example,...t}));
  const now=Date.parse('2026-10-27T00:00:00Z');
