@@ -21,7 +21,8 @@
 			"/mimori",
 			"/mimori/*",
 			"/api/mimori/*",
-			"/.well-known/mimori"
+			"/.well-known/mimori",
+			"/api/booking/*"
 		]
 	},
 	"compatibility_flags": [
