@@ -46,18 +46,18 @@ async function handleBooking(request,e,next){
  if(u.pathname==='/')return Response.redirect(u.origin+'/admin/',302);
  if(u.pathname==='/admin')return Response.redirect(u.origin+'/admin/',302);
  if(u.pathname==='/admin/'||u.pathname==='/admin/login'||u.pathname==='/admin/login.html'){
- const signed=await adminSession(request,e),asset=signed?'/book/admin/index.html':'/book/admin/login.html';
+ const signed=await adminSession(request,e),asset=signed?'/book/admin/':'/book/admin/login';
  return secure(await e.ASSETS.fetch(new Request(new URL(asset,u),request)));
  }
- if(u.pathname.startsWith('/shared/')||['/book/app.js','/book/config.js','/book/style.css','/book/admin/app.js','/book/admin/login.js','/book/admin/style.css'].includes(u.pathname))return e.ASSETS.fetch(request);
+ if(u.pathname.startsWith('/shared/')||['/book/app.js','/book/style.css','/book/admin/app.js','/book/admin/login.js','/book/admin/style.css'].includes(u.pathname))return e.ASSETS.fetch(request);
  const m=/^\/([a-z0-9][a-z0-9_-]{0,63})\/?$/.exec(u.pathname);
- if(m){const t=await getType(e,m[1]);if(t)return secure(await e.ASSETS.fetch(new Request(new URL('/book/index.html',u),request)));}
+ if(m){const t=await getType(e,m[1]);if(t)return secure(await e.ASSETS.fetch(new Request(new URL('/book/',u),request)));}
  return new Response('Booking page not found',{status:404});
  }
  // Portal also works on the main site before the custom domain is attached.
  if(u.pathname==='/book/admin/'||u.pathname==='/book/admin/login'||u.pathname==='/book/admin/login.html'){
  const signed=await adminSession(request,e);
- return secure(await e.ASSETS.fetch(new Request(new URL(signed?'/book/admin/index.html':'/book/admin/login.html',u),request)));
+ return secure(await e.ASSETS.fetch(new Request(new URL(signed?'/book/admin/':'/book/admin/login',u),request)));
  }
  if(u.pathname.startsWith('/book/admin/')&&!/\.(js|css)$/.test(u.pathname))return new Response('Not found',{status:404});
  return next();
@@ -106,17 +106,7 @@ async function handleBooking(request,e,next){
 }
 
 export async function bookingMiddleware(request,e,next){
- const u=new URL(request.url),origin=request.headers.get('Origin');
- if(!u.pathname.startsWith('/api/booking/'))return handleBooking(request,e,next);
- if(origin&&!validOrigin(request,e))return json({error:'Invalid origin'},403);
- const response=request.method==='OPTIONS'?new Response(null,{status:204}):await handleBooking(request,e,next);
- const result=new Response(response.body,response);
- if(origin&&validOrigin(request,e)){
- result.headers.set('Access-Control-Allow-Origin',origin);
- result.headers.set('Access-Control-Allow-Credentials','true');
- result.headers.set('Access-Control-Allow-Methods','GET, POST, PUT, OPTIONS');
- result.headers.set('Access-Control-Allow-Headers','Content-Type, X-CSRF-Token');
- result.headers.append('Vary','Origin');
- }
- return result;
+ const u=new URL(request.url);
+ if(u.pathname.startsWith('/api/booking/')&&request.headers.has('Origin')&&!validOrigin(request,e))return json({error:'Invalid origin'},403);
+ return handleBooking(request,e,next);
 }

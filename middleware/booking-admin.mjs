@@ -1,5 +1,5 @@
 import {token,digest,verifyPassword,hashPassword} from './mimori-crypto.mjs';
-export function validOrigin(request,e){const origin=request.headers.get('Origin');return origin===new URL(request.url).origin||origin===(e.BOOKING_FRONTEND_ORIGIN||'https://calendar.morisoba.moe')||origin==='https://sohamb117.github.io';}
+export function validOrigin(request){return request.headers.get('Origin')===new URL(request.url).origin;}
 export const json=(data,status=200,headers={})=>Response.json(data,{status,headers:{'Cache-Control':'no-store','X-Content-Type-Options':'nosniff',...headers}});
 export class HttpError extends Error{constructor(status,message){super(message);this.status=status;}}
 export async function body(request,limit=8192){

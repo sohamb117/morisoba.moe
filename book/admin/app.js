@@ -1,12 +1,12 @@
 const $=s=>document.querySelector(s),form=$('#page-form');
 let csrf='',types=[],editing=null,dirty=false;
-const home=(globalThis.BOOKING_BASE_PATH||'')+(location.pathname.startsWith('/book/')?'/book/admin/':'/admin/');
+const home=(location.pathname.startsWith('/book/')?'/book/admin/':'/admin/');
 const publicBase=location.hostname==='calendar.morisoba.moe'?location.origin:'https://calendar.morisoba.moe';
 const guestUrl=slug=>location.hostname.endsWith('.chatgpt.site')?location.origin+'/'+slug:publicBase+'/'+slug;
 const ownZone=Intl.DateTimeFormat().resolvedOptions().timeZone;
 for(const z of [...new Set([ownZone,'America/New_York',...(Intl.supportedValuesOf?.('timeZone')||[]),'UTC'])]){const o=document.createElement('option');o.value=z;o.textContent=z.replaceAll('_',' ');$('#zones').append(o);}
 async function api(path,data,method='POST'){
- const r=await fetch((globalThis.BOOKING_API_ORIGIN||'')+'/api/booking/admin/'+path,{credentials:'include',method:data===undefined?'GET':method,headers:{'Content-Type':'application/json','X-CSRF-Token':csrf},...(data===undefined?{}:{body:JSON.stringify(data)})});
+ const r=await fetch('/api/booking/admin/'+path,{credentials:'include',method:data===undefined?'GET':method,headers:{'Content-Type':'application/json','X-CSRF-Token':csrf},...(data===undefined?{}:{body:JSON.stringify(data)})});
  if(r.status===401){location.replace(home+'login.html');throw Error('Sign in required');}
  const d=await r.json();if(!r.ok)throw Error(d.error||'Request failed');return d;
 }
@@ -39,7 +39,7 @@ form.onsubmit=async e=>{
 $('#new').onclick=()=>open();$('#close').onclick=close;$('#discard').onclick=close;
 $('#logout').onclick=async()=>{if(dirty&&!confirm('Discard unsaved changes and sign out?'))return;try{await api('logout',{});dirty=false;location.replace(home+'login.html');}catch(e){$('#status').textContent=e.message;}};
 addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue='';}});
-(async()=>{try{const s=await api('session');if(!s.authenticated){location.replace(home+'login.html');return;}csrf=s.csrf;types=(await api('types')).types;render();const c=await fetch((globalThis.BOOKING_API_ORIGIN||'')+'/api/booking/config',{credentials:'include'}).then(r=>r.json());$('#connection').textContent=c.ready?'Google Calendar connected.':'Calendar not connected. You can save pages; bookings stay closed until it is connected.';}catch(e){$('#status').textContent=e.message;}})();
+(async()=>{try{const s=await api('session');if(!s.authenticated){location.replace(home+'login.html');return;}csrf=s.csrf;types=(await api('types')).types;render();const c=await fetch('/api/booking/config',{credentials:'include'}).then(r=>r.json());$('#connection').textContent=c.ready?'Google Calendar connected.':'Calendar not connected. You can save pages; bookings stay closed until it is connected.';}catch(e){$('#status').textContent=e.message;}})();
 
 $('#password-form').onsubmit=async e=>{
  e.preventDefault();const f=e.target,button=$('#change-password'),error=$('#password-error');error.textContent='';

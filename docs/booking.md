@@ -1,6 +1,6 @@
 # Calendar booking
 
-Production frontend hosting is GitHub Pages. See [custom domain and deployment](calendar-domain.md). The Cloudflare Worker hosts the API and continues serving the existing main website. GitHub Pages serves a public UI shell; all admin data and mutations require authentication on the API.
+The existing morisoba Cloudflare Worker serves the calendar frontend and API on calendar.morisoba.moe. See [deployment and custom domain](calendar-domain.md). The website’s GitHub Pages deployment is independent and remains unchanged.
 
 Native HTML/JS using shared chrome and typography. Worker APIs check Google Calendar free/busy and create invitations. Visitors need no Google login.
 
