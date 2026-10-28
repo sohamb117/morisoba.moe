@@ -4,7 +4,12 @@ import {manageBooking} from './booking-manage.mjs';
 import {json,body,HttpError,adminApi,adminSession,typeView,throttle,validOrigin} from './booking-admin.mjs';
 import {digest} from './mimori-crypto.mjs';
 const MIN=60000;
-export function parts(t,zone){return Object.fromEntries(new Intl.DateTimeFormat('en-CA',{timeZone:zone,year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23',weekday:'short'}).formatToParts(new Date(t)).map(p=>[p.type,p.value]));}
+const formatters=new Map();
+export function parts(t,zone){
+ let formatter=formatters.get(zone);
+ if(!formatter){formatter=new Intl.DateTimeFormat('en-CA',{timeZone:zone,year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23',weekday:'short'});if(formatters.size>=32)formatters.delete(formatters.keys().next().value);formatters.set(zone,formatter);}
+ return Object.fromEntries(formatter.formatToParts(new Date(t)).map(p=>[p.type,p.value]));
+}
 const defaultType=e=>({slug:'default',title:'Book a time',description:'',location:'',duration:30,timezone:e.BOOKING_TIMEZONE||'America/New_York',days:[1,2,3,4,5],startMinute:780,endMinute:1020,noticeHours:24,horizonDays:30,enabled:true,bufferBefore:0,bufferAfter:0,maxPerDay:0,googleMeet:true,reminders:true});
 export function validSlot(t,e,now=Date.now(),type=defaultType(e)){
  if(!Number.isFinite(t)||t<now+type.noticeHours*60*MIN||t>now+type.horizonDays*1440*MIN||t%(15*MIN)!==0)return false;
@@ -72,13 +77,24 @@ async function handleBooking(request,e,next){
  if(u.pathname==='/api/booking/config'&&request.method==='GET')return json({ready:configured(e),...type,hostTimezone:type.timezone});
  if(!configured(e))return json({error:'Bookings are not open yet.'},503);
  const db=e.MIMORI_DB,duration=type.duration*MIN,before=(type.bufferBefore||0)*MIN,after=(type.bufferAfter||0)*MIN;
- if(u.pathname==='/api/booking/slots'&&request.method==='GET'){
+ if(['/api/booking/slots','/api/booking/days'].includes(u.pathname)&&request.method==='GET'){
  const zone=u.searchParams.get('timezone')||'UTC';try{parts(Date.now(),zone);}catch{return json({error:'Invalid timezone'},400);}
- const slots=candidates(u.searchParams.get('date')||'',zone,e,Date.now(),type);if(!slots.length)return json({slots:[]});
+ const monthView=u.pathname.endsWith('/days'),month=u.searchParams.get('month')||'',now=Date.now();
+ let slots=[];
+ if(monthView){
+  if(!/^\d{4}-(0[1-9]|1[0-2])$/.test(month))return json({error:'Invalid month'},400);
+  const base=Date.parse(month+'-01T00:00:00Z'),end=Date.UTC(+month.slice(0,4),+month.slice(5),1);
+  if(end<now-86400000||base>now+(type.horizonDays+2)*86400000)return json({days:[]});
+  for(let t=Math.max(base-840*MIN,Math.ceil((now+type.noticeHours*60*MIN)/(15*MIN))*15*MIN);t<Math.min(end+840*MIN,now+type.horizonDays*86400000);t+=15*MIN){
+   if(bookingDay(t,zone).startsWith(month)&&validSlot(t,e,now,type))slots.push(t);
+  }
+ }else slots=candidates(u.searchParams.get('date')||'',zone,e,now,type);
+ if(!slots.length)return json(monthView?{days:[]}:{slots:[]});
  const blocks=await busy(e,slots[0]-before,slots.at(-1)+duration+after);
  const {results}=await db.prepare('SELECT start_ms FROM booking_slot_locks WHERE start_ms>=? AND start_ms<?').bind(slots[0]-before,slots.at(-1)+duration+after).all();
- const counts=type.maxPerDay?(await db.prepare("SELECT booking_day,count(*) AS n FROM booking_day_usage WHERE booking_slug=? GROUP BY booking_day").bind(slug).all()).results:[];
- return json({slots:slots.filter(t=>!counts.some(c=>c.booking_day===bookingDay(t,type.timezone)&&c.n>=type.maxPerDay)&&!results.some(r=>r.start_ms>=t-before&&r.start_ms<t+duration+after)&&!blocks.some(b=>t-before<Date.parse(b.end)&&t+duration+after>Date.parse(b.start))).map(t=>new Date(t).toISOString())});
+ const counts=type.maxPerDay?(await db.prepare('SELECT booking_day,count(*) AS n FROM booking_day_usage WHERE booking_slug=? GROUP BY booking_day').bind(slug).all()).results:[];
+ const available=slots.filter(t=>!counts.some(c=>c.booking_day===bookingDay(t,type.timezone)&&c.n>=type.maxPerDay)&&!results.some(r=>r.start_ms>=t-before&&r.start_ms<t+duration+after)&&!blocks.some(b=>t-before<Date.parse(b.end)&&t+duration+after>Date.parse(b.start)));
+ return json(monthView?{days:[...new Set(available.map(t=>bookingDay(t,zone)))]}:{slots:available.map(t=>new Date(t).toISOString())});
  }
  if(u.pathname==='/api/booking/reserve'&&request.method==='POST'){
  await throttle(db,'reserve:'+digest(request.headers.get('CF-Connecting-IP')||'unknown'),5);

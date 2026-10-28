@@ -4,7 +4,7 @@ import {DatabaseSync} from 'node:sqlite';
 import {readFileSync} from 'node:fs';
 import {sendBookingReminders,reminderKind,reminderMessage} from '../middleware/booking-reminders.mjs';
 import {bookingMiddleware} from '../middleware/booking.mjs';
-let sql,env,events,calls,failPatch,failDelete;
+let sql,env,events,calls,failPatch,failDelete,busyBlocks;
 const token='11111111-1111-1111-1111-11111111111122222222-2222-2222-2222-222222222222';
 const origin='https://calendar.morisoba.moe';
 function stmt(query,args=[]){return {bind(...v){return stmt(query,v);},async first(){return sql.prepare(query).get(...args)||null;},async all(){return {results:sql.prepare(query).all(...args)};},async run(){return sql.prepare(query).run(...args);},query,args};}
@@ -18,13 +18,13 @@ function seed(start=nextSlot()){
 beforeEach(()=>{
  sql=new DatabaseSync(':memory:');for(const n of ['0003_booking.sql','0004_booking_portal.sql','0005_booking_password.sql','0006_booking_management.sql','0007_booking_options.sql'])sql.exec(readFileSync(new URL('../migrations/'+n,import.meta.url),'utf8'));
  env={MIMORI_DB:{prepare:stmt,async batch(statements){sql.exec('BEGIN');try{const results=statements.map(s=>({results:sql.prepare(s.query).all(...s.args)}));sql.exec('COMMIT');return results;}catch(e){sql.exec('ROLLBACK');throw e;}}},BOOKING_GOOGLE_CLIENT_ID:'id',BOOKING_GOOGLE_CLIENT_SECRET:'secret',BOOKING_GOOGLE_REFRESH_TOKEN:'refresh',BOOKING_CALENDAR_ID:'primary'};
- events=new Map();calls=[];failPatch=false;failDelete=false;
+ events=new Map();calls=[];failPatch=false;failDelete=false;busyBlocks=[];
  mock.method(globalThis,'fetch',async(url,options={})=>{
   const u=new URL(url),method=options.method||'GET',data=options.body&&method!=='GET'?JSON.parse(typeof options.body==='string'?options.body:'{}'):null;
   if(u.hostname==='oauth2.googleapis.com')return Response.json({access_token:'access'});
   calls.push({url:u,method,data,headers:options.headers});
   if(u.hostname==='gmail.googleapis.com')return Response.json({id:'sent'});
-  if(u.pathname.endsWith('/freeBusy'))return Response.json({calendars:{primary:{busy:[]}}});
+  if(u.pathname.endsWith('/freeBusy'))return Response.json({calendars:{primary:{busy:busyBlocks}}});
   const id=u.pathname.split('/').at(-1);
   if(id==='events'&&method==='GET')return Response.json({items:[...events.values()]});
   if(id==='events'&&method==='POST'){events.set(data.id,{...data,etag:'"v1"'});return Response.json(data);}
@@ -86,4 +86,14 @@ test('reminders send once per threshold and skip declined attendees',async()=>{
 test('reminder windows exclude late-created and past meetings, MIME rejects header injection',()=>{
  const start=1000000000;assert.equal(reminderKind({start_ms:start,created_ms:start-300000},start-100000),null);assert.equal(reminderKind({start_ms:start,created_ms:1},start),null);
  assert.throws(()=>reminderMessage({recipient:'a@example.com\r\nBcc: other@example.com',subject:'x',text:'x',id:'id'}));
+});
+
+test('month availability agrees with daily slots and omits fully busy days across visitor timezones',async()=>{
+ const start=nextSlot(),day=new Date(start).toISOString().slice(0,10),month=day.slice(0,7);
+ busyBlocks=[{start:day+'T00:00:00Z',end:new Date(Date.parse(day)+86400000).toISOString()}];
+ async function get(path){const response=await bookingMiddleware(new Request(origin+'/api/booking/'+path),env,()=>new Response('fallback'));assert.equal(response.status,200);return response.json();}
+ const result=await get('days?month='+month+'&timezone=America%2FNew_York');assert.ok(!result.days.includes(day));assert.equal(calls.filter(c=>c.url.pathname.endsWith('/freeBusy')).length,1);
+ for(const date of result.days){const daily=await get('slots?date='+date+'&timezone=America%2FNew_York');assert.ok(daily.slots.length>0);}
+ const tokyo=await get('days?month='+month+'&timezone=Asia%2FTokyo');
+ for(const date of tokyo.days){const daily=await get('slots?date='+date+'&timezone=Asia%2FTokyo');assert.ok(daily.slots.length>0);}
 });
