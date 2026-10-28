@@ -44,7 +44,7 @@ const token=new URLSearchParams(location.hash.slice(1)).get('cancel');if(token){
 calendar();
 $('#clock').textContent=new Date().toUTCString();
 api('config').then(c=>{
- bookingConfig=c;ready=c.ready;document.title=c.title+' ✠ morisoba';$('#booking-title').textContent=c.title;
+ bookingConfig=c;ready=c.ready;document.title=c.title+' / morisoba';$('#booking-title').textContent=c.title;
  $('#booking-description').textContent=c.description;$('#booking-description').hidden=!c.description;
  $('#booking-duration').textContent=c.duration+' minutes';$('#slot-duration').textContent=c.duration+' MIN';
  $('#booking-notice').textContent=c.noticeHours+' hours';$('#booking-location').textContent=c.location;$('#booking-location').hidden=!c.location;
