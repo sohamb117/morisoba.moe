@@ -5,4 +5,4 @@ form.onsubmit=async e=>{e.preventDefault();button.disabled=true;error.textConten
 
 if(new URLSearchParams(location.search).get('password')==='changed')document.querySelector('#message').textContent='Password changed. Sign in with your new password.';
 
-if(globalThis.BOOKING_API_ORIGIN&&location.hostname==='sohamb117.github.io'){form.hidden=true;error.textContent='Admin sign-in is available at calendar.morisoba.moe after the custom domain is configured.';}
+if(globalThis.BOOKING_API_ORIGIN&&location.hostname==='sohamb117.github.io'){form.hidden=true;document.querySelector('#message').textContent='Admin sign-in is available at calendar.morisoba.moe after the custom domain is configured.';}
