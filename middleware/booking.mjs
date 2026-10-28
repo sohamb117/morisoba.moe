@@ -44,7 +44,7 @@ async function handleBooking(request,e,next){
  try{
  if(!api){
  if(calendarHost){
- if(u.pathname==='/')return Response.redirect(u.origin+'/admin/',302);
+ if(u.pathname==='/')return Response.redirect(u.origin+'/30min',302);
  if(u.pathname==='/admin')return Response.redirect(u.origin+'/admin/',302);
  if(u.pathname==='/admin/'||u.pathname==='/admin/login'||u.pathname==='/admin/login.html'){
  const signed=await adminSession(request,e),asset=signed?'/book/admin/':'/book/admin/login';
