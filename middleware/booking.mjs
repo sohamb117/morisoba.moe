@@ -1,4 +1,4 @@
-import {json,body,HttpError,adminApi,adminSession,typeView,throttle} from './booking-admin.mjs';
+import {json,body,HttpError,adminApi,adminSession,typeView,throttle,validOrigin} from './booking-admin.mjs';
 import {digest} from './mimori-crypto.mjs';
 const MIN=60000;
 export function configured(e){return !!(e.MIMORI_DB&&e.BOOKING_GOOGLE_CLIENT_ID&&e.BOOKING_GOOGLE_CLIENT_SECRET&&e.BOOKING_GOOGLE_REFRESH_TOKEN&&e.BOOKING_CALENDAR_ID);}
@@ -38,24 +38,24 @@ function secure(response){
  r.headers.set('Referrer-Policy','no-referrer');r.headers.set('X-Content-Type-Options','nosniff');
  return r;
 }
-export async function bookingMiddleware(request,e,next){
+async function handleBooking(request,e,next){
  const u=new URL(request.url),calendarHost=u.hostname===(e.BOOKING_HOST||'calendar.morisoba.moe'),api=u.pathname.startsWith('/api/booking/');
  try{
  if(!api){
  if(calendarHost){
  if(u.pathname==='/')return Response.redirect(u.origin+'/admin/',302);
  if(u.pathname==='/admin')return Response.redirect(u.origin+'/admin/',302);
- if(u.pathname==='/admin/'||u.pathname==='/admin/login'){
+ if(u.pathname==='/admin/'||u.pathname==='/admin/login'||u.pathname==='/admin/login.html'){
  const signed=await adminSession(request,e),asset=signed?'/book/admin/index.html':'/book/admin/login.html';
  return secure(await e.ASSETS.fetch(new Request(new URL(asset,u),request)));
  }
- if(u.pathname.startsWith('/shared/')||['/book/app.js','/book/style.css','/book/admin/app.js','/book/admin/login.js','/book/admin/style.css'].includes(u.pathname))return e.ASSETS.fetch(request);
+ if(u.pathname.startsWith('/shared/')||['/book/app.js','/book/config.js','/book/style.css','/book/admin/app.js','/book/admin/login.js','/book/admin/style.css'].includes(u.pathname))return e.ASSETS.fetch(request);
  const m=/^\/([a-z0-9][a-z0-9_-]{0,63})\/?$/.exec(u.pathname);
  if(m){const t=await getType(e,m[1]);if(t)return secure(await e.ASSETS.fetch(new Request(new URL('/book/index.html',u),request)));}
  return new Response('Booking page not found',{status:404});
  }
  // Portal also works on the main site before the custom domain is attached.
- if(u.pathname==='/book/admin/'||u.pathname==='/book/admin/login'){
+ if(u.pathname==='/book/admin/'||u.pathname==='/book/admin/login'||u.pathname==='/book/admin/login.html'){
  const signed=await adminSession(request,e);
  return secure(await e.ASSETS.fetch(new Request(new URL(signed?'/book/admin/index.html':'/book/admin/login.html',u),request)));
  }
@@ -63,7 +63,7 @@ export async function bookingMiddleware(request,e,next){
  return next();
  }
  if(u.pathname.startsWith('/api/booking/admin/'))return await adminApi(request,e);
- if(request.method==='POST'&&request.headers.get('Origin')!==u.origin)return json({error:'Invalid origin'},403);
+ if(request.method==='POST'&&!validOrigin(request,e))return json({error:'Invalid origin'},403);
  if(u.pathname==='/api/booking/cancel'&&request.method==='POST'){
  if(!configured(e))return json({error:'Calendar unavailable'},503);
  const d=await body(request,512),row=await e.MIMORI_DB.prepare('SELECT id,status,calendar_id FROM booking_reservations WHERE cancel_token=?').bind(String(d.token||'')).first();
@@ -103,4 +103,20 @@ export async function bookingMiddleware(request,e,next){
  }
  return json({error:'Not found'},404);
  }catch(err){return json({error:err instanceof HttpError?err.message:'Calendar unavailable. Please try again later.'},err instanceof HttpError?err.status:503);}
+}
+
+export async function bookingMiddleware(request,e,next){
+ const u=new URL(request.url),origin=request.headers.get('Origin');
+ if(!u.pathname.startsWith('/api/booking/'))return handleBooking(request,e,next);
+ if(origin&&!validOrigin(request,e))return json({error:'Invalid origin'},403);
+ const response=request.method==='OPTIONS'?new Response(null,{status:204}):await handleBooking(request,e,next);
+ const result=new Response(response.body,response);
+ if(origin&&validOrigin(request,e)){
+ result.headers.set('Access-Control-Allow-Origin',origin);
+ result.headers.set('Access-Control-Allow-Credentials','true');
+ result.headers.set('Access-Control-Allow-Methods','GET, POST, PUT, OPTIONS');
+ result.headers.set('Access-Control-Allow-Headers','Content-Type, X-CSRF-Token');
+ result.headers.append('Vary','Origin');
+ }
+ return result;
 }

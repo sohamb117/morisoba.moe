@@ -1,4 +1,6 @@
-# Booking at /book/
+# Calendar booking
+
+Production frontend hosting is GitHub Pages. See [custom domain and deployment](calendar-domain.md). The Cloudflare Worker hosts the API and continues serving the existing main website. GitHub Pages serves a public UI shell; all admin data and mutations require authentication on the API.
 
 Native HTML/JS using shared chrome and typography. Worker APIs check Google Calendar free/busy and create invitations. Visitors need no Google login.
 

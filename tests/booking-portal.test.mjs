@@ -24,8 +24,9 @@ before(async()=>{
 });
 after(async()=>{await mf?.dispose();});
 test('portal pages and all management endpoints require authentication',async()=>{
- for(const p of ['/admin/','/admin/login']){const r=await req(p);assert.equal(r.data,'/book/admin/login.html');assert.match(r.headers.get('Cache-Control'),/no-store/);assert.match(r.headers.get('Content-Security-Policy'),/frame-ancestors 'none'/);}
+ for(const p of ['/admin/','/admin/login','/admin/login.html']){const r=await req(p);assert.equal(r.data,'/book/admin/login.html');assert.match(r.headers.get('Cache-Control'),/no-store/);assert.match(r.headers.get('Content-Security-Policy'),/frame-ancestors 'none'/);}
  assert.equal((await req('/book/admin/index.html')).status,404);
+ const fallbackLogin=await mf.dispatchFetch('https://morisoba.moe/book/admin/login.html');assert.equal(await fallbackLogin.text(),'/book/admin/login.html');
  assert.equal((await req('/api/booking/admin/types')).status,401);
  assert.equal((await req('/api/booking/admin/types',{method:'POST',data:example})).status,401);
  assert.equal((await req('/api/booking/admin/session')).data.authenticated,false);
@@ -98,4 +99,10 @@ test('password changes verify the current password, persist only a hash and revo
  assert.match(stored.password_hash,/^scrypt:/);assert.ok(!stored.password_hash.includes(chosen));assert.equal(await verifyPassword(chosen,stored.password_hash),true);
  assert.equal((await req('/api/booking/admin/login',{method:'POST',data:{password},headers:{'CF-Connecting-IP':'old-after-change'}})).status,401);
  assert.equal((await req('/api/booking/admin/login',{method:'POST',data:{password:chosen},headers:{'CF-Connecting-IP':'new-after-change'}})).status,200);
+});
+test('Pages frontend receives credentialed CORS; other origins are denied',async()=>{
+ const preflight=await mf.dispatchFetch('https://morisoba.moe/api/booking/admin/session',{method:'OPTIONS',headers:{Origin:'https://calendar.morisoba.moe','Access-Control-Request-Method':'POST'}});
+ assert.equal(preflight.status,204);assert.equal(preflight.headers.get('Access-Control-Allow-Origin'),'https://calendar.morisoba.moe');assert.equal(preflight.headers.get('Access-Control-Allow-Credentials'),'true');
+ const evil=await mf.dispatchFetch('https://morisoba.moe/api/booking/admin/session',{headers:{Origin:'https://evil.example'}});
+ assert.equal(evil.status,403);assert.equal(evil.headers.get('Access-Control-Allow-Origin'),null);
 });

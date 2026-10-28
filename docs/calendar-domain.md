@@ -1,17 +1,29 @@
-# calendar.morisoba.moe
+# Calendar hosting: GitHub Pages
 
-The hosted portal is registered for this domain. DNS verification is pending.
+The calendar frontend is deployed by .github/workflows/deploy.yml from main, using scripts/build-calendar-pages.mjs. It publishes only the static calendar frontend. The root website remains served by the existing Cloudflare Worker.
 
-Add these records to the morisoba.moe zone:
+## Custom domain
 
-| Type | Name | Value |
+In this repository's Settings → Pages, set the custom domain to calendar.morisoba.moe. Then set this DNS record in Cloudflare:
+
+| Type | Name | Target |
 | --- | --- | --- |
-| CNAME | calendar | custom-domains.chatgpt.site. |
-| TXT | _openai-site-verification.calendar | openai-site-verification=AEXyafKrWCDDqag0_pRU28RKuH8saysi_YpX9J58yvQ |
-| TXT | _cf-custom-hostname.calendar | 8f51a66d-0315-47ae-bf11-ce66f27708d6 |
+| CNAME | calendar | sohamb117.github.io |
 
-These records select the separately hosted portal with its own database, not the original morisoba Worker. Preserve the root domain's existing records. Do not also attach this hostname to the original Worker.
+Remove the old ChatGPT-hosting CNAME and verification TXT records if you added them. The pending ChatGPT-hosting domain binding has been removed. Once the custom domain is configured, rerun the Pages workflow so its base path changes from /morisoba.moe to /.
 
-The portal is at /admin/; booking pages use /<booking_name>. The preview remains private to the owner account in addition to the admin password. Guest bookings require launching with the intended audience and configuring Google Calendar. Admin passwords and calendar credentials are secrets, absent from this repository.
+Enable HTTPS in Pages once the certificate is ready. The portal requires HTTPS.
 
-After DNS verification, refresh the domain status and verify HTTPS, admin login and a named page. Registration alone does not mean the custom hostname is live.
+## Backend
+
+GitHub Pages runs no server code. The frontend calls https://morisoba.moe/api/booking/ on the existing Cloudflare Worker, using an explicit origin allowlist, credentialed requests and CSRF tokens. Cookies remain Secure, HttpOnly and SameSite=Strict. Admin login requires the custom calendar.morisoba.moe domain so frontend and backend are same-site. The github.io address can display the frontend but is not an admin-login replacement.
+
+The Worker needs migrations 0003–0005, an initial admin password hash and Google Calendar credentials. See booking.md. Without those, data requests fail closed. Existing data and your chosen password in the earlier private preview have not been deleted or migrated; that separate database must be migrated to the Worker before switching records over. No secrets or database export are included in the Pages artifact.
+
+## Paths
+
+- /admin/ — management UI; all data and mutations require a server session.
+- /admin/login.html — password sign-in.
+- /<booking_name> — guest page through Pages' custom 404 fallback. These render at the requested URL but the initial document response has status 404, a GitHub Pages limitation for runtime-created routes.
+
+The UI shell is static and publicly downloadable; password verification, page settings and management operations remain protected by the API. The browser never receives the stored password hash.

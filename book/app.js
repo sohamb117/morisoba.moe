@@ -1,5 +1,5 @@
 const $=s=>document.querySelector(s);
-const pagePath=location.pathname.split('/').filter(Boolean),slug=new URLSearchParams(location.search).get('booking')||(pagePath.length===1&&pagePath[0]!=='book'?pagePath[0]:'default');
+const pagePath=location.pathname.slice((globalThis.BOOKING_BASE_PATH||'').length).split('/').filter(Boolean),slug=new URLSearchParams(location.search).get('booking')||(pagePath.length===1&&pagePath[0]!=='book'?pagePath[0]:'default');
 let bookingConfig={duration:30,horizonDays:30};
 let zone=Intl.DateTimeFormat().resolvedOptions().timeZone,view=new Date(),selectedDay='',selectedTime='',ready=false,requestId=0,icsUrl;
 view=new Date(view.getFullYear(),view.getMonth(),1);
@@ -16,7 +16,7 @@ function calendar(){
  }
  const current=new Date();$('#prev').disabled=view.getFullYear()===current.getFullYear()&&view.getMonth()===current.getMonth();$('#next').disabled=view.getTime()>Date.now()+bookingConfig.horizonDays*86400000;
 }
-async function api(path,body){if(body&&path==='reserve')body.slug=slug;if(!body)path+=(path.includes('?')?'&':'?')+'slug='+encodeURIComponent(slug);const r=await fetch('/api/booking/'+path,body?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}:{});let d;try{d=await r.json();}catch{throw Error('Calendar connection unavailable. Please try again later.');}if(!r.ok)throw Error(d.error||'Request failed');return d;}
+async function api(path,body){if(body&&path==='reserve')body.slug=slug;if(!body)path+=(path.includes('?')?'&':'?')+'slug='+encodeURIComponent(slug);const r=await fetch((globalThis.BOOKING_API_ORIGIN||'')+'/api/booking/'+path,body?{credentials:'include',method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}:{credentials:'include'});let d;try{d=await r.json();}catch{throw Error('Calendar connection unavailable. Please try again later.');}if(!r.ok)throw Error(d.error||'Request failed');return d;}
 async function loadSlots(){
  const id=++requestId;$('#slots').replaceChildren();$('#date-label').textContent=new Date(selectedDay+'T12:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric'});if(!ready){$('#status').textContent='Bookings are not open yet.';return;}
  $('#status').textContent='Checking the calendar…';

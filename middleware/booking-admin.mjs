@@ -1,4 +1,5 @@
 import {token,digest,verifyPassword,hashPassword} from './mimori-crypto.mjs';
+export function validOrigin(request,e){const origin=request.headers.get('Origin');return origin===new URL(request.url).origin||origin===(e.BOOKING_FRONTEND_ORIGIN||'https://calendar.morisoba.moe')||origin==='https://sohamb117.github.io';}
 export const json=(data,status=200,headers={})=>Response.json(data,{status,headers:{'Cache-Control':'no-store','X-Content-Type-Options':'nosniff',...headers}});
 export class HttpError extends Error{constructor(status,message){super(message);this.status=status;}}
 export async function body(request,limit=8192){
@@ -43,7 +44,7 @@ export async function throttle(db,key,limit,window=900000){
 export async function adminApi(request,e){
  const u=new URL(request.url),path=u.pathname.slice('/api/booking/admin'.length),db=e.MIMORI_DB;
  if(!db)return json({error:'Portal storage is not configured.'},503);
- if(!['GET','HEAD'].includes(request.method)&&request.headers.get('Origin')!==u.origin)return json({error:'Invalid origin'},403);
+ if(!['GET','HEAD'].includes(request.method)&&!validOrigin(request,e))return json({error:'Invalid origin'},403);
  const activeHash=await passwordHash(e),configured=!!activeHash;
  if(path==='/session'&&request.method==='GET'){const s=await adminSession(request,e);return json({authenticated:!!s,configured,...(s?{csrf:s.csrf}:{} )});}
  if(!configured)return json({error:'Set the admin password before opening the portal.'},503);

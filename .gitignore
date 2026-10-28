@@ -16,3 +16,5 @@ mimorigasaka/protocol/app.bundle.js
 
 protocol/wasm/target/
 mimori/crypto.worker.js
+
+/calendar-dist/
