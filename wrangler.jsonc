@@ -9,20 +9,7 @@
 	"assets": {
 		"directory": ".",
 		"binding": "ASSETS",
-		"run_worker_first": [
-			"/api/spotify",
-			"/api/spotify/analysis",
-			"/api/mimorigasaka",
-			"/api/mimorigasaka/*",
-			"/mimorigasaka",
-			"/mimorigasaka/*",
-			"/api/mimorigasaka-protocol/*",
-			"/.well-known/mimorigasaka",
-			"/mimori",
-			"/mimori/*",
-			"/api/mimori/*",
-			"/.well-known/mimori"
-		]
+		"run_worker_first": true
 	},
 	"compatibility_flags": [
 		"nodejs_compat"

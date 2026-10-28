@@ -1,3 +1,4 @@
+import {bookingMiddleware} from './middleware/booking.mjs';
 import {protocolMiddleware} from './protocol/provider.mjs';
 import {mimorigasakaMiddleware, session} from './middleware/mimorigasaka.mjs';
 import {spotifyMiddleware} from './middleware/spotify.mjs';
@@ -8,7 +9,7 @@ export default {
     if(url.pathname==='/mimorigasaka/protocol'||url.pathname.startsWith('/mimorigasaka/protocol/')){url.pathname='/mimori/'+url.pathname.slice('/mimorigasaka/protocol'.length).replace(/^\//,'');return Response.redirect(url.href,308);}
     const protocolPage=url.pathname==='/mimori'||url.pathname.startsWith('/mimori/');
     if(protocolPage&&env.MIMORI_PROTOCOL_ENABLED!=='true')return new Response('Not found',{status:404});
-    return protocolMiddleware(request, env, () => mimorigasakaMiddleware(request, env, () => spotifyMiddleware(request, env, async () => {
+    return bookingMiddleware(request, env, () => protocolMiddleware(request, env, () => mimorigasakaMiddleware(request, env, () => spotifyMiddleware(request, env, async () => {
       const response = await env.ASSETS.fetch(request);
       if (!protocolPage&&!url.pathname.startsWith('/mimorigasaka')) return response;
       const secured = new Response(response.body, response);
@@ -18,6 +19,6 @@ export default {
       secured.headers.set('X-Content-Type-Options', 'nosniff');
       secured.headers.set('Cache-Control', 'no-store');
       return secured;
-    })), {authenticate:session});
+    })), {authenticate:session}));
   }
 };
