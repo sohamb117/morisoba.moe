@@ -16,9 +16,9 @@ function calendar(){
 }
 async function api(path,body){const r=await fetch('/api/booking/'+path,body?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}:{});let d;try{d=await r.json();}catch{throw Error('Calendar connection unavailable. Please try again later.');}if(!r.ok)throw Error(d.error||'Request failed');return d;}
 async function loadSlots(){
- const id=++requestId;$('#slots').replaceChildren();$('#date-label').textContent=new Date(selectedDay+'T12:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric'});if(!ready){$('#status').textContent='Booking is not open yet. Calendar connection is being configured.';return;}
+ const id=++requestId;$('#slots').replaceChildren();$('#date-label').textContent=new Date(selectedDay+'T12:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric'});if(!ready){$('#status').textContent='Bookings are not open yet.';return;}
  $('#status').textContent='Checking the calendar…';
- try{const {slots}=await api('slots?date='+selectedDay+'&timezone='+encodeURIComponent(zone));if(id!==requestId)return;$('#status').textContent=slots.length?'All times shown in your timezone.':'No open times on this date. Try another day.';
+ try{const {slots}=await api('slots?date='+selectedDay+'&timezone='+encodeURIComponent(zone));if(id!==requestId)return;$('#status').textContent=slots.length?'Times are in your selected timezone.':'No open times on this date. Try another day.';
  for(const t of slots){const b=document.createElement('button');b.textContent=time(t);b.onclick=()=>{selectedTime=t;$('#picker').hidden=true;$('#details').hidden=false;$('#selection').textContent=full(t);$('#step').textContent='YOUR DETAILS';$('#details input').focus();};$('#slots').append(b);}
  }catch(e){if(id===requestId)$('#status').textContent=e.message;}
 }
@@ -34,11 +34,11 @@ $('#details').onsubmit=async e=>{
  $('#cancel-link').href=cancellationUrl(booking.cancelToken);$('#cancel-link').target='_blank';$('#cancel-link').rel='noopener';
  $('#cancel-now').onclick=()=>{if(confirm('Cancel this booking?'))cancel(booking.cancelToken,$('#cancel-status'),$('#cancel-now'));};
  const stamp=t=>new Date(t).toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,'');
- const text=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//morisoba.moe//Booking//EN','BEGIN:VEVENT','UID:'+crypto.randomUUID()+'@morisoba.moe','DTSTAMP:'+stamp(Date.now()),'DTSTART:'+stamp(booking.start),'DTEND:'+stamp(Date.parse(booking.start)+1800000),'SUMMARY:Conversation with Soham','DESCRIPTION:Cancellation link: '+cancellationUrl(booking.cancelToken),'END:VEVENT','END:VCALENDAR',''].join('\r\n');
- if(icsUrl)URL.revokeObjectURL(icsUrl);icsUrl=URL.createObjectURL(new Blob([text],{type:'text/calendar'}));$('#download').href=icsUrl;$('#download').download='conversation.ics';
+ const text=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//morisoba.moe//Booking//EN','BEGIN:VEVENT','UID:'+crypto.randomUUID()+'@morisoba.moe','DTSTAMP:'+stamp(Date.now()),'DTSTART:'+stamp(booking.start),'DTEND:'+stamp(Date.parse(booking.start)+1800000),'SUMMARY:Meeting with Soham','DESCRIPTION:Cancellation link: '+cancellationUrl(booking.cancelToken),'END:VEVENT','END:VCALENDAR',''].join('\r\n');
+ if(icsUrl)URL.revokeObjectURL(icsUrl);icsUrl=URL.createObjectURL(new Blob([text],{type:'text/calendar'}));$('#download').href=icsUrl;$('#download').download='meeting.ics';
  }catch(err){$('#form-error').textContent=err.message;}finally{$('#submit').disabled=false;}
 };
 const token=new URLSearchParams(location.hash.slice(1)).get('cancel');if(token){$('#picker').hidden=true;$('#cancel-view').hidden=false;$('#step').textContent='MANAGE BOOKING';$('#cancel-confirm').onclick=()=>cancel(token,$('#cancel-result'),$('#cancel-confirm'));}
 calendar();
 $('#clock').textContent=new Date().toUTCString();
-api('config').then(c=>{ready=c.ready;$('#status').textContent=ready?'Choose a date to see available times.':'Booking is not open yet. Calendar connection is being configured.';}).catch(e=>{$('#status').textContent=e.message;});
+api('config').then(c=>{ready=c.ready;$('#status').textContent=ready?'Choose a date to see available times.':'Bookings are not open yet.';}).catch(e=>{$('#status').textContent=e.message;});
