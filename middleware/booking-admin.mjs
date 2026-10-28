@@ -1,4 +1,4 @@
-import {token,digest,verifyPassword} from './mimori-crypto.mjs';
+import {token,digest,verifyPassword,hashPassword} from './mimori-crypto.mjs';
 export const json=(data,status=200,headers={})=>Response.json(data,{status,headers:{'Cache-Control':'no-store','X-Content-Type-Options':'nosniff',...headers}});
 export class HttpError extends Error{constructor(status,message){super(message);this.status=status;}}
 export async function body(request,limit=8192){
@@ -10,11 +10,17 @@ export async function body(request,limit=8192){
 }
 const COOKIE='__Host-booking';
 const DAY=86400000;
+export async function passwordHash(e){
+ if(!e.MIMORI_DB)return null;
+ const row=await e.MIMORI_DB.prepare('SELECT password_hash FROM booking_admin_credentials WHERE id=1').first();
+ return row?.password_hash||e.BOOKING_ADMIN_PASSWORD_HASH||null;
+}
 export async function adminSession(request,e){
- if(!e.BOOKING_ADMIN_PASSWORD_HASH||!e.MIMORI_DB)return null;
+ if(!e.MIMORI_DB)return null;
+ const hash=await passwordHash(e);if(!hash)return null;
  const raw=request.headers.get('Cookie')?.split(';').map(v=>v.trim()).find(v=>v.startsWith(COOKIE+'='))?.slice(COOKIE.length+1);
  if(!raw||!/^[a-f0-9]{64}$/.test(raw))return null;
- return e.MIMORI_DB.prepare('SELECT token_hash,csrf FROM booking_admin_sessions WHERE token_hash=? AND expires_ms>? AND password_version=?').bind(digest(raw),Date.now(),digest(e.BOOKING_ADMIN_PASSWORD_HASH)).first();
+ return e.MIMORI_DB.prepare('SELECT token_hash,csrf FROM booking_admin_sessions WHERE token_hash=? AND expires_ms>? AND password_version=?').bind(digest(raw),Date.now(),digest(hash)).first();
 }
 export function validateType(d){
  const slug=String(d.slug||''),title=String(d.title||'').trim(),description=String(d.description||'').trim(),location=String(d.location||'').trim(),timezone=String(d.timezone||'');
@@ -38,18 +44,31 @@ export async function adminApi(request,e){
  const u=new URL(request.url),path=u.pathname.slice('/api/booking/admin'.length),db=e.MIMORI_DB;
  if(!db)return json({error:'Portal storage is not configured.'},503);
  if(!['GET','HEAD'].includes(request.method)&&request.headers.get('Origin')!==u.origin)return json({error:'Invalid origin'},403);
- const configured=!!e.BOOKING_ADMIN_PASSWORD_HASH;
+ const activeHash=await passwordHash(e),configured=!!activeHash;
  if(path==='/session'&&request.method==='GET'){const s=await adminSession(request,e);return json({authenticated:!!s,configured,...(s?{csrf:s.csrf}:{} )});}
  if(!configured)return json({error:'Set the admin password before opening the portal.'},503);
  if(path==='/login'&&request.method==='POST'){
  const d=await body(request,2048);await throttle(db,'login:'+digest(request.headers.get('CF-Connecting-IP')||'unknown'),8);
- if(typeof d.password!=='string'||d.password.length>512||!await verifyPassword(d.password,e.BOOKING_ADMIN_PASSWORD_HASH))return json({error:'Incorrect password'},401);
+ if(typeof d.password!=='string'||d.password.length>512||!await verifyPassword(d.password,activeHash))return json({error:'Incorrect password'},401);
  const raw=token(),csrf=token();
- await db.batch([db.prepare('DELETE FROM booking_admin_sessions WHERE expires_ms<=? OR password_version!=?').bind(Date.now(),digest(e.BOOKING_ADMIN_PASSWORD_HASH)),db.prepare('DELETE FROM booking_rate_limits WHERE bucket<?').bind(Math.floor(Date.now()/900000)-2),db.prepare('INSERT INTO booking_admin_sessions(token_hash,csrf,expires_ms,password_version) VALUES(?,?,?,?)').bind(digest(raw),csrf,Date.now()+DAY,digest(e.BOOKING_ADMIN_PASSWORD_HASH))]);
+ await db.batch([db.prepare('DELETE FROM booking_admin_sessions WHERE expires_ms<=? OR password_version!=?').bind(Date.now(),digest(activeHash)),db.prepare('DELETE FROM booking_rate_limits WHERE bucket<?').bind(Math.floor(Date.now()/900000)-2),db.prepare('INSERT INTO booking_admin_sessions(token_hash,csrf,expires_ms,password_version) VALUES(?,?,?,?)').bind(digest(raw),csrf,Date.now()+DAY,digest(activeHash))]);
  return json({csrf},200,{'Set-Cookie':COOKIE+'='+raw+'; Path=/; HttpOnly; SameSite=Strict; Secure; Max-Age=86400'});
  }
  const s=await adminSession(request,e);if(!s)return json({error:'Sign in required'},401);
  if(request.method!=='GET'&&request.headers.get('X-CSRF-Token')!==s.csrf)return json({error:'Session check failed. Reload and try again.'},403);
+ if(path==='/password'&&request.method==='POST'){
+ const d=await body(request,8192);await throttle(db,'password:'+s.token_hash,8);
+ if(typeof d.currentPassword!=='string'||d.currentPassword.length>512||!await verifyPassword(d.currentPassword,activeHash))return json({error:'Incorrect current password'},400);
+ if(typeof d.newPassword!=='string'||d.newPassword.length<16||d.newPassword.length>512)return json({error:'Use a password of 16–512 characters.'},400);
+ if(d.newPassword!==d.confirmPassword)return json({error:'New passwords do not match.'},400);
+ const hash=await hashPassword(d.newPassword),version=digest(hash);
+ const changed=await db.batch([
+ db.prepare('INSERT INTO booking_admin_credentials(id,password_hash) VALUES(1,?) ON CONFLICT(id) DO UPDATE SET password_hash=excluded.password_hash WHERE booking_admin_credentials.password_hash=? RETURNING id').bind(hash,activeHash),
+ db.prepare('DELETE FROM booking_admin_sessions WHERE password_version!=? AND EXISTS(SELECT 1 FROM booking_admin_credentials WHERE id=1 AND password_hash=?)').bind(version,hash)
+ ]);
+ if(!changed[0].results.length)return json({error:'The password changed in another session. Sign in again.'},409);
+ return json({changed:true},200,{'Set-Cookie':COOKIE+'=; Path=/; HttpOnly; SameSite=Strict; Secure; Max-Age=0'});
+ }
  if(path==='/logout'&&request.method==='POST'){await db.prepare('DELETE FROM booking_admin_sessions WHERE token_hash=?').bind(s.token_hash).run();return json({ok:true},200,{'Set-Cookie':COOKIE+'=; Path=/; HttpOnly; SameSite=Strict; Secure; Max-Age=0'});}
  if(path==='/types'&&request.method==='GET'){const {results}=await db.prepare('SELECT slug,settings,enabled FROM booking_types ORDER BY created_ms').all();return json({types:results.map(typeView)});}
  if(path==='/types'&&request.method==='POST'){

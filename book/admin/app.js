@@ -40,3 +40,11 @@ $('#new').onclick=()=>open();$('#close').onclick=close;$('#discard').onclick=clo
 $('#logout').onclick=async()=>{if(dirty&&!confirm('Discard unsaved changes and sign out?'))return;try{await api('logout',{});dirty=false;location.replace(home);}catch(e){$('#status').textContent=e.message;}};
 addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue='';}});
 (async()=>{try{const s=await api('session');if(!s.authenticated){location.replace(home);return;}csrf=s.csrf;types=(await api('types')).types;render();const c=await fetch('/api/booking/config').then(r=>r.json());$('#connection').textContent=c.ready?'Google Calendar connected.':'Calendar not connected. You can save pages; bookings stay closed until it is connected.';}catch(e){$('#status').textContent=e.message;}})();
+
+$('#password-form').onsubmit=async e=>{
+ e.preventDefault();const f=e.target,button=$('#change-password'),error=$('#password-error');error.textContent='';
+ if(f.elements.newPassword.value!==f.elements.confirmPassword.value){error.textContent='New passwords do not match.';return;}
+ if(dirty&&!confirm('Changing your password signs you out. Discard unsaved page changes?'))return;
+ button.disabled=true;
+ try{await api('password',Object.fromEntries(new FormData(f)));f.reset();dirty=false;location.replace(home+'?password=changed');}catch(err){error.textContent=err.message;}finally{button.disabled=false;}
+};

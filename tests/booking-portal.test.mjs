@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {build} from 'esbuild';
 import {Miniflare,convertV4MiniflareOptions} from 'miniflare';
-import {hashPassword} from '../middleware/mimori-crypto.mjs';
+import {hashPassword,verifyPassword} from '../middleware/mimori-crypto.mjs';
 import {validateType} from '../middleware/booking-admin.mjs';
 import {validSlot} from '../middleware/booking.mjs';
 let mf,db,actor;
@@ -20,7 +20,7 @@ before(async()=>{
  const bundle=await build({stdin:{contents:code,resolveDir:process.cwd()},bundle:true,write:false,format:'esm',platform:'neutral',external:['node:*']});
  mf=new Miniflare(convertV4MiniflareOptions({modules:true,script:bundle.outputFiles[0].text,compatibilityDate:'2026-10-16',compatibilityFlags:['nodejs_compat'],d1Databases:['MIMORI_DB'],bindings:{BOOKING_ADMIN_PASSWORD_HASH:await hashPassword(password)},serviceBindings:{ASSETS:r=>new Response(new URL(r.url).pathname)}}));
  db=await mf.getD1Database('MIMORI_DB');
- for(const file of ['0003_booking.sql','0004_booking_portal.sql'])for(const s of (await readFile('migrations/'+file,'utf8')).split(';').filter(s=>s.trim()))await db.prepare(s).run();
+ for(const file of ['0003_booking.sql','0004_booking_portal.sql','0005_booking_password.sql'])for(const s of (await readFile('migrations/'+file,'utf8')).split(';').filter(s=>s.trim()))await db.prepare(s).run();
 });
 after(async()=>{await mf?.dispose();});
 test('portal pages and all management endpoints require authentication',async()=>{
@@ -77,4 +77,25 @@ test('logout revokes the session and repeated failed logins are throttled',async
  const r=await req('/api/booking/admin/logout',{method:'POST',auth:true,data:{}});assert.equal(r.status,200);assert.match(r.headers.get('Set-Cookie'),/Max-Age=0/);
  assert.equal((await req('/api/booking/admin/types',{auth:true})).status,401);
  for(let i=0;i<9;i++){const r=await req('/api/booking/admin/login',{method:'POST',data:{password:'bad'}});if(i===8)assert.equal(r.status,429);}
+});
+
+test('password changes verify the current password, persist only a hash and revoke every session',async()=>{
+ const login=await req('/api/booking/admin/login',{method:'POST',data:{password},headers:{'CF-Connecting-IP':'password-change'}});
+ actor={cookie:login.headers.get('Set-Cookie').split(';')[0],csrf:login.data.csrf};
+ const chosen='a new password chosen by the user';
+ const data={currentPassword:password,newPassword:chosen,confirmPassword:chosen};
+ assert.equal((await req('/api/booking/admin/password',{method:'POST',data})).status,401);
+ assert.equal((await req('/api/booking/admin/password',{method:'POST',data,headers:{Cookie:actor.cookie}})).status,403);
+ assert.equal((await req('/api/booking/admin/password',{method:'POST',auth:true,data:{...data,currentPassword:'wrong'}})).status,400);
+ assert.equal((await req('/api/booking/admin/password',{method:'POST',auth:true,data:{...data,newPassword:'short',confirmPassword:'short'}})).status,400);
+ assert.equal((await req('/api/booking/admin/password',{method:'POST',auth:true,data:{...data,confirmPassword:'different'}})).status,400);
+ const other=await req('/api/booking/admin/login',{method:'POST',data:{password},headers:{'CF-Connecting-IP':'password-second'}});
+ const changed=await req('/api/booking/admin/password',{method:'POST',auth:true,data});
+ assert.equal(changed.status,200);assert.match(changed.headers.get('Set-Cookie'),/Max-Age=0/);
+ assert.equal((await req('/api/booking/admin/session',{auth:true})).data.authenticated,false);
+ assert.equal((await req('/api/booking/admin/session',{headers:{Cookie:other.headers.get('Set-Cookie').split(';')[0]}})).data.authenticated,false);
+ const stored=await db.prepare('SELECT password_hash FROM booking_admin_credentials WHERE id=1').first();
+ assert.match(stored.password_hash,/^scrypt:/);assert.ok(!stored.password_hash.includes(chosen));assert.equal(await verifyPassword(chosen,stored.password_hash),true);
+ assert.equal((await req('/api/booking/admin/login',{method:'POST',data:{password},headers:{'CF-Connecting-IP':'old-after-change'}})).status,401);
+ assert.equal((await req('/api/booking/admin/login',{method:'POST',data:{password:chosen},headers:{'CF-Connecting-IP':'new-after-change'}})).status,200);
 });
