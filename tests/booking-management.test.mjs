@@ -112,15 +112,16 @@ test('host email failure preserves successful booking and records delivery troub
 });
 
 const details=()=>({start:new Date(nextSlot()).toISOString(),name:'Guest',email:'guest@example.com'});
-test('two upcoming bookings per address is atomic and Gmail aliases share the cap',async()=>{
+test('three upcoming bookings per address is atomic and Gmail aliases share the cap',async()=>{
  const email='g.u.e.s.t+first@gmail.com',key=emailKey(email);assert.equal(key,emailKey('guest+second@googlemail.com'));
- sql.prepare("INSERT INTO booking_reservations(id,start_ms,status,cancel_token,created_ms,email_key) VALUES('existing',?,'confirmed','existing',?,?)").run(nextSlot()+7200000,Date.now()-10000,key);
+ for(let i=0;i<2;i++)sql.prepare("INSERT INTO booking_reservations(id,start_ms,status,cancel_token,created_ms,email_key) VALUES(?,?,'confirmed',?,?,?)").run('existing'+i,nextSlot()+7200000+i*3600000,'existing'+i,Date.now()-10000,key);
  const responses=await Promise.all([0,3600000].map(offset=>req('reserve',{...details(),email:offset?'guest+second@gmail.com':email,start:new Date(nextSlot()+offset).toISOString()})));
  assert.equal(responses.filter(x=>x.status===201).length,1);assert.equal(responses.filter(x=>x.status===409).length,1);
 });
 test('cancelling does not reset daily booking cap',async()=>{
- for(let i=0;i<3;i++)sql.prepare("INSERT INTO booking_reservations(id,start_ms,status,cancel_token,created_ms,email_key) VALUES(?,?,'cancelled',?,?,?)").run('old'+i,nextSlot()+i*3600000,'old'+i,Date.now()-1000,emailKey('guest@example.com'));
- assert.equal((await req('reserve',details())).status,409);assert.ok(!calls.some(c=>c.url.pathname.endsWith('/events')));
+ for(let i=0;i<4;i++)sql.prepare("INSERT INTO booking_reservations(id,start_ms,status,cancel_token,created_ms,email_key) VALUES(?,?,'cancelled',?,?,?)").run('old'+i,nextSlot()+i*3600000,'old'+i,Date.now()-1000,emailKey('guest@example.com'));
+ assert.equal((await req('reserve',details())).status,201);
+ assert.equal((await req('reserve',{...details(),start:new Date(nextSlot()+3600000).toISOString()})).status,409);
 });
 test('global booking ceiling applies across addresses and survives cancellations',async()=>{
  for(let i=0;i<20;i++)sql.prepare("INSERT INTO booking_reservations(id,start_ms,status,cancel_token,created_ms,email_key) VALUES(?,?,'cancelled',?,?,?)").run('global'+i,nextSlot(),'global'+i,Date.now()-1000,emailKey('guest'+i+'@example.com'));
