@@ -1,5 +1,4 @@
-import {digest} from '../middleware/mimori-crypto.mjs';
-import {bookingEmail,emailKey} from '../middleware/booking-verification.mjs';
+import {emailKey} from '../middleware/booking-abuse.mjs';
 import {test,beforeEach,afterEach,mock} from 'node:test';
 import assert from 'node:assert/strict';
 import {DatabaseSync} from 'node:sqlite';
@@ -10,12 +9,7 @@ let sql,env,events,calls,failPatch,failDelete,busyBlocks,failMail;
 const token='11111111-1111-1111-1111-11111111111122222222-2222-2222-2222-222222222222';
 const origin='https://calendar.morisoba.moe';
 function stmt(query,args=[]){return {bind(...v){return stmt(query,v);},async first(){return sql.prepare(query).get(...args)||null;},async all(){return {results:sql.prepare(query).all(...args)};},async run(){return sql.prepare(query).run(...args);},query,args};}
-function verified(email='guest@example.com'){
- const verificationId=crypto.randomUUID().replaceAll('-',''),code='123456';
- sql.prepare('INSERT INTO booking_verifications(id,email_hash,code_hash,expires_ms) VALUES(?,?,?,?)').run(verificationId,digest(bookingEmail(email)),digest(verificationId+':'+code),Date.now()+600000);
- return {verificationId,code};
-}
-async function req(path,data,headers={},autoVerify=true){if(path==='reserve'&&autoVerify)data={...data,...verified(data.email)};const r=await bookingMiddleware(new Request(origin+'/api/booking/'+path,{method:'POST',headers:{Origin:origin,'Content-Type':'application/json',...headers},body:JSON.stringify(data)}),env,()=>new Response('fallback'));return {status:r.status,data:await r.json()};}
+async function req(path,data,headers={}){const r=await bookingMiddleware(new Request(origin+'/api/booking/'+path,{method:'POST',headers:{Origin:origin,'Content-Type':'application/json',...headers},body:JSON.stringify(data)}),env,()=>new Response('fallback'));return {status:r.status,data:await r.json()};}
 function nextSlot(){let d=new Date(Date.now()+3*86400000);d.setUTCHours(19,0,0,0);while([0,6].includes(d.getUTCDay()))d.setUTCDate(d.getUTCDate()+1);return d.getTime();}
 function seed(start=nextSlot()){
  sql.prepare("INSERT INTO booking_reservations(id,start_ms,status,cancel_token,created_ms,duration_minutes,calendar_id) VALUES('abc',?,'confirmed',?,?,30,'primary')").run(start,token,Date.now());
@@ -118,33 +112,8 @@ test('host email failure preserves successful booking and records delivery troub
 });
 
 const details=()=>({start:new Date(nextSlot()).toISOString(),name:'Guest',email:'guest@example.com'});
-function emailBody(call){return Buffer.from(Buffer.from(call.data.raw,'base64url').toString().split('\r\n\r\n')[1],'base64').toString();}
-test('unverified and wrong-address bookings cannot call Google or acquire slots',async()=>{
- assert.equal((await req('reserve',details(),{},false)).status,403);
- assert.equal((await req('reserve',{...details(),...verified('other@example.com')},{},false)).status,403);
- assert.equal(calls.length,0);assert.equal(sql.prepare('SELECT count(*) n FROM booking_reservations').get().n,0);
-});
-test('verification sends a code but creates no calendar event and only stores its hash',async()=>{
- const r=await req('verify',{email:'guest@example.com'});assert.equal(r.status,200);
- const mail=calls.find(c=>c.url.hostname==='gmail.googleapis.com'),code=emailBody(mail).match(/code is: (\d{6})/)[1];
- assert.equal(sql.prepare('SELECT code_hash FROM booking_verifications').get().code_hash,digest(r.data.verificationId+':'+code));
- assert.equal(sql.prepare('SELECT count(*) n FROM booking_reservations').get().n,0);assert.ok(!calls.some(c=>c.url.hostname==='www.googleapis.com'));
- const booked=await req('reserve',{...details(),verificationId:r.data.verificationId,code},{},false);assert.equal(booked.status,201);
-});
-test('verification expires, limits guesses across IPs and rejects replay',async()=>{
- const proof=verified();sql.prepare('UPDATE booking_verifications SET expires_ms=1').run();
- assert.equal((await req('reserve',{...details(),...proof},{},false)).status,403);
- const active=verified();for(let i=0;i<5;i++)assert.equal((await req('reserve',{...details(),...active,code:'999999'},{'CF-Connecting-IP':'ip'+i},false)).status,403);
- assert.equal((await req('reserve',{...details(),...active},{'CF-Connecting-IP':'other-ip'},false)).status,403);
- const fresh=verified(),first=await req('reserve',{...details(),...fresh},{'CF-Connecting-IP':'fresh'},false);assert.equal(first.status,201);
- assert.equal((await req('reserve',{...details(),start:new Date(nextSlot()+3600000).toISOString(),...fresh},{'CF-Connecting-IP':'fresh'},false)).status,403);
-});
-test('one verification code cannot create concurrent reservations',async()=>{
- const proof=verified();const r=await Promise.all([0,3600000].map(offset=>req('reserve',{...details(),start:new Date(nextSlot()+offset).toISOString(),...proof},{},false)));
- assert.equal(r.filter(x=>x.status===201).length,1);assert.equal(sql.prepare('SELECT count(*) n FROM booking_reservations').get().n,1);
-});
 test('two upcoming bookings per address is atomic and Gmail aliases share the cap',async()=>{
- const email='g.u.e.s.t+first@gmail.com',key=emailKey(bookingEmail(email));assert.equal(key,emailKey('guest+second@googlemail.com'));
+ const email='g.u.e.s.t+first@gmail.com',key=emailKey(email);assert.equal(key,emailKey('guest+second@googlemail.com'));
  sql.prepare("INSERT INTO booking_reservations(id,start_ms,status,cancel_token,created_ms,email_key) VALUES('existing',?,'confirmed','existing',?,?)").run(nextSlot()+7200000,Date.now()-10000,key);
  const responses=await Promise.all([0,3600000].map(offset=>req('reserve',{...details(),email:offset?'guest+second@gmail.com':email,start:new Date(nextSlot()+offset).toISOString()})));
  assert.equal(responses.filter(x=>x.status===201).length,1);assert.equal(responses.filter(x=>x.status===409).length,1);
@@ -153,18 +122,8 @@ test('cancelling does not reset daily booking cap',async()=>{
  for(let i=0;i<3;i++)sql.prepare("INSERT INTO booking_reservations(id,start_ms,status,cancel_token,created_ms,email_key) VALUES(?,?,'cancelled',?,?,?)").run('old'+i,nextSlot()+i*3600000,'old'+i,Date.now()-1000,emailKey('guest@example.com'));
  assert.equal((await req('reserve',details())).status,409);assert.ok(!calls.some(c=>c.url.pathname.endsWith('/events')));
 });
-test('verification email limits apply across aliases and IPs; forwarded headers cannot bypass IP limit',async()=>{
- for(let i=0;i<3;i++)assert.equal((await req('verify',{email:'g.u.e.s.t+'+i+'@gmail.com'},{'CF-Connecting-IP':'ip'+i})).status,200);
- assert.equal((await req('verify',{email:'guest+other@googlemail.com'},{'CF-Connecting-IP':'ip-other'})).status,429);
- for(let i=0;i<3;i++)assert.equal((await req('verify',{email:'person'+i+'@example.com'},{'CF-Connecting-IP':'same','X-Forwarded-For':'fake'+i})).status,200);
- assert.equal((await req('verify',{email:'another@example.com'},{'CF-Connecting-IP':'same','X-Forwarded-For':'different'})).status,429);
-});
-test('verification delivery failure invalidates code and creates no reservation',async()=>{
- failMail=true;assert.equal((await req('verify',{email:'guest@example.com'})).status,503);
- assert.equal(sql.prepare('SELECT count(*) n FROM booking_verifications').get().n,0);assert.equal(sql.prepare('SELECT count(*) n FROM booking_reservations').get().n,0);
-});
 test('global booking ceiling applies across addresses and survives cancellations',async()=>{
  for(let i=0;i<20;i++)sql.prepare("INSERT INTO booking_reservations(id,start_ms,status,cancel_token,created_ms,email_key) VALUES(?,?,'cancelled',?,?,?)").run('global'+i,nextSlot(),'global'+i,Date.now()-1000,emailKey('guest'+i+'@example.com'));
  assert.equal((await req('reserve',details())).status,409);assert.ok(!calls.some(c=>c.url.pathname.endsWith('/events')));
 });
-test('cross-origin verification cannot send email',async()=>{assert.equal((await req('verify',{email:'guest@example.com'},{Origin:'https://evil.example'})).status,403);assert.equal(calls.length,0);});
+test('verification email endpoint is disabled',async()=>{assert.equal((await req('verify',{email:'guest@example.com'})).status,404);assert.equal(calls.length,0);});

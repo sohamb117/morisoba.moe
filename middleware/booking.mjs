@@ -1,4 +1,4 @@
-import {bookingEmail,emailKey,abuseLimit,requestBookingCode,checkBookingCode} from './booking-verification.mjs';
+import {bookingEmail,emailKey,abuseLimit} from './booking-abuse.mjs';
 import {notifyBookingHost} from './booking-notifications.mjs';
 import {google,configured} from './booking-google.mjs';
 export {configured} from './booking-google.mjs';
@@ -79,7 +79,6 @@ async function handleBooking(request,e,next){
  if(u.pathname==='/api/booking/config'&&request.method==='GET')return json({ready:configured(e),...type,hostTimezone:type.timezone});
  if(!configured(e))return json({error:'Bookings are not open yet.'},503);
  const db=e.MIMORI_DB,duration=type.duration*MIN,before=(type.bufferBefore||0)*MIN,after=(type.bufferAfter||0)*MIN;
- if(u.pathname==='/api/booking/verify'&&request.method==='POST')return await requestBookingCode(request,e,d);
  if(['/api/booking/slots','/api/booking/days'].includes(u.pathname)&&request.method==='GET'){
  await abuseLimit(db,'availability:'+digest(request.headers.get('CF-Connecting-IP')||'unknown'),60,300000);
  const zone=u.searchParams.get('timezone')||'UTC';try{parts(Date.now(),zone);}catch{return json({error:'Invalid timezone'},400);}
@@ -104,15 +103,13 @@ async function handleBooking(request,e,next){
  await throttle(db,'reserve:'+digest(request.headers.get('CF-Connecting-IP')||'unknown'),5);
  const t=Date.parse(d.start),name=String(d.name||'').trim(),email=bookingEmail(d.email),notes=String(d.notes||'').trim();
  if(!validSlot(t,e,Date.now(),type)||!name||name.length>100||email.length>254||!/^\S+@\S+\.\S+$/.test(email)||notes.length>1000||d.website)return json({error:'Please enter valid booking details.'},400);
- await checkBookingCode(db,d,email);
  const emailHash=emailKey(email);
  const blocks=await busy(e,t-before,t+duration+after);if(blocks.some(b=>t-before<Date.parse(b.end)&&t+duration+after>Date.parse(b.start)))return json({error:'That time is no longer available.'},409);
  const cancelToken=crypto.randomUUID()+crypto.randomUUID(),id=crypto.randomUUID().replaceAll('-','');
  const day=bookingDay(t,type.timezone),max=type.maxPerDay||1000000;
- const statements=[db.prepare("INSERT INTO booking_reservations(id,start_ms,status,cancel_token,created_ms,booking_slug,duration_minutes,calendar_id,buffer_before,buffer_after,booking_day,reminders,email_key) SELECT ?,?,'pending',?,?,?,?,?,?,?,?,?,? WHERE (SELECT count(*) FROM booking_day_usage WHERE booking_slug=? AND booking_day=?)<? AND (SELECT count(*) FROM booking_reservations WHERE email_key=? AND status!='cancelled' AND start_ms>?)<2 AND (SELECT count(*) FROM booking_reservations WHERE email_key=? AND created_ms>?)<3 AND (SELECT count(*) FROM booking_reservations WHERE created_ms>?)<20 AND EXISTS(SELECT 1 FROM booking_verifications WHERE id=? AND email_hash=? AND expires_ms>? AND consumed_ms IS NULL AND attempts<=5) RETURNING id").bind(id,t,cancelToken,Date.now(),slug,type.duration,e.BOOKING_CALENDAR_ID,type.bufferBefore||0,type.bufferAfter||0,day,+!!type.reminders,emailHash,slug,day,max,emailHash,Date.now(),emailHash,Date.now()-86400000,Date.now()-86400000,d.verificationId,digest(email),Date.now())];
- statements.push(db.prepare('UPDATE booking_verifications SET consumed_ms=? WHERE id=? AND EXISTS(SELECT 1 FROM booking_reservations WHERE id=?)').bind(Date.now(),d.verificationId,id));
+ const statements=[db.prepare("INSERT INTO booking_reservations(id,start_ms,status,cancel_token,created_ms,booking_slug,duration_minutes,calendar_id,buffer_before,buffer_after,booking_day,reminders,email_key) SELECT ?,?,'pending',?,?,?,?,?,?,?,?,?,? WHERE (SELECT count(*) FROM booking_day_usage WHERE booking_slug=? AND booking_day=?)<? AND (SELECT count(*) FROM booking_reservations WHERE email_key=? AND status!='cancelled' AND start_ms>?)<2 AND (SELECT count(*) FROM booking_reservations WHERE email_key=? AND created_ms>?)<3 AND (SELECT count(*) FROM booking_reservations WHERE created_ms>?)<20 RETURNING id").bind(id,t,cancelToken,Date.now(),slug,type.duration,e.BOOKING_CALENDAR_ID,type.bufferBefore||0,type.bufferAfter||0,day,+!!type.reminders,emailHash,slug,day,max,emailHash,Date.now(),emailHash,Date.now()-86400000,Date.now()-86400000)];
  for(let lock=t-before;lock<t+duration+after;lock+=15*MIN)statements.push(db.prepare('INSERT INTO booking_slot_locks(start_ms,reservation_id) SELECT ?,? WHERE EXISTS(SELECT 1 FROM booking_reservations WHERE id=?)').bind(lock,id,id));
- try{const result=await db.batch(statements);if(!result[0].results.length)return json({error:'A booking limit has been reached or this code was already used. Each address may have two upcoming bookings and make three bookings per day.'},409);}catch(err){if(/UNIQUE|constraint/i.test(String(err)))return json({error:'That time was just taken. Choose another slot.'},409);throw err;}
+ try{const result=await db.batch(statements);if(!result[0].results.length)return json({error:'A booking limit has been reached. Each address may have two upcoming bookings and make three bookings per day.'},409);}catch(err){if(/UNIQUE|constraint/i.test(String(err)))return json({error:'That time was just taken. Choose another slot.'},409);throw err;}
  try{
  const event=await google(e,'calendars/'+encodeURIComponent(e.BOOKING_CALENDAR_ID)+'/events?sendUpdates=all&conferenceDataVersion=1',{id,...(type.googleMeet?{conferenceData:{createRequest:{requestId:id,conferenceSolutionKey:{type:'hangoutsMeet'}}}}:{}),summary:type.title+' / '+name,description:[notes,'Reschedule or cancel: https://'+(e.BOOKING_HOST||'calendar.morisoba.moe')+'/manage#token='+cancelToken].filter(Boolean).join('\n\n'),guestsCanInviteOthers:false,guestsCanModify:false,...(type.location?{location:type.location}:{}),start:{dateTime:new Date(t).toISOString()},end:{dateTime:new Date(t+duration).toISOString()},attendees:[{email}],extendedProperties:{private:{bookingId:id,bookingType:slug}}});
  await db.prepare("UPDATE booking_reservations SET status='confirmed' WHERE id=?").bind(id).run();

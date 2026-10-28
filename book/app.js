@@ -2,7 +2,7 @@ const $=s=>document.querySelector(s);
 const pagePath=location.pathname.split('/').filter(Boolean),slug=new URLSearchParams(location.search).get('booking')||(pagePath.length===1&&pagePath[0]!=='book'?pagePath[0]:'default');
 let bookingConfig={duration:30,horizonDays:30};
 let zone=Intl.DateTimeFormat().resolvedOptions().timeZone,view=new Date(),selectedDay='',selectedTime='',ready=false,requestId=0,icsUrl;
-let availableDays=null,daysRequestId=0,verificationId='';
+let availableDays=null,daysRequestId=0;
 view=new Date(view.getFullYear(),view.getMonth(),1);
 const zones=[...new Set([zone,'America/New_York','America/Los_Angeles','Europe/London','Europe/Paris','Asia/Kolkata','Asia/Tokyo','Australia/Sydney','UTC'])];
 for(const z of zones){const o=document.createElement('option');o.value=z;o.textContent=z.replaceAll('_',' ');$('#timezone').append(o);}$('#timezone').value=zone;
@@ -17,7 +17,7 @@ function calendar(){
  }
  const current=new Date();$('#prev').disabled=view.getFullYear()===current.getFullYear()&&view.getMonth()===current.getMonth();$('#next').disabled=view.getTime()>Date.now()+bookingConfig.horizonDays*86400000;
 }
-async function api(path,body){if(body&&['reserve','verify'].includes(path))body.slug=slug;if(!body)path+=(path.includes('?')?'&':'?')+'slug='+encodeURIComponent(slug);const r=await fetch('/api/booking/'+path,body?{credentials:'include',method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}:{credentials:'include'});let d;try{d=await r.json();}catch{throw Error('Calendar connection unavailable. Please try again later.');}if(!r.ok)throw Error(d.error||'Request failed');return d;}
+async function api(path,body){if(body&&path==='reserve')body.slug=slug;if(!body)path+=(path.includes('?')?'&':'?')+'slug='+encodeURIComponent(slug);const r=await fetch('/api/booking/'+path,body?{credentials:'include',method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}:{credentials:'include'});let d;try{d=await r.json();}catch{throw Error('Calendar connection unavailable. Please try again later.');}if(!r.ok)throw Error(d.error||'Request failed');return d;}
 async function loadDays(){
  const id=++daysRequestId;availableDays=null;calendar();
  if(!ready)return;
@@ -43,21 +43,10 @@ $('#prev').onclick=()=>{view.setMonth(view.getMonth()-1);loadDays();};$('#next')
 $('#timezone').onchange=()=>{zone=$('#timezone').value;loadDays();if(selectedDay)loadSlots();};$('#back').onclick=()=>{$('#picker').hidden=false;$('#details').hidden=true;$('#step').textContent='SELECT DATE';loadSlots();};
 function cancellationUrl(token){return 'https://calendar.morisoba.moe/manage#token='+encodeURIComponent(token);}
 async function cancel(token,target,button){button.disabled=true;try{await api('cancel',{token});target.textContent='Booking cancelled. The calendar has been updated.';}catch(e){target.textContent=e.message;button.disabled=false;}}
-function resetVerification(){verificationId='';$('#verification').hidden=true;$('#details').elements.code.required=false;$('#details').elements.code.value='';$('#submit').textContent='Email me a verification code';}
-$('#details').elements.email.addEventListener('input',resetVerification);
-async function sendCode(){
- const form=$('#details');
- const result=await api('verify',{email:form.elements.email.value,website:form.elements.website.value});
- verificationId=result.verificationId;$('#verification').hidden=false;form.elements.code.required=true;form.elements.code.value='';
- $('#verification-status').textContent='Check your email for a 6-digit code. It expires in 10 minutes. Your time is not reserved until you confirm.';
- $('#submit').textContent='Verify email & book time';form.elements.code.focus();
-}
-$('#resend-code').onclick=async()=>{$('#resend-code').disabled=true;$('#submit').disabled=true;$('#form-error').textContent='';try{await sendCode();}catch(e){$('#form-error').textContent=e.message;}finally{$('#resend-code').disabled=false;$('#submit').disabled=false;}};
 $('#details').onsubmit=async e=>{
  e.preventDefault();$('#submit').disabled=true;$('#form-error').textContent='';
  try{
- if(!verificationId){await sendCode();return;}
- const body=Object.fromEntries(new FormData(e.target));body.start=selectedTime;body.verificationId=verificationId;const booking=await api('reserve',body);
+ const body=Object.fromEntries(new FormData(e.target));body.start=selectedTime;const booking=await api('reserve',body);
  $('#details').hidden=true;$('#complete').hidden=false;$('#step').textContent='CONFIRMED';$('#confirmed-time').textContent=full(booking.start);
  if(booking.meetingUrl&&new URL(booking.meetingUrl).hostname==='meet.google.com'){$('#meeting-link').href=booking.meetingUrl;$('#meeting-link').hidden=false;}
  $('#cancel-link').href=cancellationUrl(booking.cancelToken);$('#cancel-link').target='_blank';$('#cancel-link').rel='noopener';
