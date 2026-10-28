@@ -1,9 +1,11 @@
+import {sendBookingReminders} from './middleware/booking-reminders.mjs';
 import {bookingMiddleware} from './middleware/booking.mjs';
 import {protocolMiddleware} from './protocol/provider.mjs';
 import {mimorigasakaMiddleware, session} from './middleware/mimorigasaka.mjs';
 import {spotifyMiddleware} from './middleware/spotify.mjs';
 
 export default {
+  async scheduled(controller, env) { await sendBookingReminders(env); },
   fetch(request, env) {
     const url=new URL(request.url);
     if(url.pathname==='/mimorigasaka/protocol'||url.pathname.startsWith('/mimorigasaka/protocol/')){url.pathname='/mimori/'+url.pathname.slice('/mimorigasaka/protocol'.length).replace(/^\//,'');return Response.redirect(url.href,308);}

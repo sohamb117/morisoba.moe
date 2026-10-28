@@ -1,10 +1,11 @@
+import {google,configured} from './booking-google.mjs';
+export {configured} from './booking-google.mjs';
 import {manageBooking} from './booking-manage.mjs';
 import {json,body,HttpError,adminApi,adminSession,typeView,throttle,validOrigin} from './booking-admin.mjs';
 import {digest} from './mimori-crypto.mjs';
 const MIN=60000;
-export function configured(e){return !!(e.MIMORI_DB&&e.BOOKING_GOOGLE_CLIENT_ID&&e.BOOKING_GOOGLE_CLIENT_SECRET&&e.BOOKING_GOOGLE_REFRESH_TOKEN&&e.BOOKING_CALENDAR_ID);}
 export function parts(t,zone){return Object.fromEntries(new Intl.DateTimeFormat('en-CA',{timeZone:zone,year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23',weekday:'short'}).formatToParts(new Date(t)).map(p=>[p.type,p.value]));}
-const defaultType=e=>({slug:'default',title:'Book a time',description:'',location:'',duration:30,timezone:e.BOOKING_TIMEZONE||'America/New_York',days:[1,2,3,4,5],startMinute:780,endMinute:1020,noticeHours:24,horizonDays:30,enabled:true});
+const defaultType=e=>({slug:'default',title:'Book a time',description:'',location:'',duration:30,timezone:e.BOOKING_TIMEZONE||'America/New_York',days:[1,2,3,4,5],startMinute:780,endMinute:1020,noticeHours:24,horizonDays:30,enabled:true,bufferBefore:0,bufferAfter:0,maxPerDay:0,googleMeet:true,reminders:true});
 export function validSlot(t,e,now=Date.now(),type=defaultType(e)){
  if(!Number.isFinite(t)||t<now+type.noticeHours*60*MIN||t>now+type.horizonDays*1440*MIN||t%(15*MIN)!==0)return false;
  const p=parts(t,type.timezone),weekday=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].indexOf(p.weekday),minute=+p.hour*60+(+p.minute);
@@ -19,18 +20,11 @@ export function candidates(day,zone,e,now=Date.now(),type=defaultType(e)){
  for(let t=base-840*MIN;t<base+2280*MIN;t+=15*MIN){const p=parts(t,zone);if(p.year+'-'+p.month+'-'+p.day===day&&validSlot(t,e,now,type))out.push(t);}
  return out;
 }
-async function google(e,path,data,method='POST',headers={}){
- const auth=await fetch('https://oauth2.googleapis.com/token',{method:'POST',body:new URLSearchParams({client_id:e.BOOKING_GOOGLE_CLIENT_ID,client_secret:e.BOOKING_GOOGLE_CLIENT_SECRET,refresh_token:e.BOOKING_GOOGLE_REFRESH_TOKEN,grant_type:'refresh_token'})});
- if(!auth.ok)throw Error('Calendar authentication failed');
- const {access_token}=await auth.json();
- const r=await fetch('https://www.googleapis.com/calendar/v3/'+path,{method,headers:{Authorization:'Bearer '+access_token,'Content-Type':'application/json',...headers},...(data?{body:JSON.stringify(data)}:{})});
- if(!r.ok&&!(method==='DELETE'&&[404,410].includes(r.status))){const err=Error('Calendar request failed');err.status=r.status;throw err;}
- return method==='DELETE'?{}:r.json();
-}
 async function busy(e,min,max){
  const r=await google(e,'freeBusy',{timeMin:new Date(min).toISOString(),timeMax:new Date(max).toISOString(),items:[{id:e.BOOKING_CALENDAR_ID}]});
  const c=r.calendars?.[e.BOOKING_CALENDAR_ID];if(!c||c.errors)throw Error('Availability unavailable');return c.busy||[];
 }
+export const bookingDay=(t,zone)=>{const p=parts(t,zone);return p.year+'-'+p.month+'-'+p.day;};
 async function getType(e,slug){if(slug==='default')return defaultType(e);if(!e.MIMORI_DB)return null;return typeView(await e.MIMORI_DB.prepare('SELECT slug,settings,enabled FROM booking_types WHERE slug=? AND enabled=1').bind(slug).first());}
 function secure(response){
  const r=new Response(response.body,response);
@@ -72,32 +66,34 @@ async function handleBooking(request,e,next){
  }
  if(u.pathname.startsWith('/api/booking/admin/'))return await adminApi(request,e);
  if(request.method==='POST'&&!validOrigin(request,e))return json({error:'Invalid origin'},403);
- if(['/api/booking/manage','/api/booking/manage/slots','/api/booking/cancel','/api/booking/reschedule'].includes(u.pathname))return await manageBooking(request,e,{google,getType,candidates,validSlot,configured});
+ if(['/api/booking/manage','/api/booking/manage/slots','/api/booking/cancel','/api/booking/reschedule'].includes(u.pathname))return await manageBooking(request,e,{google,getType,candidates,validSlot,configured,bookingDay});
  const d=request.method==='POST'?await body(request,4096):null,slug=d?.slug||u.searchParams.get('slug')||'default',type=await getType(e,slug);
  if(!type)return json({error:'Booking page not found'},404);
  if(u.pathname==='/api/booking/config'&&request.method==='GET')return json({ready:configured(e),...type,hostTimezone:type.timezone});
  if(!configured(e))return json({error:'Bookings are not open yet.'},503);
- const db=e.MIMORI_DB,duration=type.duration*MIN;
+ const db=e.MIMORI_DB,duration=type.duration*MIN,before=(type.bufferBefore||0)*MIN,after=(type.bufferAfter||0)*MIN;
  if(u.pathname==='/api/booking/slots'&&request.method==='GET'){
  const zone=u.searchParams.get('timezone')||'UTC';try{parts(Date.now(),zone);}catch{return json({error:'Invalid timezone'},400);}
  const slots=candidates(u.searchParams.get('date')||'',zone,e,Date.now(),type);if(!slots.length)return json({slots:[]});
- const blocks=await busy(e,slots[0],slots.at(-1)+duration);
- const {results}=await db.prepare('SELECT start_ms FROM booking_slot_locks WHERE start_ms>=? AND start_ms<?').bind(slots[0],slots.at(-1)+duration).all();
- return json({slots:slots.filter(t=>!results.some(r=>r.start_ms>=t&&r.start_ms<t+duration)&&!blocks.some(b=>t<Date.parse(b.end)&&t+duration>Date.parse(b.start))).map(t=>new Date(t).toISOString())});
+ const blocks=await busy(e,slots[0]-before,slots.at(-1)+duration+after);
+ const {results}=await db.prepare('SELECT start_ms FROM booking_slot_locks WHERE start_ms>=? AND start_ms<?').bind(slots[0]-before,slots.at(-1)+duration+after).all();
+ const counts=type.maxPerDay?(await db.prepare("SELECT booking_day,count(*) AS n FROM booking_day_usage WHERE booking_slug=? GROUP BY booking_day").bind(slug).all()).results:[];
+ return json({slots:slots.filter(t=>!counts.some(c=>c.booking_day===bookingDay(t,type.timezone)&&c.n>=type.maxPerDay)&&!results.some(r=>r.start_ms>=t-before&&r.start_ms<t+duration+after)&&!blocks.some(b=>t-before<Date.parse(b.end)&&t+duration+after>Date.parse(b.start))).map(t=>new Date(t).toISOString())});
  }
  if(u.pathname==='/api/booking/reserve'&&request.method==='POST'){
  await throttle(db,'reserve:'+digest(request.headers.get('CF-Connecting-IP')||'unknown'),5);
  const t=Date.parse(d.start),name=String(d.name||'').trim(),email=String(d.email||'').trim(),notes=String(d.notes||'').trim();
  if(!validSlot(t,e,Date.now(),type)||!name||name.length>100||email.length>254||!/^\S+@\S+\.\S+$/.test(email)||notes.length>1000||d.website)return json({error:'Please enter valid booking details.'},400);
- const blocks=await busy(e,t,t+duration);if(blocks.some(b=>t<Date.parse(b.end)&&t+duration>Date.parse(b.start)))return json({error:'That time is no longer available.'},409);
+ const blocks=await busy(e,t-before,t+duration+after);if(blocks.some(b=>t-before<Date.parse(b.end)&&t+duration+after>Date.parse(b.start)))return json({error:'That time is no longer available.'},409);
  const cancelToken=crypto.randomUUID()+crypto.randomUUID(),id=crypto.randomUUID().replaceAll('-','');
- const statements=[db.prepare("INSERT INTO booking_reservations(id,start_ms,status,cancel_token,created_ms,booking_slug,duration_minutes,calendar_id) VALUES(?,?,'pending',?,?,?,?,?)").bind(id,t,cancelToken,Date.now(),slug,type.duration,e.BOOKING_CALENDAR_ID)];
- for(let lock=t;lock<t+duration;lock+=15*MIN)statements.push(db.prepare('INSERT INTO booking_slot_locks(start_ms,reservation_id) VALUES(?,?)').bind(lock,id));
- try{await db.batch(statements);}catch(err){if(/UNIQUE|constraint/i.test(String(err)))return json({error:'That time was just taken. Choose another slot.'},409);throw err;}
+ const day=bookingDay(t,type.timezone),max=type.maxPerDay||1000000;
+ const statements=[db.prepare("INSERT INTO booking_reservations(id,start_ms,status,cancel_token,created_ms,booking_slug,duration_minutes,calendar_id,buffer_before,buffer_after,booking_day,reminders) SELECT ?,?,'pending',?,?,?,?,?,?,?,?,? WHERE (SELECT count(*) FROM booking_day_usage WHERE booking_slug=? AND booking_day=?)<? RETURNING id").bind(id,t,cancelToken,Date.now(),slug,type.duration,e.BOOKING_CALENDAR_ID,type.bufferBefore||0,type.bufferAfter||0,day,+!!type.reminders,slug,day,max)];
+ for(let lock=t-before;lock<t+duration+after;lock+=15*MIN)statements.push(db.prepare('INSERT INTO booking_slot_locks(start_ms,reservation_id) SELECT ?,? WHERE EXISTS(SELECT 1 FROM booking_reservations WHERE id=?)').bind(lock,id,id));
+ try{const result=await db.batch(statements);if(!result[0].results.length)return json({error:'The booking limit for this day has been reached.'},409);}catch(err){if(/UNIQUE|constraint/i.test(String(err)))return json({error:'That time was just taken. Choose another slot.'},409);throw err;}
  try{
- const event=await google(e,'calendars/'+encodeURIComponent(e.BOOKING_CALENDAR_ID)+'/events?sendUpdates=all',{id,summary:type.title+' / '+name,description:[notes,'Reschedule or cancel: https://'+(e.BOOKING_HOST||'calendar.morisoba.moe')+'/manage#token='+cancelToken].filter(Boolean).join('\n\n'),guestsCanInviteOthers:false,guestsCanModify:false,...(type.location?{location:type.location}:{}),start:{dateTime:new Date(t).toISOString()},end:{dateTime:new Date(t+duration).toISOString()},attendees:[{email}],extendedProperties:{private:{bookingId:id,bookingType:slug}}});
+ const event=await google(e,'calendars/'+encodeURIComponent(e.BOOKING_CALENDAR_ID)+'/events?sendUpdates=all&conferenceDataVersion=1',{id,...(type.googleMeet?{conferenceData:{createRequest:{requestId:id,conferenceSolutionKey:{type:'hangoutsMeet'}}}}:{}),summary:type.title+' / '+name,description:[notes,'Reschedule or cancel: https://'+(e.BOOKING_HOST||'calendar.morisoba.moe')+'/manage#token='+cancelToken].filter(Boolean).join('\n\n'),guestsCanInviteOthers:false,guestsCanModify:false,...(type.location?{location:type.location}:{}),start:{dateTime:new Date(t).toISOString()},end:{dateTime:new Date(t+duration).toISOString()},attendees:[{email}],extendedProperties:{private:{bookingId:id,bookingType:slug}}});
  await db.prepare("UPDATE booking_reservations SET status='confirmed' WHERE id=?").bind(id).run();
- return json({start:new Date(t).toISOString(),duration:type.duration,title:type.title,cancelToken,eventId:id,eventUid:event.iCalUID||id+'@google.com'},201);
+ return json({start:new Date(t).toISOString(),duration:type.duration,title:type.title,cancelToken,eventId:id,eventUid:event.iCalUID||id+'@google.com',meetingUrl:event.hangoutLink||event.conferenceData?.entryPoints?.find(p=>p.entryPointType==='video')?.uri||null},201);
  }catch{return json({error:'Could not confirm the invitation. Please contact Soham before trying again.'},502);}
  }
  return json({error:'Not found'},404);

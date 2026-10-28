@@ -24,7 +24,7 @@ booking_reservations stores event ID, start, status, random cancellation token a
 
 An ambiguous Calendar or confirmation failure keeps the slot pending to prevent duplicate invitations. Reconcile pending rows manually using the row's event ID: mark confirmed if the event exists; otherwise mark cancelled to release. Never release solely by age.
 
-Cancellation uses a long bearer token in the URL fragment; treat the saved link as private. Google sends invitations/cancellations through sendUpdates=all. Confirmation offers an ICS download and cancellation link. Rescheduling updates the same Google event and emails its attendees. Invitations include a private /manage link. Automatic reminders and Meet generation are not implemented.
+Cancellation uses a long bearer token in the URL fragment; treat the saved link as private. Google sends invitations/cancellations through sendUpdates=all. Confirmation offers an ICS download and cancellation link. Rescheduling updates the same Google event and emails its attendees. Invitations include a private /manage link. Booking pages can enable automatic Google Meet links and email reminders.
 
 Before public launch, configure Cloudflare rate limiting/Turnstile on the reservation API to control invitation spam. The honeypot only filters basic bots.
 
@@ -71,6 +71,12 @@ Migration 0006 adds operation tracking for reschedules and cancellations. Apply 
 
 Rescheduling locks the replacement interval while keeping the original interval reserved, then patches the existing Google event with its ETag and `sendUpdates=all`. A successful update releases the original locks. An uncertain response retains both intervals; the next management read reconciles only a matching Google event. Unresolved operations require operator review, never automatic time-based lock release. Cancellation uses the same operation tracking and requests notification delivery to all attendees.
 
-Google Calendar sends invitation, change, and cancellation emails. Delivery timing and spam filtering are controlled by Google and recipient providers; this is not a separate branded email service. Attendee reminder preferences are controlled by their calendar. The downloadable ICS uses the Google event's UID to avoid a separate event identity.
+Google Calendar sends invitation, change, and cancellation emails. Delivery timing and spam filtering are controlled by Google and recipient providers; this is not a separate branded email service. The app sends separate Gmail reminders when enabled; attendees can also use their own calendar reminders. The downloadable ICS uses the Google event's UID to avoid a separate event identity.
 
 The admin portal lists upcoming bookings and verifies calendar access using the free/busy API. The OAuth app must be in production for an enduring connection; Google's testing-mode refresh tokens for Calendar scopes expire after seven days. The initial connection uses an operator-only loopback OAuth callback, and all credentials are installed as Worker secrets, outside this repository. Reauthorization currently requires the operator flow.
+
+## Personal scheduling options
+
+Apply migration 0007 before deployment. Each page supports optional Google Meet links, buffers before/after meetings (0–120 minutes in 15-minute steps), and a per-page daily booking limit (0 is unlimited). Limits use the host timezone and include pending reschedules. Existing bookings retain their buffer and reminder settings.
+
+The Worker checks reminders every five minutes, sending at approximately 24 hours and 1 hour before the booking. Bookings made after a reminder threshold do not receive that reminder. Google OAuth requires gmail.send, calendar.events, and calendar.freebusy. Gmail access is send-only. Each recipient/reminder/time is durably claimed before sending to avoid duplicates; uncertain or failed sends are not automatically retried and appear in the admin booking list for attention. Cancellation and in-progress updates suppress reminders.

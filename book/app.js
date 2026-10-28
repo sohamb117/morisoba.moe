@@ -33,6 +33,7 @@ $('#details').onsubmit=async e=>{
  try{
  const body=Object.fromEntries(new FormData(e.target));body.start=selectedTime;const booking=await api('reserve',body);
  $('#details').hidden=true;$('#complete').hidden=false;$('#step').textContent='CONFIRMED';$('#confirmed-time').textContent=full(booking.start);
+ if(booking.meetingUrl&&new URL(booking.meetingUrl).hostname==='meet.google.com'){$('#meeting-link').href=booking.meetingUrl;$('#meeting-link').hidden=false;}
  $('#cancel-link').href=cancellationUrl(booking.cancelToken);$('#cancel-link').target='_blank';$('#cancel-link').rel='noopener';
  $('#cancel-now').onclick=()=>{if(confirm('Cancel this booking?'))cancel(booking.cancelToken,$('#cancel-status'),$('#cancel-now'));};
  const stamp=t=>new Date(t).toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,'');

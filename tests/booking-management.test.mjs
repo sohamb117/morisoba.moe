@@ -2,6 +2,7 @@ import {test,beforeEach,afterEach,mock} from 'node:test';
 import assert from 'node:assert/strict';
 import {DatabaseSync} from 'node:sqlite';
 import {readFileSync} from 'node:fs';
+import {sendBookingReminders,reminderKind,reminderMessage} from '../middleware/booking-reminders.mjs';
 import {bookingMiddleware} from '../middleware/booking.mjs';
 let sql,env,events,calls,failPatch,failDelete;
 const token='11111111-1111-1111-1111-11111111111122222222-2222-2222-2222-222222222222';
@@ -15,13 +16,14 @@ function seed(start=nextSlot()){
  events.set('abc',{id:'abc',etag:'"v1"',status:'confirmed',summary:'Meeting / Guest',start:{dateTime:new Date(start).toISOString()},end:{dateTime:new Date(start+1800000).toISOString()},attendees:[{email:'guest@example.com'}]});return start;
 }
 beforeEach(()=>{
- sql=new DatabaseSync(':memory:');for(const n of ['0003_booking.sql','0004_booking_portal.sql','0005_booking_password.sql','0006_booking_management.sql'])sql.exec(readFileSync(new URL('../migrations/'+n,import.meta.url),'utf8'));
+ sql=new DatabaseSync(':memory:');for(const n of ['0003_booking.sql','0004_booking_portal.sql','0005_booking_password.sql','0006_booking_management.sql','0007_booking_options.sql'])sql.exec(readFileSync(new URL('../migrations/'+n,import.meta.url),'utf8'));
  env={MIMORI_DB:{prepare:stmt,async batch(statements){sql.exec('BEGIN');try{const results=statements.map(s=>({results:sql.prepare(s.query).all(...s.args)}));sql.exec('COMMIT');return results;}catch(e){sql.exec('ROLLBACK');throw e;}}},BOOKING_GOOGLE_CLIENT_ID:'id',BOOKING_GOOGLE_CLIENT_SECRET:'secret',BOOKING_GOOGLE_REFRESH_TOKEN:'refresh',BOOKING_CALENDAR_ID:'primary'};
  events=new Map();calls=[];failPatch=false;failDelete=false;
  mock.method(globalThis,'fetch',async(url,options={})=>{
   const u=new URL(url),method=options.method||'GET',data=options.body&&method!=='GET'?JSON.parse(typeof options.body==='string'?options.body:'{}'):null;
   if(u.hostname==='oauth2.googleapis.com')return Response.json({access_token:'access'});
   calls.push({url:u,method,data,headers:options.headers});
+  if(u.hostname==='gmail.googleapis.com')return Response.json({id:'sent'});
   if(u.pathname.endsWith('/freeBusy'))return Response.json({calendars:{primary:{busy:[]}}});
   const id=u.pathname.split('/').at(-1);
   if(id==='events'&&method==='GET')return Response.json({items:[...events.values()]});
@@ -53,3 +55,35 @@ test('lost reschedule response keeps both times locked until Google confirms the
 });
 test('cancel emails attendees, releases locks and is idempotent',async()=>{seed();assert.equal((await req('cancel',{token})).status,200);assert.equal((await req('cancel',{token})).status,200);assert.equal(sql.prepare('SELECT count(*) AS n FROM booking_slot_locks').get().n,0);assert.equal((await req('manage',{token})).data.status,'cancelled');const deletes=calls.filter(c=>c.method==='DELETE');assert.equal(deletes.length,1);assert.equal(deletes[0].url.searchParams.get('sendUpdates'),'all');});
 test('lost cancellation response is reconciled without freeing an uncertain booking early',async()=>{seed();failDelete=true;assert.equal((await req('cancel',{token})).status,503);assert.equal(sql.prepare('SELECT count(*) AS n FROM booking_slot_locks').get().n,2);assert.equal((await req('manage',{token})).data.status,'cancelled');assert.equal(sql.prepare('SELECT count(*) AS n FROM booking_slot_locks').get().n,0);});
+
+test('Meet creation is requested and buffers protect neighboring slots',async()=>{
+ const type={slug:'chat',title:'Chat',duration:30,timezone:'America/New_York',days:[1,2,3,4,5],startMinute:780,endMinute:1020,noticeHours:24,horizonDays:30,bufferBefore:15,bufferAfter:15,googleMeet:true,reminders:true,maxPerDay:0};
+ sql.prepare('INSERT INTO booking_types VALUES(?,?,1,1,1)').run(type.slug,JSON.stringify(type));
+ const start=nextSlot(),r=await req('reserve',{slug:'chat',start:new Date(start).toISOString(),name:'Guest',email:'guest@example.com'});assert.equal(r.status,201);
+ assert.equal(calls.find(c=>c.data?.conferenceData).data.conferenceData.createRequest.conferenceSolutionKey.type,'hangoutsMeet');
+ assert.equal(sql.prepare('SELECT count(*) n FROM booking_slot_locks').get().n,4);
+ assert.equal((await req('reserve',{start:new Date(start+1800000).toISOString(),name:'Guest',email:'guest@example.com'})).status,409);
+});
+test('daily cap includes an in-flight reschedule into the target day',async()=>{
+ const type={slug:'chat',title:'Chat',duration:30,timezone:'America/New_York',days:[1,2,3,4,5],startMinute:780,endMinute:1020,noticeHours:24,horizonDays:30,maxPerDay:1};
+ sql.prepare('INSERT INTO booking_types VALUES(?,?,1,1,1)').run(type.slug,JSON.stringify(type));
+ const start=seed(),day=new Intl.DateTimeFormat('en-CA',{timeZone:type.timezone}).format(start);
+ sql.prepare("UPDATE booking_reservations SET booking_slug='chat',booking_day='2099-01-01' WHERE id='abc'").run();
+ sql.prepare("INSERT INTO booking_operations(reservation_id,operation_id,action,target_start_ms,target_day,created_ms) VALUES('abc','op','reschedule',?,?,1)").run(start,day);
+ const r=await req('reserve',{slug:'chat',start:new Date(start+3600000).toISOString(),name:'Guest',email:'guest@example.com'});assert.equal(r.status,409);assert.match(r.data.error,/limit/);
+});
+
+test('reminders send once per threshold and skip declined attendees',async()=>{
+ const start=seed();sql.prepare("UPDATE booking_reservations SET reminders=1,created_ms=? WHERE id='abc'").run(start-2*86400000);
+ events.get('abc').attendees.push({email:'declined@example.com',responseStatus:'declined'});
+ const now=start-23*3600000;
+ assert.deepEqual(await sendBookingReminders(env,now),{sent:1,failed:0});
+ assert.deepEqual(await sendBookingReminders(env,now+300000),{sent:0,failed:0});
+ assert.deepEqual(await sendBookingReminders(env,start-3500000),{sent:1,failed:0});
+ const mails=calls.filter(c=>c.url.hostname==='gmail.googleapis.com');assert.equal(mails.length,2);assert.match(Buffer.from(mails[0].data.raw,'base64url').toString(),/To: guest@example.com/);
+ sql.prepare("UPDATE booking_reservations SET status='cancelled'").run();assert.deepEqual(await sendBookingReminders(env,now),{sent:0,failed:0});
+});
+test('reminder windows exclude late-created and past meetings, MIME rejects header injection',()=>{
+ const start=1000000000;assert.equal(reminderKind({start_ms:start,created_ms:start-300000},start-100000),null);assert.equal(reminderKind({start_ms:start,created_ms:1},start),null);
+ assert.throws(()=>reminderMessage({recipient:'a@example.com\r\nBcc: other@example.com',subject:'x',text:'x',id:'id'}));
+});

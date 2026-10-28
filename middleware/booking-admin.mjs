@@ -32,7 +32,9 @@ export function validateType(d){
  if(![15,30,45,60,90,120].includes(d.duration)||!Number.isInteger(d.startMinute)||!Number.isInteger(d.endMinute)||d.startMinute<0||d.endMinute>1440||d.startMinute%15||d.endMinute%15||d.endMinute-d.startMinute<d.duration)throw new HttpError(400,'Check the duration and available hours.');
  if(!Array.isArray(d.days)||!d.days.length||d.days.some(x=>!Number.isInteger(x)||x<0||x>6)||new Set(d.days).size!==d.days.length)throw new HttpError(400,'Select at least one weekday.');
  if(!Number.isInteger(d.noticeHours)||d.noticeHours<1||d.noticeHours>168||!Number.isInteger(d.horizonDays)||d.horizonDays<1||d.horizonDays>90||d.horizonDays*24<=d.noticeHours)throw new HttpError(400,'Check the notice period and booking window.');
- return {slug,title,description,location,timezone,duration:d.duration,startMinute:d.startMinute,endMinute:d.endMinute,days:d.days,noticeHours:d.noticeHours,horizonDays:d.horizonDays,enabled:d.enabled!==false};
+ const bufferBefore=d.bufferBefore??0,bufferAfter=d.bufferAfter??0,maxPerDay=d.maxPerDay??0;
+ if(![bufferBefore,bufferAfter].every(n=>Number.isInteger(n)&&n>=0&&n<=120&&n%15===0)||!Number.isInteger(maxPerDay)||maxPerDay<0||maxPerDay>100)throw new HttpError(400,'Use 0–120 minute buffers in 15-minute steps and a daily limit of 0–100.');
+ return {bufferBefore,bufferAfter,maxPerDay,googleMeet:d.googleMeet===true,reminders:d.reminders===true,slug,title,description,location,timezone,duration:d.duration,startMinute:d.startMinute,endMinute:d.endMinute,days:d.days,noticeHours:d.noticeHours,horizonDays:d.horizonDays,enabled:d.enabled!==false};
 }
 export function typeView(row){if(!row)return null;const t=JSON.parse(row.settings);return {...t,slug:row.slug,enabled:!!row.enabled};}
 export async function throttle(db,key,limit,window=900000){
@@ -72,8 +74,8 @@ export async function adminApi(request,e){
  }
  if(path==='/logout'&&request.method==='POST'){await db.prepare('DELETE FROM booking_admin_sessions WHERE token_hash=?').bind(s.token_hash).run();return json({ok:true},200,{'Set-Cookie':COOKIE+'=; Path=/; HttpOnly; SameSite=Strict; Secure; Max-Age=0'});}
  if(path==='/bookings'&&request.method==='GET'){
- const {results}=await db.prepare("SELECT r.id,r.start_ms,r.status,r.duration_minutes,r.booking_slug,r.cancel_token,t.settings,o.action AS pending_action FROM booking_reservations r LEFT JOIN booking_types t ON t.slug=r.booking_slug LEFT JOIN booking_operations o ON o.reservation_id=r.id WHERE r.start_ms>? ORDER BY r.start_ms LIMIT 100").bind(Date.now()-86400000).all();
- return json({bookings:results.map(r=>({id:r.id,start:new Date(r.start_ms).toISOString(),status:r.status,duration:r.duration_minutes,title:r.settings?JSON.parse(r.settings).title:'Book a time',pending:!!r.pending_action,manageUrl:'https://'+(e.BOOKING_HOST||'calendar.morisoba.moe')+'/manage#token='+r.cancel_token}))});
+ const {results}=await db.prepare("SELECT r.id,r.start_ms,r.status,r.duration_minutes,r.booking_slug,r.cancel_token,t.settings,o.action AS pending_action,(SELECT count(*) FROM booking_reminder_deliveries d WHERE d.reservation_id=r.id AND d.start_ms=r.start_ms AND d.status!='sent') AS reminder_issues FROM booking_reservations r LEFT JOIN booking_types t ON t.slug=r.booking_slug LEFT JOIN booking_operations o ON o.reservation_id=r.id WHERE r.start_ms>? ORDER BY r.start_ms LIMIT 100").bind(Date.now()-86400000).all();
+ return json({bookings:results.map(r=>({id:r.id,start:new Date(r.start_ms).toISOString(),status:r.status,duration:r.duration_minutes,title:r.settings?JSON.parse(r.settings).title:'Book a time',pending:!!r.pending_action,reminderIssues:r.reminder_issues,manageUrl:'https://'+(e.BOOKING_HOST||'calendar.morisoba.moe')+'/manage#token='+r.cancel_token}))});
  }
  if(path==='/types'&&request.method==='GET'){const {results}=await db.prepare('SELECT slug,settings,enabled FROM booking_types ORDER BY created_ms').all();return json({types:results.map(typeView)});}
  if(path==='/types'&&request.method==='POST'){
