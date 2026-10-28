@@ -24,7 +24,7 @@ booking_reservations stores event ID, start, status, random cancellation token a
 
 An ambiguous Calendar or confirmation failure keeps the slot pending to prevent duplicate invitations. Reconcile pending rows manually using the row's event ID: mark confirmed if the event exists; otherwise mark cancelled to release. Never release solely by age.
 
-Cancellation uses a long bearer token in the URL fragment; treat the saved link as private. Google sends invitations/cancellations through sendUpdates=all. Confirmation offers an ICS download and cancellation link. Rescheduling means cancelling and booking again. Automatic reminders and Meet generation are not implemented.
+Cancellation uses a long bearer token in the URL fragment; treat the saved link as private. Google sends invitations/cancellations through sendUpdates=all. Confirmation offers an ICS download and cancellation link. Rescheduling updates the same Google event and emails its attendees. Invitations include a private /manage link. Automatic reminders and Meet generation are not implemented.
 
 Before public launch, configure Cloudflare rate limiting/Turnstile on the reservation API to control invitation spam. The honeypot only filters basic bots.
 
@@ -63,3 +63,14 @@ The separately hosted private preview uses the same booking modules with its own
 ## Guest access
 
 Only administration requires the password. Guest booking pages are available with a page link once the host is public. Paused and unknown pages return 404. The private preview also requires its hosting account's sign-in. Calendar credentials remain server-side; availability stays closed until configured.
+
+
+## Guest booking management
+
+Migration 0006 adds operation tracking for reschedules and cancellations. Apply it before deploying this version. Guests open `/manage#token=...` from their invitation or confirmation. Tokens are sent only in same-origin POST bodies; the page uses no-referrer and no-store responses. Pausing a page disables new bookings and rescheduling but leaves cancellation available.
+
+Rescheduling locks the replacement interval while keeping the original interval reserved, then patches the existing Google event with its ETag and `sendUpdates=all`. A successful update releases the original locks. An uncertain response retains both intervals; the next management read reconciles only a matching Google event. Unresolved operations require operator review, never automatic time-based lock release. Cancellation uses the same operation tracking and requests notification delivery to all attendees.
+
+Google Calendar sends invitation, change, and cancellation emails. Delivery timing and spam filtering are controlled by Google and recipient providers; this is not a separate branded email service. Attendee reminder preferences are controlled by their calendar. The downloadable ICS uses the Google event's UID to avoid a separate event identity.
+
+The admin portal lists upcoming bookings and verifies calendar access using the free/busy API. The OAuth app must be in production for an enduring connection; Google's testing-mode refresh tokens for Calendar scopes expire after seven days. The initial connection uses an operator-only loopback OAuth callback, and all credentials are installed as Worker secrets, outside this repository. Reauthorization currently requires the operator flow.

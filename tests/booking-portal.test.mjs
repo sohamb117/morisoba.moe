@@ -20,7 +20,7 @@ before(async()=>{
  const bundle=await build({stdin:{contents:code,resolveDir:process.cwd()},bundle:true,write:false,format:'esm',platform:'neutral',external:['node:*']});
  mf=new Miniflare(convertV4MiniflareOptions({modules:true,script:bundle.outputFiles[0].text,compatibilityDate:'2026-10-16',compatibilityFlags:['nodejs_compat'],d1Databases:['MIMORI_DB'],bindings:{BOOKING_ADMIN_PASSWORD_HASH:await hashPassword(password)},serviceBindings:{ASSETS:r=>new Response(new URL(r.url).pathname)}}));
  db=await mf.getD1Database('MIMORI_DB');
- for(const file of ['0003_booking.sql','0004_booking_portal.sql','0005_booking_password.sql'])for(const s of (await readFile('migrations/'+file,'utf8')).split(';').filter(s=>s.trim()))await db.prepare(s).run();
+ for(const file of ['0003_booking.sql','0004_booking_portal.sql','0005_booking_password.sql','0006_booking_management.sql'])for(const s of (await readFile('migrations/'+file,'utf8')).split(';').filter(s=>s.trim()))await db.prepare(s).run();
 });
 after(async()=>{await mf?.dispose();});
 test('portal pages and all management endpoints require authentication',async()=>{
@@ -28,6 +28,8 @@ test('portal pages and all management endpoints require authentication',async()=
  assert.equal((await req('/book/admin/index.html')).status,404);
  const fallbackLogin=await mf.dispatchFetch('https://morisoba.moe/book/admin/login.html');assert.equal(await fallbackLogin.text(),'/book/admin/login');
  assert.equal((await req('/api/booking/admin/types')).status,401);
+ assert.equal((await req('/api/booking/admin/calendar')).status,401);
+ assert.equal((await req('/api/booking/admin/bookings')).status,401);
  assert.equal((await req('/api/booking/admin/types',{method:'POST',data:example})).status,401);
  assert.equal((await req('/api/booking/admin/session')).data.authenticated,false);
 });
@@ -36,6 +38,8 @@ test('password login creates opaque secure sessions; cross-origin writes and mis
  assert.equal((await req('/api/booking/admin/login',{method:'POST',data:{password},headers:{Origin:'https://evil.example'}})).status,403);
  const r=await req('/api/booking/admin/login',{method:'POST',data:{password}});assert.equal(r.status,200);assert.match(r.headers.get('Set-Cookie'),/__Host-booking=.*HttpOnly; SameSite=Strict; Secure/);
  actor={cookie:r.headers.get('Set-Cookie').split(';')[0],csrf:r.data.csrf};
+ assert.equal((await req('/api/booking/admin/calendar',{auth:true})).data.connected,false);
+ assert.deepEqual((await req('/api/booking/admin/bookings',{auth:true})).data.bookings,[]);
  const stored=await db.prepare('SELECT * FROM booking_admin_sessions').first();assert.notEqual(stored.token_hash,actor.cookie.split('=')[1]);
  assert.equal((await req('/admin/',{auth:true})).data,'/book/admin/');
  assert.equal((await req('/api/booking/admin/types',{method:'POST',data:example,headers:{Cookie:actor.cookie}})).status,403);
@@ -106,3 +110,5 @@ test('calendar API rejects cross-origin access and serves canonical Worker asset
  const page=await req('/default');assert.equal(page.status,200);assert.equal(page.data,'/book/');
  assert.equal(page.headers.get('Location'),null);
 });
+
+test('management and privacy pages are served directly on the calendar host',async()=>{for(const [path,asset] of [['/manage','/book/manage'],['/privacy','/book/privacy']]){const r=await req(path);assert.equal(r.status,200);assert.equal(r.data,asset);assert.equal(r.headers.get('Referrer-Policy'),'no-referrer');}});

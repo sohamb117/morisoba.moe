@@ -26,7 +26,7 @@ async function loadSlots(){
 }
 $('#prev').onclick=()=>{view.setMonth(view.getMonth()-1);calendar();};$('#next').onclick=()=>{view.setMonth(view.getMonth()+1);calendar();};
 $('#timezone').onchange=()=>{zone=$('#timezone').value;calendar();if(selectedDay)loadSlots();};$('#back').onclick=()=>{$('#picker').hidden=false;$('#details').hidden=true;$('#step').textContent='SELECT DATE';loadSlots();};
-function cancellationUrl(token){return location.origin+location.pathname+'#cancel='+encodeURIComponent(token);}
+function cancellationUrl(token){return 'https://calendar.morisoba.moe/manage#token='+encodeURIComponent(token);}
 async function cancel(token,target,button){button.disabled=true;try{await api('cancel',{token});target.textContent='Booking cancelled. The calendar has been updated.';}catch(e){target.textContent=e.message;button.disabled=false;}}
 $('#details').onsubmit=async e=>{
  e.preventDefault();$('#submit').disabled=true;$('#form-error').textContent='';
@@ -36,11 +36,11 @@ $('#details').onsubmit=async e=>{
  $('#cancel-link').href=cancellationUrl(booking.cancelToken);$('#cancel-link').target='_blank';$('#cancel-link').rel='noopener';
  $('#cancel-now').onclick=()=>{if(confirm('Cancel this booking?'))cancel(booking.cancelToken,$('#cancel-status'),$('#cancel-now'));};
  const stamp=t=>new Date(t).toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,'');
- const text=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//morisoba.moe//Booking//EN','BEGIN:VEVENT','UID:'+crypto.randomUUID()+'@morisoba.moe','DTSTAMP:'+stamp(Date.now()),'DTSTART:'+stamp(booking.start),'DTEND:'+stamp(Date.parse(booking.start)+booking.duration*60000),'SUMMARY:'+(booking.title||'Meeting with Soham').replace(/[\r\n,;]/g,' '),'DESCRIPTION:Cancellation link: '+cancellationUrl(booking.cancelToken),'END:VEVENT','END:VCALENDAR',''].join('\r\n');
+ const text=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//morisoba.moe//Booking//EN','BEGIN:VEVENT','UID:'+booking.eventUid,'DTSTAMP:'+stamp(Date.now()),'DTSTART:'+stamp(booking.start),'DTEND:'+stamp(Date.parse(booking.start)+booking.duration*60000),'SUMMARY:'+(booking.title||'Meeting with Soham').replace(/[\r\n,;]/g,' '),'DESCRIPTION:Reschedule or cancel: '+cancellationUrl(booking.cancelToken),'END:VEVENT','END:VCALENDAR',''].join('\r\n');
  if(icsUrl)URL.revokeObjectURL(icsUrl);icsUrl=URL.createObjectURL(new Blob([text],{type:'text/calendar'}));$('#download').href=icsUrl;$('#download').download='meeting.ics';
  }catch(err){$('#form-error').textContent=err.message;}finally{$('#submit').disabled=false;}
 };
-const token=new URLSearchParams(location.hash.slice(1)).get('cancel');if(token){$('#picker').hidden=true;$('#cancel-view').hidden=false;$('#step').textContent='MANAGE BOOKING';$('#cancel-confirm').onclick=()=>cancel(token,$('#cancel-result'),$('#cancel-confirm'));}
+const token=new URLSearchParams(location.hash.slice(1)).get('cancel');if(token){location.replace(cancellationUrl(token));$('#picker').hidden=true;$('#cancel-view').hidden=false;$('#step').textContent='MANAGE BOOKING';$('#cancel-confirm').onclick=()=>cancel(token,$('#cancel-result'),$('#cancel-confirm'));}
 calendar();
 $('#clock').textContent=new Date().toUTCString();
 api('config').then(c=>{

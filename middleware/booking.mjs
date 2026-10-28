@@ -1,3 +1,4 @@
+import {manageBooking} from './booking-manage.mjs';
 import {json,body,HttpError,adminApi,adminSession,typeView,throttle,validOrigin} from './booking-admin.mjs';
 import {digest} from './mimori-crypto.mjs';
 const MIN=60000;
@@ -18,12 +19,12 @@ export function candidates(day,zone,e,now=Date.now(),type=defaultType(e)){
  for(let t=base-840*MIN;t<base+2280*MIN;t+=15*MIN){const p=parts(t,zone);if(p.year+'-'+p.month+'-'+p.day===day&&validSlot(t,e,now,type))out.push(t);}
  return out;
 }
-async function google(e,path,data,method='POST'){
+async function google(e,path,data,method='POST',headers={}){
  const auth=await fetch('https://oauth2.googleapis.com/token',{method:'POST',body:new URLSearchParams({client_id:e.BOOKING_GOOGLE_CLIENT_ID,client_secret:e.BOOKING_GOOGLE_CLIENT_SECRET,refresh_token:e.BOOKING_GOOGLE_REFRESH_TOKEN,grant_type:'refresh_token'})});
  if(!auth.ok)throw Error('Calendar authentication failed');
  const {access_token}=await auth.json();
- const r=await fetch('https://www.googleapis.com/calendar/v3/'+path,{method,headers:{Authorization:'Bearer '+access_token,'Content-Type':'application/json'},...(data?{body:JSON.stringify(data)}:{})});
- if(!r.ok&&!(method==='DELETE'&&[404,410].includes(r.status)))throw Error('Calendar request failed');
+ const r=await fetch('https://www.googleapis.com/calendar/v3/'+path,{method,headers:{Authorization:'Bearer '+access_token,'Content-Type':'application/json',...headers},...(data?{body:JSON.stringify(data)}:{})});
+ if(!r.ok&&!(method==='DELETE'&&[404,410].includes(r.status))){const err=Error('Calendar request failed');err.status=r.status;throw err;}
  return method==='DELETE'?{}:r.json();
 }
 async function busy(e,min,max){
@@ -49,7 +50,9 @@ async function handleBooking(request,e,next){
  const signed=await adminSession(request,e),asset=signed?'/book/admin/':'/book/admin/login';
  return secure(await e.ASSETS.fetch(new Request(new URL(asset,u),request)));
  }
- if(u.pathname.startsWith('/shared/')||['/book/app.js','/book/style.css','/book/admin/app.js','/book/admin/login.js','/book/admin/style.css'].includes(u.pathname))return e.ASSETS.fetch(request);
+ if(u.pathname==='/privacy')return secure(await e.ASSETS.fetch(new Request(new URL('/book/privacy',u),request)));
+ if(u.pathname==='/manage'||u.pathname==='/manage/')return secure(await e.ASSETS.fetch(new Request(new URL('/book/manage',u),request)));
+ if(u.pathname.startsWith('/shared/')||['/book/manage.js','/book/app.js','/book/style.css','/book/admin/app.js','/book/admin/login.js','/book/admin/style.css'].includes(u.pathname))return e.ASSETS.fetch(request);
  const m=/^\/([a-z0-9][a-z0-9_-]{0,63})\/?$/.exec(u.pathname);
  if(m){const t=await getType(e,m[1]);if(t)return secure(await e.ASSETS.fetch(new Request(new URL('/book/',u),request)));}
  return new Response('Booking page not found',{status:404});
@@ -62,18 +65,14 @@ async function handleBooking(request,e,next){
  if(u.pathname.startsWith('/book/admin/')&&!/\.(js|css)$/.test(u.pathname))return new Response('Not found',{status:404});
  return next();
  }
+ if(u.pathname==='/api/booking/admin/calendar'&&request.method==='GET'){
+ if(!await adminSession(request,e))return json({error:'Sign in required'},401);
+ if(!configured(e))return json({connected:false,message:'Google Calendar is not connected.'});
+ try{await busy(e,Date.now(),Date.now()+MIN);return json({connected:true,calendar:e.BOOKING_CALENDAR_ID,message:'Google Calendar connected. Invitations, updates and cancellations are emailed automatically.'});}catch{return json({connected:false,message:'Google Calendar authorization needs attention. Availability and new bookings are unavailable.'});}
+ }
  if(u.pathname.startsWith('/api/booking/admin/'))return await adminApi(request,e);
  if(request.method==='POST'&&!validOrigin(request,e))return json({error:'Invalid origin'},403);
- if(u.pathname==='/api/booking/cancel'&&request.method==='POST'){
- if(!configured(e))return json({error:'Calendar unavailable'},503);
- const d=await body(request,512),row=await e.MIMORI_DB.prepare('SELECT id,status,calendar_id FROM booking_reservations WHERE cancel_token=?').bind(String(d.token||'')).first();
- if(!row)return json({error:'Booking not found'},404);
- if(row.status!=='cancelled'){
- await google(e,'calendars/'+encodeURIComponent(row.calendar_id||e.BOOKING_CALENDAR_ID)+'/events/'+row.id+'?sendUpdates=all',null,'DELETE');
- await e.MIMORI_DB.batch([e.MIMORI_DB.prepare("UPDATE booking_reservations SET status='cancelled' WHERE id=?").bind(row.id),e.MIMORI_DB.prepare('DELETE FROM booking_slot_locks WHERE reservation_id=?').bind(row.id)]);
- }
- return json({cancelled:true});
- }
+ if(['/api/booking/manage','/api/booking/manage/slots','/api/booking/cancel','/api/booking/reschedule'].includes(u.pathname))return await manageBooking(request,e,{google,getType,candidates,validSlot,configured});
  const d=request.method==='POST'?await body(request,4096):null,slug=d?.slug||u.searchParams.get('slug')||'default',type=await getType(e,slug);
  if(!type)return json({error:'Booking page not found'},404);
  if(u.pathname==='/api/booking/config'&&request.method==='GET')return json({ready:configured(e),...type,hostTimezone:type.timezone});
@@ -96,9 +95,9 @@ async function handleBooking(request,e,next){
  for(let lock=t;lock<t+duration;lock+=15*MIN)statements.push(db.prepare('INSERT INTO booking_slot_locks(start_ms,reservation_id) VALUES(?,?)').bind(lock,id));
  try{await db.batch(statements);}catch(err){if(/UNIQUE|constraint/i.test(String(err)))return json({error:'That time was just taken. Choose another slot.'},409);throw err;}
  try{
- await google(e,'calendars/'+encodeURIComponent(e.BOOKING_CALENDAR_ID)+'/events?sendUpdates=all',{id,summary:type.title+' / '+name,description:notes,...(type.location?{location:type.location}:{}),start:{dateTime:new Date(t).toISOString()},end:{dateTime:new Date(t+duration).toISOString()},attendees:[{email}],extendedProperties:{private:{bookingId:id,bookingType:slug}}});
+ const event=await google(e,'calendars/'+encodeURIComponent(e.BOOKING_CALENDAR_ID)+'/events?sendUpdates=all',{id,summary:type.title+' / '+name,description:[notes,'Reschedule or cancel: https://'+(e.BOOKING_HOST||'calendar.morisoba.moe')+'/manage#token='+cancelToken].filter(Boolean).join('\n\n'),guestsCanInviteOthers:false,guestsCanModify:false,...(type.location?{location:type.location}:{}),start:{dateTime:new Date(t).toISOString()},end:{dateTime:new Date(t+duration).toISOString()},attendees:[{email}],extendedProperties:{private:{bookingId:id,bookingType:slug}}});
  await db.prepare("UPDATE booking_reservations SET status='confirmed' WHERE id=?").bind(id).run();
- return json({start:new Date(t).toISOString(),duration:type.duration,title:type.title,cancelToken},201);
+ return json({start:new Date(t).toISOString(),duration:type.duration,title:type.title,cancelToken,eventId:id,eventUid:event.iCalUID||id+'@google.com'},201);
  }catch{return json({error:'Could not confirm the invitation. Please contact Soham before trying again.'},502);}
  }
  return json({error:'Not found'},404);

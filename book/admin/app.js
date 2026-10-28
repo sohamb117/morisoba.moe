@@ -39,7 +39,7 @@ form.onsubmit=async e=>{
 $('#new').onclick=()=>open();$('#close').onclick=close;$('#discard').onclick=close;
 $('#logout').onclick=async()=>{if(dirty&&!confirm('Discard unsaved changes and sign out?'))return;try{await api('logout',{});dirty=false;location.replace(home+'login.html');}catch(e){$('#status').textContent=e.message;}};
 addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue='';}});
-(async()=>{try{const s=await api('session');if(!s.authenticated){location.replace(home+'login.html');return;}csrf=s.csrf;types=(await api('types')).types;render();const c=await fetch('/api/booking/config',{credentials:'include'}).then(r=>r.json());$('#connection').textContent=c.ready?'Google Calendar connected.':'Calendar not connected. You can save pages; bookings stay closed until it is connected.';}catch(e){$('#status').textContent=e.message;}})();
+(async()=>{try{const s=await api('session');if(!s.authenticated){location.replace(home+'login.html');return;}csrf=s.csrf;types=(await api('types')).types;render();await checkConnection();await loadBookings();}catch(e){$('#status').textContent=e.message;}})();
 
 $('#password-form').onsubmit=async e=>{
  e.preventDefault();const f=e.target,button=$('#change-password'),error=$('#password-error');error.textContent='';
@@ -48,3 +48,14 @@ $('#password-form').onsubmit=async e=>{
  button.disabled=true;
  try{await api('password',Object.fromEntries(new FormData(f)));f.reset();dirty=false;location.replace(home+'login.html?password=changed');}catch(err){error.textContent=err.message;}finally{button.disabled=false;}
 };
+
+async function checkConnection(){
+ $('#check-connection').disabled=true;
+ try{const c=await api('calendar');$('#connection').textContent=c.message+(c.connected?' Calendar: '+c.calendar:'');}catch(e){$('#connection').textContent=e.message;}finally{$('#check-connection').disabled=false;}
+}
+async function loadBookings(){
+ const {bookings}=await api('bookings');$('#bookings').replaceChildren();
+ if(!bookings.length){$('#bookings').append(text('p','No upcoming bookings.'));return;}
+ for(const b of bookings){const row=document.createElement('article');row.className='row';row.append(text('h2',b.title),text('p',new Date(b.start).toLocaleString()+' · '+b.duration+' min'),text('p',b.pending?'Update awaiting confirmation':b.status));const a=text('a','Manage booking ↗');a.href=b.manageUrl;a.target='_blank';a.rel='noopener';row.append(a);$('#bookings').append(row);}
+}
+$('#check-connection').onclick=checkConnection;

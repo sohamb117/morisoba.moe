@@ -25,7 +25,7 @@ export async function adminSession(request,e){
 }
 export function validateType(d){
  const slug=String(d.slug||''),title=String(d.title||'').trim(),description=String(d.description||'').trim(),location=String(d.location||'').trim(),timezone=String(d.timezone||'');
- const reserved=['default','admin','api','book','shared','signin-with-chatgpt','signout-with-chatgpt','callback'];
+ const reserved=['privacy','manage','default','admin','api','book','shared','signin-with-chatgpt','signout-with-chatgpt','callback'];
  if(!/^[a-z0-9][a-z0-9_-]{0,63}$/.test(slug)||reserved.includes(slug))throw new HttpError(400,'Use lowercase letters, numbers, hyphens or underscores. Start with a letter or number.');
  if(!title||title.length>100||description.length>500||location.length>200)throw new HttpError(400,'Check the title, description and location.');
  try{new Intl.DateTimeFormat('en-US',{timeZone:timezone}).format();}catch{throw new HttpError(400,'Choose a valid timezone.');}
@@ -71,6 +71,10 @@ export async function adminApi(request,e){
  return json({changed:true},200,{'Set-Cookie':COOKIE+'=; Path=/; HttpOnly; SameSite=Strict; Secure; Max-Age=0'});
  }
  if(path==='/logout'&&request.method==='POST'){await db.prepare('DELETE FROM booking_admin_sessions WHERE token_hash=?').bind(s.token_hash).run();return json({ok:true},200,{'Set-Cookie':COOKIE+'=; Path=/; HttpOnly; SameSite=Strict; Secure; Max-Age=0'});}
+ if(path==='/bookings'&&request.method==='GET'){
+ const {results}=await db.prepare("SELECT r.id,r.start_ms,r.status,r.duration_minutes,r.booking_slug,r.cancel_token,t.settings,o.action AS pending_action FROM booking_reservations r LEFT JOIN booking_types t ON t.slug=r.booking_slug LEFT JOIN booking_operations o ON o.reservation_id=r.id WHERE r.start_ms>? ORDER BY r.start_ms LIMIT 100").bind(Date.now()-86400000).all();
+ return json({bookings:results.map(r=>({id:r.id,start:new Date(r.start_ms).toISOString(),status:r.status,duration:r.duration_minutes,title:r.settings?JSON.parse(r.settings).title:'Book a time',pending:!!r.pending_action,manageUrl:'https://'+(e.BOOKING_HOST||'calendar.morisoba.moe')+'/manage#token='+r.cancel_token}))});
+ }
  if(path==='/types'&&request.method==='GET'){const {results}=await db.prepare('SELECT slug,settings,enabled FROM booking_types ORDER BY created_ms').all();return json({types:results.map(typeView)});}
  if(path==='/types'&&request.method==='POST'){
  const t=validateType(await body(request));const r=await db.prepare('INSERT INTO booking_types(slug,settings,enabled,created_ms,updated_ms) VALUES(?,?,?,?,?) ON CONFLICT(slug) DO NOTHING RETURNING slug').bind(t.slug,JSON.stringify(t),+t.enabled,Date.now(),Date.now()).first();
