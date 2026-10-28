@@ -9,11 +9,11 @@ test('host hours follow DST and visitor timezone boundaries',()=>{
  assert.equal(validSlot(Date.parse('2026-11-02T17:00:00Z'),e,now),false);
  assert.equal(validSlot(Date.parse('2026-10-31T17:00:00Z'),e,now),false);
  const japan=candidates('2026-11-03','Asia/Tokyo',e,now);
- assert.equal(japan.length,8);assert.equal(new Date(japan[0]).toISOString(),'2026-11-02T18:00:00.000Z');
+ assert.equal(japan.length,15);assert.equal(new Date(japan[0]).toISOString(),'2026-11-02T18:00:00.000Z');
 });
-test('notice, horizon and half-hour boundaries are enforced',()=>{
+test('notice, horizon and quarter-hour boundaries are enforced',()=>{
  const now=Date.parse('2026-10-29T18:00:00Z');
- for(const t of ['2026-10-30T17:00:00Z','2026-12-01T18:00:00Z','2026-11-02T18:15:00Z','2026-11-02T18:00:01Z'])assert.equal(validSlot(Date.parse(t),e,now),false,t);
+ for(const t of ['2026-10-30T17:00:00Z','2026-12-01T18:00:00Z','2026-11-02T18:07:00Z','2026-11-02T18:00:01Z'])assert.equal(validSlot(Date.parse(t),e,now),false,t);
  assert.deepEqual(candidates('invalid','UTC',e,now),[]);
 });
 test('unconfigured calendar fails closed; other routes pass through',async()=>{

@@ -4,7 +4,7 @@ const fs=require('node:fs');
 const path=require('node:path');
 test('production artifact includes Mimorigasaka shell, API routing and original durable database',()=>{
   const config=JSON.parse(fs.readFileSync('wrangler.jsonc','utf8'));
-  for(const route of ['/mimorigasaka','/mimorigasaka/*','/api/mimorigasaka','/api/mimorigasaka/*'])assert.ok(config.assets.run_worker_first.includes(route),route);
+  for(const route of ['/mimorigasaka','/mimorigasaka/*','/api/mimorigasaka','/api/mimorigasaka/*'])assert.ok(config.assets.run_worker_first===true||config.assets.run_worker_first.includes(route),route);
   assert.equal(config.d1_databases.find(db=>db.binding==='MIMORI_DB').database_id,'f43ff1cb-49cb-4713-baa2-48586de779c4');
   const shell=fs.readFileSync('mimorigasaka/index.html','utf8');
   for(const match of shell.matchAll(/(?:src|href)="(\/[^"?#]+)(?:\?[^"#]*)?"/g)){

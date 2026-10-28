@@ -1,4 +1,6 @@
 const $=s=>document.querySelector(s);
+const pagePath=location.pathname.split('/').filter(Boolean),slug=new URLSearchParams(location.search).get('booking')||(pagePath.length===1&&pagePath[0]!=='book'?pagePath[0]:'default');
+let bookingConfig={duration:30,horizonDays:30};
 let zone=Intl.DateTimeFormat().resolvedOptions().timeZone,view=new Date(),selectedDay='',selectedTime='',ready=false,requestId=0,icsUrl;
 view=new Date(view.getFullYear(),view.getMonth(),1);
 const zones=[...new Set([zone,'America/New_York','America/Los_Angeles','Europe/London','Europe/Paris','Asia/Kolkata','Asia/Tokyo','Australia/Sydney','UTC'])];
@@ -10,11 +12,11 @@ function calendar(){
  $('#month').textContent=view.toLocaleDateString('en-US',{month:'long',year:'numeric'});$('#days').replaceChildren();
  const offset=(view.getDay()+6)%7;for(let i=0;i<offset;i++)$('#days').append(document.createElement('span'));
  for(let d=1;d<=new Date(view.getFullYear(),view.getMonth()+1,0).getDate();d++){
- const day=view.getFullYear()+'-'+String(view.getMonth()+1).padStart(2,'0')+'-'+String(d).padStart(2,'0'),b=document.createElement('button');b.textContent=d;b.type='button';b.disabled=day<localDay(new Date())||day>localDay(new Date(Date.now()+30*86400000));b.classList.toggle('selected',selectedDay===day);b.classList.toggle('today',day===localDay(new Date()));b.setAttribute('aria-label',new Date(day+'T12:00:00').toLocaleDateString('en-US',{dateStyle:'full'}));b.setAttribute('aria-pressed',selectedDay===day);b.onclick=()=>{selectedDay=day;calendar();loadSlots();};$('#days').append(b);
+ const day=view.getFullYear()+'-'+String(view.getMonth()+1).padStart(2,'0')+'-'+String(d).padStart(2,'0'),b=document.createElement('button');b.textContent=d;b.type='button';b.disabled=day<localDay(new Date())||day>localDay(new Date(Date.now()+bookingConfig.horizonDays*86400000));b.classList.toggle('selected',selectedDay===day);b.classList.toggle('today',day===localDay(new Date()));b.setAttribute('aria-label',new Date(day+'T12:00:00').toLocaleDateString('en-US',{dateStyle:'full'}));b.setAttribute('aria-pressed',selectedDay===day);b.onclick=()=>{selectedDay=day;calendar();loadSlots();};$('#days').append(b);
  }
- const current=new Date();$('#prev').disabled=view.getFullYear()===current.getFullYear()&&view.getMonth()===current.getMonth();$('#next').disabled=view.getTime()>Date.now()+30*86400000;
+ const current=new Date();$('#prev').disabled=view.getFullYear()===current.getFullYear()&&view.getMonth()===current.getMonth();$('#next').disabled=view.getTime()>Date.now()+bookingConfig.horizonDays*86400000;
 }
-async function api(path,body){const r=await fetch('/api/booking/'+path,body?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}:{});let d;try{d=await r.json();}catch{throw Error('Calendar connection unavailable. Please try again later.');}if(!r.ok)throw Error(d.error||'Request failed');return d;}
+async function api(path,body){if(body&&path==='reserve')body.slug=slug;if(!body)path+=(path.includes('?')?'&':'?')+'slug='+encodeURIComponent(slug);const r=await fetch('/api/booking/'+path,body?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}:{});let d;try{d=await r.json();}catch{throw Error('Calendar connection unavailable. Please try again later.');}if(!r.ok)throw Error(d.error||'Request failed');return d;}
 async function loadSlots(){
  const id=++requestId;$('#slots').replaceChildren();$('#date-label').textContent=new Date(selectedDay+'T12:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric'});if(!ready){$('#status').textContent='Bookings are not open yet.';return;}
  $('#status').textContent='Checking the calendar…';
@@ -34,11 +36,19 @@ $('#details').onsubmit=async e=>{
  $('#cancel-link').href=cancellationUrl(booking.cancelToken);$('#cancel-link').target='_blank';$('#cancel-link').rel='noopener';
  $('#cancel-now').onclick=()=>{if(confirm('Cancel this booking?'))cancel(booking.cancelToken,$('#cancel-status'),$('#cancel-now'));};
  const stamp=t=>new Date(t).toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,'');
- const text=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//morisoba.moe//Booking//EN','BEGIN:VEVENT','UID:'+crypto.randomUUID()+'@morisoba.moe','DTSTAMP:'+stamp(Date.now()),'DTSTART:'+stamp(booking.start),'DTEND:'+stamp(Date.parse(booking.start)+1800000),'SUMMARY:Meeting with Soham','DESCRIPTION:Cancellation link: '+cancellationUrl(booking.cancelToken),'END:VEVENT','END:VCALENDAR',''].join('\r\n');
+ const text=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//morisoba.moe//Booking//EN','BEGIN:VEVENT','UID:'+crypto.randomUUID()+'@morisoba.moe','DTSTAMP:'+stamp(Date.now()),'DTSTART:'+stamp(booking.start),'DTEND:'+stamp(Date.parse(booking.start)+booking.duration*60000),'SUMMARY:'+(booking.title||'Meeting with Soham').replace(/[\r\n,;]/g,' '),'DESCRIPTION:Cancellation link: '+cancellationUrl(booking.cancelToken),'END:VEVENT','END:VCALENDAR',''].join('\r\n');
  if(icsUrl)URL.revokeObjectURL(icsUrl);icsUrl=URL.createObjectURL(new Blob([text],{type:'text/calendar'}));$('#download').href=icsUrl;$('#download').download='meeting.ics';
  }catch(err){$('#form-error').textContent=err.message;}finally{$('#submit').disabled=false;}
 };
 const token=new URLSearchParams(location.hash.slice(1)).get('cancel');if(token){$('#picker').hidden=true;$('#cancel-view').hidden=false;$('#step').textContent='MANAGE BOOKING';$('#cancel-confirm').onclick=()=>cancel(token,$('#cancel-result'),$('#cancel-confirm'));}
 calendar();
 $('#clock').textContent=new Date().toUTCString();
-api('config').then(c=>{ready=c.ready;$('#status').textContent=ready?'Choose a date to see available times.':'Bookings are not open yet.';}).catch(e=>{$('#status').textContent=e.message;});
+api('config').then(c=>{
+ bookingConfig=c;ready=c.ready;document.title=c.title+' ✠ morisoba';$('#booking-title').textContent=c.title;
+ $('#booking-description').textContent=c.description;$('#booking-description').hidden=!c.description;
+ $('#booking-duration').textContent=c.duration+' minutes';$('#slot-duration').textContent=c.duration+' MIN';
+ $('#booking-notice').textContent=c.noticeHours+' hours';$('#booking-location').textContent=c.location;$('#booking-location').hidden=!c.location;
+ const dayNames=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],clock=n=>String(Math.floor(n/60)).padStart(2,'0')+':'+String(n%60).padStart(2,'0');
+ $('#booking-hours').textContent=c.days.map(d=>dayNames[d]).join(', ')+' · '+clock(c.startMinute)+'–'+clock(c.endMinute)+' · '+c.timezone;
+ calendar();$('#status').textContent=ready?'Choose a date to see available times.':'Bookings are not open yet.';
+}).catch(e=>{$('#status').textContent=e.message;$('#days').querySelectorAll('button').forEach(b=>b.disabled=true);});
