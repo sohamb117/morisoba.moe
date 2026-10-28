@@ -1,3 +1,4 @@
+import {notifyBookingHost} from './booking-notifications.mjs';
 import {google,configured} from './booking-google.mjs';
 export {configured} from './booking-google.mjs';
 import {manageBooking} from './booking-manage.mjs';
@@ -109,6 +110,7 @@ async function handleBooking(request,e,next){
  try{
  const event=await google(e,'calendars/'+encodeURIComponent(e.BOOKING_CALENDAR_ID)+'/events?sendUpdates=all&conferenceDataVersion=1',{id,...(type.googleMeet?{conferenceData:{createRequest:{requestId:id,conferenceSolutionKey:{type:'hangoutsMeet'}}}}:{}),summary:type.title+' / '+name,description:[notes,'Reschedule or cancel: https://'+(e.BOOKING_HOST||'calendar.morisoba.moe')+'/manage#token='+cancelToken].filter(Boolean).join('\n\n'),guestsCanInviteOthers:false,guestsCanModify:false,...(type.location?{location:type.location}:{}),start:{dateTime:new Date(t).toISOString()},end:{dateTime:new Date(t+duration).toISOString()},attendees:[{email}],extendedProperties:{private:{bookingId:id,bookingType:slug}}});
  await db.prepare("UPDATE booking_reservations SET status='confirmed' WHERE id=?").bind(id).run();
+ await notifyBookingHost(e,{event,start:t,timezone:type.timezone,cancelToken,name,email,notes});
  return json({start:new Date(t).toISOString(),duration:type.duration,title:type.title,cancelToken,eventId:id,eventUid:event.iCalUID||id+'@google.com',meetingUrl:event.hangoutLink||event.conferenceData?.entryPoints?.find(p=>p.entryPointType==='video')?.uri||null},201);
  }catch{return json({error:'Could not confirm the invitation. Please contact Soham before trying again.'},502);}
  }

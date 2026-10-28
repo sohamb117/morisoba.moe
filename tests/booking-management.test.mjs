@@ -4,7 +4,7 @@ import {DatabaseSync} from 'node:sqlite';
 import {readFileSync} from 'node:fs';
 import {sendBookingReminders,reminderKind,reminderMessage} from '../middleware/booking-reminders.mjs';
 import {bookingMiddleware} from '../middleware/booking.mjs';
-let sql,env,events,calls,failPatch,failDelete,busyBlocks;
+let sql,env,events,calls,failPatch,failDelete,busyBlocks,failMail;
 const token='11111111-1111-1111-1111-11111111111122222222-2222-2222-2222-222222222222';
 const origin='https://calendar.morisoba.moe';
 function stmt(query,args=[]){return {bind(...v){return stmt(query,v);},async first(){return sql.prepare(query).get(...args)||null;},async all(){return {results:sql.prepare(query).all(...args)};},async run(){return sql.prepare(query).run(...args);},query,args};}
@@ -18,16 +18,16 @@ function seed(start=nextSlot()){
 beforeEach(()=>{
  sql=new DatabaseSync(':memory:');for(const n of ['0003_booking.sql','0004_booking_portal.sql','0005_booking_password.sql','0006_booking_management.sql','0007_booking_options.sql'])sql.exec(readFileSync(new URL('../migrations/'+n,import.meta.url),'utf8'));
  env={MIMORI_DB:{prepare:stmt,async batch(statements){sql.exec('BEGIN');try{const results=statements.map(s=>({results:sql.prepare(s.query).all(...s.args)}));sql.exec('COMMIT');return results;}catch(e){sql.exec('ROLLBACK');throw e;}}},BOOKING_GOOGLE_CLIENT_ID:'id',BOOKING_GOOGLE_CLIENT_SECRET:'secret',BOOKING_GOOGLE_REFRESH_TOKEN:'refresh',BOOKING_CALENDAR_ID:'primary'};
- events=new Map();calls=[];failPatch=false;failDelete=false;busyBlocks=[];
+ events=new Map();calls=[];failPatch=false;failDelete=false;busyBlocks=[];failMail=false;
  mock.method(globalThis,'fetch',async(url,options={})=>{
   const u=new URL(url),method=options.method||'GET',data=options.body&&method!=='GET'?JSON.parse(typeof options.body==='string'?options.body:'{}'):null;
   if(u.hostname==='oauth2.googleapis.com')return Response.json({access_token:'access'});
   calls.push({url:u,method,data,headers:options.headers});
-  if(u.hostname==='gmail.googleapis.com')return Response.json({id:'sent'});
+  if(u.hostname==='gmail.googleapis.com')return failMail?Response.json({error:'unavailable'},{status:503}):Response.json({id:'sent'});
   if(u.pathname.endsWith('/freeBusy'))return Response.json({calendars:{primary:{busy:busyBlocks}}});
   const id=u.pathname.split('/').at(-1);
   if(id==='events'&&method==='GET')return Response.json({items:[...events.values()]});
-  if(id==='events'&&method==='POST'){events.set(data.id,{...data,etag:'"v1"'});return Response.json(data);}
+  if(id==='events'&&method==='POST'){const event={...data,organizer:{email:'host@example.com'},etag:'"v1"'};events.set(data.id,event);return Response.json(event);}
   if(method==='GET')return events.has(id)?Response.json(events.get(id)):Response.json({}, {status:404});
   if(method==='PATCH'){const event=events.get(id);events.set(id,{...event,...data,etag:'"v2"'});if(failPatch)throw Error('Lost response');return Response.json(events.get(id));}
   if(method==='DELETE'){events.delete(id);if(failDelete)throw Error('Lost response');return new Response(null,{status:204});}
@@ -96,4 +96,16 @@ test('month availability agrees with daily slots and omits fully busy days acros
  for(const date of result.days){const daily=await get('slots?date='+date+'&timezone=America%2FNew_York');assert.ok(daily.slots.length>0);}
  const tokyo=await get('days?month='+month+'&timezone=Asia%2FTokyo');
  for(const date of tokyo.days){const daily=await get('slots?date='+date+'&timezone=Asia%2FTokyo');assert.ok(daily.slots.length>0);}
+});
+
+test('new booking sends host a separate receipt with guest details and management link',async()=>{
+ const r=await req('reserve',{start:new Date(nextSlot()).toISOString(),name:'Guest',email:'guest@example.com',notes:'Discuss plans'});assert.equal(r.status,201);
+ const mail=calls.find(c=>c.url.hostname==='gmail.googleapis.com');assert.ok(mail);
+ const mime=Buffer.from(mail.data.raw,'base64url').toString();assert.match(mime,/To: host@example.com/);
+ const text=Buffer.from(mime.split('\r\n\r\n')[1],'base64').toString();assert.match(text,/Guest: Guest <guest@example.com>/);assert.match(text,/Discuss plans/);assert.match(text,/Manage booking: https:\/\/calendar.morisoba.moe\/manage#token=/);
+ assert.equal(sql.prepare("SELECT status FROM booking_reminder_deliveries WHERE kind='host-booked'").get().status,'sent');
+});
+test('host email failure preserves successful booking and records delivery trouble',async()=>{
+ failMail=true;const r=await req('reserve',{start:new Date(nextSlot()).toISOString(),name:'Guest',email:'guest@example.com'});assert.equal(r.status,201);
+ assert.equal(sql.prepare('SELECT status FROM booking_reservations').get().status,'confirmed');assert.equal(sql.prepare("SELECT status FROM booking_reminder_deliveries WHERE kind='host-booked'").get().status,'failed');
 });
