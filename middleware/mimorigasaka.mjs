@@ -1,3 +1,4 @@
+import {controlSession,googleAuthEnabled,controlAuthApi} from './control-auth.mjs';
 import {changeVaultPassword} from '../protocol/vault.mjs';
 import {token, digest, hashPassword, verifyPassword} from './mimori-crypto.mjs';
 const BASE = '/api/mimorigasaka';
@@ -26,9 +27,11 @@ function cookieValue(request, env) {
   return parts.find(s => s.startsWith(name + '='))?.slice(name.length + 1) || '';
 }
 export async function session(request, env) {
+  if(googleAuthEnabled(env)){const owner=await controlSession(request,env);if(owner)return {...owner,control_auth:true};}
   const raw = cookieValue(request, env);
   if (!/^[a-f0-9]{64}$/.test(raw)) return null;
-  return one(env.MIMORI_DB, `SELECT u.*, s.csrf, s.token_hash AS session_hash FROM mimori_sessions s JOIN mimori_users u ON s.user_id=u.id WHERE s.token_hash=? AND s.expires_at>? AND u.disabled=0`, digest(raw), Date.now());
+  const legacy=await one(env.MIMORI_DB, `SELECT u.*, s.csrf, s.token_hash AS session_hash FROM mimori_sessions s JOIN mimori_users u ON s.user_id=u.id WHERE s.token_hash=? AND s.expires_at>? AND u.disabled=0`, digest(raw), Date.now());
+  return googleAuthEnabled(env)&&legacy?.role==='admin'?null:legacy;
 }
 async function issueSession(request, env, user) {
   const raw = token(), csrf = token(), now = Date.now();
@@ -110,6 +113,7 @@ export async function mimorigasakaMiddleware(request, env, next) {
       if (route === '/login') {
         const user = await one(db, 'SELECT * FROM mimori_users WHERE username=?', id);
         const valid = await verifyPassword(pass, user?.password_hash);
+        if (googleAuthEnabled(env)&&user?.role==='admin')fail(403,'Sign in at /control/.');
         if (!valid || user.disabled) fail(401, 'ID or passcode is incorrect.');
         return issueSession(request, env, user);
       }
@@ -133,15 +137,17 @@ export async function mimorigasakaMiddleware(request, env, next) {
       return issueSession(request, env, await one(db, `SELECT ${PUBLIC_USER} FROM mimori_users WHERE id=?`, uid));
     }
     const user = await session(request, env);
-    if (route === '/session' && method === 'GET') return json(user ? {user:userView(user), csrf:user.csrf} : {user:null});
+    if (route === '/session' && method === 'GET') return json(user ? {user:userView(user), csrf:user.csrf,...(user.control_auth?{controlAuth:true}:{})} : {user:null});
     if (!user) fail(401, 'Sign in to view posts.');
     if (mutation && request.headers.get('X-CSRF-Token') !== user.csrf) fail(403, 'Session check failed. Reload and try again.');
     if (mutation) await limit(db, 'write:' + user.id, 120, 60000);
     if (route === '/logout' && method === 'POST') {
+      if(user.control_auth){const u=new URL(request.url);u.pathname='/api/control/logout';return controlAuthApi(new Request(u,request),env);}
       await run(db, 'DELETE FROM mimori_sessions WHERE token_hash=?', user.session_hash);
       return json({ok:true}, 200, {'Set-Cookie':setCookie(request, env, '', 0)});
     }
     if (route === '/password' && method === 'POST') {
+      if(user.control_auth)fail(403,'Manage your password at /control/.');
       const data = await body(request); await limit(db, 'password:' + user.id, 5);
       if (!await verifyPassword(password(data.currentPassword), user.password_hash)) fail(400, 'Current passcode is incorrect.');
       const nextPassword=password(data.password),hash = await hashPassword(nextPassword);

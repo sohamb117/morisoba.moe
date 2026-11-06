@@ -25,6 +25,7 @@
   "dependencies": {
     "@noble/hashes": "2.0.1",
     "@open-e2ee/signal-protocol-sdk": "13.2.0",
+    "jose": "^6.2.15",
     "json-canonicalize": "2.0.0"
   }
 }

@@ -18,3 +18,5 @@ protocol/wasm/target/
 mimori/crypto.worker.js
 
 /calendar-dist/
+
+control/app.bundle.js

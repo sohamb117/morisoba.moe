@@ -1,3 +1,4 @@
+import {controlSession,googleAuthEnabled} from './control-auth.mjs';
 import {token,digest,verifyPassword,hashPassword} from './mimori-crypto.mjs';
 export function validOrigin(request){return request.headers.get('Origin')===new URL(request.url).origin;}
 export const json=(data,status=200,headers={})=>Response.json(data,{status,headers:{'Cache-Control':'no-store','X-Content-Type-Options':'nosniff',...headers}});
@@ -17,6 +18,7 @@ export async function passwordHash(e){
  return row?.password_hash||e.BOOKING_ADMIN_PASSWORD_HASH||null;
 }
 export async function adminSession(request,e){
+ if(googleAuthEnabled(e))return controlSession(request,e);
  if(!e.MIMORI_DB)return null;
  const hash=await passwordHash(e);if(!hash)return null;
  const raw=request.headers.get('Cookie')?.split(';').map(v=>v.trim()).find(v=>v.startsWith(COOKIE+'='))?.slice(COOKIE.length+1);
@@ -47,7 +49,8 @@ export async function adminApi(request,e){
  const u=new URL(request.url),path=u.pathname.slice('/api/booking/admin'.length),db=e.MIMORI_DB;
  if(!db)return json({error:'Portal storage is not configured.'},503);
  if(!['GET','HEAD'].includes(request.method)&&!validOrigin(request,e))return json({error:'Invalid origin'},403);
- const activeHash=await passwordHash(e),configured=!!activeHash;
+ if(googleAuthEnabled(e)&&['/login','/password','/logout'].includes(path))return json({error:'Sign in at /control/.'},410);
+ const activeHash=googleAuthEnabled(e)?null:await passwordHash(e),configured=googleAuthEnabled(e)||!!activeHash;
  if(path==='/session'&&request.method==='GET'){const s=await adminSession(request,e);return json({authenticated:!!s,configured,...(s?{csrf:s.csrf}:{} )});}
  if(!configured)return json({error:'Set the admin password before opening the portal.'},503);
  if(path==='/login'&&request.method==='POST'){

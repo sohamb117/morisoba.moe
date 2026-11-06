@@ -3,6 +3,7 @@ import {ProviderClient} from './provider-client.mjs';
 import {openWorkerClient} from './worker-client.mjs';
 import {verifyRecord} from './records.mjs';
 const $=id=>document.getElementById(id),status=text=>{$('page-status').textContent=text;};
+let controlAuth=false;
 let user,provider,client,legacyPosts=[],partners=new Map();
 const running=new WeakSet();
 async function busy(fn,scope=null){
@@ -21,6 +22,8 @@ async function session(){
  const r=await fetch('/api/mimorigasaka/session',{cache:'no-store'}),s=await r.json();
  if(!r.ok)throw Error(s.error??'Unable to check account');
  if(s.user){
+ controlAuth=!!s.controlAuth;
+ if(controlAuth){$('login-submit')?.removeAttribute('disabled');$('login-form').querySelector('button').textContent='Unlock keyring';document.querySelector('label[for="password"]').textContent='Keyring passphrase';}
  user=s.user;provider=new ProviderClient(location.origin,{csrf:s.csrf});
  $('account').hidden=false;$('username').value=user.username;
  $('account-name').textContent='Signed in as @'+user.username;$('identity-toggle').textContent='C:'+user.username+'>';
@@ -37,6 +40,7 @@ click('sign-out',async()=>{await accountRequest('/logout',{method:'POST',data:{}
 form('login-form',async()=>{
  const password=$('password').value;status('Signing in…');
  try{
+ if(controlAuth){await activate(password);return;}
  const r=await fetch('/api/mimorigasaka/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:$('username').value,password})}),data=await r.json();
  if(!r.ok)throw Error(data.error??'Login failed');
  await session();await activate(password);
