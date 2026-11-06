@@ -1,40 +1,51 @@
 {
-	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "morisoba",
-	"main": "worker.mjs",
-	"compatibility_date": "2026-10-16",
-	"observability": {
-		"enabled": true
-	},
-	"assets": {
-		"directory": ".",
-		"binding": "ASSETS",
-		"run_worker_first": true
-	},
-	"compatibility_flags": [
-		"nodejs_compat"
-	],
-	"keep_vars": true,
-	"triggers": {"crons": ["*/5 * * * *"]},
-	"vars": {
-		"SPOTIFY_CLIENT_ID": "58bb81063b87436ba551703d0d8f53c3",
-		"MIMORI_ORIGIN": "https://morisoba.moe",
-		"MIMORI_PROTOCOL_ENABLED": "true"
-	},
-	"d1_databases": [
-		{
-			"binding": "MIMORI_DB",
-			"database_name": "morisoba-mimorigasaka",
-			"database_id": "f43ff1cb-49cb-4713-baa2-48586de779c4"
-		},
-		{
-			"binding": "MIMORI_PROTOCOL_DB",
-			"database_name": "morisoba-mimori-protocol",
-			"database_id": "012834c3-f4c5-42a8-944a-b07411cafafb",
-			"migrations_dir": "protocol/migrations"
-		}
-	],
-	"build": {
-		"command": "npm run build:protocol"
-	}
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "morisoba",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-10-16",
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "directory": ".",
+    "binding": "ASSETS",
+    "run_worker_first": true
+  },
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "keep_vars": true,
+  "triggers": {
+    "crons": [
+      "*/5 * * * *"
+    ]
+  },
+  "vars": {
+    "SPOTIFY_CLIENT_ID": "58bb81063b87436ba551703d0d8f53c3",
+    "MIMORI_ORIGIN": "https://morisoba.moe",
+    "MIMORI_PROTOCOL_ENABLED": "true",
+    "CONTROL_AUTH_REQUIRED": "true",
+    "GCP_AUTH_PROJECT_ID": "personal-use-493017",
+    "GCP_AUTH_API_KEY": "AIzaSyCG0EyiE-74eYdwRRoHwdZGY1sjgYgLQzU",
+    "CONTROL_GCP_UID": "morisoba-owner",
+    "CONTROL_OWNER_ID": "b2156aaf-e79d-475a-8051-0bf9b037b43b",
+    "CONTROL_OWNER_EMAIL": "sohamb117@gmail.com",
+    "CONTROL_USERNAME": "morisoba"
+  },
+  "d1_databases": [
+    {
+      "binding": "MIMORI_DB",
+      "database_name": "morisoba-mimorigasaka",
+      "database_id": "f43ff1cb-49cb-4713-baa2-48586de779c4"
+    },
+    {
+      "binding": "MIMORI_PROTOCOL_DB",
+      "database_name": "morisoba-mimori-protocol",
+      "database_id": "012834c3-f4c5-42a8-944a-b07411cafafb",
+      "migrations_dir": "protocol/migrations"
+    }
+  ],
+  "build": {
+    "command": "npm run build:protocol"
+  }
 }
