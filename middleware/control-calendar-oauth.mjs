@@ -28,7 +28,7 @@ export async function calendarOAuth(request,env){
    if(url.origin!=='https://morisoba.moe')return json({error:'Connect Calendar from morisoba.moe.'},400);
    const state=token(),verifier=token(),challenge=b64(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(verifier))).replaceAll('+','-').replaceAll('/','_').replace(/=+$/,'');
    await db.batch([db.prepare('DELETE FROM control_calendar_oauth WHERE expires_ms<?').bind(Date.now()),db.prepare('INSERT INTO control_calendar_oauth VALUES(?,?,?,?)').bind(digest(state),session.session_hash,await seal(verifier,env),Date.now()+600000)]);
-   const params=new URLSearchParams({client_id:env.BOOKING_GOOGLE_CLIENT_ID,redirect_uri:callback,response_type:'code',access_type:'offline',prompt:'consent',include_granted_scopes:'true',scope:'https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/calendar.calendarlist.readonly',state,code_challenge:challenge,code_challenge_method:'S256',login_hint:env.CONTROL_OWNER_EMAIL});
+   const params=new URLSearchParams({client_id:env.BOOKING_GOOGLE_CLIENT_ID,redirect_uri:callback,response_type:'code',access_type:'offline',prompt:'consent',include_granted_scopes:'false',scope:'https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/calendar.calendarlist.readonly',state,code_challenge:challenge,code_challenge_method:'S256',login_hint:env.CONTROL_OWNER_EMAIL});
    return json({url:'https://accounts.google.com/o/oauth2/v2/auth?'+params},200,{'Set-Cookie':cookie+'='+state+'; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=600'});
   }
   if(request.method!=='GET')return json({error:'Method not allowed'},405);
