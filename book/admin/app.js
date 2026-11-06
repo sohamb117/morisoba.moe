@@ -1,13 +1,14 @@
 const $=s=>document.querySelector(s),form=$('#page-form');
 let csrf='',types=[],editing=null,dirty=false;
 const home=(location.pathname.startsWith('/book/')?'/book/admin/':'/admin/');
+const panelQuery=new URLSearchParams(location.search).get('panel')==='1'?'?panel=1':'';
 const publicBase=location.hostname==='calendar.morisoba.moe'?location.origin:'https://calendar.morisoba.moe';
 const guestUrl=slug=>location.hostname.endsWith('.chatgpt.site')?location.origin+'/'+slug:publicBase+'/'+slug;
 const ownZone=Intl.DateTimeFormat().resolvedOptions().timeZone;
 for(const z of [...new Set([ownZone,'America/New_York',...(Intl.supportedValuesOf?.('timeZone')||[]),'UTC'])]){const o=document.createElement('option');o.value=z;o.textContent=z.replaceAll('_',' ');$('#zones').append(o);}
 async function api(path,data,method='POST'){
  const r=await fetch('/api/booking/admin/'+path,{credentials:'include',method:data===undefined?'GET':method,headers:{'Content-Type':'application/json','X-CSRF-Token':csrf},...(data===undefined?{}:{body:JSON.stringify(data)})});
- if(r.status===401){location.replace(home+'login.html');throw Error('Sign in required');}
+ if(r.status===401){location.replace(home+'login.html'+panelQuery);throw Error('Sign in required');}
  const d=await r.json();if(!r.ok)throw Error(d.error||'Request failed');return d;
 }
 function text(tag,value){const el=document.createElement(tag);el.textContent=value;return el;}
@@ -37,16 +38,16 @@ form.onsubmit=async e=>{
  try{await api(editing?'types/'+editing:'types',d,editing?'PUT':'POST');types=(await api('types')).types;render();dirty=false;close();$('#status').textContent='Page saved.';}catch(err){$('#form-error').textContent=err.message;}finally{$('#save').disabled=false;}
 };
 $('#new').onclick=()=>open();$('#close').onclick=close;$('#discard').onclick=close;
-$('#logout').onclick=async()=>{if(dirty&&!confirm('Discard unsaved changes and sign out?'))return;try{await api('logout',{});dirty=false;location.replace(home+'login.html');}catch(e){$('#status').textContent=e.message;}};
+$('#logout').onclick=async()=>{if(dirty&&!confirm('Discard unsaved changes and sign out?'))return;try{await api('logout',{});dirty=false;location.replace(home+'login.html'+panelQuery);}catch(e){$('#status').textContent=e.message;}};
 addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue='';}});
-(async()=>{try{const s=await api('session');if(!s.authenticated){location.replace(home+'login.html');return;}csrf=s.csrf;types=(await api('types')).types;render();await checkConnection();await loadBookings();}catch(e){$('#status').textContent=e.message;}})();
+(async()=>{try{const s=await api('session');if(!s.authenticated){location.replace(home+'login.html'+panelQuery);return;}csrf=s.csrf;types=(await api('types')).types;render();await checkConnection();await loadBookings();}catch(e){$('#status').textContent=e.message;}})();
 
 $('#password-form').onsubmit=async e=>{
  e.preventDefault();const f=e.target,button=$('#change-password'),error=$('#password-error');error.textContent='';
  if(f.elements.newPassword.value!==f.elements.confirmPassword.value){error.textContent='New passwords do not match.';return;}
  if(dirty&&!confirm('Changing your password signs you out. Discard unsaved page changes?'))return;
  button.disabled=true;
- try{await api('password',Object.fromEntries(new FormData(f)));f.reset();dirty=false;location.replace(home+'login.html?password=changed');}catch(err){error.textContent=err.message;}finally{button.disabled=false;}
+ try{await api('password',Object.fromEntries(new FormData(f)));f.reset();dirty=false;location.replace(home+'login.html?password=changed'+(panelQuery?'&panel=1':''));}catch(err){error.textContent=err.message;}finally{button.disabled=false;}
 };
 
 async function checkConnection(){
