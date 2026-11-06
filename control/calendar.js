@@ -32,18 +32,14 @@ form.onsubmit=async e=>{
 };
 $('#new').onclick=()=>open();$('#discard').onclick=close;
 addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue='';}});
-(async()=>{try{types=(await api('types')).types;render();await checkConnection();await loadBookings();}catch(e){$('#status').textContent=e.message;}})();
+(async()=>{try{types=(await api('types')).types;render();await loadBookings();}catch(e){$('#status').textContent=e.message;}})();
 
-async function checkConnection(){
- $('#check-connection').disabled=true;
- try{const c=await api('calendar');$('#connection').textContent=c.connected?'Connected':c.message;}catch(e){$('#connection').textContent=e.message;}finally{$('#check-connection').disabled=false;}
-}
 async function loadBookings(){
  const {bookings}=await api('bookings');$('#bookings').replaceChildren();
  if(!bookings.length){$('#bookings').append(text('p','No upcoming bookings.'));return;}
  for(const b of bookings){const row=document.createElement('article');row.className='row';row.append(text('h2',b.title),text('p',new Date(b.start).toLocaleString()+' · '+b.duration+' min'),text('p',b.pending?'Update awaiting confirmation':b.status));if(b.reminderIssues)row.append(text('p','Email delivery needs attention'));const a=text('a','Manage booking ↗');a.href=b.manageUrl;a.target='_blank';a.rel='noopener';row.append(a);$('#bookings').append(row);}
 }
-$('#check-connection').onclick=checkConnection;
+
 
 $('#refresh-bookings').onclick=()=>loadBookings().catch(e=>{$('#status').textContent=e.message;});
 }

@@ -4,6 +4,8 @@ import {openWorkerClient} from './worker-client.mjs';
 import {verifyRecord} from './records.mjs';
 const $=id=>document.getElementById(id),status=text=>{$('page-status').textContent=text;};
 let controlAuth=false;
+const invitation=new URLSearchParams(location.hash.slice(1)).get('invite');
+if(invitation){history.replaceState(null,'',location.pathname);$('login-form').querySelector('button').textContent='Create account';}
 let user,provider,client,legacyPosts=[],partners=new Map();
 const running=new WeakSet();
 async function busy(fn,scope=null){
@@ -32,7 +34,7 @@ async function session(){
 }
 click('invite-people',async()=>{
  const result=await accountRequest('/invites',{method:'POST',data:{}});
- $('account-invite-link').value=location.origin+'/mimorigasaka/#invite='+result.token;
+ $('account-invite-link').value=location.origin+'/mimori/#invite='+result.token;
  $('account-invite').hidden=false;status('Copy this private invitation link. It is shown only once.');
 });
 click('copy-account-invite',async()=>{try{await navigator.clipboard.writeText($('account-invite-link').value);status('Invitation copied.');}catch{$('account-invite-link').select();status('Select and copy the invitation link.');}});
@@ -41,7 +43,7 @@ form('login-form',async()=>{
  const password=$('password').value;status('Signing in…');
  try{
  if(controlAuth){await activate(password);return;}
- const r=await fetch('/api/mimorigasaka/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:$('username').value,password})}),data=await r.json();
+ const r=await fetch('/api/mimorigasaka/'+(invitation?'register':'login'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:$('username').value,password,...(invitation?{invite:invitation}:{})})}),data=await r.json();
  if(!r.ok)throw Error(data.error??'Login failed');
  await session();await activate(password);
  }finally{$('password').value='';}

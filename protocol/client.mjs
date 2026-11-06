@@ -20,6 +20,7 @@ export async function unlock(provider,password){
 }
 export async function signInIdentity(provider,password){
  try{return await unlock(provider,password);}catch(e){
+ if(e.name==='OperationError')throw Error('Keyring could not be decrypted. Use the original Mimori passphrase. Your control-plane password may be different.');
  if(!['No vault','Enroll first'].includes(e.message))throw e;
  const pending=await enroll(provider,password);try{await pending.commit();return pending.secrets;}catch(error){if(error.message!=='Account already enrolled')throw error;return unlock(provider,password);}
  }

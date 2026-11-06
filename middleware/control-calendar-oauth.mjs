@@ -1,24 +1,11 @@
 import {controlSession} from './control-auth.mjs';
 import {digest,token} from './mimori-crypto.mjs';
-import {google} from './booking-google.mjs';
+import {seal,unseal,b64} from './connection-crypto.mjs';
+export {seal,unseal} from './connection-crypto.mjs';
+export {google as controlGoogle} from './connections-google.mjs';
 const callback='https://morisoba.moe/api/control/calendar/callback';
 const cookie='__Host-calendar-oauth';
 const json=(data,status=200,extra={})=>Response.json(data,{status,headers:{'Cache-Control':'no-store','Referrer-Policy':'no-referrer',...extra}});
-const b64=bytes=>btoa(String.fromCharCode(...new Uint8Array(bytes)));
-const unb64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
-async function encryptionKey(env){const source=await crypto.subtle.importKey('raw',new TextEncoder().encode(env.BOOKING_GOOGLE_CLIENT_SECRET),'HKDF',false,['deriveKey']);return crypto.subtle.deriveKey({name:'HKDF',hash:'SHA-256',salt:new TextEncoder().encode('morisoba-control-calendar-v1'),info:new TextEncoder().encode('oauth-storage')},source,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);}
-export async function seal(value,env){const iv=crypto.getRandomValues(new Uint8Array(12)),cipher=await crypto.subtle.encrypt({name:'AES-GCM',iv},await encryptionKey(env),new TextEncoder().encode(value));return b64(iv)+'.'+b64(cipher);}
-export async function unseal(value,env){const [iv,cipher]=value.split('.');return new TextDecoder().decode(await crypto.subtle.decrypt({name:'AES-GCM',iv:unb64(iv)},await encryptionKey(env),unb64(cipher)));}
-export async function controlGoogle(env,path,data,method='POST',headers={}){
- // Existing booking authorization already covers event reads and writes.
- if(!path.startsWith('users/me/calendarList')&&path!=='colors')return google(env,path,data,method,headers);
- const saved=await env.MIMORI_DB.prepare('SELECT encrypted_token FROM control_calendar_connection WHERE id=1').first();
- if(!saved)return google(env,path,data,method,headers);
- const auth=await fetch('https://oauth2.googleapis.com/token',{method:'POST',body:new URLSearchParams({client_id:env.BOOKING_GOOGLE_CLIENT_ID,client_secret:env.BOOKING_GOOGLE_CLIENT_SECRET,refresh_token:await unseal(saved.encrypted_token,env),grant_type:'refresh_token'})});
- if(!auth.ok){const error=Error('Reconnect Google Calendar');error.status=401;throw error;}
- const {access_token}=await auth.json();const r=await fetch('https://www.googleapis.com/calendar/v3/'+path,{method,headers:{Authorization:'Bearer '+access_token,'Content-Type':'application/json',...headers},...(data?{body:JSON.stringify(data)}:{})});
- if(!r.ok&&!(method==='DELETE'&&[404,410].includes(r.status))){const error=Error('Calendar request failed');error.status=r.status;throw error;}return method==='DELETE'?{}:r.json();
-}
 export async function calendarOAuth(request,env){
  const url=new URL(request.url),db=env.MIMORI_DB;
  if(!db||!env.BOOKING_GOOGLE_CLIENT_SECRET)return json({error:'Calendar connection is not configured.'},503);

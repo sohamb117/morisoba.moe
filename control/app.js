@@ -1,3 +1,4 @@
+import {createConnections} from './connections.js';
 import {createDesktop,registerApps} from './desktop.js';
 import {createGoogleCalendar} from './google-calendar.js';
 import {initCalendar} from './calendar.js';
@@ -14,17 +15,21 @@ async function start(s){
  owner=s.user;csrf=s.csrf;$('#entry-gate').hidden=true;$('#stage').hidden=false;$('#dock').hidden=false;$('#desktop-bar').hidden=false;$('#owner-email').textContent=owner.email;$('#profile-form').elements.displayName.value=owner.displayName;$('#profile-form').elements.bio.value=owner.bio||'';
  if(started){location.reload();return;}started=true;
  const desktop=createDesktop();
- const calendar=createGoogleCalendar({api:(path,data,method)=>api('/api/control/calendar'+path,data,method)});
+ const connections=createConnections({api:(path,data)=>api('/api/control'+path,data),openChat:()=>launchChat()});
+ const openConnections=()=>{desktop.open('app-connections');connections.open();};
+ const calendar=createGoogleCalendar({ownerId:owner.id,openConnections,api:(path,data,method)=>api('/api/control/calendar'+path,data,method)});
  let bookingStarted=false,adminStarted=false,chatStarted=false;
+ const launchChat=()=>{desktop.open('app-chat');if(!chatStarted){closeKeyring=initKeyring({csrf,owner});chatStarted=true;}};
  const launch=(id,init)=>()=>{desktop.open(id);init?.();};
  registerApps($('#app-launcher'),[
+  {name:'Connection Manager',launch:openConnections},
   {name:'Calendar',launch:launch('app-calendar',()=>calendar.open())},
-  {name:'Mimori-Chat',launch:launch('app-chat',()=>{if(!chatStarted){closeKeyring=initKeyring({csrf,owner});chatStarted=true;}})},
-  {name:'Mimori-Admin',launch:launch('app-admin',()=>{if(!adminStarted){initCommunity({api:(path,data,method)=>api('/api/mimorigasaka/'+path,data,method)});adminStarted=true;}})},
+  {name:'Mimori-Chat',launch:launchChat},
+  {name:'Mimori-Admin',launch:launch('app-admin',()=>{if(!adminStarted){initCommunity({protocolApi:()=>api('/api/control/mimori'),api:(path,data,method)=>api('/api/mimorigasaka/'+path,data,method)});adminStarted=true;}})},
   {name:'Upcoming Events',launch:launch('app-upcoming',()=>calendar.upcoming())},
   {name:'Booking Manager',launch:launch('app-booking',()=>{if(!bookingStarted){initCalendar({api:(path,data,method)=>api('/api/booking/admin/'+path,data,method),openPanel:()=>{$('#booking-editor').hidden=false;$('#booking-editor').scrollIntoView({block:'start'});},closePanel:()=>{$('#booking-editor').hidden=true;}});bookingStarted=true;}})}
  ]);
- if(location.hash==='#calendar-connected'){desktop.open('app-calendar');calendar.open();history.replaceState(null,'',location.pathname);}
+ if(location.hash==='#calendar-connected'){openConnections();history.replaceState(null,'',location.pathname);}
 }
 
 $('#login-form').onsubmit=async e=>{

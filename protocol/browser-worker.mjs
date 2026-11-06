@@ -12,7 +12,7 @@ self.onmessage=({data})=>{
     if(client)throw Error('Already signed in');
     provider=new ProviderClient(data.origin,{csrf:data.csrf});
     const secrets=await signInIdentity(provider,data.password);data.password=null;
-    client=await openProtocolClient({provider,secrets,automaticDevice:true});
+    try{client=await openProtocolClient({provider,secrets,automaticDevice:true});}catch(error){if(error.name==='OperationError')throw Error('Keyring unlocked, but this browser’s saved messaging data could not be decrypted. No data was reset.');throw error;}
     value={identity:{id:client.identity.id},deviceId:client.deviceId};
    }else{
     if(!client||!methods.has(data.method))throw Error('Unavailable operation');

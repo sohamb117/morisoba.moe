@@ -1,3 +1,4 @@
+import {connectionsApi,protocolAdminApi} from './control-connections.mjs';
 import {calendarOAuth} from './control-calendar-oauth.mjs';
 import {controlCalendarApi} from './control-calendar.mjs';
 import {controlAuthApi} from './control-auth.mjs';
@@ -5,6 +6,8 @@ const entries=new Set(['/control','/control/','/control/index.html']);
 export async function controlPlaneMiddleware(request,env,next){
  const url=new URL(request.url),calendar=url.hostname===(env.BOOKING_HOST||'calendar.morisoba.moe');
  if(['/api/control/calendar/connect','/api/control/calendar/callback'].includes(url.pathname))return calendarOAuth(request,env);
+ if(url.pathname==='/api/control/connections')return connectionsApi(request,env);
+ if(url.pathname==='/api/control/mimori')return protocolAdminApi(request,env);
  if(url.pathname.startsWith('/api/control/calendar/'))return controlCalendarApi(request,env);
  if(url.pathname.startsWith('/api/control/'))return controlAuthApi(request,env);
  if(/^\/(?:book\/)?admin(?:\/|$)/.test(url.pathname))return Response.redirect((calendar?'https://morisoba.moe':url.origin)+'/control/',302);
