@@ -1,3 +1,4 @@
+import {socialApi} from './control-social.mjs';
 import {spotifyControlApi} from './control-spotify.mjs';
 import {remiliaApi} from './control-remilia.mjs';
 import {discordApi} from './control-discord.mjs';
@@ -10,6 +11,7 @@ const entries=new Set(['/control','/control/','/control/index.html']);
 export async function controlPlaneMiddleware(request,env,next){
  const url=new URL(request.url),calendar=url.hostname===(env.BOOKING_HOST||'calendar.morisoba.moe');
  if(['/api/control/calendar/connect','/api/control/calendar/callback'].includes(url.pathname))return calendarOAuth(request,env);
+ if(/^\/api\/control\/(slack|x|instagram)\//.test(url.pathname))return socialApi(request,env);
  if(url.pathname.startsWith('/api/control/spotify/'))return spotifyControlApi(request,env);
  if(url.pathname.startsWith('/api/control/remilia/'))return remiliaApi(request,env);
  if(url.pathname.startsWith('/api/control/discord/'))return discordApi(request,env);
@@ -24,7 +26,7 @@ export async function controlPlaneMiddleware(request,env,next){
   if(url.pathname==='/control')return Response.redirect(url.origin+'/control/',302);
   const response=await env.ASSETS.fetch(new Request(new URL('/control/',url),request)),out=new Response(response.body,response);
   out.headers.set('Cache-Control','no-store');out.headers.set('X-Robots-Tag','noindex, nofollow');out.headers.set('Cross-Origin-Opener-Policy','same-origin');
-  out.headers.set('Content-Security-Policy',"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://lh3.googleusercontent.com https://i.scdn.co https://cdn.discordapp.com https://media.discordapp.net; font-src 'self'; connect-src 'self' https:; worker-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'");
+  out.headers.set('Content-Security-Policy',"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://lh3.googleusercontent.com https://i.scdn.co https://cdn.discordapp.com https://media.discordapp.net https://pbs.twimg.com https://*.cdninstagram.com https://*.fbcdn.net; font-src 'self'; connect-src 'self' https:; worker-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'");
   return out;
  }
  return next();

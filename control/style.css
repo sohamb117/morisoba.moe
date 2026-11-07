@@ -100,3 +100,26 @@ input[type=checkbox]:checked::before{content:"";width:8px;height:8px;background:
 #stage .app-window.is-maximized{height:auto!important;max-height:none}
 @media(max-width:720px){#stage .app-window.panel:not(.is-maximized){bottom:auto!important;height:auto!important;max-height:calc(100dvh - 112px)}#stage #app-discord:not(.is-maximized),#stage #app-remilia:not(.is-maximized){height:620px!important}}
 .month-day{min-height:84px}
+
+/* Social panes have one main scroll surface; chats keep a separate channel list. */
+#stage .social-window{height:620px;min-height:0}
+#stage .social-window>.pbody{display:flex;overflow:hidden;min-height:0}
+.social-root{display:flex;flex-direction:column;flex:1;min-width:0;min-height:0;gap:8px}
+.social-tabs{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.social-tabs [aria-pressed=true],.social-sidebar .selected{background:#ddd;color:#111}
+.social-body{display:flex;gap:12px;flex:1;min-height:0;min-width:0}
+.social-sidebar{width:180px;flex-shrink:0;overflow:auto;display:flex;flex-direction:column;align-items:stretch;gap:4px}
+.social-sidebar[hidden],.social-composer[hidden]{display:none}
+.social-sidebar button{text-align:left;overflow-wrap:anywhere}
+.social-main{display:flex;flex-direction:column;flex:1;min-width:0;min-height:0;gap:8px}
+.social-content{flex:1;min-height:0;overflow:auto;overflow-wrap:anywhere}
+.social-item{display:flex;flex-direction:column;gap:6px;padding:10px 0;border-bottom:1px solid #444;white-space:pre-wrap}
+.social-item time{font-size:.8em;opacity:.65}
+.social-thumbnail{border:0;padding:0;background:none;align-self:flex-start}
+.social-thumbnail img{max-width:220px;max-height:140px;object-fit:contain;display:block}
+.social-image{max-width:94vw;max-height:94dvh;background:#080808;color:#eee;border:1px solid #888}
+.social-image img{display:block;max-width:85vw;max-height:80dvh;object-fit:contain}
+.social-composer{display:flex;gap:8px;align-items:center}
+.social-composer textarea{flex:1;min-width:0;resize:none;height:64px;overflow:auto;outline-offset:0}
+.social-root>[role=status]:empty{display:none}
+@media(max-width:600px){.social-sidebar{width:115px}.social-tabs{gap:4px}.social-thumbnail img{max-width:160px}}

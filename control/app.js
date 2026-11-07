@@ -1,3 +1,4 @@
+import {createSocial} from './social.js';
 import {createGitActivity} from './git-activity.js';
 import {createSpotifyControls} from './spotify.js';
 import {createRemoteChat} from './remote-chat.js';
@@ -25,7 +26,8 @@ async function start(s){
  const remilia=createRemoteChat({provider:'remilia',ownerId:owner.id,api:(path,data,method)=>api('/api/control'+path,data,method),openConnections});
  const discord=createRemoteChat({provider:'discord',ownerId:owner.id,api:(path,data,method)=>api('/api/control'+path,data,method),openConnections});
  const spotify=createSpotifyControls({api:(path,data)=>api('/api/control'+path,data),openConnections});
- closeRemote=()=>{remilia.close();discord.close();spotify.close();gitActivity.close();};
+ const social=Object.fromEntries(['slack','x','instagram'].map(provider=>[provider,createSocial({provider,api:(path,data,method)=>api('/api/control'+path,data,method),openConnections})]));
+ closeRemote=()=>{Object.values(social).forEach(app=>app.close());remilia.close();discord.close();spotify.close();gitActivity.close();};
  const feeds=createFeedApps({api:(path,data,method)=>api('/api/control'+path,data,method)});
  const gitActivity=createGitActivity({api:path=>api('/api/control'+path),openConnections});
  const github=createGithub({api:path=>api('/api/control'+path),openConnections});
@@ -34,6 +36,7 @@ async function start(s){
  const launchChat=()=>{desktop.open('app-chat');if(!chatStarted){closeKeyring=initKeyring({csrf,owner});chatStarted=true;}};
  const launch=(id,init)=>()=>{desktop.open(id);init?.();};
  registerApps($('#app-launcher'),[
+  ...Object.entries(social).map(([name,app])=>({name,launch:launch('app-'+name,()=>app.open())})),
   {name:'RemiliaNet Chat',launch:launch('app-remilia',()=>remilia.open())},
   {name:'Discord',launch:launch('app-discord',()=>discord.open())},
   {name:'Spotify',launch:launch('p-wave',()=>spotify.open())},

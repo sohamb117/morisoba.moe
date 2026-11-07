@@ -23,3 +23,5 @@
 /wrangler.protocol*.jsonc
 
 /mimorigasaka/protocol/**
+
+/social-bridge/**

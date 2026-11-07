@@ -21,6 +21,7 @@
     ]
   },
   "vars": {
+    "SOCIAL_BRIDGE_URL": "https://morisoba-social-7unastvusq-ue.a.run.app",
     "SPOTIFY_CLIENT_ID": "58bb81063b87436ba551703d0d8f53c3",
     "MIMORI_ORIGIN": "https://morisoba.moe",
     "MIMORI_PROTOCOL_ENABLED": "true",
