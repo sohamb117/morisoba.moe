@@ -2,3 +2,6 @@
 !app.py
 !requirements.txt
 !Dockerfile
+
+!x_compat.py
+!instagram_web.py

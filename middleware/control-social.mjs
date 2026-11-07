@@ -30,7 +30,7 @@ async function bridge(env,provider,route,auth,args={}){
  stage='adapter request';
  const response=await fetch(audience+'/request',{method:'POST',headers:{Authorization:'Bearer '+identity.id_token,'Content-Type':'application/json'},body:JSON.stringify({provider,route,auth,args}),redirect:'manual',signal:AbortSignal.timeout(55000)});
  stage='adapter response (HTTP '+response.status+')';
- const data=await read(response);if(!response.ok)throw fail(data.error||'Social request failed',502);return data;
+ const data=await read(response);if(!response.ok||data.error)throw fail(data.error||'Social request failed',502);return data;
  }catch(e){if(e.status)throw e;console.warn(JSON.stringify({event:'social_bridge_error',provider,route,stage,errorType:e.name}));throw fail('Social connection failed at '+stage+' ('+(e.name==='TimeoutError'?'timeout':'transport error')+').',502);}
 }
 export async function socialApi(request,env){
