@@ -1,0 +1,11 @@
+export function createSpotifyControls({api,openConnections}){
+ const root=document.querySelector('#spotify-controls'),panel=root.closest('.app-window'),bar=document.createElement('div'),status=document.createElement('p'),queue=document.createElement('ol');let playing=false,busy=false,timer,stopped=false,queueVisible=false;
+ bar.className='actions';status.setAttribute('role','status');queue.hidden=true;queue.className='spotify-queue';
+ const button=(text,fn)=>{const b=document.createElement('button');b.textContent=text;b.onclick=fn;bar.append(b);return b;};
+ const play=button('Play',()=>command(playing?'pause':'play')),skip=button('Skip',()=>command('next')),show=button('Queue',async()=>{queueVisible=!queueVisible;queue.hidden=!queueVisible;show.setAttribute('aria-expanded',String(queueVisible));if(queueVisible)await refreshQueue();});show.setAttribute('aria-expanded','false');button('Connections',openConnections);root.append(bar,status,queue);
+ async function refreshQueue(){try{const d=await api('/spotify/queue');queue.replaceChildren();for(const t of d.queue){const li=document.createElement('li');li.textContent=t.title+(t.artist?' — '+t.artist:'');queue.append(li);}if(!d.queue.length){const li=document.createElement('li');li.textContent='Queue empty';queue.append(li);}status.textContent='';}catch(e){status.textContent=e.message;}}
+ async function refresh(){if(busy||stopped)return;try{const s=await api('/spotify/state');playing=s.isPlaying;play.textContent=playing?'Pause':'Play';play.disabled=playing?s.canPause===false:s.canPlay===false;skip.disabled=s.canSkip===false;status.textContent='';if(queueVisible)await refreshQueue();}catch(e){status.textContent=e.message;}}
+ async function command(action){if(busy)return;busy=true;play.disabled=skip.disabled=true;try{await api('/spotify/'+action,{});playing=action==='play'?true:action==='pause'?false:playing;play.textContent=playing?'Pause':'Play';status.textContent='';}catch(e){status.textContent=e.message;}finally{busy=false;play.disabled=skip.disabled=false;}}
+ function poll(){clearTimeout(timer);if(stopped)return;timer=setTimeout(async()=>{if(!document.hidden&&!panel.hidden)await refresh();poll();},5000);}
+ return {open:async()=>{stopped=false;await refresh();poll();},close:()=>{stopped=true;clearTimeout(timer);queue.replaceChildren();}};
+}

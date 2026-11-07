@@ -1,3 +1,4 @@
+import {remiliaStatus} from './control-remilia.mjs';
 import {controlSession} from './control-auth.mjs';
 import {google,configured} from './connections-google.mjs';
 const json=(data,status=200)=>Response.json(data,{status,headers:{'Cache-Control':'no-store','X-Content-Type-Options':'nosniff'}});
@@ -11,9 +12,11 @@ export async function connectionsApi(request,env,{authenticate=controlSession,ca
    try{await call(env,'users/me/calendarList?maxResults=1',undefined,'GET');account.calendarList=true;}catch{account.listError='Calendar-list access required.';}
   }
   const mimori=env.MIMORI_PROTOCOL_ENABLED==='true'&&!!env.MIMORI_PROTOCOL_DB;
+  const spotify=await env.MIMORI_DB.prepare("SELECT account FROM control_app_connections WHERE provider='spotify'").first();
   const gh=await env.MIMORI_DB.prepare("SELECT account FROM control_app_connections WHERE provider='github'").first();
   const rss=await env.MIMORI_DB.prepare('SELECT COUNT(*) AS n FROM control_rss_subscriptions').first();
-  return json({connections:[{id:'github',name:'GitHub',account:gh?.account||'',connected:!!gh,apps:['GitHub']},{id:'spotify',name:'Spotify',account:'',connected:!!(env.SPOTIFY_CLIENT_ID&&env.SPOTIFY_CLIENT_SECRET&&env.SPOTIFY_REFRESH_TOKEN),apps:['Spotify']},{id:'rss',name:'RSS',account:rss.n+' subscriptions',connected:true,apps:['RSS Feed Viewer','RSS Feed Editor']},account,{id:'mimori',name:'Mimori',account:new URL(request.url).host,apps:['Mimori-Chat','Mimori-Admin'],connected:mimori}]});
+  const discord=await env.MIMORI_DB.prepare("SELECT account FROM control_app_connections WHERE provider='discord'").first();
+  return json({connections:[await remiliaStatus(env),{id:'discord',name:'Discord',account:discord?.account||'',connected:!!discord,apps:['Discord']},{id:'github',name:'GitHub',account:gh?.account||'',connected:!!gh,apps:['GitHub']},{id:'spotify',name:'Spotify',account:spotify?.account||'',connected:!!(env.SPOTIFY_CLIENT_ID&&env.SPOTIFY_CLIENT_SECRET&&(spotify||env.SPOTIFY_REFRESH_TOKEN)),apps:['Spotify']},{id:'rss',name:'RSS',account:rss.n+' subscriptions',connected:true,apps:['RSS Feed Viewer','RSS Feed Editor']},account,{id:'mimori',name:'Mimori',account:new URL(request.url).host,apps:['Mimori-Chat','Mimori-Admin'],connected:mimori}]});
  }catch{return json({error:'Unable to check connections'},503);}
 }
 export async function protocolAdminApi(request,env,{authenticate=controlSession}={}){

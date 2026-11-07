@@ -51,3 +51,18 @@ Brizm is called only when its key **and a readable durable cache** are configure
 Visible status panels poll metadata every 3 seconds, even when nothing is playing, so playback starts, skips, pauses and resumes are detected without reloading. The metadata cache lasts up to 2 seconds and expires sooner near track boundaries. The browser schedules a refresh just after the expected song ending, and refreshes immediately on window focus, page restoration, network reconnection or reopening the status panel. Concurrent browser requests are coalesced and failed requests back off. Hidden pages do not poll. Spotify does not provide a playback-change webhook here; changes are detected by polling, usually within about 3–5 seconds plus network latency.
 
 This change does not modify wrangler.jsonc, production variables, secrets or bindings. Keep `keep_vars: true` enabled.
+
+## Control-plane playback
+
+The owner-only Spotify window supports play/pause, skip and queue. Register
+`https://morisoba.moe/api/control/spotify/callback` in the existing Spotify app,
+then use Connection Manager → Spotify → Connect playback. The authorization
+requests `user-read-currently-playing`, `user-read-playback-state` and
+`user-modify-playback-state`. Playback requires Spotify Premium and an active
+Spotify device.
+
+The new grant is encrypted in D1 `control_app_connections`, provider `spotify`,
+using the shared connection encryption key. Homepage metadata and owner playback
+use this same grant; the original Worker refresh-token secret remains the fallback
+until reconnection. Browser storage contains only owner preferences, never tokens.
+Migration `0013_spotify_controls.sql` stores short-lived, session-bound PKCE state.

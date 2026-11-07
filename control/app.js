@@ -1,3 +1,5 @@
+import {createSpotifyControls} from './spotify.js';
+import {createRemoteChat} from './remote-chat.js';
 import {createFeedApps,createGithub} from './feed-apps.js';
 import {createConnections} from './connections.js';
 import {createDesktop,registerApps} from './desktop.js';
@@ -6,18 +8,22 @@ import {initCalendar} from './calendar.js';
 import {initCommunity} from './community.js';
 import {initKeyring} from './keyring.js';
 const $=s=>document.querySelector(s);
-let csrf='',owner,started=false,closeKeyring=()=>{};
+let csrf='',owner,started=false,closeKeyring=()=>{},closeRemote=()=>{};
 async function api(path,data,method='POST'){
  const response=await fetch(path,{method:data===undefined?'GET':method,credentials:'same-origin',cache:'no-store',headers:{'Content-Type':'application/json','X-CSRF-Token':csrf},...(data===undefined?{}:{body:JSON.stringify(data)})});
  const result=await response.json();if(response.status===401){lock();throw Error('Sign in required');}if(!response.ok)throw Error(result.error||'Request failed');return result;
 }
-function lock(){document.querySelectorAll('dialog[open]').forEach(d=>d.close());closeKeyring();$('#stage').hidden=true;$('#dock').hidden=true;$('#entry-gate').hidden=false;$('#desktop-bar').hidden=true;$('#app-launcher').hidden=true;csrf='';}
+function lock(){closeRemote();document.querySelectorAll('dialog[open]').forEach(d=>d.close());closeKeyring();$('#stage').hidden=true;$('#dock').hidden=true;$('#entry-gate').hidden=false;$('#desktop-bar').hidden=true;$('#app-launcher').hidden=true;csrf='';}
 async function start(s){
  owner=s.user;csrf=s.csrf;$('#entry-gate').hidden=true;$('#stage').hidden=false;$('#dock').hidden=false;$('#desktop-bar').hidden=false;$('#owner-email').textContent=owner.email;$('#profile-form').elements.displayName.value=owner.displayName;$('#profile-form').elements.bio.value=owner.bio||'';
  if(started){location.reload();return;}started=true;
- const desktop=createDesktop();
+ const desktop=createDesktop({ownerId:owner.id});
  const connections=createConnections({api:(path,data,method)=>api('/api/control'+path,data,method),openChat:()=>launchChat(),openFeeds:()=>{desktop.open('app-rss-editor');feeds.edit();}});
  const openConnections=()=>{desktop.open('app-connections');connections.open();};
+ const remilia=createRemoteChat({provider:'remilia',ownerId:owner.id,api:(path,data,method)=>api('/api/control'+path,data,method),openConnections});
+ const discord=createRemoteChat({provider:'discord',ownerId:owner.id,api:(path,data,method)=>api('/api/control'+path,data,method),openConnections});
+ const spotify=createSpotifyControls({api:(path,data)=>api('/api/control'+path,data),openConnections});
+ closeRemote=()=>{remilia.close();discord.close();spotify.close();};
  const feeds=createFeedApps({api:(path,data,method)=>api('/api/control'+path,data,method)});
  const github=createGithub({api:path=>api('/api/control'+path),openConnections});
  const calendar=createGoogleCalendar({ownerId:owner.id,openConnections,api:(path,data,method)=>api('/api/control/calendar'+path,data,method)});
@@ -25,7 +31,9 @@ async function start(s){
  const launchChat=()=>{desktop.open('app-chat');if(!chatStarted){closeKeyring=initKeyring({csrf,owner});chatStarted=true;}};
  const launch=(id,init)=>()=>{desktop.open(id);init?.();};
  registerApps($('#app-launcher'),[
-  {name:'Spotify',launch:launch('p-wave')},
+  {name:'RemiliaNet Chat',launch:launch('app-remilia',()=>remilia.open())},
+  {name:'Discord',launch:launch('app-discord',()=>discord.open())},
+  {name:'Spotify',launch:launch('p-wave',()=>spotify.open())},
   {name:'GitHub',launch:launch('app-github',()=>github.open())},
   {name:'RSS Feed Viewer',launch:launch('app-rss-viewer',()=>feeds.view())},
   {name:'RSS Feed Editor',launch:launch('app-rss-editor',()=>feeds.edit())},
@@ -36,6 +44,10 @@ async function start(s){
   {name:'Upcoming Events',launch:launch('app-upcoming',()=>calendar.upcoming())},
   {name:'Booking Manager',launch:launch('app-booking',()=>{if(!bookingStarted){initCalendar({api:(path,data,method)=>api('/api/booking/admin/'+path,data,method),openPanel:()=>{$('#booking-editor').hidden=false;$('#booking-editor').scrollIntoView({block:'start'});},closePanel:()=>{$('#booking-editor').hidden=true;}});bookingStarted=true;}})}
  ]);
+ if(location.hash==='#spotify-connected'){desktop.open('p-wave');spotify.open();history.replaceState(null,'',location.pathname);}
+ if(location.hash==='#spotify-cancelled'){openConnections();history.replaceState(null,'',location.pathname);}
+ if(location.hash==='#remilia-connected'){desktop.open('app-remilia');remilia.open();history.replaceState(null,'',location.pathname);}
+ if(location.hash==='#remilia-cancelled'){openConnections();history.replaceState(null,'',location.pathname);}
  if(location.hash==='#calendar-connected'){openConnections();history.replaceState(null,'',location.pathname);}
 }
 

@@ -66,3 +66,7 @@ input[type=checkbox]:checked::before{content:"";width:8px;height:8px;background:
 #app-launcher{bottom:88px;max-height:calc(100dvh - 120px);overflow:auto}
 #github-root .actions select,#rss-viewer-root .actions select{width:auto;max-width:100%;margin:0}#github-root .actions{margin-bottom:14px}#rss-editor-root .row p{overflow-wrap:anywhere}
 @media(max-width:720px){#app-launcher{bottom:66px}#dock{max-width:calc(100vw - 130px)}#launcher-toggle{bottom:10px}}
+
+#remilia-root,#discord-root{height:100%;display:flex;flex-direction:column;gap:8px}.remote-chat-messages{flex:1;min-height:120px;overflow:auto}.remote-chat-messages .row small{display:block;opacity:.7}.remote-chat-messages .row a{display:block}.remote-chat-messages .row button{font-size:11px;margin-top:4px}#remilia-root>form,#discord-root>form{flex:none}#remilia-root .actions,#discord-root .actions{margin:0}#discord-root select{width:auto;max-width:100%;margin:0}#discord-root>.actions input{flex:1;margin:0;width:auto}.connection-callback{overflow-wrap:anywhere;font-size:11px}
+
+#spotify-controls{margin-top:12px}#spotify-controls .actions{gap:8px;flex-wrap:wrap}.spotify-queue{max-height:260px;overflow:auto;padding-left:26px}.spotify-queue li{padding:6px 0;border-bottom:1px solid #ffffff24}
