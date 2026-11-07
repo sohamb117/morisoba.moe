@@ -1,3 +1,4 @@
+import {discordPins} from './control-discord-pins.mjs';
 import {controlSession} from './control-auth.mjs';
 import {seal,unseal} from './connection-crypto.mjs';
 const json=(data,status=200)=>Response.json(data,{status,headers:{'Cache-Control':'no-store','X-Content-Type-Options':'nosniff'}});
@@ -8,6 +9,7 @@ async function discord(token,path,data){const multipart=data instanceof FormData
 const message=m=>({id:m.id,text:m.content||'',author:{id:m.author?.id,handle:m.author?.username,display_name:m.author?.global_name||m.author?.username},mentions:(m.mentions||[]).map(u=>({id:u.id,handle:u.username,display_name:u.global_name||u.username})),created_at:m.timestamp,reply_to_id:m.message_reference?.message_id,media:[...(m.attachments||[]).map(a=>({url:a.proxy_url||a.url,name:a.filename,contentType:a.content_type||''})),...(m.embeds||[]).flatMap(e=>{const image=e.image||e.thumbnail;return image?[{url:image.proxy_url||image.url,name:e.title||'Image preview',contentType:'image/unknown'}]:[]})],reactions:(m.reactions||[]).map(r=>({emoji:r.emoji?.name,count:r.count}))});
 export async function discordApi(request,env){const url=new URL(request.url),route=url.pathname.split('/').at(-1),method=request.method;const session=await controlSession(request,env);if(!session)return json({error:'Sign in required'},401);if(method!=='GET'&&(request.headers.get('Origin')!==url.origin||request.headers.get('X-CSRF-Token')!==session.csrf||request.headers.get('Sec-Fetch-Site')==='cross-site'))return json({error:'Session check failed'},403);
  try{const db=env.MIMORI_DB;
+ if(route==='pins')return await discordPins(request,db,session.id);
  if(route==='connection'){
   if(method==='GET'){const c=await db.prepare("SELECT account FROM control_app_connections WHERE provider='discord'").first();return json({connected:!!c,account:c?.account||''});}
   if(method==='POST'){const d=await read(request,4096);if(typeof d.token!=='string'||d.token.length<30||d.token.length>2000||/\s/.test(d.token))throw fail('Enter your Discord token');if(/^https?:\/\//i.test(d.token))throw fail('Enter a Discord token, not a URL');const me=await discord(d.token,'/users/@me');if(!snowflake(me.id)||me.bot)throw fail('Use your own Discord user token');await db.prepare("INSERT INTO control_app_connections VALUES('discord',?,?,?) ON CONFLICT(provider) DO UPDATE SET encrypted_token=excluded.encrypted_token,account=excluded.account,updated_ms=excluded.updated_ms").bind(await seal(d.token,env),me.username,Date.now()).run();return json({connected:true,account:me.username});}

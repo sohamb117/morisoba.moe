@@ -5,7 +5,7 @@ import {token,digest} from './mimori-crypto.mjs';
 const callback='https://morisoba.moe/api/control/spotify/callback',cookie='__Host-spotify-oauth',scopes='user-read-currently-playing user-read-playback-state user-modify-playback-state';
 const json=(data,status=200,headers={})=>Response.json(data,{status,headers:{'Cache-Control':'no-store','Referrer-Policy':'no-referrer',...headers}});
 const fail=(message,status=400)=>Object.assign(Error(message),{status});
-const track=t=>t?{id:t.id,title:t.name,artist:t.artists?.map(a=>a.name).join(', ')||t.show?.name||'',url:t.external_urls?.spotify||''}:null;
+const track=t=>t?{id:t.id,uri:t.uri,title:t.name,artist:t.artists?.map(a=>a.name).join(', ')||t.show?.name||'',url:t.external_urls?.spotify||''}:null;
 export async function spotifyControlApi(request,env){const u=new URL(request.url),route=u.pathname.split('/').at(-1),db=env.MIMORI_DB;try{
  if(route==='callback'){
   if(request.method!=='GET')throw fail('Method not allowed',405);
@@ -31,13 +31,14 @@ export async function spotifyControlApi(request,env){const u=new URL(request.url
   await db.batch([db.prepare('DELETE FROM control_spotify_oauth WHERE expires_ms<?').bind(Date.now()),db.prepare('INSERT INTO control_spotify_oauth VALUES(?,?,?,?)').bind(digest(state),session.session_hash,await seal(verifier,env),Date.now()+600000)]);
   return json({url:'https://accounts.spotify.com/authorize?'+new URLSearchParams({client_id:env.SPOTIFY_CLIENT_ID,redirect_uri:callback,response_type:'code',scope:scopes,state,code_challenge:challenge,code_challenge_method:'S256'})},200,{'Set-Cookie':cookie+'='+state+'; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=600'});
  }
- const commands={play:'PUT',pause:'PUT',next:'POST'},read=['state','queue'].includes(route);
+ const commands={play:'PUT',pause:'PUT',next:'POST',previous:'POST'},read=['state','queue'].includes(route);
  if(!(read&&request.method==='GET')&&!(commands[route]&&request.method==='POST'))throw fail('Method not allowed',405);
- const access=await spotifyToken(env),r=await fetch('https://api.spotify.com/v1/me/player'+(route==='state'?'':'/'+route),{method:read?'GET':commands[route],headers:{Authorization:'Bearer '+access},signal:AbortSignal.timeout(12000),redirect:'manual'});
+ let body;if(route==='play'){const text=await request.text();if(text.length>1000)throw fail('Invalid track',400);const input=text?JSON.parse(text):{};if(input.uri!==undefined){if(!/^spotify:(track|episode):[a-zA-Z0-9]{22}$/.test(input.uri))throw fail('Invalid track',400);body=JSON.stringify({uris:[input.uri]});}}
+ const access=await spotifyToken(env),r=await fetch('https://api.spotify.com/v1/me/player'+(route==='state'?'':'/'+route),{method:read?'GET':commands[route],headers:{Authorization:'Bearer '+access,...(body?{'Content-Type':'application/json'}:{})},...(body?{body}:{}),signal:AbortSignal.timeout(12000),redirect:'manual'});
  if(!read&&r.ok)return json({ok:true});
  if(r.status===204)return json(route==='state'?{isPlaying:false,active:false}:{ok:true});
  if(r.status>=300&&r.status<400)throw fail('Spotify returned an unexpected redirect',502);
  const d=await r.json();if(!r.ok){if(r.status===401){clearSpotifyCache();throw fail('Reconnect Spotify in Connection Manager',409);}if(r.status===404)throw fail('Open Spotify on a device to start playback',409);if(r.status===429)throw fail('Spotify rate limit. Try again shortly.',429);throw fail(d.error?.reason==='PREMIUM_REQUIRED'?'Spotify Premium is required':d.error?.message||'Spotify request failed',r.status===403?403:502);}
  if(route==='queue')return json({current:track(d.currently_playing),queue:(d.queue||[]).map(track)});
- return json({active:!!d.device,isPlaying:!!d.is_playing,track:track(d.item),canPause:!d.actions?.disallows?.pausing,canPlay:!d.actions?.disallows?.resuming,canSkip:!d.actions?.disallows?.skipping_next});
+ return json({active:!!d.device,isPlaying:!!d.is_playing,track:track(d.item),canPause:!d.actions?.disallows?.pausing,canPlay:!d.actions?.disallows?.resuming,canPrevious:!d.actions?.disallows?.skipping_prev,canSkip:!d.actions?.disallows?.skipping_next});
  }catch(e){return json({error:e.status?e.message:request.method==='POST'?'Spotify request did not finish. Refresh before trying again.':'Spotify is unavailable'},e.status||502);}}
