@@ -1,12 +1,31 @@
 const api=globalThis.browser||chrome;
 const CONTROL='https://morisoba.moe/control/';
-const origins={x:['https://x.com/*'],instagram:['https://www.instagram.com/*']};
+const origins={x:['https://x.com/*'],instagram:['https://www.instagram.com/*','https://instagram.com/*']};
 const pending=new Map();
 function controlTab(sender){try{const u=new URL(sender.url);return sender.id===api.runtime.id&&sender.tab&&u.origin==='https://morisoba.moe'&&u.pathname==='/control/';}catch{return false;}}
-async function cookies(provider){
- const read=async(url,name)=>{const c=await api.cookies.get({url,name});return c?.value;};
- const auth=provider==='x'?{auth_token:await read('https://x.com/','auth_token'),ct0:await read('https://x.com/','ct0')}:{sessionid:await read('https://www.instagram.com/','sessionid')};
- if(Object.values(auth).some(value=>!value))throw Error('Sign in to '+(provider==='x'?'x.com':'instagram.com')+' in this browser’s default profile first.');
+async function sourceContext(provider,manual){
+ const tabs=await api.tabs.query({url:origins[provider]}),stores=await api.cookies.getAllCookieStores();
+ const active=await api.tabs.query({active:true,currentWindow:true});
+ const saved=await api.storage.local.get('sourceStores');
+ const storeFor=tab=>tab.cookieStoreId||stores.find(store=>store.tabIds?.includes(tab.id))?.id;
+ let source=manual?tabs.find(tab=>active.some(current=>current.id===tab.id)):null;
+ if(!source&&saved.sourceStores?.[provider])source=tabs.find(tab=>storeFor(tab)===saved.sourceStores[provider]);
+ if(!source){const ids=new Set(tabs.map(storeFor).filter(Boolean));if(ids.size<=1)source=tabs[0];}
+ if(!source)throw Error('Open the '+(provider==='x'?'X':'Instagram')+' tab you want to connect, then click connect again.');
+ const storeId=storeFor(source)||(stores.length===1?stores[0].id:null);
+ if(!storeId)throw Error('Safari did not identify this tab cookie store. Reload the site tab and try again.');
+ return {source,storeId,stores};
+}
+async function cookies(provider,storeId){
+ const urls=provider==='x'?['https://x.com/']:['https://www.instagram.com/','https://instagram.com/'];
+ const names=provider==='x'?['auth_token','ct0']:['sessionid'],auth={};
+ for(const name of names){for(const url of urls){
+  const found=await api.cookies.get({url,name,storeId});
+  if(found?.value){auth[name]=found.value;break;}
+  const matches=await api.cookies.getAll({url,name,storeId});
+  const cookie=matches.find(c=>c.name===name&&c.value);if(cookie){auth[name]=cookie.value;break;}
+ }}
+ if(names.some(name=>!auth[name]))throw Error('Safari is not exposing the required '+(provider==='x'?'X':'Instagram')+' session cookies. Allow this extension on that website in Safari Settings > Extensions, then reload the site tab.');
  return auth;
 }
 async function fingerprint(provider,auth){const value=provider==='x'?auth.auth_token:auth.sessionid;return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(value)))).map(b=>b.toString(16).padStart(2,'0')).join('');}
@@ -15,15 +34,18 @@ async function sync(provider,manual=false){
  const task=(async()=>{
   if(!origins[provider])throw Error('Unknown service');
   if(!await api.permissions.contains({origins:origins[provider]}))throw Error('Allow access to '+provider+' in the extension.');
+  const {source,storeId,stores}=await sourceContext(provider,manual);
   const tabs=await api.tabs.query({url:CONTROL+'*'});
-  if(!tabs.length){if(manual)await api.tabs.create({url:CONTROL});throw Error('Open the control plane and sign in.');}
-  const auth=await cookies(provider),hash=await fingerprint(provider,auth),state=await api.storage.local.get(['enabled','fingerprints']);
+  const store=stores.find(s=>s.id===storeId);
+  const sameStore=tabs.filter(tab=>tab.cookieStoreId===storeId||store?.tabIds?.includes(tab.id));
+  const tab=sameStore.find(tab=>tab.windowId===source.windowId)||sameStore[0];
+  if(!tab){if(manual)await api.tabs.create({url:CONTROL,windowId:source.windowId});throw Error('Sign in to the control plane in this Safari profile, then click connect again.');}
+  const auth=await cookies(provider,storeId),hash=await fingerprint(provider,auth),state=await api.storage.local.get(['enabled','fingerprints']);
   if(!manual&&state.fingerprints?.[provider]===hash)return {ok:true};
-  const tab=tabs.sort((a,b)=>(b.lastAccessed||0)-(a.lastAccessed||0))[0];
   let result;try{result=await api.tabs.sendMessage(tab.id,{type:'CONNECT_SESSION',provider,auth},{frameId:0});}catch{throw Error('Refresh the control-plane tab, then try again.');}
   if(!result?.ok)throw Error(result?.error||'Connection failed');
   // Only a one-way fingerprint is retained; never cookies or access tokens.
-  const latest=await api.storage.local.get('fingerprints');await api.storage.local.set({fingerprints:{...latest.fingerprints,[provider]:hash}});
+  const latest=await api.storage.local.get(['fingerprints','sourceStores']);await api.storage.local.set({fingerprints:{...latest.fingerprints,[provider]:hash},sourceStores:{...latest.sourceStores,[provider]:storeId}});
   return {ok:true};
  })();pending.set(provider,task);try{return await task;}finally{pending.delete(provider);}
 }

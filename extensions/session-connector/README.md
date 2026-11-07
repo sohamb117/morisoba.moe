@@ -18,12 +18,16 @@ Safari removes a temporary extension after 24 hours or when Safari quits. A pers
 
 Apple instructions: https://developer.apple.com/documentation/safariservices/running-your-safari-web-extension
 
+## Updating
+
+Version 0.1.2 resolves Safari cookie stores from open tab IDs and includes a named-cookie fallback. Replace the old extension folder with this build, then use Safari Settings → Extensions → Reload for the temporary extension (or remove and re-add it). Grant the requested website access and reload the service and control-plane tabs.
+
 ## Connect
 
-1. Sign in to `morisoba.moe/control/` and X or Instagram in the same browser's default profile. Refresh the control-plane tab after installing the extension.
+1. Sign in to `morisoba.moe/control/` and X or Instagram in the same browser profile. Refresh the control-plane tab after installing the extension.
 2. Open the extension and click **connect x** or **connect instagram**. Grant access to that service when prompted. The extension does not need access to other sites.
 3. Optionally enable **keep sessions connected** to check for changed session cookies while a signed-in control-plane tab is open. Only providers you have explicitly connected are eligible. Disable this checkbox to stop background synchronization.
 
-The extension stores only the enabled-provider list, the automatic-sync preference, and one-way session fingerprints used to avoid repeated uploads. It cannot read cookies in another browser/profile or Firefox container. It does not bypass account checks. A service may reject a valid browser session on the server adapter; extraction alone does not prove that feeds or messages work. Safari 18 or later supports the required HttpOnly cookie access; Safari 26.3 is installed on this Mac. Safari cookie-change events are not relied on; automatic sync uses the five-minute alarm and control-plane sign-in notification.
+The extension stores only the enabled-provider list, the automatic-sync preference, and one-way session fingerprints used to avoid repeated uploads. It selects the cookie store belonging to the open service tab and sends the session only to a control-plane tab in the same store. It does not scan unrelated profiles. It does not bypass account checks. A service may reject a valid browser session on the server adapter; extraction alone does not prove that feeds or messages work. Safari 18 or later supports the required HttpOnly cookie access; Safari 26.3 is installed on this Mac. Safari cookie-change events are not relied on; automatic sync uses the five-minute alarm and control-plane sign-in notification.
 
 Validation: mocked browser-API and content-script checks; no real account cookies were read and no real account connection was tested. Install-time permissions and live session acceptance still need browser verification.

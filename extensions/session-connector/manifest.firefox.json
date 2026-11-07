@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "morisoba connections",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Connect your own X and Instagram sessions to your morisoba control plane.",
   "permissions": [
     "cookies",
@@ -13,7 +13,8 @@
   ],
   "optional_host_permissions": [
     "https://x.com/*",
-    "https://www.instagram.com/*"
+    "https://www.instagram.com/*",
+    "https://instagram.com/*"
   ],
   "action": {
     "default_popup": "popup.html"
