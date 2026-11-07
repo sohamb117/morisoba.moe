@@ -36,7 +36,7 @@ api.runtime.onMessage.addListener((message,sender,respond)=>{
  }
  return false;
 });
-api.cookies.onChanged.addListener(change=>{
+api.cookies.onChanged?.addListener(change=>{
  const domain=change.cookie.domain.replace(/^\./,'');if(change.removed)return;
  if(domain==='x.com'&&change.cookie.name==='auth_token'||domain==='instagram.com'&&change.cookie.name==='sessionid')automatic();
 });

@@ -1,0 +1,39 @@
+{
+  "manifest_version": 3,
+  "name": "morisoba connections",
+  "version": "0.1.1",
+  "description": "Connect your own X and Instagram sessions to your morisoba control plane.",
+  "permissions": [
+    "cookies",
+    "storage",
+    "alarms"
+  ],
+  "host_permissions": [
+    "https://morisoba.moe/*"
+  ],
+  "optional_host_permissions": [
+    "https://x.com/*",
+    "https://www.instagram.com/*"
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://morisoba.moe/control/"
+      ],
+      "js": [
+        "control.js"
+      ],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+  "background": {
+    "scripts": [
+      "background.js"
+    ],
+    "persistent": false
+  }
+}
