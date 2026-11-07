@@ -1,3 +1,4 @@
+import {createGitActivity} from './git-activity.js';
 import {createSpotifyControls} from './spotify.js';
 import {createRemoteChat} from './remote-chat.js';
 import {createFeedApps,createGithub} from './feed-apps.js';
@@ -24,8 +25,9 @@ async function start(s){
  const remilia=createRemoteChat({provider:'remilia',ownerId:owner.id,api:(path,data,method)=>api('/api/control'+path,data,method),openConnections});
  const discord=createRemoteChat({provider:'discord',ownerId:owner.id,api:(path,data,method)=>api('/api/control'+path,data,method),openConnections});
  const spotify=createSpotifyControls({api:(path,data)=>api('/api/control'+path,data),openConnections});
- closeRemote=()=>{remilia.close();discord.close();spotify.close();};
+ closeRemote=()=>{remilia.close();discord.close();spotify.close();gitActivity.close();};
  const feeds=createFeedApps({api:(path,data,method)=>api('/api/control'+path,data,method)});
+ const gitActivity=createGitActivity({api:path=>api('/api/control'+path),openConnections});
  const github=createGithub({api:path=>api('/api/control'+path),openConnections});
  const calendar=createGoogleCalendar({ownerId:owner.id,openConnections,api:(path,data,method)=>api('/api/control/calendar'+path,data,method)});
  let bookingStarted=false,adminStarted=false,chatStarted=false;
@@ -35,6 +37,7 @@ async function start(s){
   {name:'RemiliaNet Chat',launch:launch('app-remilia',()=>remilia.open())},
   {name:'Discord',launch:launch('app-discord',()=>discord.open())},
   {name:'Spotify',launch:launch('p-wave',()=>spotify.open())},
+  {name:'git activity',launch:launch('app-git-activity',()=>gitActivity.open())},
   {name:'GitHub',launch:launch('app-github',()=>github.open())},
   {name:'RSS Feed Viewer',launch:launch('app-rss-viewer',()=>feeds.view())},
   {name:'RSS Feed Editor',launch:launch('app-rss-editor',()=>feeds.edit())},

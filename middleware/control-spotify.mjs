@@ -33,8 +33,8 @@ export async function spotifyControlApi(request,env){const u=new URL(request.url
  }
  const commands={play:'PUT',pause:'PUT',next:'POST',previous:'POST'},read=['state','queue'].includes(route);
  if(!(read&&request.method==='GET')&&!(commands[route]&&request.method==='POST'))throw fail('Method not allowed',405);
- let body;if(route==='play'){const text=await request.text();if(text.length>1000)throw fail('Invalid track',400);const input=text?JSON.parse(text):{};if(input.uri!==undefined){if(!/^spotify:(track|episode):[a-zA-Z0-9]{22}$/.test(input.uri))throw fail('Invalid track',400);body=JSON.stringify({uris:[input.uri]});}}
- const access=await spotifyToken(env),r=await fetch('https://api.spotify.com/v1/me/player'+(route==='state'?'':'/'+route),{method:read?'GET':commands[route],headers:{Authorization:'Bearer '+access,...(body?{'Content-Type':'application/json'}:{})},...(body?{body}:{}),signal:AbortSignal.timeout(12000),redirect:'manual'});
+ if(route==='play'){const text=await request.text();if(text.length>1000)throw fail('Invalid playback request',400);const input=text?JSON.parse(text):{};if(input.uri!==undefined||input.uris!==undefined)throw fail('Refresh the control panel before selecting a queued song.',409);}
+ const access=await spotifyToken(env),r=await fetch('https://api.spotify.com/v1/me/player'+(route==='state'?'':'/'+route),{method:read?'GET':commands[route],headers:{Authorization:'Bearer '+access},signal:AbortSignal.timeout(12000),redirect:'manual'});
  if(!read&&r.ok)return json({ok:true});
  if(r.status===204)return json(route==='state'?{isPlaying:false,active:false}:{ok:true});
  if(r.status>=300&&r.status<400)throw fail('Spotify returned an unexpected redirect',502);

@@ -1,3 +1,4 @@
+import {gitActivity} from './control-git-activity.mjs';
 import {controlSession} from './control-auth.mjs';
 import {seal,unseal} from './connection-crypto.mjs';
 const json=(data,status=200)=>Response.json(data,{status,headers:{'Cache-Control':'no-store','X-Content-Type-Options':'nosniff'}});
@@ -24,6 +25,7 @@ export async function controlAppsApi(request,env){
   }
   if(route.startsWith('github/')&&method==='GET'){
    const c=await db.prepare("SELECT encrypted_token FROM control_app_connections WHERE provider='github'").first();if(!c)return json({error:'Connect GitHub in Connection Manager'},409);const token=await unseal(c.encrypted_token,env),page=Math.min(100,Math.max(1,Number(url.searchParams.get('page'))||1));let path;
+   if(route==='github/activity')return json(await gitActivity(token));
    if(route==='github/repos')path='/user/repos?sort=updated&per_page=50&page='+page;
    else if(['github/issues','github/pulls'].includes(route)){const repo=url.searchParams.get('repo');if(!/^[\w.-]+\/[\w.-]+$/.test(repo||''))throw Error('Select a repository');path='/repos/'+repo+'/'+route.split('/')[1]+'?state='+(url.searchParams.get('state')==='all'?'all':'open')+'&per_page=50&page='+page;}
    else return json({error:'Not found'},404);
