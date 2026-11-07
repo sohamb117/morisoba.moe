@@ -1,7 +1,7 @@
 import {initPanelSettings} from './panel-settings.js';
 export function registerApps(container,apps){
  container.replaceChildren();
- for(const {name,launch} of apps){const button=document.createElement('button');button.textContent=name;button.onclick=()=>{container.hidden=true;document.querySelector('#launcher-toggle').setAttribute('aria-expanded','false');launch();};container.append(button);}
+ for(const {name,launch} of apps){const button=document.createElement('button');button.textContent=name==='RemiliaNet Chat'?'remiliaNet chat':name.toLowerCase();button.onclick=()=>{container.hidden=true;document.querySelector('#launcher-toggle').setAttribute('aria-expanded','false');launch();};container.append(button);}
  document.dispatchEvent(new CustomEvent('control:apps-ready',{detail:apps}));
 }
 export function createDesktop({ownerId}){
