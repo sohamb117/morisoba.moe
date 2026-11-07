@@ -1,7 +1,7 @@
 /* Shared form chrome and scroll areas, including dynamically created panels. */
 html, body, body * { scrollbar-width: thin !important; scrollbar-color: #fff transparent !important; }
-::-webkit-scrollbar { width: 3px !important; height: 3px !important; }
-::-webkit-scrollbar-track, ::-webkit-scrollbar-corner { background: transparent !important; }
+::-webkit-scrollbar { width: 1px !important; height: 1px !important; }
+::-webkit-scrollbar-track, ::-webkit-scrollbar-track-piece, ::-webkit-scrollbar-corner { background: transparent !important; }
 ::-webkit-scrollbar-thumb { background: #fff !important; border: 0 !important; border-radius: 0 !important; }
 ::-webkit-scrollbar-thumb:hover { background: #fff !important; }
 select:not([multiple]) { appearance: none; -webkit-appearance: none; border-radius: 0; color: var(--chalk, #d0d1c7); background-color: #10110f; background-image: url("/shared/select-arrow.svg"); background-repeat: no-repeat; background-position: right 8px center; padding-right: 26px !important; cursor: pointer; }
@@ -15,3 +15,5 @@ select:focus-visible { outline: 1px solid #c4c5b9; outline-offset: 2px; }
 @media (pointer: coarse) { .site-select-menu [role=option] { padding-top: 10px; padding-bottom: 10px; } }
 
 @supports selector(::-webkit-scrollbar) { html, body, body * { scrollbar-width:auto !important; scrollbar-color:auto !important; } }
+
+::-webkit-scrollbar-button { display:none !important; width:0 !important; height:0 !important; }
