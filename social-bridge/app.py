@@ -84,10 +84,10 @@ def instagram_request(route, auth, args):
     def reject_challenge(*args, **kwargs):
         raise PermissionError('Account check required')
     client.challenge_resolve = reject_challenge
-    def single_request(endpoint, **kwargs):
+    def single_request(endpoint, data=None, **kwargs):
         headers = dict(kwargs.pop('headers', None) or {})
         if client.authorization: headers['Authorization'] = client.authorization
-        return client._send_private_request(endpoint, headers=headers, **kwargs)
+        return client._send_private_request(endpoint, data=data, headers=headers, **kwargs)
     client.private_request = single_request
     client.request_timeout = 1
     client.public_request_retries_count = 1
@@ -146,6 +146,7 @@ async def request(req: Request):
         if len(body) > 100000: return JSONResponse({'error': 'Request too large'}, status_code=413)
     import json
     write = False
+    data = {}
     try:
         data = json.loads(body)
         provider, route, auth, args = data['provider'], data['route'], data['auth'], data.get('args', {})
@@ -161,6 +162,9 @@ async def request(req: Request):
         return JSONResponse({'result': result, 'auth': state}, headers={'Cache-Control': 'no-store'})
     except Exception as e:
         name = type(e).__name__
+        import traceback
+        frames = traceback.extract_tb(e.__traceback__)
+        print(json.dumps({'event':'social_error','provider':data.get('provider') if isinstance(data,dict) else None,'route':data.get('route') if isinstance(data,dict) else None,'error_type':name,'frames':[{'file':f.filename.rsplit('/',1)[-1],'line':f.lineno,'function':f.name} for f in frames[-5:]]}),flush=True)
         if write:
             error = 'Send result unknown. Check the original app before retrying.'
         elif any(s in name.lower() for s in ['login', 'unauthorized', 'challenge', 'checkpoint', 'forbidden', 'badrequest', 'permission']):

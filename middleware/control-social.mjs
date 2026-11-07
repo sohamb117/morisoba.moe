@@ -18,18 +18,25 @@ export async function slackWorkspaces(env){
 }
 async function bridge(env,provider,route,auth,args={}){
  if(!env.SOCIAL_BRIDGE_CREDENTIALS||!env.SOCIAL_BRIDGE_URL)throw fail('Social connection service is not configured',503);
+ let stage='service identity';
+ try{
  const credential=JSON.parse(env.SOCIAL_BRIDGE_CREDENTIALS),audience=env.SOCIAL_BRIDGE_URL;
  const key=await importPKCS8(credential.private_key,'RS256');
  const assertion=await new SignJWT({target_audience:audience}).setProtectedHeader({alg:'RS256',typ:'JWT'}).setIssuer(credential.client_email).setSubject(credential.client_email).setAudience('https://oauth2.googleapis.com/token').setIssuedAt().setExpirationTime('5m').sign(key);
+ stage='identity exchange';
  const tokenResponse=await fetch('https://oauth2.googleapis.com/token',{method:'POST',body:new URLSearchParams({grant_type:'urn:ietf:params:oauth:grant-type:jwt-bearer',assertion}),redirect:'manual',signal:AbortSignal.timeout(10000)});
  if(!tokenResponse.ok)throw fail('Social service authentication failed',503);
  const identity=await read(tokenResponse,20000);
+ stage='adapter request';
  const response=await fetch(audience+'/request',{method:'POST',headers:{Authorization:'Bearer '+identity.id_token,'Content-Type':'application/json'},body:JSON.stringify({provider,route,auth,args}),redirect:'manual',signal:AbortSignal.timeout(55000)});
+ stage='adapter response (HTTP '+response.status+')';
  const data=await read(response);if(!response.ok)throw fail(data.error||'Social request failed',502);return data;
+ }catch(e){if(e.status)throw e;console.warn(JSON.stringify({event:'social_bridge_error',provider,route,stage,errorType:e.name}));throw fail('Social connection failed at '+stage+' ('+(e.name==='TimeoutError'?'timeout':'transport error')+').',502);}
 }
 export async function socialApi(request,env){
  const url=new URL(request.url),[,provider,route]=url.pathname.match(/^\/api\/control\/(slack|x|instagram)\/([a-z-]+)$/)||[];const session=await controlSession(request,env);
  if(!session)return json({error:'Sign in required'},401);if(request.method!=='GET'&&(request.headers.get('Origin')!==url.origin||request.headers.get('X-CSRF-Token')!==session.csrf||request.headers.get('Sec-Fetch-Site')==='cross-site'))return json({error:'Session check failed'},403);
+ let operation='request body';
  try{
   const db=env.MIMORI_DB;let input;if(request.method==='POST')input=await read(request,50000);
   if(['x','instagram'].includes(provider)){
@@ -37,7 +44,9 @@ export async function socialApi(request,env){
    if(route==='connection'&&request.method==='POST'){
     const auth=provider==='x'?{auth_token:input.auth_token,ct0:input.ct0}:{sessionid:input.sessionid};
     for(const value of Object.values(auth))if(typeof value!=='string'||value.length<16||value.length>4096||/[\s\r\n]/.test(value))throw fail('Enter the session cookie values');
+    operation='session verification';
     const data=await bridge(env,provider,route,auth);
+    operation='session storage';
     await db.prepare('INSERT INTO control_app_connections VALUES(?,?,?,?) ON CONFLICT(provider) DO UPDATE SET encrypted_token=excluded.encrypted_token,account=excluded.account,updated_ms=excluded.updated_ms').bind(provider,await seal(JSON.stringify(data.auth),env),data.result.account,Date.now()).run();return json({connected:true});
    }
    if(!['feed','following','conversations','messages'].includes(route)||!['GET','POST'].includes(request.method)||request.method==='POST'&&route!=='messages')return json({error:'Not found'},404);
@@ -75,5 +84,5 @@ export async function socialApi(request,env){
    }
   }
   return json({error:'Not found'},404);
- }catch(e){return json({error:e.status?e.message:'Connection request failed'},e.status||502);}
+ }catch(e){if(!e.status)console.warn(JSON.stringify({event:'social_api_error',provider,route,operation,errorType:e.name}));return json({error:e.status?e.message:'Social connection failed at '+operation+'.'},e.status||502);}
 }
