@@ -15,10 +15,11 @@ export async function spotifyControlApi(request,env){const u=new URL(request.url
   const session=await db.prepare("SELECT s.owner_id FROM control_sessions s JOIN mimori_users u ON u.id=s.owner_id WHERE s.token_hash=? AND s.expires_ms>? AND u.id=? AND u.role='admin' AND u.disabled=0").bind(row.session_hash,Date.now(),env.CONTROL_OWNER_ID).first();if(!session)throw fail('Sign in to the control plane again',401);
   if(u.searchParams.has('error'))return Response.redirect('https://morisoba.moe/control/#spotify-cancelled',303);
   if(u.searchParams.getAll('code').length!==1)throw fail('Missing authorization code');
-  const r=await fetch('https://accounts.spotify.com/api/token',{method:'POST',headers:{Authorization:'Basic '+btoa(env.SPOTIFY_CLIENT_ID+':'+env.SPOTIFY_CLIENT_SECRET),'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({grant_type:'authorization_code',code:u.searchParams.get('code'),redirect_uri:callback,code_verifier:await unseal(row.encrypted_verifier,env)}),signal:AbortSignal.timeout(12000),redirect:'error'});
+  const r=await fetch('https://accounts.spotify.com/api/token',{method:'POST',headers:{Authorization:'Basic '+btoa(env.SPOTIFY_CLIENT_ID+':'+env.SPOTIFY_CLIENT_SECRET),'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({grant_type:'authorization_code',code:u.searchParams.get('code'),redirect_uri:callback,code_verifier:await unseal(row.encrypted_verifier,env)}),signal:AbortSignal.timeout(12000),redirect:'manual'});
+  if(r.status>=300&&r.status<400)throw fail('Spotify returned an unexpected redirect',502);
   const auth=await r.json();if(!r.ok||!auth.refresh_token)throw fail('Spotify authorization failed. Reconnect.',409);
   if(scopes.split(' ').some(s=>!auth.scope?.split(' ').includes(s)))throw fail('Allow playback and queue access when connecting Spotify',403);
-  const check=await fetch('https://api.spotify.com/v1/me',{headers:{Authorization:'Bearer '+auth.access_token},signal:AbortSignal.timeout(10000),redirect:'error'});if(!check.ok)throw fail('Unable to verify Spotify account',502);const me=await check.json();
+  const check=await fetch('https://api.spotify.com/v1/me',{headers:{Authorization:'Bearer '+auth.access_token},signal:AbortSignal.timeout(10000),redirect:'manual'});if(!check.ok)throw fail('Unable to verify Spotify account',502);const me=await check.json();
   await db.prepare("INSERT INTO control_app_connections(provider,encrypted_token,account,updated_ms) VALUES('spotify',?,?,?) ON CONFLICT(provider) DO UPDATE SET encrypted_token=excluded.encrypted_token,account=excluded.account,updated_ms=excluded.updated_ms").bind(await seal(auth.refresh_token,env),me.display_name||me.id,Date.now()).run();clearSpotifyCache();
   return new Response(null,{status:303,headers:{Location:'https://morisoba.moe/control/#spotify-connected','Cache-Control':'no-store','Referrer-Policy':'no-referrer','Set-Cookie':cookie+'=; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=0'}});
  }
@@ -32,8 +33,9 @@ export async function spotifyControlApi(request,env){const u=new URL(request.url
  }
  const commands={play:'PUT',pause:'PUT',next:'POST'},read=['state','queue'].includes(route);
  if(!(read&&request.method==='GET')&&!(commands[route]&&request.method==='POST'))throw fail('Method not allowed',405);
- const access=await spotifyToken(env),r=await fetch('https://api.spotify.com/v1/me/player'+(route==='state'?'':'/'+route),{method:read?'GET':commands[route],headers:{Authorization:'Bearer '+access},signal:AbortSignal.timeout(12000),redirect:'error'});
+ const access=await spotifyToken(env),r=await fetch('https://api.spotify.com/v1/me/player'+(route==='state'?'':'/'+route),{method:read?'GET':commands[route],headers:{Authorization:'Bearer '+access},signal:AbortSignal.timeout(12000),redirect:'manual'});
  if(r.status===204)return json(route==='state'?{isPlaying:false,active:false}:{ok:true});
+ if(r.status>=300&&r.status<400)throw fail('Spotify returned an unexpected redirect',502);
  const d=await r.json();if(!r.ok){if(r.status===401){clearSpotifyCache();throw fail('Reconnect Spotify in Connection Manager',409);}if(r.status===404)throw fail('Open Spotify on a device to start playback',409);if(r.status===429)throw fail('Spotify rate limit. Try again shortly.',429);throw fail(d.error?.reason==='PREMIUM_REQUIRED'?'Spotify Premium is required':d.error?.message||'Spotify request failed',r.status===403?403:502);}
  if(route==='queue')return json({current:track(d.currently_playing),queue:(d.queue||[]).map(track)});
  return json({active:!!d.device,isPlaying:!!d.is_playing,track:track(d.item),canPause:!d.actions?.disallows?.pausing,canPlay:!d.actions?.disallows?.resuming,canSkip:!d.actions?.disallows?.skipping_next});
