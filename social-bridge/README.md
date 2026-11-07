@@ -6,7 +6,7 @@ The Worker verifies the owner session and CSRF, decrypts the provider session, s
 
 Required Worker configuration:
 - `SOCIAL_BRIDGE_URL`: canonical Cloud Run URL (also the ID-token audience).
-- `SOCIAL_BRIDGE_CREDENTIALS`: encrypted Worker secret containing a service-account JSON credential, with only `roles/run.invoker` on this service. Provisioning is pending explicit credential approval.
+- `SOCIAL_BRIDGE_CREDENTIALS`: encrypted Worker secret containing a service-account JSON credential, with only `roles/run.invoker` on this service. Provisioned after explicit owner approval. The temporary local key file was removed; the credential is stored only as a Worker secret.
 
 Deploy the directory with `gcloud run deploy morisoba-social --source . --project personal-use-493017 --region us-east1 --no-allow-unauthenticated --min-instances 0 --max-instances 1 --concurrency 4 --memory 512Mi --timeout 60`. Never grant `allUsers` invocation. Service-to-service authentication follows https://docs.cloud.google.com/run/docs/authenticating/service-to-service .
 
