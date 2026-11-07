@@ -10,7 +10,8 @@ import {initKeyring} from './keyring.js';
 const $=s=>document.querySelector(s);
 let csrf='',owner,started=false,closeKeyring=()=>{},closeRemote=()=>{};
 async function api(path,data,method='POST'){
- const response=await fetch(path,{method:data===undefined?'GET':method,credentials:'same-origin',cache:'no-store',headers:{'Content-Type':'application/json','X-CSRF-Token':csrf},...(data===undefined?{}:{body:JSON.stringify(data)})});
+ const multipart=data instanceof FormData;
+ const response=await fetch(path,{method:data===undefined?'GET':method,credentials:'same-origin',cache:'no-store',headers:{...(multipart?{}:{'Content-Type':'application/json'}),'X-CSRF-Token':csrf},...(data===undefined?{}:{body:multipart?data:JSON.stringify(data)})});
  const result=await response.json();if(response.status===401){lock();throw Error('Sign in required');}if(!response.ok)throw Error(result.error||'Request failed');return result;
 }
 function lock(){closeRemote();document.querySelectorAll('dialog[open]').forEach(d=>d.close());closeKeyring();$('#stage').hidden=true;$('#dock').hidden=true;$('#entry-gate').hidden=false;$('#desktop-bar').hidden=true;$('#app-launcher').hidden=true;csrf='';}

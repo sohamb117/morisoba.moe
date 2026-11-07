@@ -1,0 +1,15 @@
+/* Shared form chrome and scroll areas, including dynamically created panels. */
+html, body, body * { scrollbar-width: thin !important; scrollbar-color: #70716b #141512 !important; }
+::-webkit-scrollbar { width: 7px; height: 7px; }
+::-webkit-scrollbar-track, ::-webkit-scrollbar-corner { background: #141512; }
+::-webkit-scrollbar-thumb { background: #70716b; border: 1px solid #141512; border-radius: 0; }
+::-webkit-scrollbar-thumb:hover { background: #b9bab1; }
+select:not([multiple]) { appearance: none; -webkit-appearance: none; border-radius: 0; color: var(--chalk, #d0d1c7); background-color: #10110f; background-image: url("/shared/select-arrow.svg"); background-repeat: no-repeat; background-position: right 8px center; padding-right: 26px !important; cursor: pointer; }
+select:focus-visible { outline: 1px solid #c4c5b9; outline-offset: 2px; }
+.site-select-menu { position: fixed; inset: auto; margin: 0; box-sizing: border-box; padding: 3px; overflow: auto; overscroll-behavior: contain; border: 1px solid #66685e; border-radius: 0; background: #10110f; color: #d0d1c7; box-shadow: 4px 4px 0 #0009; font: 12px/1.5 monospace; text-align: left; z-index: 2147483647; }
+.site-select-menu [role=option] { position: relative; padding: 6px 24px 6px 9px; min-height: 18px; overflow-wrap: anywhere; cursor: pointer; }
+.site-select-menu [role=option][aria-selected=true]::after { content: '✓'; position: absolute; right: 7px; top: 6px; }
+.site-select-menu [role=option]:hover, .site-select-menu .highlighted { background: #32352e; color: #f0f1e5; }
+.site-select-menu [aria-disabled=true] { opacity: .4; cursor: default; }
+.site-select-group { padding: 7px 9px 3px; color: #8d9081; border-bottom: 1px solid #35382e; }
+@media (pointer: coarse) { .site-select-menu [role=option] { padding-top: 10px; padding-bottom: 10px; } }

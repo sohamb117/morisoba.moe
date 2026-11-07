@@ -1,3 +1,4 @@
+import {initPanelSettings} from './panel-settings.js';
 export function registerApps(container,apps){
  container.replaceChildren();
  for(const {name,launch} of apps){const button=document.createElement('button');button.textContent=name;button.onclick=()=>{container.hidden=true;document.querySelector('#launcher-toggle').setAttribute('aria-expanded','false');launch();};container.append(button);}
@@ -6,6 +7,7 @@ export function registerApps(container,apps){
 export function createDesktop({ownerId}){
  const $=s=>document.querySelector(s),launcher=$('#app-launcher'),toggle=$('#launcher-toggle'),dock=$('#dock');let top=10,offset=0;
  window.spawnDecor?.();window.attachAccessories?.(document.querySelectorAll('.app-window'));window.startCursorParallax?.();
+ initPanelSettings();
  const tasks=new Map(),key='control.desktop.'+ownerId;let saved={},restoring=false,saveTimer;
  try{saved=JSON.parse(localStorage.getItem(key)||'{}');}catch{}
  function save(){if(restoring)return;const state={};for(const win of document.querySelectorAll('.app-window'))state[win.id]={running:tasks.has(win.id),minimized:win.hidden,maximized:win.classList.contains('is-maximized'),left:win.style.left,top:win.style.top,width:win.style.width,height:win.style.height};try{localStorage.setItem(key,JSON.stringify(state));}catch{}}

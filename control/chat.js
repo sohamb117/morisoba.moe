@@ -1,3 +1,4 @@
+import {appendChatText} from './chat-media.js';
 import {buildThreads} from '../protocol/threads.mjs';
 export async function initChat({client,provider,owner}){
 const $=s=>document.querySelector(s),status=text=>{$('#chat-status').textContent=text;};
@@ -20,7 +21,7 @@ async function render(){
    article.append(context);
   }
   const meta=document.createElement('div');meta.className='post-meta';meta.textContent=name(record.author)+' · '+new Date(record.payload.createdAt).toLocaleString();
-  const body=document.createElement('p');body.className='post-body';body.textContent=record.payload.body;article.append(meta,body);
+  const body=document.createElement('p');body.className='post-body';appendChatText(body,record.payload.body);article.append(meta,body);
   if(record.payload.audience.includes(client.identity.id)){
    const actions=document.createElement('div');actions.className='post-actions';
    const liked=view.likes.get(record.id)?.has(client.identity.id),like=document.createElement('button');
