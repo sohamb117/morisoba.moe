@@ -1,3 +1,4 @@
+import {slackWorkspaces} from './control-social.mjs';
 import {remiliaStatus} from './control-remilia.mjs';
 import {controlSession} from './control-auth.mjs';
 import {google,configured} from './connections-google.mjs';
@@ -16,7 +17,7 @@ export async function connectionsApi(request,env,{authenticate=controlSession,ca
   const gh=await env.MIMORI_DB.prepare("SELECT account FROM control_app_connections WHERE provider='github'").first();
   const rss=await env.MIMORI_DB.prepare('SELECT COUNT(*) AS n FROM control_rss_subscriptions').first();
   const discord=await env.MIMORI_DB.prepare("SELECT account FROM control_app_connections WHERE provider='discord'").first();
-  const social=await Promise.all(['slack','x','instagram'].map(async id=>{const c=await env.MIMORI_DB.prepare('SELECT account FROM control_app_connections WHERE provider=?').bind(id).first();return {id,name:{slack:'Slack',x:'X',instagram:'Instagram'}[id],account:c?.account||'',connected:!!c,available:id==='slack'||!!(env.SOCIAL_BRIDGE_URL&&env.SOCIAL_BRIDGE_CREDENTIALS),apps:[id]};}));
+  const social=await Promise.all(['slack','x','instagram'].map(async id=>{if(id==='slack'){const workspaces=(await slackWorkspaces(env)).map(({id,name,account})=>({id,name,account}));return {id,name:'Slack',account:'',connected:!!workspaces.length,available:true,apps:['slack'],workspaces};}const c=await env.MIMORI_DB.prepare('SELECT account FROM control_app_connections WHERE provider=?').bind(id).first();return {id,name:{slack:'Slack',x:'X',instagram:'Instagram'}[id],account:c?.account||'',connected:!!c,available:id==='slack'||!!(env.SOCIAL_BRIDGE_URL&&env.SOCIAL_BRIDGE_CREDENTIALS),apps:[id]};}));
   return json({connections:[...social,await remiliaStatus(env),{id:'discord',name:'Discord',account:discord?.account||'',connected:!!discord,apps:['Discord']},{id:'github',name:'GitHub',account:gh?.account||'',connected:!!gh,apps:['GitHub']},{id:'spotify',name:'Spotify',account:spotify?.account||'',connected:!!(env.SPOTIFY_CLIENT_ID&&env.SPOTIFY_CLIENT_SECRET&&(spotify||env.SPOTIFY_REFRESH_TOKEN)),apps:['Spotify']},{id:'rss',name:'RSS',account:rss.n+' subscriptions',connected:true,apps:['RSS Feed Viewer','RSS Feed Editor']},account,{id:'mimori',name:'Mimori',account:new URL(request.url).host,apps:['Mimori-Chat','Mimori-Admin'],connected:mimori}]});
  }catch{return json({error:'Unable to check connections'},503);}
 }

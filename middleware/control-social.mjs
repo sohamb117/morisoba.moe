@@ -12,6 +12,10 @@ export async function slackCall(token,method,params={},write=false){
 }
 const slackId=id=>/^[CDGUW][A-Z0-9]{8,24}$/.test(id||'');
 const slackMessage=m=>({id:m.ts,text:m.text||'',author:m.user||m.bot_id||'Slack',createdAt:new Date(Number(m.ts)*1000).toISOString(),thread:m.thread_ts||m.ts,replies:m.reply_count||0,files:(m.files||[]).map(f=>({name:f.name||'Attachment',url:f.permalink}))});
+export async function slackWorkspaces(env){
+ const {results}=await env.MIMORI_DB.prepare("SELECT provider,encrypted_token,account FROM control_app_connections WHERE provider='slack' OR provider LIKE 'slack:%' ORDER BY provider").all();
+ const rows=new Map();for(const row of results){const auth=JSON.parse(await unseal(row.encrypted_token,env));rows.set(auth.team,{id:auth.team,name:auth.name||row.account.split(' / ')[0],account:row.account,provider:row.provider,auth});}return [...rows.values()];
+}
 async function bridge(env,provider,route,auth,args={}){
  if(!env.SOCIAL_BRIDGE_CREDENTIALS||!env.SOCIAL_BRIDGE_URL)throw fail('Social connection service is not configured',503);
  const credential=JSON.parse(env.SOCIAL_BRIDGE_CREDENTIALS),audience=env.SOCIAL_BRIDGE_URL;
@@ -50,11 +54,19 @@ export async function socialApi(request,env){
   if(provider==='slack'){
    if(route==='connection'&&request.method==='POST'){
     if(typeof input.token!=='string'||!/^xoxp-[A-Za-z0-9-]{20,1000}$/.test(input.token))throw fail('Enter a Slack OAuth user token (xoxp).');const who=await slackCall(input.token,'auth.test');
-    await db.prepare("INSERT INTO control_app_connections VALUES('slack',?,?,?) ON CONFLICT(provider) DO UPDATE SET encrypted_token=excluded.encrypted_token,account=excluded.account,updated_ms=excluded.updated_ms").bind(await seal(JSON.stringify({token:input.token,user:who.user_id,team:who.team_id}),env),who.team+' / '+who.user,Date.now()).run();return json({connected:true});
+    await db.prepare("INSERT INTO control_app_connections VALUES(?,?,?,?) ON CONFLICT(provider) DO UPDATE SET encrypted_token=excluded.encrypted_token,account=excluded.account,updated_ms=excluded.updated_ms").bind('slack:'+who.team_id,await seal(JSON.stringify({token:input.token,user:who.user_id,team:who.team_id,name:who.team}),env),who.team+' / '+who.user,Date.now()).run();return json({connected:true});
    }
-   if(route==='connection'&&request.method==='DELETE'){await db.prepare("DELETE FROM control_app_connections WHERE provider='slack'").run();return json({ok:true});}
-   const c=await db.prepare("SELECT encrypted_token FROM control_app_connections WHERE provider='slack'").first();if(!c)throw fail('Connect Slack in Connection Manager',409);const auth=JSON.parse(await unseal(c.encrypted_token,env));
-   if(route==='conversations'&&request.method==='GET'){const result=await slackCall(auth.token,'users.conversations',{types:'public_channel,private_channel,im,mpim',exclude_archived:true,limit:100,cursor:url.searchParams.get('cursor')||undefined});return json({items:result.channels.map(c=>({id:c.id,name:c.name||c.user||c.id,direct:c.is_im||c.is_mpim,user:c.user})),cursor:result.response_metadata?.next_cursor||''});}
+   const workspaces=await slackWorkspaces(env);
+   if(route==='workspaces'&&request.method==='GET')return json({items:workspaces.map(({id,name,account})=>({id,name,account}))});
+   const team=url.searchParams.get('workspace'),workspace=team?workspaces.find(w=>w.id===team):workspaces[0];
+   if(!workspace)throw fail('Connect this Slack workspace in Connection Manager',409);const auth=workspace.auth;
+   if(route==='connection'&&request.method==='DELETE'){
+    await db.prepare('DELETE FROM control_app_connections WHERE provider=?').bind(workspace.provider).run();
+    const legacy=await db.prepare("SELECT encrypted_token FROM control_app_connections WHERE provider='slack'").first();
+    if(legacy&&JSON.parse(await unseal(legacy.encrypted_token,env)).team===workspace.id)await db.prepare("DELETE FROM control_app_connections WHERE provider='slack'").run();return json({ok:true});
+   }
+   if(route==='activity'&&request.method==='GET'){const channel=url.searchParams.get('channel');if(!slackId(channel))throw fail('Select a conversation');const result=await slackCall(auth.token,'conversations.history',{channel,limit:1});return json({latest:result.messages?.[0]?.ts||'0'});}
+   if(route==='conversations'&&request.method==='GET'){const result=await slackCall(auth.token,'users.conversations',{types:'public_channel,private_channel,im,mpim',exclude_archived:true,limit:100,cursor:url.searchParams.get('cursor')||undefined});return json({items:result.channels.map(c=>({id:c.id,name:c.name||c.user||c.id,direct:!!(c.is_im||c.is_mpim),user:c.user,latest:c.latest?.ts||null})),cursor:result.response_metadata?.next_cursor||''});}
    if(route==='users'&&request.method==='GET'){const result=await slackCall(auth.token,'users.list',{limit:200,cursor:url.searchParams.get('cursor')||undefined});return json({items:result.members.map(u=>({id:u.id,name:u.profile?.display_name||u.real_name||u.name})),cursor:result.response_metadata?.next_cursor||''});}
    if(route==='messages'){
     const channel=url.searchParams.get('channel');if(!slackId(channel))throw fail('Select a conversation');

@@ -123,3 +123,5 @@ input[type=checkbox]:checked::before{content:"";width:8px;height:8px;background:
 .social-composer textarea{flex:1;min-width:0;resize:none;height:64px;overflow:auto;outline-offset:0}
 .social-root>[role=status]:empty{display:none}
 @media(max-width:600px){.social-sidebar{width:115px}.social-tabs{gap:4px}.social-thumbnail img{max-width:160px}}
+
+#slack-root{display:flex;flex-direction:column;flex:1;min-height:0;min-width:0;gap:8px}#slack-root>.actions{align-items:center;flex-wrap:nowrap}#slack-root .discord-server-picker{margin:0;width:auto;max-width:45%;min-width:100px;font-size:12px}#slack-root .discord-conversation form{display:flex;flex-direction:column;gap:8px}#slack-root .discord-conversation form>button{align-self:flex-start}#slack-root .discord-conversation form[hidden]{display:none}#slack-root textarea{height:78px;resize:none;overflow:auto}#slack-root .discord-sidebar[hidden]{display:none}
