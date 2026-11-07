@@ -17,3 +17,12 @@ select:focus-visible { outline: 1px solid #c4c5b9; outline-offset: 2px; }
 @supports selector(::-webkit-scrollbar) { html, body, body * { scrollbar-width:auto !important; scrollbar-color:auto !important; } }
 
 ::-webkit-scrollbar-button { display:none !important; width:0 !important; height:0 !important; }
+html.site-custom-scrollbars,html.site-custom-scrollbars *{scrollbar-width:none!important}
+html.site-custom-scrollbars::-webkit-scrollbar,html.site-custom-scrollbars *::-webkit-scrollbar{display:none!important;width:0!important;height:0!important}
+.site-scroll-indicators{position:fixed;inset:0;width:100vw;height:100vh;max-width:none;max-height:none;margin:0;padding:0;border:0;background:transparent;pointer-events:none;overflow:hidden;z-index:2147483647}
+.site-scroll-indicators::backdrop{display:none}
+.site-scroll-indicator{position:absolute;pointer-events:auto;touch-action:none;background:transparent;cursor:default}
+.site-scroll-indicator[hidden]{display:none!important}
+.site-scroll-indicator::after{content:"";position:absolute;background:#fff;pointer-events:none}
+.site-scroll-indicator.y::after{right:0;top:0;width:1px;height:100%}
+.site-scroll-indicator.x::after{bottom:0;left:0;height:1px;width:100%}

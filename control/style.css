@@ -85,3 +85,18 @@ input[type=checkbox]:checked::before{content:"";width:8px;height:8px;background:
 #discord-root textarea,#remilia-root textarea,#app-chat textarea{resize:none;outline:none;box-shadow:none;border:1px solid var(--edge-mid)}
 #discord-root textarea:focus,#remilia-root textarea:focus,#app-chat textarea:focus{outline:none;border-color:var(--ink-dim)}
 .git-activity-summary{display:flex;gap:16px;align-items:baseline;font-size:12px;margin-bottom:16px}.git-activity-summary time{margin-left:auto;opacity:.55}.git-activity-summary span{opacity:.55}.git-activity-graph{overflow:auto;padding-bottom:8px}.git-activity-grid{display:grid;grid-template-rows:18px repeat(7,10px);gap:3px;min-width:max-content;padding:2px}.git-activity-month{grid-row:1;font-size:10px;white-space:nowrap;color:var(--ink-dim)}.git-activity-grid .git-activity-day{display:block;width:10px;height:10px;min-width:0;padding:0;margin:0;border:1px solid #ffffff16;background:#ffffff08}.git-activity-day[data-level="1"]{background:#ffffff30}.git-activity-day[data-level="2"]{background:#ffffff60}.git-activity-day[data-level="3"]{background:#ffffffa0}.git-activity-day[data-level="4"]{background:#ffffffe0}.git-activity-grid .git-activity-day:hover,.git-activity-grid .git-activity-day:focus-visible{outline:1px solid white;outline-offset:1px}.git-activity-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:16px;margin:16px 0 0}.git-activity-stats dt{font-size:11px;color:var(--ink-dim)}.git-activity-stats dd{font-size:24px;margin:3px 0 0}.git-activity-detail{font-size:11px;min-height:16px;margin-top:12px;opacity:.7}
+/* Content determines default height; available desktop space is only a ceiling. */
+#stage .app-window.panel{height:auto;min-height:0;max-height:var(--app-height-limit,calc(100dvh - 134px))}
+#stage .app-window.panel>.pbody{min-height:0;max-height:none;overflow:auto;flex:1 1 auto}
+#stage #app-discord,#stage #app-remilia{height:620px}
+#stage #app-discord>.pbody,#stage #app-remilia>.pbody{overflow:hidden;display:flex;flex-direction:column}
+#discord-root,#remilia-root{flex:1;min-height:0;height:auto}
+.remote-chat-messages{min-height:0}
+#stage #p-wave{height:auto;min-height:0}
+#p-wave .spotify-queue{max-height:none;overflow:visible}
+.discord-pin-settings section{max-height:none;overflow:visible}
+.calendar-canvas{overflow:visible}
+#app-calendar .pbody{overflow:auto}
+#stage .app-window.is-maximized{height:auto!important;max-height:none}
+@media(max-width:720px){#stage .app-window.panel:not(.is-maximized){bottom:auto!important;height:auto!important;max-height:calc(100dvh - 112px)}#stage #app-discord:not(.is-maximized),#stage #app-remilia:not(.is-maximized){height:620px!important}}
+.month-day{min-height:84px}
