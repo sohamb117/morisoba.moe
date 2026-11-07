@@ -1,3 +1,4 @@
+import {createFeedApps,createGithub} from './feed-apps.js';
 import {createConnections} from './connections.js';
 import {createDesktop,registerApps} from './desktop.js';
 import {createGoogleCalendar} from './google-calendar.js';
@@ -15,13 +16,19 @@ async function start(s){
  owner=s.user;csrf=s.csrf;$('#entry-gate').hidden=true;$('#stage').hidden=false;$('#dock').hidden=false;$('#desktop-bar').hidden=false;$('#owner-email').textContent=owner.email;$('#profile-form').elements.displayName.value=owner.displayName;$('#profile-form').elements.bio.value=owner.bio||'';
  if(started){location.reload();return;}started=true;
  const desktop=createDesktop();
- const connections=createConnections({api:(path,data)=>api('/api/control'+path,data),openChat:()=>launchChat()});
+ const connections=createConnections({api:(path,data,method)=>api('/api/control'+path,data,method),openChat:()=>launchChat(),openFeeds:()=>{desktop.open('app-rss-editor');feeds.edit();}});
  const openConnections=()=>{desktop.open('app-connections');connections.open();};
+ const feeds=createFeedApps({api:(path,data,method)=>api('/api/control'+path,data,method)});
+ const github=createGithub({api:path=>api('/api/control'+path),openConnections});
  const calendar=createGoogleCalendar({ownerId:owner.id,openConnections,api:(path,data,method)=>api('/api/control/calendar'+path,data,method)});
  let bookingStarted=false,adminStarted=false,chatStarted=false;
  const launchChat=()=>{desktop.open('app-chat');if(!chatStarted){closeKeyring=initKeyring({csrf,owner});chatStarted=true;}};
  const launch=(id,init)=>()=>{desktop.open(id);init?.();};
  registerApps($('#app-launcher'),[
+  {name:'Spotify',launch:launch('p-wave')},
+  {name:'GitHub',launch:launch('app-github',()=>github.open())},
+  {name:'RSS Feed Viewer',launch:launch('app-rss-viewer',()=>feeds.view())},
+  {name:'RSS Feed Editor',launch:launch('app-rss-editor',()=>feeds.edit())},
   {name:'Connection Manager',launch:openConnections},
   {name:'Calendar',launch:launch('app-calendar',()=>calendar.open())},
   {name:'Mimori-Chat',launch:launchChat},

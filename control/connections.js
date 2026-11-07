@@ -1,4 +1,4 @@
-export function createConnections({api,openChat}){
+export function createConnections({api,openChat,openFeeds}){
  const root=document.querySelector('#connections-root');
  const node=(tag,text)=>{const n=document.createElement(tag);n.textContent=text;return n;};
  const button=(text,fn)=>{const n=node('button',text);n.onclick=fn;return n;};
@@ -9,6 +9,14 @@ export function createConnections({api,openChat}){
     if(c.id==='google'){
      row.append(node('p',c.events?'Events connected':c.eventError||'Events not connected'),node('p',c.calendarList?'Calendar list connected':c.listError||'Calendar list not connected'));
      row.append(button(c.calendarList?'Reconnect calendars':'Connect calendars',async e=>{const b=e.target;b.disabled=true;try{const r=await api('/calendar/connect',{});location.assign(r.url);}catch(err){row.append(node('p',err.message));b.disabled=false;}}));
+    }else if(c.id==='github'){
+     row.append(node('p',c.connected?'Connected':'Not connected'));
+     const form=node('form','');form.innerHTML='<label>GitHub access token<input name="token" type="password" autocomplete="off" required></label><p>Read access: Metadata, Issues, Pull requests.</p><button type="submit">Connect</button><p role="status"></p>';
+     const tokenLink=node('a','Create token ↗');tokenLink.href='https://github.com/settings/personal-access-tokens/new';tokenLink.target='_blank';tokenLink.rel='noopener noreferrer';form.prepend(tokenLink);
+     form.onsubmit=async e=>{e.preventDefault();const token=form.elements.token.value;form.elements.token.value='';const b=form.querySelector('button');b.disabled=true;try{await api('/github/connection',{token});await open();}catch(err){form.querySelector('[role=status]').textContent=err.message;}finally{b.disabled=false;}};row.append(form);
+     if(c.connected)row.append(button('Disconnect',async()=>{if(!confirm('Disconnect GitHub?'))return;try{await api('/github/connection',{},'DELETE');await open();}catch(e){row.append(node('p',e.message));}}));
+    }else if(c.id==='rss'){row.append(button('Edit subscriptions',openFeeds));
+    }else if(c.id==='spotify'){row.append(node('p',c.connected?'Connected':'Not connected'));
     }else{row.append(node('p',c.connected?'Connected':'Unavailable'));if(c.connected)row.append(button('Open keyring',openChat));}root.append(row);
    }
   }catch(err){root.replaceChildren(node('p',err.message),button('Retry',open));}
