@@ -34,6 +34,7 @@ export async function spotifyControlApi(request,env){const u=new URL(request.url
  const commands={play:'PUT',pause:'PUT',next:'POST'},read=['state','queue'].includes(route);
  if(!(read&&request.method==='GET')&&!(commands[route]&&request.method==='POST'))throw fail('Method not allowed',405);
  const access=await spotifyToken(env),r=await fetch('https://api.spotify.com/v1/me/player'+(route==='state'?'':'/'+route),{method:read?'GET':commands[route],headers:{Authorization:'Bearer '+access},signal:AbortSignal.timeout(12000),redirect:'manual'});
+ if(!read&&r.ok)return json({ok:true});
  if(r.status===204)return json(route==='state'?{isPlaying:false,active:false}:{ok:true});
  if(r.status>=300&&r.status<400)throw fail('Spotify returned an unexpected redirect',502);
  const d=await r.json();if(!r.ok){if(r.status===401){clearSpotifyCache();throw fail('Reconnect Spotify in Connection Manager',409);}if(r.status===404)throw fail('Open Spotify on a device to start playback',409);if(r.status===429)throw fail('Spotify rate limit. Try again shortly.',429);throw fail(d.error?.reason==='PREMIUM_REQUIRED'?'Spotify Premium is required':d.error?.message||'Spotify request failed',r.status===403?403:502);}
