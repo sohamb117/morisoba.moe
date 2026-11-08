@@ -4,8 +4,7 @@ import logging
 import re
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
-from twikit import Client as XClient
-from x_compat import CurrentTransaction
+from x_compat import CurrentTransaction, CompatibleClient as XClient
 from instagram_web import request as instagram_web_request
 
 # Third-party exceptions can contain request headers; never emit them.

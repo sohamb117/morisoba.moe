@@ -45,3 +45,55 @@ class CurrentTransaction(ClientTransaction):
         indices = [int(m.group(2)) for m in INDICES_REGEX.finditer(source)]
         if len(indices) < 2: raise RuntimeError('X transaction asset changed')
         return indices[0], indices[1:]
+
+
+def normalize_users(value):
+    """Adapt optional profile metadata before twikit constructs User objects."""
+    if isinstance(value, list):
+        return [normalize_users(item) for item in value]
+    if not isinstance(value, dict):
+        return value
+    value = {key: normalize_users(item) for key, item in value.items()}
+    if value.get('__typename') != 'User' or not value.get('rest_id'):
+        return value
+    legacy = dict(value.get('legacy') or {})
+    core = value.get('core') or {}
+    for key in ('name', 'screen_name', 'created_at'):
+        if key in core:
+            legacy[key] = core[key]
+    avatar = value.get('avatar') or {}
+    if avatar.get('image_url'):
+        legacy['profile_image_url_https'] = avatar['image_url']
+    location = value.get('location') or {}
+    if isinstance(location, dict) and 'location' in location:
+        legacy['location'] = location['location']
+    # Identity fields remain required. Missing metadata must not hide bad auth
+    # responses or manufacture a successful account identity.
+    for key in ('created_at', 'profile_image_url_https', 'location', 'description', 'translator_type'):
+        legacy.setdefault(key, '')
+    for key in ('pinned_tweet_ids_str', 'withheld_in_countries'):
+        legacy.setdefault(key, [])
+    for key in ('verified', 'possibly_sensitive', 'can_dm', 'can_media_tag', 'want_retweets',
+                'default_profile', 'default_profile_image', 'has_custom_timelines', 'is_translator'):
+        legacy.setdefault(key, False)
+    for key in ('followers_count', 'fast_followers_count', 'normal_followers_count', 'friends_count',
+                'favourites_count', 'listed_count', 'media_count', 'statuses_count'):
+        legacy.setdefault(key, 0)
+    entities = dict(legacy.get('entities') or {})
+    description = dict(entities.get('description') or {})
+    description.setdefault('urls', [])
+    entities['description'] = description
+    if entities.get('url') is None:
+        entities.pop('url', None)
+    legacy['entities'] = entities
+    value['legacy'] = legacy
+    value.setdefault('is_blue_verified', False)
+    return value
+
+
+from twikit import Client
+
+class CompatibleClient(Client):
+    async def request(self, *args, **kwargs):
+        data, response = await super().request(*args, **kwargs)
+        return normalize_users(data), response
