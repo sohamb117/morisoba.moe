@@ -12,7 +12,7 @@ The server checks TorBox cache availability, selects the exact episode file and 
 
 Public metadata uses memory and existing persistent KV with coalescing and stale-on-error fallback. Release searches cache for six hours; mappings for one day. Private playlists stay in memory for 60 seconds. Rate-limit recovery is bounded. A player that cannot load initial video within 20 seconds tries another cached release. Failed hashes are excluded; recovery after playback begins retains position and playing state.
 
-Audio and captions share one popup. External captions support language/track selection, timing offset, size, vertical position, and alignment. Sources contains the alternate-release action. Website-provider adapters remain registered but are not the default playback path.
+Audio and captions share one popup. Exact AniList episode captions (including compressed ASS tracks) are preferred, with external subtitle search as fallback. Captions support language/track selection, timing offset, size, vertical position, and alignment. Sources contains the alternate-release action. Website-provider adapters remain registered but are not the default playback path.
 
 ## Accounts
 
@@ -26,6 +26,6 @@ Deploy from the repository root using the installed Wrangler with `--config ani/
 
 ## Verification
 
-44 anime checks cover authorization, viewer metadata isolation, exact episode/file selection, retries excluding failed hashes, new-series ID discovery, caches, private playlists, and real workerd fetch behavior. Separate account/control tests cover member privileges and session revocation.
+46 anime checks cover authorization, viewer metadata isolation, exact episode/file selection, retries excluding failed hashes, new-series ID discovery, caches, private playlists, and real workerd fetch behavior. Separate account/control tests cover member privileges and session revocation.
 
 Production browser tests include Black Clover, Black Clover Season 2, Spy x Family Season 3, Overgeared, Devils' Crest, Blue Box Season 2, The Apothecary Diaries Season 3, Firefly Wedding, Space Mercenary, and Dragon Ball Super: Beerus. Testing uses five concurrent browser players and checks decoded dimensions, advancing playback clocks, and errors. A playlist response alone is not counted as successful playback. Upstream cache availability and CDN outages remain external dependencies; the app cannot promise every episode is cached.

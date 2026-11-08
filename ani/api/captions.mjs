@@ -7,7 +7,12 @@ function seriesIdentity(media){
 }
 export async function findCaptions(media,episode,transport=fetch){
   if(!Number.isInteger(episode)||episode<1||episode>2000)throw new ProviderError('Invalid episode','invalid_request');
-  return cached(`captions:v1:${media.id}:${episode}`,604800,async()=>{
+  return cached(`captions:v2:${media.id}:${episode}`,21600,async()=>{
+    try{
+      const releases=await fetchJSON(`https://aniraws.org/api/v1/feed?anilist_id=${media.id}&episode_number=${episode}&limit=50`,{},transport);
+      const embedded=(Array.isArray(releases)?releases:[]).filter(r=>Number(r.anilist_id)===media.id&&Number(r.episode_number)===episode).flatMap(r=>(r.files||[]).flatMap(f=>(f.subtitles||[]).filter(s=>/^https:\/\/aniraws\.org\/tasks\/\d+\/subtitles\/\d+$/.test(s.link)&&['ASS','SRT','VTT'].includes(s.format)&&/^[a-z]{3}$/i.test(s.language)).map(s=>({id:'ar-'+s.link.split('/').pop(),language:s.language.toLowerCase(),name:s.name+' / '+r.title,url:s.link}))));
+      if(embedded.some(s=>s.language==='eng'&&!/signs|songs/i.test(s.name.split(' / ')[0])))return [...new Map(embedded.map(s=>[s.id,s])).values()].sort((a,b)=>Number(/signs|songs/i.test(a.name.split(' / ')[0]))-Number(/signs|songs/i.test(b.name.split(' / ')[0])));
+    }catch{}
     const {title,season}=seriesIdentity(media);const kind=media.format==='MOVIE'?'movie':'series';
     const results=await cached(`imdb:${kind}:${title}`,2592000,()=>fetchJSON(`https://v3-cinemeta.strem.io/catalog/${kind}/top/search=${encodeURIComponent(title)}.json`,{},transport));
     const names=[title,media.alternateTitle].filter(Boolean).map(normalized);
@@ -20,5 +25,13 @@ export async function findCaptions(media,episode,transport=fetch){
 }
 export async function captionText(media,episode,captionId,transport=fetch){
   const list=await findCaptions(media,episode,transport);const caption=list.find(c=>c.id===captionId);if(!caption)throw new ProviderError('Caption not found','invalid_request');
-  return cached(`caption-file:${caption.id}`,2592000,()=>fetchText(caption.url,{},transport));
+  return cached(`caption-file:${caption.id}`,2592000,async()=>{
+    if(caption.id.startsWith('ar-')){
+      const response=await transport(caption.url,{redirect:'manual',signal:AbortSignal.timeout(12000)});
+      if(!response.ok){await response.body?.cancel();throw new ProviderError('Caption download failed');}
+      const body=response.headers.get('Content-Type')?.includes('gzip')?response.body.pipeThrough(new DecompressionStream('gzip')):response.body;
+      return fetchText(caption.url,{},async()=>new Response(body));
+    }
+    return fetchText(caption.url,{},transport);
+  });
 }
