@@ -1,3 +1,4 @@
+import {aniAccountsApi} from './ani-accounts.mjs';
 import {socialApi} from './control-social.mjs';
 import {spotifyControlApi} from './control-spotify.mjs';
 import {remiliaApi} from './control-remilia.mjs';
@@ -19,6 +20,7 @@ export async function controlPlaneMiddleware(request,env,next){
  if(url.pathname==='/api/control/connections')return connectionsApi(request,env);
  if(url.pathname==='/api/control/mimori')return protocolAdminApi(request,env);
  if(url.pathname.startsWith('/api/control/calendar/'))return controlCalendarApi(request,env);
+ if(url.pathname==='/api/control/ani-accounts')return aniAccountsApi(request,env);
  if(url.pathname.startsWith('/api/control/'))return controlAuthApi(request,env);
  if(/^\/(?:book\/)?admin(?:\/|$)/.test(url.pathname))return Response.redirect((calendar?'https://morisoba.moe':url.origin)+'/control/',302);
  if(calendar&&entries.has(url.pathname))return Response.redirect('https://morisoba.moe/control/',302);

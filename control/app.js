@@ -1,3 +1,4 @@
+import {createAniAccounts} from './ani-accounts.js';
 import {createSlack} from './slack.js';
 import {createSocial} from './social.js';
 import {createGitActivity} from './git-activity.js';
@@ -22,6 +23,7 @@ async function start(s){
  owner=s.user;csrf=s.csrf;$('#entry-gate').hidden=true;$('#stage').hidden=false;$('#dock').hidden=false;$('#desktop-bar').hidden=false;$('#owner-email').textContent=owner.email;$('#profile-form').elements.displayName.value=owner.displayName;$('#profile-form').elements.bio.value=owner.bio||'';
  if(started){location.reload();return;}started=true;
  const desktop=createDesktop({ownerId:owner.id});
+ const aniAccounts=createAniAccounts({api:(data,method)=>api('/api/control/ani-accounts',data,method)});
  const connections=createConnections({api:(path,data,method)=>api('/api/control'+path,data,method),openChat:()=>launchChat(),openFeeds:()=>{desktop.open('app-rss-editor');feeds.edit();}});
  const openConnections=()=>{desktop.open('app-connections');connections.open();};
  const remilia=createRemoteChat({provider:'remilia',ownerId:owner.id,api:(path,data,method)=>api('/api/control'+path,data,method),openConnections});
@@ -46,6 +48,7 @@ async function start(s){
   {name:'RSS Feed Viewer',launch:launch('app-rss-viewer',()=>feeds.view())},
   {name:'RSS Feed Editor',launch:launch('app-rss-editor',()=>feeds.edit())},
   {name:'Connection Manager',launch:openConnections},
+  {name:'Anime Accounts',launch:launch('app-ani-accounts',()=>aniAccounts.open())},
   {name:'Calendar',launch:launch('app-calendar',()=>calendar.open())},
   {name:'Mimori-Chat',launch:launchChat},
   {name:'Mimori-Admin',launch:launch('app-admin',()=>{if(!adminStarted){initCommunity({protocolApi:()=>api('/api/control/mimori'),api:(path,data,method)=>api('/api/mimorigasaka/'+path,data,method)});adminStarted=true;}})},

@@ -1,0 +1,55 @@
+{
+  "name": "morisoba-ani",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-11-08",
+  "assets": {
+    "directory": "public",
+    "binding": "ASSETS",
+    "run_worker_first": [
+      "/api/*"
+    ]
+  },
+  "observability": {
+    "enabled": true,
+    "logs": {
+      "enabled": false
+    },
+    "traces": {
+      "enabled": false
+    }
+  },
+  "account_id": "78e4c4fd641dd66cd98516f31ed16dc3",
+  "workers_dev": false,
+  "preview_urls": false,
+  "routes": [
+    {
+      "pattern": "ani.morisoba.moe",
+      "custom_domain": true
+    }
+  ],
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "CACHE",
+      "id": "fb5c9cf5ef4b4f3a8c2d04487e546676"
+    }
+  ],
+  "d1_databases": [
+    {
+      "binding": "MIMORI_DB",
+      "database_name": "morisoba-mimorigasaka",
+      "database_id": "f43ff1cb-49cb-4713-baa2-48586de779c4"
+    }
+  ],
+  "vars": {
+    "CONTROL_AUTH_REQUIRED": "true",
+    "GCP_AUTH_PROJECT_ID": "personal-use-493017",
+    "GCP_AUTH_API_KEY": "AIzaSyCG0EyiE-74eYdwRRoHwdZGY1sjgYgLQzU",
+    "CONTROL_GCP_UID": "morisoba-owner",
+    "CONTROL_OWNER_ID": "b2156aaf-e79d-475a-8051-0bf9b037b43b",
+    "CONTROL_OWNER_EMAIL": "sohamb117@gmail.com",
+    "CONTROL_USERNAME": "morisoba"
+  }
+}

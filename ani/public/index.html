@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="referrer" content="no-referrer"><title>ani.morisoba.moe</title><link rel="stylesheet" href="/shared/chrome.css"><link rel="stylesheet" href="/shared/typography.css"><link rel="stylesheet" href="/style.css"></head>
+<body><div id="scanlines"></div><div id="grain"></div>
+<header><a href="https://morisoba.moe"><img src="/shared/morisoba-lily.svg" alt="" width="28" height="28">morisoba.moe</a><button id="texture" aria-pressed="true">CRT ON</button><button id="sign-out" hidden>Sign out</button></header>
+<dialog id="login-dialog"><form id="login-form"><h2>Sign in</h2><label for="login-username">Username</label><input id="login-username" name="username" autocomplete="username" required maxlength="32"><label for="owner-password">Password</label><input id="owner-password" name="password" type="password" autocomplete="current-password" required><button type="submit">Continue</button><p id="login-status" role="status"></p></form></dialog><main>
+<section id="identity"><div class="pbody"><form id="search"><label for="query">SEARCH</label><div class="search-line"><input id="query" name="q" aria-label="Search anime" type="search" placeholder="Title / タイトル" maxlength="120" autocomplete="off"><button type="submit" aria-label="Search">Search</button></div></form></div></section>
+
+<section class="content-section" id="catalog-panel"><div class="titlebar"><span class="tl" id="catalog-label">Trending</span><button class="pbtn" id="reload" aria-label="Reload catalogue">↻</button></div><div class="pbody"><p id="catalog-status" role="status">Loading catalogue…</p><div id="catalog"></div></div></section>
+<section class="content-section" id="detail-panel" hidden><div class="titlebar"><button id="close-detail" aria-label="Back to results">← Back to results</button></div><div class="pbody"><h2 id="title"></h2><p id="metadata"></p><details id="synopsis"><summary>Synopsis</summary><p id="description"></p></details><div class="episode-toolbar"><button id="refresh-sources">Retry</button></div><div id="availability" role="status"></div><div id="episodes"></div></div></section>
+<section class="content-section" id="player-panel" hidden><div class="titlebar"><span class="tl" id="playing-title">Playback</span></div><div class="pbody"><div id="playback"></div><p id="player-status" role="status"></p><div class="player-bottom"><details id="source-menu" class="control-menu"><summary>Sources</summary><div id="stream-options" class="menu-panel"></div></details>
+<details id="playback-settings" class="control-menu"><summary>Audio &amp; captions</summary><div class="menu-panel settings-panel">
+<label for="audio">Audio</label><select id="audio"><option value="sub">Japanese · Sub</option><option value="dub">English · Dub</option></select>
+<label for="caption-language">Captions</label><select id="caption-language"><option value="eng">English</option><option value="off">Off</option></select>
+<label for="caption-release">Subtitle track</label><select id="caption-release"><option>Loading…</option></select>
+<label for="caption-offset">Timing (seconds)</label><input id="caption-offset" type="number" value="0" step="0.1" min="-120" max="120">
+<label for="caption-size">Text size</label><select id="caption-size"><option value="80">Small</option><option value="100" selected>Normal</option><option value="125">Large</option><option value="150">Extra large</option></select>
+<label for="caption-position">Vertical position</label><input id="caption-position" type="range" min="10" max="90" value="85">
+<label for="caption-align">Alignment</label><select id="caption-align"><option value="center">Center</option><option value="start">Left</option><option value="end">Right</option></select>
+<button id="caption-reset" type="button">Reset captions</button><p id="caption-status" role="status"></p>
+</div></details><button id="next" disabled>Next episode →</button></div></div></section>
+<section class="content-section" id="history-panel"><div class="titlebar"><span class="tl">Continue watching</span><button id="clear-history" aria-label="Clear watch history">Clear</button></div><div id="history" class="pbody"></div></section>
+</main><span id="activity" hidden></span>
+<script src="/vendor/hls.min.js"></script><script type="module" src="/auth.js"></script><script type="module" src="/app.js"></script></body></html>
