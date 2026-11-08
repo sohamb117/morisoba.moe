@@ -1,9 +1,8 @@
 (()=>{
  if(window.top!==window||location.origin!=='https://morisoba.moe'||location.pathname!=='/control/')return;
  const api=globalThis.browser||chrome;
- api.runtime.onMessage.addListener((message,sender,respond)=>{
-  if(sender.id!==api.runtime.id||message?.type!=='CONNECT_SESSION'||!['x','instagram'].includes(message.provider))return false;
-  (async()=>{
+ async function connectSession(message){
+  if(!['x','instagram'].includes(message.provider))throw Error('Unknown service');
    const r=await fetch('/api/control/session',{credentials:'same-origin',cache:'no-store',redirect:'error'});const session=await r.json();
    if(!r.ok||!session.authenticated||!session.csrf)throw Error('Sign in to the control plane first.');
    const names=message.provider==='x'?['auth_token','ct0']:['sessionid'];const auth={};
@@ -11,8 +10,16 @@
    const response=await fetch('/api/control/'+message.provider+'/connection',{method:'POST',credentials:'same-origin',cache:'no-store',redirect:'error',headers:{'Content-Type':'application/json','X-CSRF-Token':session.csrf},body:JSON.stringify(auth)});
    if(!response.ok){const detail=await response.json().catch(()=>({}));throw Error(detail.error||'Connection rejected. Check the session in the original app.');}
    return {ok:true};
-  })().then(respond,e=>respond({ok:false,error:e.message}));return true;
- });
+ }
+ function sessionPort(){
+  const port=api.runtime.connect({name:'control-session'});let closed=false;
+  port.onMessage.addListener(message=>{
+   if(message.type!=='CONNECT_SESSION'||typeof message.requestId!=='string')return;
+   connectSession(message).then(result=>{if(!closed)port.postMessage({requestId:message.requestId,...result});},e=>{if(!closed)port.postMessage({requestId:message.requestId,ok:false,error:e.message});});
+  });
+  port.onDisconnect.addListener(()=>{closed=true;setTimeout(()=>{try{sessionPort();}catch{}},1500);});
+ }
+ sessionPort();
  window.addEventListener('message',async event=>{
   const m=event.data;
   if(event.source!==window||event.origin!==location.origin||m?.type!=='MORISOBA_X_CHAT_REQUEST'||typeof m.id!=='string')return;
@@ -35,6 +42,6 @@
  document.documentElement.dataset.morisobaChatBridge='1';
  // A sign-in updates this element; no page messages or DOM fields can request cookie access.
  const gate=document.querySelector('#entry-gate');
- const ready=()=>{if(gate?.hidden)api.runtime.sendMessage({type:'CONTROL_READY'}).catch(()=>{});};
+ const ready=()=>{if(gate?.hidden)Promise.resolve(api.runtime.sendMessage({type:'CONTROL_READY'})).catch(()=>{});};
  if(gate)new MutationObserver(ready).observe(gate,{attributes:true,attributeFilter:['hidden']});ready();
 })();

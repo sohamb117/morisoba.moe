@@ -2,6 +2,19 @@ const api=globalThis.browser||chrome;
 const CONTROL='https://morisoba.moe/control/';
 const origins={x:['https://x.com/*'],instagram:['https://www.instagram.com/*','https://instagram.com/*']};
 const pending=new Map();
+const controlPorts=new Map();
+function deliverSession(tabId,provider,auth){
+ const port=controlPorts.get(tabId);if(!port)throw Error('Reload the control-plane tab, then connect again.');
+ return new Promise((resolve,reject)=>{
+  const requestId=crypto.randomUUID();let settled=false;
+  const done=(error,value)=>{if(settled)return;settled=true;clearTimeout(timer);port.onMessage.removeListener(reply);port.onDisconnect.removeListener(disconnected);error?reject(error):resolve(value);};
+  const reply=value=>{if(value.requestId===requestId)done(null,value);};
+  const disconnected=()=>done(Error('Control-plane tab closed. Reopen it and connect again.'));
+  const timer=setTimeout(()=>done(Error('Connection check timed out. Try again.')),45000);
+  port.onMessage.addListener(reply);port.onDisconnect.addListener(disconnected);
+  port.postMessage({type:'CONNECT_SESSION',requestId,provider,auth});
+ });
+}
 function controlTab(sender){try{const u=new URL(sender.url||sender.tab?.url);return sender.id===api.runtime.id&&sender.tab&&u.origin==='https://morisoba.moe'&&u.pathname==='/control/';}catch{return false;}}
 async function sourceContext(provider,manual){
  const tabs=await api.tabs.query({url:origins[provider]}),stores=await api.cookies.getAllCookieStores();
@@ -42,7 +55,7 @@ async function sync(provider,manual=false){
   if(!tab){if(manual)await api.tabs.create({url:CONTROL,windowId:source.windowId});throw Error('Sign in to the control plane in this Safari profile, then click connect again.');}
   const auth=await cookies(provider,storeId),hash=await fingerprint(provider,auth),state=await api.storage.local.get(['enabled','fingerprints']);
   if(!manual&&state.fingerprints?.[provider]===hash)return {ok:true};
-  let result;try{result=await api.tabs.sendMessage(tab.id,{type:'CONNECT_SESSION',provider,auth},{frameId:0});}catch{throw Error('Refresh the control-plane tab, then try again.');}
+  const result=await deliverSession(tab.id,provider,auth);
   if(!result?.ok)throw Error(result?.error||'Connection failed');
   // Only a one-way fingerprint is retained; never cookies or access tokens.
   const latest=await api.storage.local.get(['fingerprints','sourceStores']);await api.storage.local.set({fingerprints:{...latest.fingerprints,[provider]:hash},sourceStores:{...latest.sourceStores,[provider]:storeId}});
@@ -68,6 +81,20 @@ api.runtime.onStartup.addListener(()=>api.alarms.create('session-sync',{periodIn
 
 const chatTabs=new Map();
 api.runtime.onConnect.addListener(port=>{
+ if(port.name==='control-session'){
+  if(!controlTab(port.sender)){port.disconnect();return;}
+  controlPorts.set(port.sender.tab.id,port);
+  port.onDisconnect.addListener(()=>{if(controlPorts.get(port.sender.tab.id)===port)controlPorts.delete(port.sender.tab.id);});
+  return;
+ }
+ if(port.name==='session-popup'){
+  if(port.sender?.id!==api.runtime.id||port.sender.url!==api.runtime.getURL('popup.html')){port.disconnect();return;}
+  let used=false,closed=false;port.onDisconnect.addListener(()=>{closed=true;});
+  port.onMessage.addListener(message=>{
+   if(used||!origins[message.provider])return;used=true;
+   (async()=>{const state=await api.storage.local.get('enabled');await api.storage.local.set({enabled:[...new Set([...(state.enabled||[]),message.provider])]});return sync(message.provider,true);})().then(result=>{if(!closed)port.postMessage(result);},e=>{if(!closed)port.postMessage({ok:false,error:e.message});});
+  });return;
+ }
  if(port.name==='x-chat-native'){
   const sender=port.sender;
   if(sender?.id!==api.runtime.id||!sender.tab||sender.frameId!==0||!/^https:\/\/x\.com\//.test(sender.url||sender.tab.url||'')){port.disconnect();return;}

@@ -20,7 +20,7 @@ Apple instructions: https://developer.apple.com/documentation/safariservices/run
 
 ## Updating
 
-Version 0.1.6 adds a browser-local X Chat bridge. Keep X Chat open and unlocked in the same Safari profile. Safari briefly activates the X tab for each request, then restores the control tab; keep both tabs open. The bridge reads rendered messages and uses X’s composer for explicit sends; encryption keys remain inside X, and chat content is not saved by the extension or sent to the server adapter. It preserves unsent X drafts and never retries a send automatically. Replace the old extension folder with this build, then use Safari Settings → Extensions → Reload for the temporary extension (or remove and re-add it). Grant the requested website access and reload the service and control-plane tabs.
+Version 0.1.7 adds a browser-local X Chat bridge. Keep X Chat open and unlocked in the same Safari profile. Safari briefly activates the X tab for each request, then restores the control tab; keep both tabs open. The bridge reads rendered messages and uses X’s composer for explicit sends; encryption keys remain inside X, and chat content is not saved by the extension or sent to the server adapter. It preserves unsent X drafts and never retries a send automatically. Replace the old extension folder with this build, then use Safari Settings → Extensions → Reload for the temporary extension (or remove and re-add it). Grant the requested website access and reload the service and control-plane tabs.
 
 ## Connect
 
@@ -29,5 +29,7 @@ Version 0.1.6 adds a browser-local X Chat bridge. Keep X Chat open and unlocked 
 3. Optionally enable **keep sessions connected** to check for changed session cookies while a signed-in control-plane tab is open. Only providers you have explicitly connected are eligible. Disable this checkbox to stop background synchronization.
 
 The extension stores only the enabled-provider list, the automatic-sync preference, and one-way session fingerprints used to avoid repeated uploads. It selects the cookie store belonging to the open service tab and sends the session only to a control-plane tab in the same store. It does not scan unrelated profiles. It does not bypass account checks. A service may reject a valid browser session on the server adapter; extraction alone does not prove that feeds or messages work. Safari 18 or later supports the required HttpOnly cookie access; Safari 26.3 is installed on this Mac. Safari cookie-change events are not relied on; automatic sync uses the five-minute alarm and control-plane sign-in notification.
+
+Connection checks use explicit extension ports and wait for the authenticated server response before showing Connected.
 
 Validation: Safari 26.3 live inbox and multi-message conversation reads verified. Sending has not been tested with a real message. Older-history reads depend on the messages X can render; encrypted attachments using browser-local blob URLs are not exported.
