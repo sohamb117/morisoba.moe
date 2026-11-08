@@ -42,10 +42,14 @@ def request(route, auth, args, media_parser):
         cursor=args.get('cursor') or ''
         if route in ('connection','feed'):
             feed=call('feed/timeline/',form={'reason':'pagination' if cursor else 'cold_start_fetch','is_pull_to_refresh':'0',
-                'phone_id':'00000000-0000-0000-0000-000000000000','battery_level':'100','is_charging':'1','will_sound_on':'0',**({'max_id':cursor} if cursor else {})})
+                'phone_id':'00000000-0000-0000-0000-000000000000','battery_level':'100','is_charging':'1','will_sound_on':'0',**({'pagination_source':'following'} if route=='feed' and args.get('mode')=='following' else {}),**({'max_id':cursor} if cursor else {})})
             media=[i['media_or_ad'] for i in feed.get('feed_items',[]) if i.get('media_or_ad')]
             if not media: media=feed.get('items',[])
             if 'feed_items' not in feed and 'items' not in feed: raise BrowserRequestFailed()
+            if route=='feed' and args.get('mode')=='following':
+                print(json.dumps({'event':'social_feed','provider':'instagram','mode':'following',
+                    'source':feed.get('pagination_source') if feed.get('pagination_source') in ('following','feed_recs','favorites','past_posts') else 'unspecified',
+                    'items':len(media),'followed':sum(1 for m in media if (m.get('user') or {}).get('friendship_status',{}).get('following') is True)}),flush=True)
             result={'account':auth.get('username') or 'Instagram '+user_id} if route=='connection' else {'items':[media_parser(m) for m in media if not m.get('ad_id')], 'cursor':feed.get('next_max_id') or ''}
         elif route=='following':
             data=call('friendships/'+user_id+'/following/',params={'count':50,**({'max_id':cursor} if cursor else {})})

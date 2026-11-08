@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "morisoba connections",
-  "version": "0.1.2",
+  "version": "0.1.6",
   "description": "Connect your own X and Instagram sessions to your morisoba control plane.",
   "permissions": [
     "cookies",
@@ -26,6 +26,16 @@
       ],
       "js": [
         "control.js"
+      ],
+      "run_at": "document_idle",
+      "all_frames": false
+    },
+    {
+      "matches": [
+        "https://x.com/*"
+      ],
+      "js": [
+        "x-chat.js"
       ],
       "run_at": "document_idle",
       "all_frames": false

@@ -2,7 +2,7 @@ const api=globalThis.browser||chrome;
 const CONTROL='https://morisoba.moe/control/';
 const origins={x:['https://x.com/*'],instagram:['https://www.instagram.com/*','https://instagram.com/*']};
 const pending=new Map();
-function controlTab(sender){try{const u=new URL(sender.url);return sender.id===api.runtime.id&&sender.tab&&u.origin==='https://morisoba.moe'&&u.pathname==='/control/';}catch{return false;}}
+function controlTab(sender){try{const u=new URL(sender.url||sender.tab?.url);return sender.id===api.runtime.id&&sender.tab&&u.origin==='https://morisoba.moe'&&u.pathname==='/control/';}catch{return false;}}
 async function sourceContext(provider,manual){
  const tabs=await api.tabs.query({url:origins[provider]}),stores=await api.cookies.getAllCookieStores();
  const active=await api.tabs.query({active:true,currentWindow:true});
@@ -65,3 +65,32 @@ api.cookies.onChanged?.addListener(change=>{
 api.alarms.onAlarm.addListener(alarm=>{if(alarm.name==='session-sync')automatic();});
 api.runtime.onInstalled.addListener(()=>api.alarms.create('session-sync',{periodInMinutes:5}));
 api.runtime.onStartup.addListener(()=>api.alarms.create('session-sync',{periodInMinutes:5}));
+
+const chatTabs=new Map();
+api.runtime.onConnect.addListener(port=>{
+ if(port.name==='x-chat-native'){
+  const sender=port.sender;
+  if(sender?.id!==api.runtime.id||!sender.tab||sender.frameId!==0||!/^https:\/\/x\.com\//.test(sender.url||sender.tab.url||'')){port.disconnect();return;}
+  chatTabs.set(sender.tab.id,port);
+  port.onDisconnect.addListener(()=>{if(chatTabs.get(sender.tab.id)===port)chatTabs.delete(sender.tab.id);});
+  return;
+ }
+ if(port.name!=='x-chat-control'||!controlTab(port.sender)){port.disconnect();return;}
+ let received=false,closed=false,native=null,listener=null,restore=null;
+ port.onDisconnect.addListener(()=>{closed=true;if(native&&listener)native.onMessage.removeListener(listener);if(restore)restore();});
+ port.onMessage.addListener(message=>{
+  if(received)return;received=true;
+  (async()=>{
+   if(!['conversations','messages'].includes(message.route))throw Error('Invalid chat request');
+   const {source,storeId,stores}=await sourceContext('x',false);
+   if(port.sender.tab.cookieStoreId!==storeId&&!stores.find(s=>s.id===storeId)?.tabIds?.includes(port.sender.tab.id))throw Error('Open the control plane and X in the same Safari profile.');
+   if(closed)return;
+   native=chatTabs.get(source.id);if(!native)throw Error('Reload the X Chat tab to connect it.');
+   const requestId=crypto.randomUUID();
+   if(!source.active){await api.tabs.update(source.id,{active:true});restore=async()=>{try{const current=await api.tabs.get(source.id);if(current.active)await api.tabs.update(port.sender.tab.id,{active:true});}catch{/* The user may have closed either tab. */}};}
+   listener=reply=>{if(!closed&&reply.requestId===requestId)port.postMessage(reply);};
+   native.onMessage.addListener(listener);
+   native.postMessage({...message,requestId});
+  })().catch(e=>{if(!closed)port.postMessage({ok:false,error:e.message});});
+ });
+});

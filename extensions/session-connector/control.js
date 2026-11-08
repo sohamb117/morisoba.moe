@@ -13,6 +13,26 @@
    return {ok:true};
   })().then(respond,e=>respond({ok:false,error:e.message}));return true;
  });
+ window.addEventListener('message',async event=>{
+  const m=event.data;
+  if(event.source!==window||event.origin!==location.origin||m?.type!=='MORISOBA_X_CHAT_REQUEST'||typeof m.id!=='string')return;
+  let response;
+  try{
+   const r=await fetch('/api/control/session',{credentials:'same-origin',cache:'no-store'});const session=await r.json();
+   if(!r.ok||!session.authenticated)throw Error('Sign in to the control plane first.');
+   response=await new Promise((resolve,reject)=>{
+    const port=api.runtime.connect({name:'x-chat-control'});
+    let settled=false;const done=(error,value)=>{if(settled)return;settled=true;clearTimeout(timer);port.disconnect();error?reject(error):resolve(value);};
+    const timer=setTimeout(()=>done(Error('X Chat did not respond. Check the X tab before retrying.')),22000);
+    port.onMessage.addListener(value=>{done(null,value);});
+    port.onDisconnect.addListener(()=>done(Error('X Chat connection closed. Reload both tabs.')));
+    port.postMessage({route:m.route,channel:m.channel,cursor:m.cursor,write:m.write,text:m.text,nonce:m.nonce});
+   });
+   if(!response||typeof response!=='object')throw Error('X Chat did not return a response. Reload both tabs.');
+  }catch(e){response={ok:false,error:e.message};}
+  window.postMessage({type:'MORISOBA_X_CHAT_RESPONSE',id:m.id,...response},location.origin);
+ });
+ document.documentElement.dataset.morisobaChatBridge='1';
  // A sign-in updates this element; no page messages or DOM fields can request cookie access.
  const gate=document.querySelector('#entry-gate');
  const ready=()=>{if(gate?.hidden)api.runtime.sendMessage({type:'CONTROL_READY'}).catch(()=>{});};
