@@ -39,7 +39,7 @@ async def x_request(route, auth, args):
             tweets = await method(count=20, cursor=cursor)
             result = {'items': [{'id': t.id, 'text': t.full_text, 'author': '@' + t.user.screen_name,
                                 'url': 'https://x.com/' + t.user.screen_name + '/status/' + t.id,
-                                'images': [m['media_url_https'] for m in (t.media or []) if m.get('media_url_https')][:4]}
+                                'images': [m.media_url for m in (t.media or []) if m.media_url][:4]}
                                for t in tweets], 'cursor': tweets.next_cursor or ''}
         elif route == 'following':
             users = await client.get_user_following(auth['user'], count=50, cursor=cursor)
@@ -59,13 +59,29 @@ async def x_request(route, auth, args):
                 await client.v11.dm_new(channel, args['text'], None, None)
                 result = {'ok': True}
             else:
-                data = (await client._get_dm_history(channel, cursor)).get('conversation_timeline', {})
+                raw, _ = await client.get('https://x.com/i/api/1.1/dm/conversation/'+channel+'.json',
+                    params={'context':'FETCH_DM_CONVERSATION_HISTORY','include_conversation_info':'true',
+                            'count':50,**({'max_id':cursor} if cursor else {})},headers=client._base_headers)
+                data = raw.get('conversation_timeline', {})
                 users = data.get('users', {})
-                entries = [e['message']['message_data'] for e in data.get('entries', []) if e.get('message', {}).get('message_data')]
-                result = {'items': sorted([{'id': m['id'], 'text': m.get('text', ''),
-                    'author': users.get(m.get('sender_id'), {}).get('name', m.get('sender_id', '')),
-                    'createdAt': int(m.get('time', 0)), 'images': []} for m in entries], key=lambda m: m['createdAt']),
-                    'cursor': data.get('min_entry_id', '') if data.get('status') != 'AT_END' else ''}
+                items = {}
+                for entry in data.get('entries', []):
+                    envelope = entry.get('message') or {}
+                    message = envelope.get('message_data') or {}
+                    if not message: continue
+                    mid = str(message.get('id') or envelope.get('id') or '')
+                    if not mid: continue
+                    sender = str(message.get('sender_id') or '')
+                    items[mid] = {'id':mid,'text':message.get('text',''),
+                        'author':users.get(sender,{}).get('name',sender),
+                        'createdAt':int(envelope.get('time') or message.get('time') or 0),'images':[]}
+                next_cursor = data.get('min_entry_id','') if data.get('status') != 'AT_END' else ''
+                if next_cursor == cursor: next_cursor = ''
+                result = {'items':sorted(items.values(),key=lambda m:(m['createdAt'],int(m['id']))),
+                          'cursor':next_cursor}
+                import json
+                print(json.dumps({'event':'social_history','provider':'x','entries':len(data.get('entries',[])),
+                    'messages':len(items),'has_more':bool(next_cursor)}),flush=True)
         else: raise ValueError('route')
         auth['cookies'] = client.get_cookies()
         return result, auth

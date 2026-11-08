@@ -1,8 +1,8 @@
 """Use browser sessions with Instagram's web host, never the mobile host."""
 import json
-import uuid
 from urllib.parse import quote, unquote
 import httpx
+from instagram_chat import request as chat_request
 
 class BrowserSessionRejected(Exception): pass
 class BrowserRequestFailed(Exception): pass
@@ -50,27 +50,14 @@ def request(route, auth, args, media_parser):
         elif route=='following':
             data=call('friendships/'+user_id+'/following/',params={'count':50,**({'max_id':cursor} if cursor else {})})
             result={'items':[{'id':str(u['pk']),'name':u.get('full_name') or u['username'],'handle':u['username']} for u in data.get('users',[])], 'cursor':data.get('next_max_id') or ''}
-        elif route=='conversations':
-            data=call('direct_v2/inbox/',params={'limit':20,'thread_message_limit':1,**({'cursor':cursor} if cursor else {})}).get('inbox',{})
-            result={'items':[{'id':str(t['thread_id']),'name':t.get('thread_title') or ', '.join(u.get('username','') for u in t.get('users',[]))} for t in data.get('threads',[])], 'cursor':data.get('oldest_cursor','') if data.get('has_older') else ''}
-        elif route=='messages':
-            channel=args['channel']
-            if args.get('write'):
-                nonce=str(uuid.uuid4())
-                call('direct_v2/threads/broadcast/text/',form={'thread_ids':json.dumps([channel]),'text':args['text'],'action':'send_item','client_context':nonce,'mutation_token':nonce,'_csrftoken':cookies['csrftoken']})
-                result={'ok':True}
-            else:
-                data=call('direct_v2/threads/'+channel+'/',params={'limit':20,'direction':'older',**({'cursor':cursor} if cursor else {})}).get('thread',{})
-                users={str(u['pk']):u.get('username','') for u in data.get('users',[])}
-                result={'items':[{'id':str(m['item_id']),'text':m.get('text') or '['+m.get('item_type','attachment')+']',
-                    'author':users.get(str(m.get('user_id')), 'you' if str(m.get('user_id'))==user_id else str(m.get('user_id',''))),
-                    'createdAt':int(m.get('timestamp',0))/1000,'images':[]} for m in reversed(data.get('items',[]))],
-                    'cursor':data.get('oldest_cursor','') if data.get('has_older') else ''}
+        elif route in ('conversations','messages'):
+            result, chat = chat_request(client, route, auth, args, user_id, BrowserRequestFailed)
+            auth = {**auth, 'chat':chat}
         else: raise ValueError('route')
         # Keep only the explicitly used cookie names, with no cross-domain cookie jar.
         for cookie in client.cookies.jar:
             if cookie.name in cookies and cookie.domain.lstrip('.') in ('instagram.com','www.instagram.com'):
                 cookies[cookie.name]=cookie.value
-        return result,{'cookies':cookies,'username':auth.get('username',''),'transport':'web'}
+        return result,{'cookies':cookies,'username':auth.get('username',''),'transport':'web','chat':auth.get('chat',{})}
 
 class BrowserRateLimit(Exception): pass
